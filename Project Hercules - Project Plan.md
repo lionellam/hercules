@@ -4,7 +4,7 @@
 
 ## 1. Overview
 
-Project Hercules is a self-hosted expense and budget tracker that uses a natural language interface, powered by a small language model, to remove the friction of manual expense entry. This plan translates the project charter into a working plan for contributors — covering the product vision, objectives, features, phases, and risks — as a community-driven, open project.
+Project Hercules is web-based, open source, self-hosted expense and budget tracker that uses a natural language interface, powered by a small language model (SML), to remove the friction of manual expense entry. This plan translates the project charter into a working plan for contributors — covering the product vision, objectives, features, phases, and risks — as a community-driven, open project.
 
 ## 2. Product Vision
 
@@ -35,7 +35,7 @@ Friction of maintaining an up-to-date expense and budget log can be due to the f
 
 ## 5. Feature Breakdown
 
-A high-level look at the functional pieces of the system. These will be broken down further into individual backlog items as the project progresses.
+A high-level look at the functional pieces of the system. These will be broken down further into individual backlog items as the project progresses. 
 
 - **Natural Language Input** — free-form text entry for logging an expense
 - **NL Parsing Engine** — local model (Phi-4-mini via Ollama) that parses input into structured fields
@@ -46,7 +46,7 @@ A high-level look at the functional pieces of the system. These will be broken d
 - **Export / Download** — ability to export a list of expenses (in lieu of built-in reports/dashboards)
 - **Hosting & Deployment** — self-hosted setup on a home server (containerization approach TBD)
 
-## 6. Milestones & Deliverables
+## 6. Milestones & Deliverables (To be reviewed)
 
 Phased, sequential rather than dated — reflecting the open, community-driven pace of the project.
 
@@ -62,9 +62,9 @@ Budget definitions by category, and the ability to query/report on spending via 
 **Phase 4 — Polish & Hosting**
 Refinement of the experience, documentation for self-hosting, and a settled containerization/deployment approach.
 
-## 7. Risks & Dependencies
+## 7. Risks, Dependencies and Open Questions
 
-- Containerize the app, or run natively on the home server?
+- Containerize the app, or run natively on the home server? To preserve portability.
 - Always show the confirmation screen, or auto-save high-confidence entries?
 - How should multi-item entries in a single input be handled (e.g. "coffee $4 and lunch $12")?
 - The fixed category taxonomy still needs to be finalized
