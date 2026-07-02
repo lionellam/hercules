@@ -1,6 +1,6 @@
 # Project Hercules — Project Plan
 
-> Version 0.1 · Draft
+> Version 0.1 · Draft | Last Reviewed: 02 July 2026
 
 ## 1. Overview
 
@@ -32,6 +32,7 @@ Friction of maintaining an up-to-date expense and budget log can be due to the f
 - Run entirely self-hosted / on-premises, with no cloud dependency
 - Keep the project free, open, and easy for others to run on their own hardware
 - Achieve reliable parsing (target: less than 10% of entries require manual correction)
+- To demonstrate the viability of the CPMAI framework in conceiving of and developing cognitive projects.
 
 ## 5. Feature Breakdown
 
