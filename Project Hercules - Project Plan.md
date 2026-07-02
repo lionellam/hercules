@@ -35,6 +35,8 @@ Friction of maintaining an up-to-date expense and budget log can be due to the f
 
 ## 5. Feature Breakdown
 
+> Feature priorities are grounded in the target personas — see [Appendix A: Personas](#appendix-a-personas).
+
 A high-level look at the functional pieces of the system. These will be broken down further into individual backlog items as the project progresses. 
 
 - **Natural Language Input** — free-form text entry for logging an expense
@@ -77,3 +79,63 @@ This plan is a living document. It should be revisited:
 - At the end of each phase, to confirm scope for the next
 - Whenever a significant open question (see Risks & Dependencies) is resolved
 - As new contributors join and priorities evolve, given the community-driven nature of the project
+
+---
+
+## Appendix A: Personas
+
+A set of representative users and contributors the project is designed for. These help ground feature decisions and prioritization in real needs.
+
+### The Privacy-Conscious Home User
+
+**Mei, 34, Product Manager**
+*"I just don't want my spending habits sitting on someone else's server."*
+
+- **Goals:** Track personal and household spending without exposing financial data to a third party; maintain full control over where her data lives and who can access it.
+- **Frustrations:** Distrusts cloud-based finance apps, even ones with "bank-level encryption" claims; has looked into self-hosted alternatives before but found them either too barebones or too complex to set up.
+- **Technical Comfort:** Moderate — comfortable following setup instructions and running a home server, but not a developer. Wants something she can install and mostly forget about.
+- **Relationship to the Product:** Primary end-user. Success looks like: data never leaves her network, and the app is trustworthy enough that she checks it daily without a second thought.
+
+### The Frugal Subscription-Avoider
+
+**Dave, 41, Teacher**
+*"I already pay for five subscriptions I forgot I had. I'm not adding a sixth to track that problem."*
+
+- **Goals:** Track spending and stick to a budget without an ongoing monthly cost; set it up once and have it "just work" long-term.
+- **Frustrations:** Frustrated that budgeting tools charge a subscription to manage money he's trying to save; has churned through multiple free-tier apps that eventually paywall core features.
+- **Technical Comfort:** Low to moderate — willing to follow a guided setup (e.g. a Docker Compose file) but not going to debug dependency issues. Self-hosting is a means to an end (free), not a hobby.
+- **Relationship to the Product:** Primary end-user, cost-driven. Success looks like: no recurring bill, ever — and a setup simple enough that he doesn't regret the switch from a paid app.
+
+### The Self-Hoster / Homelab Enthusiast
+
+**Priya, 29, DevOps Engineer**
+*"If it doesn't have a docker-compose.yml, does it even count as self-hosted?"*
+
+- **Goals:** Add expense tracking to an existing homelab stack alongside Plex, Home Assistant, etc.; wants clean, well-documented deployment and sensible defaults.
+- **Frustrations:** Impatient with projects that claim to be "self-hostable" but assume a single specific OS or lack containerization; wants to inspect and, if needed, modify the stack (backend, DB, model) without fighting the architecture.
+- **Technical Comfort:** High — can debug, contribute code, and adapt the deployment to her own infrastructure. Likely to raise GitHub issues or PRs.
+- **Relationship to the Product:** Power user and potential contributor. Success looks like: it slots cleanly into her existing setup, and the codebase is approachable enough to tinker with.
+
+### The Busy / Mobile-First Logger
+
+**Jordan, 26, Nurse**
+*"I'm not typing into six fields while I'm still holding my coffee."*
+
+- **Goals:** Log expenses in the moment — while walking, in a queue, between tasks — with minimal friction; trust that a quick, casual sentence gets recorded accurately.
+- **Frustrations:** Abandons expense tracking within a week or two because manual entry feels like a chore; screen-constrained mobile forms (dropdowns, date pickers) feel disproportionately slow for something as simple as "I bought coffee."
+- **Technical Comfort:** Low to moderate — not going to self-host it themselves, but happy to use an instance a partner or roommate (like Priya) has already set up.
+- **Relationship to the Product:** Primary day-to-day end-user, and the persona the original problem statement was written around. Success looks like: logging an expense takes less time than opening a banking app.
+
+### The Open Source Contributor
+
+**Sam, 24, CS Student**
+*"I want to see how far a 3.8B model can actually get with real-world messy text."*
+
+- **Goals:** Contribute to a project with an interesting technical problem (local SLM inference, structured parsing from free-form text); build public portfolio work and learn from code review / collaboration.
+- **Frustrations:** Bounces off projects with unclear contribution guidelines, no labeled "good first issue" tickets, or an unclear roadmap; loses motivation if PRs sit unreviewed.
+- **Technical Comfort:** High — but may be new to some parts of the stack (e.g. hasn't used Ollama before). Learning-motivated as much as output-motivated.
+- **Relationship to the Product:** Not necessarily an end-user yet — motivated by the build itself. Success looks like: clear docs, a welcoming project structure, and visible impact from their contributions.
+
+### Out of Scope: The Household / Family Budgeter
+
+Someone managing a shared household or family budget across multiple people would want multi-user support, shared visibility, and permissions — all explicitly listed as Non-Goals in the charter. Included here as a boundary marker, not a target persona, so it doesn't quietly creep into scope later.
