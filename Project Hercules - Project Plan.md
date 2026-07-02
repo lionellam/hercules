@@ -8,7 +8,7 @@ Assembled with the use of Claude
 
 ## 1. Overview
 
-Project Hercules is web-based, open source, self-hosted expense and budget tracker that uses a natural language interface, powered by a small language model (SML), to remove the friction of manual expense entry. This plan translates the project charter into a working plan for contributors — covering the product vision, objectives, features, phases, and risks — as a community-driven, open project.
+Project Hercules is web-based, open source, self-hosted expense and budget tracker that uses a natural language interface, powered by a Small Language Model (SLM), to remove the friction of manual expense entry. This plan translates the project charter into a working plan for contributors — covering the product vision, objectives, features, phases, and risks — as a community-driven, open project.
 
 ## 2. Product Vision
 
