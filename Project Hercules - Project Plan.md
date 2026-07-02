@@ -1,6 +1,10 @@
 # Project Hercules — Project Plan
 
-> Version 0.1 · Draft | Last Reviewed: 02 July 2026
+```
+Version 0.1 · Draft 
+Last Reviewed: 02 July 2026
+Assembled with the use of Claude
+```
 
 ## 1. Overview
 
