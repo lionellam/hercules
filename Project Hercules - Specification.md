@@ -54,8 +54,6 @@ This spec exists to align the team before the process flow diagram (UPN) and fea
 5. **User confirms/saves** — the system writes the structured record, the original raw text, and a flag indicating whether any edit occurred.
 6. **Record is available for viewing/export** — out of detailed scope for this spec, noted for completeness.
 
-**Note:** an earlier draft of this flow included a "Looks correct?" decision branch looping back to re-parsing. This has been removed — editing is not a fork to a separate path, it's simply part of interacting with the confirmation screen.
-
 ---
 
 ## 5. Data Model (Draft)
