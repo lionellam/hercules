@@ -1,7 +1,10 @@
 # Project Hercules — Specification Sheet: "Log an Expense" Flow
 
-> **Status:** Draft, for review
-> **Scope:** This spec covers the core natural-language expense logging flow only. It does not yet cover budgets, queries/export, or account/profile management in detail — those may warrant their own specs later.
+```
+Version 0.2 · Draft 
+Last Reviewed: 05 July 2026
+Produced with AI Assistance (Claude Code)
+```
 
 ## Version History
 
@@ -37,7 +40,7 @@ This spec exists to align the team before the process flow diagram (UPN) and fea
 |---|---|
 | **User** | Enters expense text, reviews parsed output, edits fields directly if needed, confirms/saves |
 | **SLM (Phi-4-mini via Ollama)** | Cognitive component only — parses raw text into structured fields |
-| **Application (backend/database)** | All non-cognitive logic — validation, storage, retrieval, profile scoping |
+| **Application (backend/database)** | All non-cognitive logic — validation, storage, retrieval, profile and configuration |
 
 ---
 

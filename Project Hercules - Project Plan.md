@@ -53,20 +53,17 @@ A high-level look at the functional pieces of the system. These will be broken d
 - **Export / Download** — ability to export a list of expenses (in lieu of built-in reports/dashboards)
 - **Hosting & Deployment** — self-hosted setup on a home server (containerization approach TBD)
 
-## 6. Milestones & Deliverables (To be reviewed)
+## 6. Milestones & Deliverables (Subject to Revision)
 
-Phased, sequential rather than dated — reflecting the open, community-driven pace of the project.
+Phased and interative, as follows:
 
-**Phase 1 — Foundation**
+- **Phase 1 — Foundation**
 CLI/API-level natural language parsing working end-to-end, with manual database insertion. Proves out the core parsing approach.
-
-**Phase 2 — Confirmation UI**
+- **Phase 2 — Confirmation UI**
 A usable interface for reviewing, editing, and confirming parsed expenses before saving.
-
-**Phase 3 — Budgets & Queries**
+- **Phase 3 — Budgets & Queries**
 Budget definitions by category, and the ability to query/report on spending via natural language or simple views.
-
-**Phase 4 — Polish & Hosting**
+- **Phase 4 — Polish & Hosting**
 Refinement of the experience, documentation for self-hosting, and a settled containerization/deployment approach.
 
 ## 7. Risks, Dependencies and Open Questions
