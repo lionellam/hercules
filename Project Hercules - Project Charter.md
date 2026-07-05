@@ -58,7 +58,7 @@ Friction of maintaining an up-to-date expense and budget log can be due to the f
 
 - **Expense —** amount, category, date and time, merchant, notes, payment method
 - **Budget —** category, monthly limit, period
-- **Category —** fixed taxonomy (e.g. Food, Transport, Groceries, Utilities, Other)
+- **Category —** per-user, extensible taxonomy; new profiles are seeded with a starter list (e.g. Food, Transport, Groceries, Utilities, Other) and users can add, rename, or retire categories
 
 *Full field-level schema maintained separately (see project repo / design doc).*
 
@@ -72,7 +72,7 @@ Friction of maintaining an up-to-date expense and budget log can be due to the f
 
 - Containerize the app, or run natively on the home server?
 - How to handle multi-item entries in a single input?
-- Finalize the fixed category taxonomy
+- ~~Finalize the fixed category taxonomy~~ — *Resolved: categories are per-user and extensible; new profiles are seeded with a starter list (exact list TBD). See spec for details.*
 - Security risks - how do we sandbox adequately?
 
 ## 9. Milestones (Draft - To be reviewed)
