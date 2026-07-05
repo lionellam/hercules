@@ -1,10 +1,20 @@
 # Project Hercules — Project Plan
 
 ```
-Version 0.2 · Draft 
+Version 0.3 · Draft 
 Last Reviewed: 05 July 2026
 Produced with AI Assistance (Claude Code)
 ```
+
+## Version History
+
+| Version | Date | Author | Changes |
+|---|---|---|---|
+| 0.1 | 2026-07-03 | James Wong, Lionel Lam | Initial draft project plan |
+| 0.2 | 2026-07-05 | James Wong, Lionel Lam | Reordered plan sections; updated milestones format; aligned with spec |
+| 0.3 | 2026-07-05 | James Wong, Lionel Lam | Updated NL Parsing Engine feature to reflect category suggestion capability |
+
+---
 
 ## 1. Overview
 

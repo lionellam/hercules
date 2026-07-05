@@ -1,6 +1,19 @@
 **Natural Language Expense & Budget Tracker**
 
-> Version 0.1 · Draft
+```
+Version 0.2 · Draft
+Last Reviewed: 05 July 2026
+Produced with AI Assistance (Claude Code)
+```
+
+## Version History
+
+| Version | Date | Author | Changes |
+|---|---|---|---|
+| 0.1 | 2026-07-03 | James Wong, Lionel Lam | Initial draft charter |
+| 0.2 | 2026-07-05 | James Wong, Lionel Lam | Updated category taxonomy from fixed to per-user extensible; resolved fixed taxonomy open question |
+
+---
 
 ## Team / Collaborators
 
