@@ -1,0 +1,132 @@
+<svg viewBox="0 0 780 540" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Segoe UI', Arial, sans-serif" font-size="12">
+  <title>Project Hercules — Entity Relationship Diagram</title>
+  <desc>ERD showing Expense, Category, User entities and their relationships</desc>
+
+  <rect width="780" height="540" fill="#ffffff"/>
+
+  <!-- Title -->
+  <text x="390" y="28" text-anchor="middle" font-size="15" font-weight="700" fill="#111111">Project Hercules — Entity Relationship Diagram</text>
+  <text x="390" y="46" text-anchor="middle" font-size="11" fill="#666666">Specification v0.4 · Draft data model</text>
+
+  <!-- USER entity -->
+  <rect x="300" y="62" width="180" height="140" rx="6" fill="#EFF6FF" stroke="#2563EB" stroke-width="2"/>
+  <rect x="300" y="62" width="180" height="28" rx="6" fill="#2563EB"/>
+  <rect x="300" y="76" width="180" height="14" fill="#2563EB"/>
+  <text x="390" y="80" text-anchor="middle" font-size="12" font-weight="700" fill="#ffffff">User</text>
+  <text x="312" y="104" font-size="11" fill="#1E3A8A">🔑 id</text>
+  <text x="430" y="104" font-size="10" fill="#3B82F6" text-anchor="end">identifier (PK)</text>
+  <line x1="308" y1="108" x2="472" y2="108" stroke="#BFDBFE" stroke-width="0.5"/>
+  <text x="312" y="122" font-size="11" fill="#1E3A8A">display_name</text>
+  <text x="470" y="122" font-size="10" fill="#6B7280" text-anchor="end">string</text>
+  <line x1="308" y1="126" x2="472" y2="126" stroke="#BFDBFE" stroke-width="0.5"/>
+  <text x="312" y="140" font-size="11" fill="#1E3A8A">is_active</text>
+  <text x="470" y="140" font-size="10" fill="#6B7280" text-anchor="end">boolean</text>
+  <line x1="308" y1="144" x2="472" y2="144" stroke="#BFDBFE" stroke-width="0.5"/>
+  <text x="312" y="158" font-size="11" fill="#1E3A8A">created_at</text>
+  <text x="470" y="158" font-size="10" fill="#6B7280" text-anchor="end">timestamp</text>
+  <text x="390" y="192" text-anchor="middle" font-size="9" fill="#2563EB" font-style="italic">Phase 1: hardcoded · Phase 4: auth-backed</text>
+
+  <!-- CATEGORY entity -->
+  <rect x="30" y="240" width="210" height="210" rx="6" fill="#FFF7ED" stroke="#D97706" stroke-width="2"/>
+  <rect x="30" y="240" width="210" height="28" rx="6" fill="#D97706"/>
+  <rect x="30" y="254" width="210" height="14" fill="#D97706"/>
+  <text x="135" y="258" text-anchor="middle" font-size="12" font-weight="700" fill="#ffffff">Category</text>
+  <text x="42" y="282" font-size="11" fill="#92400E">🔑 id</text>
+  <text x="232" y="282" font-size="10" fill="#D97706" text-anchor="end">identifier (PK)</text>
+  <line x1="38" y1="286" x2="232" y2="286" stroke="#FDE68A" stroke-width="0.5"/>
+  <text x="42" y="300" font-size="11" fill="#92400E">🔗 user_id</text>
+  <text x="232" y="300" font-size="10" fill="#D97706" text-anchor="end">FK → User</text>
+  <line x1="38" y1="304" x2="232" y2="304" stroke="#FDE68A" stroke-width="0.5"/>
+  <text x="42" y="318" font-size="11" fill="#92400E">name</text>
+  <text x="232" y="318" font-size="10" fill="#6B7280" text-anchor="end">string</text>
+  <line x1="38" y1="322" x2="232" y2="322" stroke="#FDE68A" stroke-width="0.5"/>
+  <text x="42" y="336" font-size="11" fill="#92400E">is_default</text>
+  <text x="232" y="336" font-size="10" fill="#6B7280" text-anchor="end">boolean</text>
+  <line x1="38" y1="340" x2="232" y2="340" stroke="#FDE68A" stroke-width="0.5"/>
+  <text x="42" y="354" font-size="11" fill="#92400E">is_active</text>
+  <text x="232" y="354" font-size="10" fill="#6B7280" text-anchor="end">boolean</text>
+  <line x1="38" y1="358" x2="232" y2="358" stroke="#FDE68A" stroke-width="0.5"/>
+  <text x="42" y="372" font-size="11" fill="#92400E">is_other</text>
+  <text x="232" y="372" font-size="10" fill="#6B7280" text-anchor="end">boolean</text>
+  <line x1="38" y1="376" x2="232" y2="376" stroke="#FDE68A" stroke-width="0.5"/>
+  <text x="42" y="390" font-size="10" fill="#9CA3AF" font-style="italic">↳ flags the "Other" catch-all row</text>
+  <text x="42" y="438" font-size="9" fill="#D97706" font-style="italic">Per-user · extensible · seeded on profile create</text>
+
+  <!-- EXPENSE entity -->
+  <rect x="490" y="240" width="260" height="280" rx="6" fill="#F0FDF4" stroke="#16A34A" stroke-width="2"/>
+  <rect x="490" y="240" width="260" height="28" rx="6" fill="#16A34A"/>
+  <rect x="490" y="254" width="260" height="14" fill="#16A34A"/>
+  <text x="620" y="258" text-anchor="middle" font-size="12" font-weight="700" fill="#ffffff">Expense</text>
+  <text x="502" y="282" font-size="11" fill="#166534">🔑 id</text>
+  <text x="742" y="282" font-size="10" fill="#16A34A" text-anchor="end">identifier (PK)</text>
+  <line x1="498" y1="286" x2="742" y2="286" stroke="#BBF7D0" stroke-width="0.5"/>
+  <text x="502" y="300" font-size="11" fill="#166534">🔗 user_id</text>
+  <text x="742" y="300" font-size="10" fill="#16A34A" text-anchor="end">FK → User</text>
+  <line x1="498" y1="304" x2="742" y2="304" stroke="#BBF7D0" stroke-width="0.5"/>
+  <text x="502" y="318" font-size="11" fill="#166534">🔗 category_id</text>
+  <text x="742" y="318" font-size="10" fill="#16A34A" text-anchor="end">FK → Category</text>
+  <line x1="498" y1="322" x2="742" y2="322" stroke="#BBF7D0" stroke-width="0.5"/>
+  <text x="502" y="336" font-size="11" fill="#166534">raw_input</text>
+  <text x="742" y="336" font-size="10" fill="#6B7280" text-anchor="end">string</text>
+  <line x1="498" y1="340" x2="742" y2="340" stroke="#BBF7D0" stroke-width="0.5"/>
+  <text x="502" y="354" font-size="11" fill="#166534">amount</text>
+  <text x="742" y="354" font-size="10" fill="#6B7280" text-anchor="end">number</text>
+  <line x1="498" y1="358" x2="742" y2="358" stroke="#BBF7D0" stroke-width="0.5"/>
+  <text x="502" y="372" font-size="11" fill="#166534">currency</text>
+  <text x="742" y="372" font-size="10" fill="#6B7280" text-anchor="end">string</text>
+  <line x1="498" y1="376" x2="742" y2="376" stroke="#BBF7D0" stroke-width="0.5"/>
+  <text x="502" y="390" font-size="11" fill="#166534">merchant</text>
+  <text x="742" y="390" font-size="10" fill="#6B7280" text-anchor="end">string (optional)</text>
+  <line x1="498" y1="394" x2="742" y2="394" stroke="#BBF7D0" stroke-width="0.5"/>
+  <text x="502" y="408" font-size="11" fill="#166534">date</text>
+  <text x="742" y="408" font-size="10" fill="#6B7280" text-anchor="end">date</text>
+  <line x1="498" y1="412" x2="742" y2="412" stroke="#BBF7D0" stroke-width="0.5"/>
+  <text x="502" y="426" font-size="11" fill="#166534">other_sub_label</text>
+  <text x="742" y="426" font-size="10" fill="#6B7280" text-anchor="end">string (optional)</text>
+  <line x1="498" y1="430" x2="742" y2="430" stroke="#BBF7D0" stroke-width="0.5"/>
+  <text x="502" y="444" font-size="11" fill="#166534">remarks</text>
+  <text x="742" y="444" font-size="10" fill="#6B7280" text-anchor="end">string (optional)</text>
+  <line x1="498" y1="448" x2="742" y2="448" stroke="#BBF7D0" stroke-width="0.5"/>
+  <text x="502" y="462" font-size="11" fill="#166534">was_edited</text>
+  <text x="742" y="462" font-size="10" fill="#6B7280" text-anchor="end">boolean</text>
+  <line x1="498" y1="466" x2="742" y2="466" stroke="#BBF7D0" stroke-width="0.5"/>
+  <text x="502" y="480" font-size="11" fill="#166534">created_at / updated_at</text>
+  <text x="742" y="480" font-size="10" fill="#6B7280" text-anchor="end">timestamp</text>
+
+  <!-- MERCHANT note -->
+  <rect x="30" y="468" width="210" height="56" rx="6" fill="#F9FAFB" stroke="#D1D5DB" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <text x="135" y="486" text-anchor="middle" font-size="11" font-weight="700" fill="#6B7280">Merchant</text>
+  <text x="135" y="500" text-anchor="middle" font-size="10" fill="#9CA3AF">No dedicated table</text>
+  <text x="135" y="514" text-anchor="middle" font-size="10" fill="#9CA3AF">Autocomplete from prior Expense.merchant values</text>
+
+  <!-- RELATIONSHIPS -->
+  <line x1="320" y1="202" x2="200" y2="202" stroke="#94A3B8" stroke-width="1.5"/>
+  <line x1="200" y1="202" x2="200" y2="240" stroke="#94A3B8" stroke-width="1.5" marker-end="url(#arrowGray)"/>
+  <text x="308" y="198" font-size="10" fill="#94A3B8" text-anchor="end">1</text>
+  <text x="192" y="236" font-size="10" fill="#94A3B8" text-anchor="end">M</text>
+
+  <line x1="460" y1="202" x2="565" y2="202" stroke="#94A3B8" stroke-width="1.5"/>
+  <line x1="565" y1="202" x2="565" y2="240" stroke="#94A3B8" stroke-width="1.5" marker-end="url(#arrowGray)"/>
+  <text x="472" y="198" font-size="10" fill="#94A3B8">1</text>
+  <text x="570" y="236" font-size="10" fill="#94A3B8">M</text>
+
+  <line x1="240" y1="350" x2="490" y2="314" stroke="#94A3B8" stroke-width="1.5" marker-end="url(#arrowGray)"/>
+  <text x="248" y="344" font-size="10" fill="#94A3B8">1</text>
+  <text x="476" y="312" font-size="10" fill="#94A3B8" text-anchor="end">M</text>
+
+  <text x="255" y="198" text-anchor="middle" font-size="9" fill="#94A3B8" font-style="italic">owns</text>
+  <text x="520" y="198" text-anchor="middle" font-size="9" fill="#94A3B8" font-style="italic">logs</text>
+  <text x="355" y="320" text-anchor="middle" font-size="9" fill="#94A3B8" font-style="italic">categorises</text>
+
+  <defs>
+    <marker id="arrowGray" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#94A3B8"/>
+    </marker>
+  </defs>
+
+  <!-- Legend -->
+  <rect x="490" y="505" width="260" height="28" rx="4" fill="#F9FAFB" stroke="#E5E7EB" stroke-width="1"/>
+  <text x="502" y="518" font-size="10" fill="#6B7280">🔑 Primary key</text>
+  <text x="590" y="518" font-size="10" fill="#6B7280">🔗 Foreign key</text>
+  <text x="660" y="518" font-size="10" fill="#6B7280">1 / M  Cardinality</text>
+</svg>
