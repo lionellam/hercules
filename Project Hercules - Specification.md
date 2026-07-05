@@ -1,7 +1,7 @@
 # Project Hercules — Specification Sheet: "Log an Expense" Flow
 
 ```
-Version 0.2 · Draft 
+Version 0.3 · Draft 
 Last Reviewed: 05 July 2026
 Produced with AI Assistance (Claude Code)
 ```
@@ -12,6 +12,7 @@ Produced with AI Assistance (Claude Code)
 |---|---|---|---|
 | 0.1 | 2026-07-03 | James Wong, Lionel Lam | Initial draft specification sheet for the "Log an Expense" flow |
 | 0.2 | 2026-07-05 | James Wong, Lionel Lam | Updated taxonomy and user-specific expense categories |
+| 0.3 | 2026-07-05 | James Wong, Lionel Lam | Resolved open questions: user/profile model and "Other" category handling; updated data model accordingly |
 
 ---
 
@@ -70,6 +71,7 @@ This spec exists to align the team before the process flow diagram (UPN) and fea
 | `category_id` | identifier (FK → `Category`) | References a category from the user's own list, not a raw string |
 | `merchant` | string (optional) | Free text; autocomplete-suggested from the user's prior entries, not constrained to a list |
 | `date` | date | Parsed or defaulted to today |
+| `other_sub_label` | string (optional) | Only populated when the selected category has `is_other = true`; captures specificity (e.g. "gift", "charity") without overloading `remarks` |
 | `remarks` | string (optional) | Freeform, **user-authored** notes — distinct from `raw_input`, which is model input |
 | `was_edited` | boolean | Flags whether the user modified any parsed field before saving — a proxy signal for parsing accuracy over time |
 | `created_at` | timestamp | System-generated |
@@ -86,6 +88,7 @@ Per-user and extensible — this is a **user preference**, not a global constant
 | `name` | string | e.g. "Food", "Transport", or a user-added custom category |
 | `is_default` | boolean | Distinguishes preset/seeded categories from user-added ones |
 | `is_active` | boolean | Allows retiring a category without deleting historical records that reference it |
+| `is_other` | boolean | Flags the built-in "Other" catch-all; ensures only one such category exists per profile. When `true`, the expense entry will prompt for an `other_sub_label` to capture specificity |
 
 **Preset behavior:** new profiles are seeded with a starter list of common categories (exact list TBD by the team) plus an **"Other"** catch-all. Users can rename, add, or retire categories from there.
 
@@ -95,9 +98,21 @@ Merchant is handled as autocomplete-over-free-text, not a constrained/enum list.
 
 *Flagged as a possible future refinement:* a dedicated `Merchant` table would become worthwhile if richer metadata is ever needed (e.g. a default category per merchant, merchant aliases/name normalization) — not required for this phase.
 
-### 5.4 `User` (minimal, referenced but not detailed here)
+### 5.4 `User`
 
-Referenced by `Expense.user_id` and `Category.user_id`. Full shape (auth model, profile switching UX, etc.) is an open question — see Section 7.
+| Field | Type | Notes |
+|---|---|---|
+| `id` | identifier | Primary key |
+| `display_name` | string | Human-readable name shown in the profile picker (e.g. "Lionel", "James") |
+| `is_active` | boolean | Allows disabling a profile without deleting its data |
+| `created_at` | timestamp | System-generated |
+
+**Profile model — phased approach:**
+
+- **Phase 1 (prototype):** Profiles are hardcoded in configuration. No passwords, no login screen — users select their profile from a simple picker. Access control is delegated to the home network (i.e. the app is not publicly exposed). The priority is to get a working prototype out quickly and validate functionality.
+- **Future phase:** The `User` table is designed to accommodate a proper authentication layer (e.g. password hash, session tokens) without structural changes to `Expense` or `Category`. Migration from hardcoded to auth-backed profiles should be straightforward.
+
+**Design intent:** profile data is private and non-shared. Each profile operates as an independent silo within the same deployment.
 
 ---
 
@@ -124,8 +139,8 @@ Carried forward, not yet resolved:
 - **Multi-item entries** — how should input like *"coffee $4 and lunch $12"* be handled? Single record, or split into two?
 - **Low-confidence parsing** — should the confirmation screen indicate when the model was uncertain about a specific field (e.g. no date mentioned, so it defaulted to today)? Deferred to a later phase, or in scope now?
 - **`raw_input` storage shape** — single table (structured fields + raw text together, as currently drafted), or a separate related/audit table?
-- **Category "Other" handling** — does selecting "Other" need a follow-up freeform sub-label, or does the existing `remarks` field cover that need?
-- **User/profile model** — how lightweight should profiles be? (e.g. a simple profile picker with no password, relying on the home network itself for access control, vs. something more formal with authentication)
+- ~~**Category "Other" handling**~~ — *Resolved in v0.3: `is_other` flag added to `Category`; `other_sub_label` field added to `Expense` for specificity. `remarks` remains a general-purpose notes field.*
+- ~~**User/profile model**~~ — *Resolved in v0.3: lightweight hardcoded profiles for the prototype (profile picker, no auth); designed to scale to proper authentication in a future phase. See Section 5.4.*
 - **`was_edited` granularity** — currently a single boolean. A likely future refinement is tracking *which* fields were edited (e.g. `edited_fields: [category, amount]`) for richer parsing-quality signal — not required now.
 
 ---
