@@ -1,16 +1,30 @@
 # Project Hercules — Project Plan
 
 ```
-Version 0.1 · Draft 
-Last Reviewed: 02 July 2026
-Assembled with the use of Claude
+Version 0.2 · Draft 
+Last Reviewed: 05 July 2026
+Produced with AI Assistance (Claude Code)
 ```
 
 ## 1. Overview
 
 Project Hercules is web-based, open source, self-hosted expense and budget tracker that uses a natural language interface, powered by a Small Language Model (SLM), to remove the friction of manual expense entry. This plan translates the project charter into a working plan for contributors — covering the product vision, objectives, features, phases, and risks — as a community-driven, open project.
 
-## 2. Product Vision
+## 2. Problem Statement
+
+Friction of maintaining an up-to-date expense and budget log can be due to the fiddly and cumbersome nature of some expense tracker apps. This project aims to reduce this friction by employing a natural language interface. For personal and home use, this project aims to deliver a working solution without the expense of recurring subscriptions that is pervasive of the competing alternatives (i.e. YNAB, etc.) available on the market.
+
+## 3. Project Objectives
+
+- Enable natural language expense entry that is parsed into structured, storable data
+- Provide a human-in-the-loop confirmation step before any data is saved
+- Support budget and expense tracking by category
+- Run entirely self-hosted / on-premises, with no cloud dependency
+- Keep the project free, open, and easy for others to run on their own hardware
+- Achieve reliable parsing (target: less than 10% of entries require manual correction)
+- To demonstrate the viability of the CPMAI framework in conceiving of and developing cognitive projects.
+
+## 4. Product Vision
 
 **Elevator Statement**
 
@@ -23,20 +37,6 @@ Project Hercules is web-based, open source, self-hosted expense and budget track
 - No subscriptions, no accounts, no ads.
 - Built by and for people who want a simple, private, open alternative to commercial budgeting apps.
 - Confirm before it's saved — you're always in control of what gets recorded.
-
-## 3. Problem Statement
-
-Friction of maintaining an up-to-date expense and budget log can be due to the fiddly and cumbersome nature of some expense tracker apps. This project aims to reduce this friction by employing a natural language interface. For personal and home use, this project aims to deliver a working solution without the expense of recurring subscriptions that is pervasive of the competing alternatives (i.e. YNAB, etc.) available on the market.
-
-## 4. Project Objectives
-
-- Enable natural language expense entry that is parsed into structured, storable data
-- Provide a human-in-the-loop confirmation step before any data is saved
-- Support budget and expense tracking by category
-- Run entirely self-hosted / on-premises, with no cloud dependency
-- Keep the project free, open, and easy for others to run on their own hardware
-- Achieve reliable parsing (target: less than 10% of entries require manual correction)
-- To demonstrate the viability of the CPMAI framework in conceiving of and developing cognitive projects.
 
 ## 5. Feature Breakdown
 

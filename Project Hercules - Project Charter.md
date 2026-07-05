@@ -71,7 +71,6 @@ Friction of maintaining an up-to-date expense and budget log can be due to the f
 ## 8. Open Questions / Risks
 
 - Containerize the app, or run natively on the home server?
-- Always show confirmation screen, or auto-save high-confidence entries?
 - How to handle multi-item entries in a single input?
 - Finalize the fixed category taxonomy
 - Security risks - how do we sandbox adequately?
