@@ -49,7 +49,7 @@ A high-level look at the functional pieces of the system. These will be broken d
 - **Confirmation Screen** — editable review step before data is committed to the database
 - **Expense Storage** — structured, queryable storage of logged expenses
 - **Budget Tracking** — category-based budgets and tracking against them
-- **Category Taxonomy** — a fixed, manageable set of expense categories
+- **Category Taxonomy** — a per-user, extensible set of expense categories; new profiles are seeded with a starter list and users can add, rename, or retire categories
 - **Export / Download** — ability to export a list of expenses (in lieu of built-in reports/dashboards)
 - **Hosting & Deployment** — self-hosted setup on a home server (containerization approach TBD)
 
@@ -72,9 +72,7 @@ Refinement of the experience, documentation for self-hosting, and a settled cont
 ## 7. Risks, Dependencies and Open Questions
 
 - Containerize the app, or run natively on the home server? To preserve portability.
-- Always show the confirmation screen, or auto-save high-confidence entries?
 - How should multi-item entries in a single input be handled (e.g. "coffee $4 and lunch $12")?
-- The fixed category taxonomy still needs to be finalized
 - Parsing reliability is dependent on the chosen small language model's performance on free-form, informal text
 
 ## 8. Review Checkpoints
