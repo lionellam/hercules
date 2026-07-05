@@ -11,6 +11,7 @@ Produced with AI Assistance (Claude Code)
 | Version | Date | Author | Changes |
 |---|---|---|---|
 | 0.1 | 2026-07-03 | James Wong, Lionel Lam | Initial draft specification sheet for the "Log an Expense" flow |
+| 0.2 | 2026-07-05 | James Wong, Lionel Lam | Updated taxonomy and user-specific expense categories |
 
 ---
 
