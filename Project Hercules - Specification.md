@@ -1,7 +1,7 @@
 # Project Hercules — Specification Sheet: "Log an Expense" Flow
 
 ```
-Version 0.3 · Draft 
+Version 0.4 · Draft 
 Last Reviewed: 05 July 2026
 Produced with AI Assistance (Claude Code)
 ```
@@ -13,6 +13,7 @@ Produced with AI Assistance (Claude Code)
 | 0.1 | 2026-07-03 | James Wong, Lionel Lam | Initial draft specification sheet for the "Log an Expense" flow |
 | 0.2 | 2026-07-05 | James Wong, Lionel Lam | Updated taxonomy and user-specific expense categories |
 | 0.3 | 2026-07-05 | James Wong, Lionel Lam | Resolved open questions: user/profile model and "Other" category handling; updated data model accordingly |
+| 0.4 | 2026-07-05 | James Wong, Lionel Lam | Extended SLM role to include category suggestion from the user's active category list; updated process flow and AI boundary accordingly |
 
 ---
 
@@ -49,11 +50,13 @@ This spec exists to align the team before the process flow diagram (UPN) and fea
 ## 4. Process Flow (Narrative)
 
 1. **User enters expense** — free text, e.g. *"spent $12 on lunch at McDonald's yesterday"*
-2. **SLM parses input** — the sole AI step. Produces structured fields (amount, category, merchant, date, etc.) from the raw text.
-3. **Confirmation screen is presented** — parsed fields shown as editable form elements (not a static summary).
-4. **User reviews and optionally edits fields directly** — this is the human-in-the-loop step. No re-prompting of the model occurs; corrections are direct field edits.
-5. **User confirms/saves** — the system writes the structured record, the original raw text, and a flag indicating whether any edit occurred.
-6. **Record is available for viewing/export** — out of detailed scope for this spec, noted for completeness.
+2. **Application fetches active categories** — before calling the SLM, the application queries the Category table for the user's active categories and injects the list into the prompt. This is an application-side step; no AI is involved.
+3. **SLM parses input** — the AI step. Produces structured fields (amount, category, merchant, date, etc.) from the raw text. For category, the SLM is instructed to return exactly one name from the injected category list, or "Other" if nothing fits. No free-text category invention.
+4. **Application resolves `category_id`** — the returned category name is matched via exact lookup against the Category table. "Other" maps to the row where `is_other = true`. No fuzzy matching required.
+5. **Confirmation screen is presented** — parsed fields shown as editable form elements (not a static summary).
+6. **User reviews and optionally edits fields directly** — this is the human-in-the-loop step. No re-prompting of the model occurs; corrections are direct field edits.
+7. **User confirms/saves** — the system writes the structured record, the original raw text, and a flag indicating whether any edit occurred.
+8. **Record is available for viewing/export** — out of detailed scope for this spec, noted for completeness.
 
 ---
 
@@ -122,7 +125,9 @@ To keep this explicit and reviewable:
 
 | In scope for the SLM | Out of scope for the SLM |
 |---|---|
-| Parsing free text → structured fields (amount, category guess, merchant guess, date) | Validating the parsed output |
+| Parsing free text → structured fields (amount, merchant guess, date) | Validating the parsed output |
+| Category suggestion — selecting the best match from the user's active category list (injected into the prompt by the application); returns a name from the list or the sentinel "Other" | Fetching the category list (application responsibility) |
+| — | Resolving the returned category name to a `category_id` (application responsibility — exact match lookup) |
 | — | Saving/storing data |
 | — | Retrieving or querying past expenses |
 | — | Handling user edits |
