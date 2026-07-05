@@ -1,0 +1,144 @@
+<svg viewBox="0 0 780 620" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Segoe UI', Arial, sans-serif" font-size="13">
+  <title>Project Hercules — Log an Expense Process Flow</title>
+  <desc>UPN-styled swimlane diagram showing the Log an Expense flow across User, Application, and SLM actors</desc>
+
+  <!-- Background -->
+  <rect width="780" height="620" fill="#ffffff"/>
+
+  <!-- Title -->
+  <text x="390" y="32" text-anchor="middle" font-size="15" font-weight="700" fill="#111111">Project Hercules — Log an Expense Flow</text>
+  <text x="390" y="50" text-anchor="middle" font-size="11" fill="#666666">Specification v0.4 · UPN-style process diagram</text>
+
+  <!-- Swimlane headers -->
+  <rect x="20" y="64" width="120" height="536" fill="#f5f5f5" stroke="#cccccc" stroke-width="1"/>
+  <rect x="140" y="64" width="220" height="536" fill="#fafafa" stroke="#cccccc" stroke-width="1"/>
+  <rect x="360" y="64" width="200" height="536" fill="#fff8f0" stroke="#cccccc" stroke-width="1"/>
+  <rect x="560" y="64" width="200" height="536" fill="#f0f4ff" stroke="#cccccc" stroke-width="1"/>
+
+  <!-- Swimlane labels -->
+  <text x="80" y="90" text-anchor="middle" font-size="11" font-weight="700" fill="#444444">USER</text>
+  <text x="250" y="90" text-anchor="middle" font-size="11" font-weight="700" fill="#444444">APPLICATION</text>
+  <text x="460" y="90" text-anchor="middle" font-size="11" font-weight="700" fill="#b45309">SLM (Phi-4-mini)</text>
+  <text x="660" y="90" text-anchor="middle" font-size="11" font-weight="700" fill="#444444">DATABASE</text>
+
+  <!-- Divider line under headers -->
+  <line x1="20" y1="98" x2="760" y2="98" stroke="#cccccc" stroke-width="1"/>
+
+  <!-- STEP 1: User enters expense -->
+  <rect x="30" y="114" width="100" height="48" rx="6" fill="#ffffff" stroke="#111111" stroke-width="1.5"/>
+  <text x="80" y="134" text-anchor="middle" font-size="11" font-weight="600" fill="#111111">Enter expense</text>
+  <text x="80" y="150" text-anchor="middle" font-size="10" fill="#555555">free text input</text>
+
+  <!-- Arrow: User → App -->
+  <line x1="130" y1="138" x2="148" y2="138" stroke="#111111" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- STEP 2: App fetches categories -->
+  <rect x="150" y="114" width="200" height="48" rx="6" fill="#ffffff" stroke="#111111" stroke-width="1.5"/>
+  <text x="250" y="134" text-anchor="middle" font-size="11" font-weight="600" fill="#111111">Fetch active categories</text>
+  <text x="250" y="150" text-anchor="middle" font-size="10" fill="#555555">for this user profile</text>
+
+  <!-- Arrow: App → DB (fetch) -->
+  <line x1="350" y1="130" x2="558" y2="130" stroke="#111111" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrow)"/>
+  <text x="454" y="124" text-anchor="middle" font-size="9" fill="#888888">query</text>
+  <!-- Arrow: DB → App (return) -->
+  <line x1="558" y1="145" x2="350" y2="145" stroke="#111111" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrow)"/>
+  <text x="454" y="158" text-anchor="middle" font-size="9" fill="#888888">category list</text>
+
+  <!-- Arrow: App → SLM -->
+  <line x1="350" y1="138" x2="358" y2="138" stroke="#111111" stroke-width="1" />
+  <line x1="358" y1="138" x2="358" y2="208" stroke="#111111" stroke-width="1"/>
+  <line x1="358" y1="208" x2="368" y2="208" stroke="#111111" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="363" y="178" font-size="9" fill="#888888">text +</text>
+  <text x="363" y="189" font-size="9" fill="#888888">categories</text>
+
+  <!-- STEP 3: SLM parses -->
+  <!-- Cognitive activity box (rounded, amber border) -->
+  <rect x="370" y="183" width="180" height="58" rx="6" fill="#fffbeb" stroke="#b45309" stroke-width="2"/>
+  <text x="460" y="203" text-anchor="middle" font-size="11" font-weight="700" fill="#b45309">⬡ Parse expense text</text>
+  <text x="460" y="219" text-anchor="middle" font-size="10" fill="#92400e">amount · merchant · date</text>
+  <text x="460" y="232" text-anchor="middle" font-size="10" fill="#92400e">category (from list)</text>
+
+  <!-- Legend note for cognitive box -->
+  <text x="370" y="176" font-size="9" fill="#b45309" font-style="italic">⬡ cognitive activity (SLM)</text>
+
+  <!-- Arrow: SLM → App (structured fields) -->
+  <line x1="370" y1="212" x2="358" y2="212" stroke="#111111" stroke-width="1"/>
+  <line x1="358" y1="212" x2="358" y2="282" stroke="#111111" stroke-width="1"/>
+  <line x1="358" y1="282" x2="350" y2="282" stroke="#111111" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="310" y="252" font-size="9" fill="#888888">structured</text>
+  <text x="310" y="263" font-size="9" fill="#888888">fields</text>
+
+  <!-- STEP 4: App resolves category_id -->
+  <rect x="150" y="258" width="200" height="48" rx="6" fill="#ffffff" stroke="#111111" stroke-width="1.5"/>
+  <text x="250" y="278" text-anchor="middle" font-size="11" font-weight="600" fill="#111111">Resolve category_id</text>
+  <text x="250" y="294" text-anchor="middle" font-size="10" fill="#555555">exact match lookup</text>
+
+  <!-- Arrow: App → User (show confirmation) -->
+  <line x1="150" y1="282" x2="130" y2="282" stroke="#111111" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- STEP 5: Confirmation screen -->
+  <rect x="30" y="258" width="100" height="48" rx="6" fill="#ffffff" stroke="#111111" stroke-width="1.5"/>
+  <text x="80" y="274" text-anchor="middle" font-size="11" font-weight="600" fill="#111111">Review fields</text>
+  <text x="80" y="290" text-anchor="middle" font-size="10" fill="#555555">confirmation screen</text>
+
+  <!-- Arrow down: User reviews -->
+  <line x1="80" y1="306" x2="80" y2="354" stroke="#111111" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- STEP 6: User edits (optional) -->
+  <rect x="30" y="355" width="100" height="48" rx="6" fill="#ffffff" stroke="#111111" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <text x="80" y="371" text-anchor="middle" font-size="11" font-weight="600" fill="#111111">Edit fields</text>
+  <text x="80" y="387" text-anchor="middle" font-size="10" fill="#888888">optional</text>
+
+  <!-- Arrow down: User confirms -->
+  <line x1="80" y1="403" x2="80" y2="435" stroke="#111111" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- STEP 7: User confirms -->
+  <rect x="30" y="436" width="100" height="48" rx="6" fill="#ffffff" stroke="#111111" stroke-width="1.5"/>
+  <text x="80" y="452" text-anchor="middle" font-size="11" font-weight="600" fill="#111111">Confirm &amp; save</text>
+  <text x="80" y="468" text-anchor="middle" font-size="10" fill="#555555">user action</text>
+
+  <!-- Arrow: User → App (save) -->
+  <line x1="130" y1="460" x2="148" y2="460" stroke="#111111" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- STEP 8: App writes record -->
+  <rect x="150" y="436" width="200" height="48" rx="6" fill="#ffffff" stroke="#111111" stroke-width="1.5"/>
+  <text x="250" y="452" text-anchor="middle" font-size="11" font-weight="600" fill="#111111">Write expense record</text>
+  <text x="250" y="468" text-anchor="middle" font-size="10" fill="#555555">structured fields + raw_input + was_edited</text>
+
+  <!-- Arrow: App → DB (write) -->
+  <line x1="350" y1="460" x2="568" y2="460" stroke="#111111" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- DB cylinder -->
+  <ellipse cx="630" cy="454" rx="40" ry="12" fill="#e0e7ff" stroke="#4338ca" stroke-width="1.5"/>
+  <rect x="590" y="454" width="80" height="36" fill="#e0e7ff" stroke="#4338ca" stroke-width="1.5"/>
+  <ellipse cx="630" cy="490" rx="40" ry="12" fill="#c7d2fe" stroke="#4338ca" stroke-width="1.5"/>
+  <text x="630" y="476" text-anchor="middle" font-size="11" font-weight="600" fill="#3730a3">Expense</text>
+
+  <!-- STEP 9: Record available -->
+  <rect x="150" y="510" width="200" height="36" rx="6" fill="#f0fdf4" stroke="#16a34a" stroke-width="1.5"/>
+  <text x="250" y="533" text-anchor="middle" font-size="11" fill="#15803d">Record available for viewing / export</text>
+
+  <!-- Arrow: DB → available -->
+  <line x1="590" y1="490" x2="356" y2="525" stroke="#16a34a" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#arrowGreen)"/>
+
+  <!-- Arrowhead markers -->
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#111111"/>
+    </marker>
+    <marker id="arrowGreen" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#16a34a"/>
+    </marker>
+  </defs>
+
+  <!-- Legend -->
+  <rect x="20" y="572" width="740" height="36" rx="4" fill="#f9f9f9" stroke="#dddddd" stroke-width="1"/>
+  <rect x="32" y="583" width="16" height="12" rx="2" fill="#fffbeb" stroke="#b45309" stroke-width="2"/>
+  <text x="54" y="593" font-size="10" fill="#555555">Cognitive activity (SLM boundary)</text>
+  <rect x="200" y="583" width="16" height="12" rx="2" fill="#ffffff" stroke="#111111" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <text x="222" y="593" font-size="10" fill="#555555">Optional step</text>
+  <line x1="320" y1="589" x2="346" y2="589" stroke="#111111" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <text x="352" y="593" font-size="10" fill="#555555">Database read/write</text>
+  <line x1="480" y1="589" x2="506" y2="589" stroke="#111111" stroke-width="1.5"/>
+  <text x="512" y="593" font-size="10" fill="#555555">Process flow</text>
+</svg>
