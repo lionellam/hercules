@@ -45,7 +45,7 @@ Friction of maintaining an up-to-date expense and budget log can be due to the f
 A high-level look at the functional pieces of the system. These will be broken down further into individual backlog items as the project progresses. 
 
 - **Natural Language Input** — free-form text entry for logging an expense
-- **NL Parsing Engine** — local model (Phi-4-mini via Ollama) that parses input into structured fields
+- **NL Parsing Engine** — local model (Phi-4-mini via Ollama) that parses input into structured fields and suggests the best-matching expense category from the user's active category list
 - **Confirmation Screen** — editable review step before data is committed to the database
 - **Expense Storage** — structured, queryable storage of logged expenses
 - **Budget Tracking** — category-based budgets and tracking against them
