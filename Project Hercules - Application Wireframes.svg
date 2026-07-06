@@ -1,0 +1,229 @@
+<svg viewBox="0 0 1180 640" xmlns="http://www.w3.org/2000/svg" font-family="'Segoe UI', Arial, sans-serif" role="img">
+  <title>Project Hercules — Mid-Fidelity Wireframes</title>
+
+  <rect width="1180" height="640" fill="#F1F5F9"/>
+
+  <!-- Title -->
+  <text x="590" y="28" text-anchor="middle" font-size="14" font-weight="700" fill="#1E293B">Project Hercules — Mid-Fidelity Wireframes</text>
+  <text x="590" y="44" text-anchor="middle" font-size="10" fill="#94A3B8">Phase 1 &amp; 2 · Mobile-first · 4 core screens</text>
+
+  <defs>
+    <clipPath id="c1"><rect x="20" y="69" width="260" height="492" rx="3"/></clipPath>
+    <clipPath id="c2"><rect x="313" y="69" width="260" height="492" rx="3"/></clipPath>
+    <clipPath id="c3"><rect x="606" y="69" width="260" height="492" rx="3"/></clipPath>
+    <clipPath id="c4"><rect x="899" y="69" width="260" height="492" rx="3"/></clipPath>
+  </defs>
+
+  <!-- PHONE FRAMES -->
+
+  <!-- P1 frame -->
+  <rect x="13" y="55" width="274" height="520" rx="22" fill="#1E293B"/>
+  <rect x="20" y="69" width="260" height="492" rx="3" fill="#FFFFFF"/>
+  <rect x="120" y="55" width="40" height="12" rx="6" fill="#111827"/>
+
+  <!-- P2 frame -->
+  <rect x="306" y="55" width="274" height="520" rx="22" fill="#1E293B"/>
+  <rect x="313" y="69" width="260" height="492" rx="3" fill="#FFFFFF"/>
+  <rect x="413" y="55" width="40" height="12" rx="6" fill="#111827"/>
+
+  <!-- P3 frame -->
+  <rect x="599" y="55" width="274" height="520" rx="22" fill="#1E293B"/>
+  <rect x="606" y="69" width="260" height="492" rx="3" fill="#FFFFFF"/>
+  <rect x="706" y="55" width="40" height="12" rx="6" fill="#111827"/>
+
+  <!-- P4 frame -->
+  <rect x="892" y="55" width="274" height="520" rx="22" fill="#1E293B"/>
+  <rect x="899" y="69" width="260" height="492" rx="3" fill="#FFFFFF"/>
+  <rect x="999" y="55" width="40" height="12" rx="6" fill="#111827"/>
+
+  <!-- Screen labels -->
+  <text x="150" y="596" text-anchor="middle" font-size="11" font-weight="700" fill="#475569">① Profile Picker</text>
+  <text x="443" y="596" text-anchor="middle" font-size="11" font-weight="700" fill="#475569">② Log an Expense</text>
+  <text x="736" y="596" text-anchor="middle" font-size="11" font-weight="700" fill="#475569">③ Confirmation Screen</text>
+  <text x="1029" y="596" text-anchor="middle" font-size="11" font-weight="700" fill="#475569">④ Expense Log</text>
+  <text x="150" y="610" text-anchor="middle" font-size="10" fill="#94A3B8">Phase 1</text>
+  <text x="443" y="610" text-anchor="middle" font-size="10" fill="#94A3B8">Phase 2</text>
+  <text x="736" y="610" text-anchor="middle" font-size="10" fill="#94A3B8">Phase 2</text>
+  <text x="1029" y="610" text-anchor="middle" font-size="10" fill="#94A3B8">Phase 2</text>
+
+  <!-- SCREEN 1: Profile Picker -->
+  <g clip-path="url(#c1)">
+    <text x="28" y="84" font-size="9" fill="#64748B">9:41</text>
+    <text x="272" y="84" text-anchor="end" font-size="9" fill="#64748B">●●● 100%</text>
+    <rect x="20" y="88" width="260" height="44" fill="#F8FAFC"/>
+    <text x="150" y="116" text-anchor="middle" font-size="16" font-weight="700" fill="#0F172A">⬡ Hercules</text>
+    <line x1="20" y1="132" x2="280" y2="132" stroke="#E2E8F0" stroke-width="1"/>
+    <text x="150" y="153" text-anchor="middle" font-size="11" fill="#94A3B8">Select your profile to continue</text>
+    <!-- Card 1 -->
+    <rect x="30" y="163" width="240" height="66" rx="10" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1"/>
+    <circle cx="62" cy="196" r="20" fill="#2563EB"/>
+    <text x="62" y="201" text-anchor="middle" font-size="13" font-weight="700" fill="#FFFFFF">J</text>
+    <text x="92" y="191" font-size="13" font-weight="600" fill="#1E293B">James Wong</text>
+    <text x="92" y="208" font-size="10" fill="#94A3B8">Profile · Personal</text>
+    <text x="262" y="200" text-anchor="end" font-size="18" fill="#CBD5E1">›</text>
+    <!-- Card 2 -->
+    <rect x="30" y="241" width="240" height="66" rx="10" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1"/>
+    <circle cx="62" cy="274" r="20" fill="#D97706"/>
+    <text x="62" y="279" text-anchor="middle" font-size="13" font-weight="700" fill="#FFFFFF">L</text>
+    <text x="92" y="269" font-size="13" font-weight="600" fill="#1E293B">Lionel Lam</text>
+    <text x="92" y="286" font-size="10" fill="#94A3B8">Profile · Personal</text>
+    <text x="262" y="278" text-anchor="end" font-size="18" fill="#CBD5E1">›</text>
+    <text x="150" y="330" text-anchor="middle" font-size="10" fill="#CBD5E1">+ Add profile (Phase 4)</text>
+    <rect x="60" y="355" width="180" height="120" rx="12" fill="#F1F5F9"/>
+    <text x="150" y="410" text-anchor="middle" font-size="11" fill="#CBD5E1">App illustration</text>
+    <text x="150" y="428" text-anchor="middle" font-size="10" fill="#CBD5E1">placeholder</text>
+    <text x="150" y="495" text-anchor="middle" font-size="9" fill="#E2E8F0">⬡ Hercules · v0.1</text>
+    <text x="150" y="508" text-anchor="middle" font-size="9" fill="#E2E8F0">Self-hosted · Private by design</text>
+  </g>
+
+  <!-- SCREEN 2: Log an Expense -->
+  <g clip-path="url(#c2)">
+    <text x="321" y="84" font-size="9" fill="#64748B">9:41</text>
+    <text x="565" y="84" text-anchor="end" font-size="9" fill="#64748B">●●● 100%</text>
+    <rect x="313" y="88" width="260" height="44" fill="#F8FAFC"/>
+    <text x="325" y="116" font-size="12" fill="#64748B">← Back</text>
+    <text x="443" y="116" text-anchor="middle" font-size="14" font-weight="700" fill="#0F172A">Log Expense</text>
+    <circle cx="560" cy="110" r="14" fill="#D97706"/>
+    <text x="560" y="115" text-anchor="middle" font-size="11" font-weight="700" fill="#FFFFFF">L</text>
+    <line x1="313" y1="132" x2="573" y2="132" stroke="#E2E8F0" stroke-width="1"/>
+    <text x="323" y="153" font-size="14" font-weight="700" fill="#1E293B">What did you spend on?</text>
+    <text x="323" y="168" font-size="10" fill="#94A3B8">Type naturally — the app will parse it for you</text>
+    <rect x="323" y="178" width="240" height="100" rx="8" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="1.5"/>
+    <text x="333" y="198" font-size="11" fill="#CBD5E1" font-style="italic">e.g. "spent $12 on lunch at</text>
+    <text x="333" y="214" font-size="11" fill="#CBD5E1" font-style="italic">McDonald's yesterday"</text>
+    <text x="555" y="272" text-anchor="end" font-size="9" fill="#CBD5E1">0 / 300</text>
+    <rect x="323" y="288" width="240" height="40" rx="8" fill="#2563EB"/>
+    <text x="443" y="313" text-anchor="middle" font-size="13" font-weight="600" fill="#FFFFFF">Parse &amp; Review →</text>
+    <rect x="400" y="332" width="86" height="12" fill="#F1F5F9"/>
+    <text x="443" y="341" text-anchor="middle" font-size="9" fill="#94A3B8">Recent expenses</text>
+    <line x1="323" y1="344" x2="563" y2="344" stroke="#E2E8F0" stroke-width="1"/>
+    <!-- Row 1 -->
+    <rect x="323" y="352" width="240" height="44" rx="6" fill="#F8FAFC"/>
+    <rect x="333" y="362" width="48" height="16" rx="4" fill="#FEF3C7"/>
+    <text x="357" y="374" text-anchor="middle" font-size="9" fill="#D97706">Food</text>
+    <text x="390" y="369" font-size="11" font-weight="500" fill="#1E293B">McDonald's</text>
+    <text x="390" y="383" font-size="9" fill="#94A3B8">04 Jul · Today</text>
+    <text x="555" y="374" text-anchor="end" font-size="12" font-weight="600" fill="#1E293B">$12.00</text>
+    <!-- Row 2 -->
+    <rect x="323" y="402" width="240" height="44" rx="6" fill="#F8FAFC"/>
+    <rect x="333" y="412" width="56" height="16" rx="4" fill="#DBEAFE"/>
+    <text x="361" y="424" text-anchor="middle" font-size="9" fill="#2563EB">Transport</text>
+    <text x="398" y="419" font-size="11" font-weight="500" fill="#1E293B">Grab</text>
+    <text x="398" y="433" font-size="9" fill="#94A3B8">04 Jul · Today</text>
+    <text x="555" y="424" text-anchor="end" font-size="12" font-weight="600" fill="#1E293B">$8.50</text>
+    <!-- Row 3 -->
+    <rect x="323" y="452" width="240" height="44" rx="6" fill="#F8FAFC"/>
+    <rect x="333" y="462" width="58" height="16" rx="4" fill="#DCFCE7"/>
+    <text x="362" y="474" text-anchor="middle" font-size="9" fill="#16A34A">Groceries</text>
+    <text x="400" y="469" font-size="11" font-weight="500" fill="#1E293B">FairPrice</text>
+    <text x="400" y="483" font-size="9" fill="#94A3B8">03 Jul · Yesterday</text>
+    <text x="555" y="474" text-anchor="end" font-size="12" font-weight="600" fill="#1E293B">$34.20</text>
+    <text x="443" y="515" text-anchor="middle" font-size="10" fill="#CBD5E1">View all expenses →</text>
+  </g>
+
+  <!-- SCREEN 3: Confirmation Screen -->
+  <g clip-path="url(#c3)">
+    <text x="614" y="84" font-size="9" fill="#64748B">9:41</text>
+    <text x="858" y="84" text-anchor="end" font-size="9" fill="#64748B">●●● 100%</text>
+    <rect x="606" y="88" width="260" height="44" fill="#F8FAFC"/>
+    <text x="618" y="116" font-size="12" fill="#64748B">← Cancel</text>
+    <text x="736" y="116" text-anchor="middle" font-size="14" font-weight="700" fill="#0F172A">Review Expense</text>
+    <line x1="606" y1="132" x2="866" y2="132" stroke="#E2E8F0" stroke-width="1"/>
+    <!-- Raw input box -->
+    <rect x="616" y="139" width="240" height="40" rx="6" fill="#FFFBEB" stroke="#FDE68A" stroke-width="1"/>
+    <text x="626" y="153" font-size="9" font-weight="600" fill="#D97706">Your input</text>
+    <text x="626" y="168" font-size="10" fill="#78350F" font-style="italic">"spent $12 on lunch at McDonald's"</text>
+    <!-- Amount -->
+    <text x="616" y="196" font-size="10" font-weight="600" fill="#64748B">AMOUNT</text>
+    <rect x="616" y="200" width="240" height="36" rx="6" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5"/>
+    <text x="628" y="223" font-size="14" font-weight="700" fill="#1E293B">$12.00</text>
+    <text x="848" y="223" text-anchor="end" font-size="11" fill="#94A3B8">SGD ▾</text>
+    <!-- Category -->
+    <text x="616" y="252" font-size="10" font-weight="600" fill="#64748B">CATEGORY</text>
+    <rect x="616" y="256" width="240" height="36" rx="6" fill="#FFFFFF" stroke="#2563EB" stroke-width="1.5"/>
+    <rect x="626" y="264" width="68" height="18" rx="4" fill="#FEF3C7"/>
+    <text x="660" y="277" text-anchor="middle" font-size="10" fill="#D97706">Food &amp; Dining</text>
+    <text x="848" y="279" text-anchor="end" font-size="13" fill="#94A3B8">▾</text>
+    <rect x="702" y="264" width="38" height="14" rx="4" fill="#EDE9FE"/>
+    <text x="721" y="274" text-anchor="middle" font-size="8" fill="#7C3AED">AI ✦</text>
+    <!-- Merchant -->
+    <text x="616" y="308" font-size="10" font-weight="600" fill="#64748B">MERCHANT</text>
+    <rect x="616" y="312" width="240" height="36" rx="6" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5"/>
+    <text x="628" y="335" font-size="13" fill="#1E293B">McDonald's</text>
+    <!-- Date -->
+    <text x="616" y="364" font-size="10" font-weight="600" fill="#64748B">DATE</text>
+    <rect x="616" y="368" width="240" height="36" rx="6" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5"/>
+    <text x="628" y="391" font-size="13" fill="#1E293B">Today, 05 Jul 2026</text>
+    <text x="848" y="391" text-anchor="end" font-size="13" fill="#CBD5E1">📅</text>
+    <!-- Remarks -->
+    <text x="616" y="420" font-size="10" font-weight="600" fill="#64748B">REMARKS <tspan fill="#CBD5E1">(optional)</tspan></text>
+    <rect x="616" y="424" width="240" height="36" rx="6" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1"/>
+    <text x="628" y="447" font-size="11" fill="#CBD5E1" font-style="italic">Add a note…</text>
+    <text x="736" y="473" text-anchor="middle" font-size="9" fill="#E2E8F0">was_edited tracked automatically on save</text>
+    <!-- Confirm button -->
+    <rect x="616" y="480" width="240" height="42" rx="8" fill="#16A34A"/>
+    <text x="736" y="505" text-anchor="middle" font-size="13" font-weight="600" fill="#FFFFFF">✓ Confirm &amp; Save</text>
+    <text x="736" y="534" text-anchor="middle" font-size="11" fill="#CBD5E1">Cancel</text>
+  </g>
+
+  <!-- SCREEN 4: Expense Log -->
+  <g clip-path="url(#c4)">
+    <text x="907" y="84" font-size="9" fill="#64748B">9:41</text>
+    <text x="1151" y="84" text-anchor="end" font-size="9" fill="#64748B">●●● 100%</text>
+    <rect x="899" y="88" width="260" height="44" fill="#F8FAFC"/>
+    <text x="911" y="116" font-size="15" font-weight="700" fill="#0F172A">My Expenses</text>
+    <circle cx="1143" cy="110" r="14" fill="#D97706"/>
+    <text x="1143" y="115" text-anchor="middle" font-size="11" font-weight="700" fill="#FFFFFF">L</text>
+    <line x1="899" y1="132" x2="1159" y2="132" stroke="#E2E8F0" stroke-width="1"/>
+    <!-- Month selector -->
+    <text x="911" y="151" font-size="11" fill="#94A3B8">‹</text>
+    <text x="1029" y="151" text-anchor="middle" font-size="12" font-weight="600" fill="#1E293B">July 2026</text>
+    <text x="1147" y="151" text-anchor="end" font-size="11" fill="#94A3B8">›</text>
+    <!-- Summary strip -->
+    <rect x="909" y="158" width="240" height="30" rx="6" fill="#F1F5F9"/>
+    <text x="919" y="177" font-size="11" fill="#64748B">4 expenses</text>
+    <text x="1141" y="177" text-anchor="end" font-size="12" font-weight="700" fill="#1E293B">$79.70 total</text>
+    <line x1="899" y1="196" x2="1159" y2="196" stroke="#E2E8F0" stroke-width="1"/>
+    <!-- Row 1 -->
+    <rect x="909" y="202" width="240" height="54" rx="6" fill="#FFFFFF" stroke="#F1F5F9" stroke-width="1"/>
+    <rect x="909" y="202" width="4" height="54" rx="2" fill="#D97706"/>
+    <text x="921" y="220" font-size="11" font-weight="600" fill="#1E293B">McDonald's</text>
+    <rect x="921" y="226" width="56" height="14" rx="4" fill="#FEF3C7"/>
+    <text x="949" y="236" text-anchor="middle" font-size="9" fill="#D97706">Food &amp; Dining</text>
+    <text x="1141" y="220" text-anchor="end" font-size="13" font-weight="700" fill="#1E293B">$12.00</text>
+    <text x="1141" y="238" text-anchor="end" font-size="9" fill="#94A3B8">05 Jul · Today</text>
+    <text x="921" y="249" font-size="9" fill="#CBD5E1" font-style="italic">No remarks</text>
+    <!-- Row 2 -->
+    <rect x="909" y="263" width="240" height="54" rx="6" fill="#FFFFFF" stroke="#F1F5F9" stroke-width="1"/>
+    <rect x="909" y="263" width="4" height="54" rx="2" fill="#2563EB"/>
+    <text x="921" y="281" font-size="11" font-weight="600" fill="#1E293B">Grab</text>
+    <rect x="921" y="287" width="52" height="14" rx="4" fill="#DBEAFE"/>
+    <text x="947" y="297" text-anchor="middle" font-size="9" fill="#2563EB">Transport</text>
+    <text x="1141" y="281" text-anchor="end" font-size="13" font-weight="700" fill="#1E293B">$8.50</text>
+    <text x="1141" y="299" text-anchor="end" font-size="9" fill="#94A3B8">04 Jul</text>
+    <text x="921" y="310" font-size="9" fill="#CBD5E1" font-style="italic">No remarks</text>
+    <!-- Row 3 -->
+    <rect x="909" y="324" width="240" height="54" rx="6" fill="#FFFFFF" stroke="#F1F5F9" stroke-width="1"/>
+    <rect x="909" y="324" width="4" height="54" rx="2" fill="#16A34A"/>
+    <text x="921" y="342" font-size="11" font-weight="600" fill="#1E293B">FairPrice</text>
+    <rect x="921" y="348" width="52" height="14" rx="4" fill="#DCFCE7"/>
+    <text x="947" y="358" text-anchor="middle" font-size="9" fill="#16A34A">Groceries</text>
+    <text x="1141" y="342" text-anchor="end" font-size="13" font-weight="700" fill="#1E293B">$34.20</text>
+    <text x="1141" y="360" text-anchor="end" font-size="9" fill="#94A3B8">03 Jul</text>
+    <text x="921" y="371" font-size="9" fill="#CBD5E1" font-style="italic">No remarks</text>
+    <!-- Row 4 -->
+    <rect x="909" y="385" width="240" height="58" rx="6" fill="#FFFFFF" stroke="#F1F5F9" stroke-width="1"/>
+    <rect x="909" y="385" width="4" height="58" rx="2" fill="#94A3B8"/>
+    <text x="921" y="403" font-size="11" font-weight="600" fill="#1E293B">Gift Shop</text>
+    <rect x="921" y="409" width="30" height="14" rx="4" fill="#F1F5F9"/>
+    <text x="936" y="419" text-anchor="middle" font-size="9" fill="#64748B">Other</text>
+    <text x="1141" y="403" text-anchor="end" font-size="13" font-weight="700" fill="#1E293B">$25.00</text>
+    <text x="1141" y="421" text-anchor="end" font-size="9" fill="#94A3B8">02 Jul</text>
+    <text x="921" y="432" font-size="9" fill="#94A3B8" font-style="italic">↳ gift</text>
+    <text x="921" y="444" font-size="9" fill="#CBD5E1" font-style="italic">(other_sub_label)</text>
+    <!-- FAB -->
+    <circle cx="1129" cy="521" r="24" fill="#2563EB"/>
+    <text x="1129" y="527" text-anchor="middle" font-size="22" font-weight="300" fill="#FFFFFF">+</text>
+    <text x="1029" y="476" text-anchor="middle" font-size="10" fill="#CBD5E1">← swipe to delete</text>
+  </g>
+</svg>
