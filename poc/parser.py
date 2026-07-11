@@ -8,6 +8,7 @@
 # (validation, storage, display) is handled by deterministic code elsewhere.
 
 import json
+import datetime
 import ollama
 from models import ParsedExpense
 
@@ -51,8 +52,16 @@ def parse_expense(raw_input: str, categories: list[str]) -> ParsedExpense | None
     # Load the prompt template and substitute in the actual values.
     # We use simple string replacement rather than str.format() because the
     # template also contains JSON curly braces {} which would confuse format().
+    # Resolve today's date so the SLM can interpret relative terms like "yesterday".
+    today_str = datetime.date.today().isoformat()
+
     template = load_prompt_template()
-    prompt = template.replace("{raw_input}", raw_input).replace("{categories}", category_list)
+    prompt = (
+        template
+        .replace("{raw_input}", raw_input)
+        .replace("{categories}", category_list)
+        .replace("{today}", today_str)
+    )
 
     print("\n⏳ Sending to Phi-4-mini for parsing...")
 

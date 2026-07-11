@@ -19,7 +19,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 
 from models import ParsedExpense, Expense
 from parser import parse_expense
-from db import init_db, save_expense, get_recent_expenses
+from db import init_db, save_expense, get_recent_expenses, get_monthly_summary
 
 
 # ─────────────────────────────────────────────
@@ -185,6 +185,38 @@ def confirm_or_edit(parsed: ParsedExpense, categories: list[str]) -> Expense | N
 
 
 # ─────────────────────────────────────────────
+# MONTHLY SUMMARY VIEW
+# ─────────────────────────────────────────────
+
+def show_monthly_summary():
+    """Prints a month-to-date spending summary grouped by category."""
+    from datetime import date
+
+    rows = get_monthly_summary()
+    month_label = date.today().strftime("%B %Y")   # e.g. "July 2026"
+
+    if not rows:
+        print(f"\nNo expenses recorded for {month_label} yet.")
+        return
+
+    print_divider()
+    print(f"📊  MONTH-TO-DATE SUMMARY — {month_label}:\n")
+    print(f"  {'Category':<22} {'Expenses':>9}  {'Total (SGD)':>12}")
+    print(f"  {'─' * 22}  {'─' * 9}  {'─' * 12}")
+
+    grand_total = 0.0
+    for row in rows:
+        print(
+            f"  {row['category']:<22} {row['count']:>9}  {row['total']:>12.2f}"
+        )
+        grand_total += row["total"]
+
+    print(f"  {'─' * 22}  {'─' * 9}  {'─' * 12}")
+    print(f"  {'TOTAL':<22} {'':>9}  {grand_total:>12.2f}")
+    print_divider()
+
+
+# ─────────────────────────────────────────────
 # RECENT EXPENSES VIEW
 # ─────────────────────────────────────────────
 
@@ -231,7 +263,9 @@ def main():
     categories = load_categories()
     print(f"\n✅  Loaded {len(categories)} categories.")
     print("    Type an expense in plain language, or:")
-    print("    'history' to see recent expenses, 'quit' to exit.\n")
+    print("    'history'  (h) to see recent expenses")
+    print("    'summary'  (s) to see month-to-date totals by category")
+    print("    'quit'     (q) to exit\n")
 
     # Keep looping until the user decides to quit.
     while True:
@@ -245,6 +279,10 @@ def main():
 
         if raw.lower() in ("history", "h"):
             show_recent_expenses()
+            continue
+
+        if raw.lower() in ("summary", "s"):
+            show_monthly_summary()
             continue
 
         # Ignore blank input.

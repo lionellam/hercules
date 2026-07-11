@@ -104,6 +104,39 @@ def save_expense(expense: Expense) -> int:
     return new_id
 
 
+def get_monthly_summary() -> list[dict]:
+    """
+    Returns total spending grouped by category for the current calendar month.
+    Only includes expenses whose date field is in YYYY-MM-DD format and falls
+    within the current year and month.
+    """
+    from datetime import date
+
+    # Build the year-month prefix for the current month, e.g. "2026-07"
+    month_prefix = date.today().strftime("%Y-%m")
+
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    # LIKE 'YYYY-MM-%' matches any date string that starts with the current year-month.
+    # SUM(amount) adds up all amounts per category.
+    # COUNT(*) tells us how many individual expenses make up that total.
+    cursor.execute("""
+        SELECT category,
+               SUM(amount)  AS total,
+               COUNT(*)     AS count
+        FROM expenses
+        WHERE date LIKE ?
+        GROUP BY category
+        ORDER BY total DESC
+    """, (month_prefix + "-%",))
+
+    rows = [dict(row) for row in cursor.fetchall()]
+    conn.close()
+
+    return rows
+
+
 def get_recent_expenses(limit: int = 10) -> list[dict]:
     """
     Retrieves the most recent expenses from the database.

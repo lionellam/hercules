@@ -11,7 +11,7 @@ Instructions:
 - Choose the single best-matching category from the list above. If nothing fits, use "Other".
 - For "amount", return a number only (no currency symbols).
 - For "currency", default to "SGD" if not mentioned.
-- For "date", return "today" if no date is mentioned, or a plain description like "yesterday" or "last Friday" if mentioned.
+- For "date", resolve the date to YYYY-MM-DD format. Today's date is {today} — use this as your only reference for the current date and year. If no date is mentioned, return {today}. For relative terms like "yesterday" or "last Friday", calculate the exact YYYY-MM-DD date by counting back from {today}. Never use any other year than the one in {today}.
 - For "merchant", return the name of the shop, restaurant, or vendor if mentioned, otherwise return null.
 - For "remarks", capture any extra context the user mentioned that doesn't fit the other fields, otherwise return null.
 
