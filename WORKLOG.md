@@ -189,3 +189,20 @@ Last updated: 12 July 2026
 - Phi-4 (full) will remain performant enough for local POC use on the development machine.
 - The `dateparser` approach remains viable as a fallback if model performance becomes an issue.
 - Real expense data entry begins from 07 July 2026; records prior to that date in the database are test artefacts.
+
+---
+
+## 12 July 2026 — Documentation Terminology Updates
+
+### What Was Done
+
+#### Model Reference Update (Phi-4-mini → Phi-4)
+- Updated all references to `Phi-4-mini` → `Phi-4` across the three project documents: Charter (v0.3), Project Plan (v0.4), and Specification (v0.5).
+- Also updated `poc/parser.py` (MODEL_NAME constant) and `poc/README.md` (prerequisites section) to reflect the model switch.
+
+#### Terminology Update (SLM → Local Model)
+- Replaced all content-level uses of "SLM" (Small Language Model) and "Small Language Model" with "local model" and "locally-hosted language model" across Charter (v0.4), Project Plan (v0.5), and Specification (v0.6).
+- Historical version history rows that referenced "SLM" were left unchanged as they record past decisions.
+
+### Decisions Made
+- **"Local model" preferred over "SLM"** — Phi-4 at 14B parameters does not accurately fit the Small Language Model classification (typically applied to models in the 1–7B range). "Local model" better reflects the architectural intent of the project: the defining characteristic is that the model runs on-premises via Ollama, not that it is small. The CPMAI-aligned design principle (narrow cognitive scope) remains unchanged.
