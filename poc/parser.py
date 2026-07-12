@@ -14,7 +14,7 @@ from models import ParsedExpense
 
 # The name of the Ollama model to use.
 # This must match what you pulled with: ollama pull phi4-mini
-MODEL_NAME = "phi4-mini"
+MODEL_NAME = "phi4"
 
 # Path to the prompt template file.
 # Keeping the prompt in a separate text file makes it easy to
