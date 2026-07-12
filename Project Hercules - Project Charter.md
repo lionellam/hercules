@@ -1,8 +1,8 @@
 **Natural Language Expense & Budget Tracker**
 
 ```
-Version 0.2 · Draft
-Last Reviewed: 05 July 2026
+Version 0.3 · Draft
+Last Reviewed: 12 July 2026
 Produced with AI Assistance (Claude Code)
 ```
 
@@ -12,6 +12,7 @@ Produced with AI Assistance (Claude Code)
 |---|---|---|---|
 | 0.1 | 2026-07-03 | James Wong, Lionel Lam | Initial draft charter |
 | 0.2 | 2026-07-05 | James Wong, Lionel Lam | Updated category taxonomy from fixed to per-user extensible; resolved fixed taxonomy open question |
+| 0.3 | 2026-07-12 | James Wong, Lionel Lam | Updated model reference from Phi-4-mini to Phi-4 |
 
 ---
 
@@ -52,7 +53,7 @@ Friction of maintaining an up-to-date expense and budget log can be due to the f
 ## 4. Core User Flow
 
 1. User enters a natural language expense (text only) on their phone
-2. Local model (Phi-4-mini) parses the input into structured fields
+2. Local model (Phi-4) parses the input into structured fields
 3. App displays a confirmation screen with editable fields
 4. User reviews, corrects if needed, and saves
 5. Data is saved to a remote database
@@ -61,7 +62,7 @@ Friction of maintaining an up-to-date expense and budget log can be due to the f
 
 > The below is a recommendation by Claude - further review required
 
-- **Model:** Phi-4-mini via Ollama (local inference)
+- **Model:** Phi-4 via Ollama (local inference)
 - **Backend:** FastAPI (Python)
 - **Database:** SQLite
 - **Frontend:** Mobile-friendly web UI

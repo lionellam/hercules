@@ -6,10 +6,10 @@ A single-user command-line expense tracker. Type an expense in plain language, r
 
 - Python 3.11+
 - [Ollama](https://ollama.com) installed and running
-- Phi-4-mini model pulled
+- Phi-4 model pulled
 
 ```bash
-ollama pull phi4-mini
+ollama pull phi4
 ollama serve
 ```
 
@@ -58,7 +58,7 @@ poc/
   db.py               # SQLite database operations
   models.py           # data models (ParsedExpense, Expense)
   prompts/
-    parse_expense.txt # prompt template sent to Phi-4-mini
+    parse_expense.txt # prompt template sent to Phi-4
   data/
     categories.txt    # expense categories (editable)
     expenses.db       # SQLite database (auto-created on first run)

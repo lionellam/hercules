@@ -13,7 +13,7 @@ import ollama
 from models import ParsedExpense
 
 # The name of the Ollama model to use.
-# This must match what you pulled with: ollama pull phi4-mini
+# This must match what you pulled with: ollama pull phi4
 MODEL_NAME = "phi4"
 
 # Path to the prompt template file.
@@ -63,7 +63,7 @@ def parse_expense(raw_input: str, categories: list[str]) -> ParsedExpense | None
         .replace("{today}", today_str)
     )
 
-    print("\n⏳ Sending to Phi-4-mini for parsing...")
+    print("\n⏳ Sending to Phi-4 for parsing...")
 
     # Call the Ollama service running locally.
     # ollama.generate() sends an HTTP request to http://localhost:11434

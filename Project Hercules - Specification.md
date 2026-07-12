@@ -1,8 +1,8 @@
 # Project Hercules — Specification Sheet: "Log an Expense" Flow
 
 ```
-Version 0.4 · Draft 
-Last Reviewed: 05 July 2026
+Version 0.5 · Draft 
+Last Reviewed: 12 July 2026
 Produced with AI Assistance (Claude Code)
 ```
 
@@ -14,6 +14,7 @@ Produced with AI Assistance (Claude Code)
 | 0.2 | 2026-07-05 | James Wong, Lionel Lam | Updated taxonomy and user-specific expense categories |
 | 0.3 | 2026-07-05 | James Wong, Lionel Lam | Resolved open questions: user/profile model and "Other" category handling; updated data model accordingly |
 | 0.4 | 2026-07-05 | James Wong, Lionel Lam | Extended SLM role to include category suggestion from the user's active category list; updated process flow and AI boundary accordingly |
+| 0.5 | 2026-07-12 | James Wong, Lionel Lam | Updated SLM actor reference from Phi-4-mini to Phi-4 |
 
 ---
 
@@ -29,7 +30,7 @@ This spec exists to align the team before the process flow diagram (UPN) and fea
 
 **Human-in-the-loop.** No parsed data is saved without the user seeing and having the opportunity to edit it first. The confirmation screen is not optional in this phase.
 
-**Cognitive scope discipline (CPMAI-aligned).** The SLM (Phi-4-mini) is used *only* for the cognitive task of interpreting free text into structured fields. It is not used for storage, validation, retrieval, editing, or any task that deterministic application code already handles well. This keeps the AI surface area small, auditable, and technically grounded.
+**Cognitive scope discipline (CPMAI-aligned).** The SLM (Phi-4) is used *only* for the cognitive task of interpreting free text into structured fields. It is not used for storage, validation, retrieval, editing, or any task that deterministic application code already handles well. This keeps the AI surface area small, auditable, and technically grounded.
 
 **Audit-friendly by default.** The original natural language input is preserved verbatim alongside the structured output it produced — not just for the record, but to support troubleshooting, diagnostics, and future review of parsing quality.
 
@@ -42,7 +43,7 @@ This spec exists to align the team before the process flow diagram (UPN) and fea
 | Actor | Role |
 |---|---|
 | **User** | Enters expense text, reviews parsed output, edits fields directly if needed, confirms/saves |
-| **SLM (Phi-4-mini via Ollama)** | Cognitive component only — parses raw text into structured fields |
+| **SLM (Phi-4 via Ollama)** | Cognitive component only — parses raw text into structured fields |
 | **Application (backend/database)** | All non-cognitive logic — validation, storage, retrieval, profile and configuration |
 
 ---
