@@ -253,7 +253,7 @@ def main():
 
     print("\n╔══════════════════════════════════╗")
     print("║   Project Hercules — POC v0.1    ║")
-    print("║   Expense Tracker (CLI)           ║")
+    print("║   Expense Tracker (CLI)          ║")
     print("╚══════════════════════════════════╝")
 
     # Set up the database on first run (creates the table if it doesn't exist).

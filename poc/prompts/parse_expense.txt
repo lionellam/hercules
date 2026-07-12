@@ -6,12 +6,14 @@ The user's input is:
 The user's available expense categories are:
 {categories}
 
+Today's date is {today}.
+
 Instructions:
 - Return ONLY a valid JSON object. No explanation, no extra text — just the JSON.
 - Choose the single best-matching category from the list above. If nothing fits, use "Other".
 - For "amount", return a number only (no currency symbols).
 - For "currency", default to "SGD" if not mentioned.
-- For "date", resolve the date to YYYY-MM-DD format. Today's date is {today} — use this as your only reference for the current date and year. If no date is mentioned, return {today}. For relative terms like "yesterday" or "last Friday", calculate the exact YYYY-MM-DD date by counting back from {today}. Never use any other year than the one in {today}.
+- For "date", return the date in YYYY-MM-DD format. If the user states a specific date, always use it. If relative (e.g. "yesterday"), resolve from {today}. If not mentioned, use {today}.
 - For "merchant", return the name of the shop, restaurant, or vendor if mentioned, otherwise return null.
 - For "remarks", capture any extra context the user mentioned that doesn't fit the other fields, otherwise return null.
 

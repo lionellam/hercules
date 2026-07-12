@@ -24,7 +24,8 @@ pip install -r requirements.txt
 ## Running
 
 ```bash
-cd poc
+cd [codepath]/hercules/poc
+source venv/bin/activate
 python cli.py
 ```
 
