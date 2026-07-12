@@ -45,6 +45,21 @@ The app will parse the input, show you the extracted fields, and let you confirm
 - `history` or `h` — view the 10 most recent saved expenses
 - `quit`, `exit`, or `q` — exit the app
 
+## Model Configuration
+
+By default the app uses the `phi4` model. If your Ollama installation uses a different tag (e.g. `phi4:14b`), set the `HERCULES_MODEL` environment variable before running:
+
+```bash
+export HERCULES_MODEL=phi4:14b
+python cli.py
+```
+
+Or inline:
+
+```bash
+HERCULES_MODEL=phi4:14b python cli.py
+```
+
 ## Customising Categories
 
 Edit `data/categories.txt` — one category per line. Changes take effect next time you start the app.

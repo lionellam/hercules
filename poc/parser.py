@@ -8,13 +8,17 @@
 # (validation, storage, display) is handled by deterministic code elsewhere.
 
 import json
+import os
 import datetime
 import ollama
 from models import ParsedExpense
 
 # The name of the Ollama model to use.
-# This must match what you pulled with: ollama pull phi4
-MODEL_NAME = "phi4"
+# Defaults to "phi4" but can be overridden per-machine via the HERCULES_MODEL
+# environment variable — useful when the model is tagged differently across
+# machines (e.g. "phi4:14b" vs "phi4").
+# Set it in your shell: export HERCULES_MODEL=phi4:14b
+MODEL_NAME = os.environ.get("HERCULES_MODEL", "phi4")
 
 # Path to the prompt template file.
 # Keeping the prompt in a separate text file makes it easy to
