@@ -1,7 +1,7 @@
 # Project Hercules — Project Plan
 
 ```
-Version 0.4 · Draft 
+Version 0.5 · Draft 
 Last Reviewed: 12 July 2026
 Produced with AI Assistance (Claude Code)
 ```
@@ -14,12 +14,13 @@ Produced with AI Assistance (Claude Code)
 | 0.2 | 2026-07-05 | James Wong, Lionel Lam | Reordered plan sections; updated milestones format; aligned with spec |
 | 0.3 | 2026-07-05 | James Wong, Lionel Lam | Updated NL Parsing Engine feature to reflect category suggestion capability |
 | 0.4 | 2026-07-12 | James Wong, Lionel Lam | Updated NL Parsing Engine model reference from Phi-4-mini to Phi-4 |
+| 0.5 | 2026-07-12 | James Wong, Lionel Lam | Replaced "SLM" / "Small Language Model" terminology with "local model" / "locally-hosted language model" |
 
 ---
 
 ## 1. Overview
 
-Project Hercules is web-based, open source, self-hosted expense and budget tracker that uses a natural language interface, powered by a Small Language Model (SLM), to remove the friction of manual expense entry. This plan translates the project charter into a working plan for contributors — covering the product vision, objectives, features, phases, and risks — as a community-driven, open project.
+Project Hercules is web-based, open source, self-hosted expense and budget tracker that uses a natural language interface, powered by a locally-hosted language model, to remove the friction of manual expense entry. This plan translates the project charter into a working plan for contributors — covering the product vision, objectives, features, phases, and risks — as a community-driven, open project.
 
 ## 2. Problem Statement
 
@@ -81,7 +82,7 @@ Refinement of the experience, documentation for self-hosting, and a settled cont
 
 - Containerize the app, or run natively on the home server? To preserve portability.
 - How should multi-item entries in a single input be handled (e.g. "coffee $4 and lunch $12")?
-- Parsing reliability is dependent on the chosen small language model's performance on free-form, informal text
+- Parsing reliability is dependent on the chosen local model's performance on free-form, informal text
 
 ## 8. Review Checkpoints
 
@@ -142,7 +143,7 @@ A set of representative users and contributors the project is designed for. Thes
 **Sam, 24, CS Student**
 *"I want to see how far a 3.8B model can actually get with real-world messy text."*
 
-- **Goals:** Contribute to a project with an interesting technical problem (local SLM inference, structured parsing from free-form text); build public portfolio work and learn from code review / collaboration.
+- **Goals:** Contribute to a project with an interesting technical problem (local model inference, structured parsing from free-form text); build public portfolio work and learn from code review / collaboration.
 - **Frustrations:** Bounces off projects with unclear contribution guidelines, no labeled "good first issue" tickets, or an unclear roadmap; loses motivation if PRs sit unreviewed.
 - **Technical Comfort:** High — but may be new to some parts of the stack (e.g. hasn't used Ollama before). Learning-motivated as much as output-motivated.
 - **Relationship to the Product:** Not necessarily an end-user yet — motivated by the build itself. Success looks like: clear docs, a welcoming project structure, and visible impact from their contributions.

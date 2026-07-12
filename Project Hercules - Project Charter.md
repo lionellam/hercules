@@ -1,7 +1,7 @@
 **Natural Language Expense & Budget Tracker**
 
 ```
-Version 0.3 · Draft
+Version 0.4 · Draft
 Last Reviewed: 12 July 2026
 Produced with AI Assistance (Claude Code)
 ```
@@ -13,6 +13,7 @@ Produced with AI Assistance (Claude Code)
 | 0.1 | 2026-07-03 | James Wong, Lionel Lam | Initial draft charter |
 | 0.2 | 2026-07-05 | James Wong, Lionel Lam | Updated category taxonomy from fixed to per-user extensible; resolved fixed taxonomy open question |
 | 0.3 | 2026-07-12 | James Wong, Lionel Lam | Updated model reference from Phi-4-mini to Phi-4 |
+| 0.4 | 2026-07-12 | James Wong, Lionel Lam | Replaced "SLM" / "Small Language Model" terminology with "local model" / "locally-hosted language model" |
 
 ---
 
@@ -23,9 +24,9 @@ Produced with AI Assistance (Claude Code)
 
 ## 1. Project Overview and Objectives
 
-A self-hosted, mobile-first, web-based expense tracker that utilizes a Small Language Model (SLM) as a Natural Language Interface.
+A self-hosted, mobile-first, web-based expense tracker that utilizes a locally-hosted language model as a Natural Language Interface.
 
-The objective of this project is to explore the feasibility of deploying a SLM as part of a cognitive project, and to validate the feasibility of the CPMAI framework, as well as address a personal need to manage and track  individual expenses and budget.
+The objective of this project is to explore the feasibility of deploying a local model as part of a cognitive project, and to validate the feasibility of the CPMAI framework, as well as address a personal need to manage and track  individual expenses and budget.
 
 ## 2. Problem Statement
 

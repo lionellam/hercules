@@ -1,7 +1,7 @@
 # Project Hercules — Specification Sheet: "Log an Expense" Flow
 
 ```
-Version 0.5 · Draft 
+Version 0.6 · Draft 
 Last Reviewed: 12 July 2026
 Produced with AI Assistance (Claude Code)
 ```
@@ -15,6 +15,7 @@ Produced with AI Assistance (Claude Code)
 | 0.3 | 2026-07-05 | James Wong, Lionel Lam | Resolved open questions: user/profile model and "Other" category handling; updated data model accordingly |
 | 0.4 | 2026-07-05 | James Wong, Lionel Lam | Extended SLM role to include category suggestion from the user's active category list; updated process flow and AI boundary accordingly |
 | 0.5 | 2026-07-12 | James Wong, Lionel Lam | Updated SLM actor reference from Phi-4-mini to Phi-4 |
+| 0.6 | 2026-07-12 | James Wong, Lionel Lam | Replaced "SLM" terminology with "local model" throughout |
 
 ---
 
@@ -30,7 +31,7 @@ This spec exists to align the team before the process flow diagram (UPN) and fea
 
 **Human-in-the-loop.** No parsed data is saved without the user seeing and having the opportunity to edit it first. The confirmation screen is not optional in this phase.
 
-**Cognitive scope discipline (CPMAI-aligned).** The SLM (Phi-4) is used *only* for the cognitive task of interpreting free text into structured fields. It is not used for storage, validation, retrieval, editing, or any task that deterministic application code already handles well. This keeps the AI surface area small, auditable, and technically grounded.
+**Cognitive scope discipline (CPMAI-aligned).** The local model (Phi-4) is used *only* for the cognitive task of interpreting free text into structured fields. It is not used for storage, validation, retrieval, editing, or any task that deterministic application code already handles well. This keeps the AI surface area small, auditable, and technically grounded.
 
 **Audit-friendly by default.** The original natural language input is preserved verbatim alongside the structured output it produced — not just for the record, but to support troubleshooting, diagnostics, and future review of parsing quality.
 
@@ -43,7 +44,7 @@ This spec exists to align the team before the process flow diagram (UPN) and fea
 | Actor | Role |
 |---|---|
 | **User** | Enters expense text, reviews parsed output, edits fields directly if needed, confirms/saves |
-| **SLM (Phi-4 via Ollama)** | Cognitive component only — parses raw text into structured fields |
+| **Local model (Phi-4 via Ollama)** | Cognitive component only — parses raw text into structured fields |
 | **Application (backend/database)** | All non-cognitive logic — validation, storage, retrieval, profile and configuration |
 
 ---
@@ -51,8 +52,8 @@ This spec exists to align the team before the process flow diagram (UPN) and fea
 ## 4. Process Flow (Narrative)
 
 1. **User enters expense** — free text, e.g. *"spent $12 on lunch at McDonald's yesterday"*
-2. **Application fetches active categories** — before calling the SLM, the application queries the Category table for the user's active categories and injects the list into the prompt. This is an application-side step; no AI is involved.
-3. **SLM parses input** — the AI step. Produces structured fields (amount, category, merchant, date, etc.) from the raw text. For category, the SLM is instructed to return exactly one name from the injected category list, or "Other" if nothing fits. No free-text category invention.
+2. **Application fetches active categories** — before calling the local model, the application queries the Category table for the user's active categories and injects the list into the prompt. This is an application-side step; no AI is involved.
+3. **Local model parses input** — the AI step. Produces structured fields (amount, category, merchant, date, etc.) from the raw text. For category, the local model is instructed to return exactly one name from the injected category list, or "Other" if nothing fits. No free-text category invention.
 4. **Application resolves `category_id`** — the returned category name is matched via exact lookup against the Category table. "Other" maps to the row where `is_other = true`. No fuzzy matching required.
 5. **Confirmation screen is presented** — parsed fields shown as editable form elements (not a static summary).
 6. **User reviews and optionally edits fields directly** — this is the human-in-the-loop step. No re-prompting of the model occurs; corrections are direct field edits.
@@ -124,7 +125,7 @@ Merchant is handled as autocomplete-over-free-text, not a constrained/enum list.
 
 To keep this explicit and reviewable:
 
-| In scope for the SLM | Out of scope for the SLM |
+| In scope for the local model | Out of scope for the local model |
 |---|---|
 | Parsing free text → structured fields (amount, merchant guess, date) | Validating the parsed output |
 | Category suggestion — selecting the best match from the user's active category list (injected into the prompt by the application); returns a name from the list or the sentinel "Other" | Fetching the category list (application responsibility) |
