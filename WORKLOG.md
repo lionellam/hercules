@@ -213,3 +213,16 @@ Last updated: 12 July 2026
 
 ### Decisions Made
 - **"Local model" preferred over "SLM"** — Phi-4 at 14B parameters does not accurately fit the Small Language Model classification (typically applied to models in the 1–7B range). "Local model" better reflects the architectural intent of the project: the defining characteristic is that the model runs on-premises via Ollama, not that it is small. The CPMAI-aligned design principle (narrow cognitive scope) remains unchanged.
+
+---
+
+## 12 July 2026 — History Command Update and Category Addition
+
+### What Was Done
+- Changed the `history` / `h` command to show all expenses for the current calendar month, replacing the previous fixed limit of 10 most recent entries.
+- Added `get_monthly_expenses()` to `db.py` — queries expenses filtered by the current year-month prefix, ordered by date then creation time. Mirrors the scoping approach used by `get_monthly_summary()`.
+- Updated the history display header to show the month and year (e.g. `EXPENSES — July 2026`), consistent with the summary view.
+- Added **Household** as a new expense category in `poc/data/categories.txt`.
+
+### Decisions Made
+- **History scoped to month-to-date** — aligns the history view with the summary view, making both commands consistently month-scoped. The previous "last 10" behaviour was arbitrary and less useful for reviewing a month's spending.
