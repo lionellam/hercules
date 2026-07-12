@@ -1,6 +1,6 @@
 <mxfile host="Electron">
   <diagram name="Log an Expense Flow" id="hercules-log-expense-flow">
-    <mxGraphModel dx="1814" dy="1250" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+    <mxGraphModel dx="1257" dy="915" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -10,7 +10,7 @@
         <mxCell id="title" parent="1" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=15;fontStyle=1;fontColor=#111111;" value="Project Hercules — Log an Expense Flow" vertex="1">
           <mxGeometry height="26" width="500" x="75" y="-28.5" as="geometry" />
         </mxCell>
-        <mxCell id="subtitle" parent="1" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=11;fontColor=#666666;" value="Specification v0.4 · Last Updated 06 July 2026" vertex="1">
+        <mxCell id="subtitle" parent="1" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=11;fontColor=#666666;" value="Specification v0.6 · Last Updated 12 July 2026" vertex="1">
           <mxGeometry height="25" width="244" x="203" y="-2.5" as="geometry" />
         </mxCell>
         <mxCell id="lane-user" parent="1" style="swimlane;startSize=30;fillColor=#f5f5f5;strokeColor=#cccccc;strokeWidth=1;fontStyle=1;fontSize=11;fontColor=#444444;horizontal=0;" value="USER" vertex="1">
@@ -37,14 +37,14 @@
         <mxCell id="lane-app" parent="1" style="swimlane;startSize=30;fillColor=#fafafa;strokeColor=#cccccc;strokeWidth=1;fontStyle=1;fontSize=11;fontColor=#444444;horizontal=0;" value="APPLICATION" vertex="1">
           <mxGeometry height="536" width="220" x="78" y="33.5" as="geometry" />
         </mxCell>
-        <mxCell id="lane-slm" parent="1" style="swimlane;startSize=30;fillColor=#fff8f0;strokeColor=#cccccc;strokeWidth=1;fontStyle=1;fontSize=11;fontColor=#b45309;horizontal=0;" value="SLM (Phi-4-mini)" vertex="1">
+        <mxCell id="lane-slm" parent="1" style="swimlane;startSize=30;fillColor=#fff8f0;strokeColor=#cccccc;strokeWidth=1;fontStyle=1;fontSize=11;fontColor=#b45309;horizontal=0;" value="Local Model (Phi-4)" vertex="1">
           <mxGeometry height="536" width="232" x="298" y="33.5" as="geometry" />
         </mxCell>
         <mxCell id="step3" parent="lane-slm" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fffbeb;strokeColor=#b45309;strokeWidth=2;fontSize=11;fontColor=#b45309;fontStyle=1;arcSize=8;" value="&lt;b&gt;⬡ Parse expense text&lt;/b&gt;&lt;br/&gt;&lt;font color=&#39;#92400e&#39;&gt;amount · merchant · date&lt;br/&gt;category (from list)&lt;/font&gt;" vertex="1">
           <mxGeometry height="58" width="180" x="45" y="120" as="geometry" />
         </mxCell>
-        <mxCell id="step3-label" parent="lane-slm" style="text;html=1;align=left;verticalAlign=middle;resizable=0;strokeColor=none;fillColor=none;fontSize=9;fontColor=#b45309;fontStyle=2;" value="⬡ cognitive activity (SLM)" vertex="1">
-          <mxGeometry height="16" width="180" x="76" y="181" as="geometry" />
+        <mxCell id="step3-label" parent="lane-slm" style="text;html=1;align=left;verticalAlign=middle;resizable=0;strokeColor=none;fillColor=none;fontSize=9;fontColor=#b45309;fontStyle=2;" value="⬡ cognitive activity (local model)" vertex="1">
+          <mxGeometry height="16" width="180" x="69" y="182.5" as="geometry" />
         </mxCell>
         <mxCell id="lane-db" parent="1" style="swimlane;startSize=30;fillColor=#f0f4ff;strokeColor=#cccccc;strokeWidth=1;fontStyle=1;fontSize=11;fontColor=#444444;horizontal=0;" value="DATABASE" vertex="1">
           <mxGeometry height="536" width="200" x="531" y="33.5" as="geometry" />
