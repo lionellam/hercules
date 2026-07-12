@@ -4,6 +4,7 @@ Groceries
 Entertainment
 Utilities
 Health & Medical
+Household
 Shopping
 Education
 Travel
