@@ -3,7 +3,7 @@
 ```
 Maintained by: Lionel Lam Song Poh, James Wong
 Purpose: Record of work done, decisions made, challenges encountered, and assumptions held —
-         to serve as a lessons learned reference for current and future contributors.
+to serve as a lessons learned reference for current and future contributors.
 Last updated: 12 July 2026
 ```
 
