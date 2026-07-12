@@ -137,6 +137,29 @@ def get_monthly_summary() -> list[dict]:
     return rows
 
 
+def get_monthly_expenses() -> list[dict]:
+    """
+    Retrieves all expenses for the current calendar month, ordered by date then creation time.
+    """
+    from datetime import date
+
+    month_prefix = date.today().strftime("%Y-%m")
+
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT * FROM expenses
+        WHERE date LIKE ?
+        ORDER BY date ASC, created_at ASC
+    """, (month_prefix + "-%",))
+
+    rows = [dict(row) for row in cursor.fetchall()]
+    conn.close()
+
+    return rows
+
+
 def get_recent_expenses(limit: int = 10) -> list[dict]:
     """
     Retrieves the most recent expenses from the database.

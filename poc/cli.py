@@ -19,7 +19,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 
 from models import ParsedExpense, Expense
 from parser import parse_expense
-from db import init_db, save_expense, get_recent_expenses, get_monthly_summary
+from db import init_db, save_expense, get_recent_expenses, get_monthly_summary, get_monthly_expenses
 
 
 # ─────────────────────────────────────────────
@@ -221,14 +221,17 @@ def show_monthly_summary():
 # ─────────────────────────────────────────────
 
 def show_recent_expenses():
-    """Fetches and prints the 10 most recent saved expenses."""
-    rows = get_recent_expenses(limit=10)
+    """Fetches and prints all expenses for the current calendar month."""
+    from datetime import date
+
+    month_label = date.today().strftime("%B %Y")
+    rows = get_monthly_expenses()
     if not rows:
-        print("\nNo expenses saved yet.")
+        print(f"\nNo expenses recorded for {month_label} yet.")
         return
 
     print_divider()
-    print("📂  RECENT EXPENSES (last 10):\n")
+    print(f"📂  EXPENSES — {month_label}:\n")
     for row in rows:
         edited_flag = " ✏️" if row["was_edited"] else ""
         print(
