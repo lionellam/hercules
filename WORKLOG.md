@@ -192,6 +192,13 @@ Last updated: 12 July 2026
 
 ---
 
+## 12 July 2026 — Flow Diagram Update
+
+### What Was Done
+- Updated the "Log an Expense" flow diagram (`.drawio`) and re-exported the PNG.
+
+---
+
 ## 12 July 2026 — Documentation Terminology Updates
 
 ### What Was Done
