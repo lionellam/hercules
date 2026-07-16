@@ -226,3 +226,15 @@ Last updated: 12 July 2026
 
 ### Decisions Made
 - **History scoped to month-to-date** — aligns the history view with the summary view, making both commands consistently month-scoped. The previous "last 10" behaviour was arbitrary and less useful for reviewing a month's spending.
+
+---
+
+## 16 July 2026 — Single-Click Launcher
+
+### What Was Done
+- Created `Hercules.command` — a shell script at the project root that activates the venv and launches the CLI, double-clickable from Finder with no terminal setup required.
+- Fixed a path issue on first launch: the script initially `cd`'d to the project root, causing `sqlite3.OperationalError: unable to open database file` because `db.py` resolves `data/expenses.db` relative to the working directory. Fixed by `cd`-ing into `poc/` before launching.
+
+### Decisions Made
+- **Shell script (`.command`) chosen over Automator or Platypus** — simplest option with no new dependencies. Covers the goal (single-click launch, no venv setup) with minimal complexity. Electron was considered but ruled out as the interaction quality inside the app was not a concern at this stage.
+- **Launcher kept in the project root** — natural home alongside the rest of the project; easy to find and double-click from Finder or pin to the Dock's file area.
