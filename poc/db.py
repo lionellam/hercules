@@ -137,6 +137,35 @@ def get_monthly_summary() -> list[dict]:
     return rows
 
 
+def get_previous_month_summary() -> list[dict]:
+    """
+    Returns total spending grouped by category for the previous calendar month.
+    """
+    from datetime import date, timedelta
+
+    first_of_this_month = date.today().replace(day=1)
+    last_of_prev_month = first_of_this_month - timedelta(days=1)
+    month_prefix = last_of_prev_month.strftime("%Y-%m")
+
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT category,
+               SUM(amount)  AS total,
+               COUNT(*)     AS count
+        FROM expenses
+        WHERE date LIKE ?
+        GROUP BY category
+        ORDER BY total DESC
+    """, (month_prefix + "-%",))
+
+    rows = [dict(row) for row in cursor.fetchall()]
+    conn.close()
+
+    return rows
+
+
 def get_monthly_expenses() -> list[dict]:
     """
     Retrieves all expenses for the current calendar month, ordered by date then creation time.

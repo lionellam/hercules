@@ -19,7 +19,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 
 from models import ParsedExpense, Expense
 from parser import parse_expense
-from db import init_db, save_expense, get_recent_expenses, get_monthly_summary, get_monthly_expenses
+from db import init_db, save_expense, get_recent_expenses, get_monthly_summary, get_monthly_expenses, get_previous_month_summary
 
 
 # ─────────────────────────────────────────────
@@ -188,31 +188,37 @@ def confirm_or_edit(parsed: ParsedExpense, categories: list[str]) -> Expense | N
 # MONTHLY SUMMARY VIEW
 # ─────────────────────────────────────────────
 
-def show_monthly_summary():
-    """Prints a month-to-date spending summary grouped by category."""
-    from datetime import date
-
-    rows = get_monthly_summary()
-    month_label = date.today().strftime("%B %Y")   # e.g. "July 2026"
-
+def _print_summary_block(rows: list, month_label: str):
+    """Prints a single month's summary table."""
     if not rows:
-        print(f"\nNo expenses recorded for {month_label} yet.")
+        print(f"\n  No expenses recorded for {month_label}.")
         return
 
-    print_divider()
-    print(f"📊  MONTH-TO-DATE SUMMARY — {month_label}:\n")
+    print(f"📊  SUMMARY — {month_label}:\n")
     print(f"  {'Category':<22} {'Expenses':>9}  {'Total (SGD)':>12}")
     print(f"  {'─' * 22}  {'─' * 9}  {'─' * 12}")
 
     grand_total = 0.0
     for row in rows:
-        print(
-            f"  {row['category']:<22} {row['count']:>9}  {row['total']:>12.2f}"
-        )
+        print(f"  {row['category']:<22} {row['count']:>9}  {row['total']:>12.2f}")
         grand_total += row["total"]
 
     print(f"  {'─' * 22}  {'─' * 9}  {'─' * 12}")
     print(f"  {'TOTAL':<22} {'':>9}  {grand_total:>12.2f}")
+
+
+def show_monthly_summary():
+    """Prints spending summaries for the previous month and the current month."""
+    from datetime import date, timedelta
+
+    today = date.today()
+    month_label = today.strftime("%B %Y")
+    prev_month_label = (today.replace(day=1) - timedelta(days=1)).strftime("%B %Y")
+
+    print_divider()
+    _print_summary_block(get_previous_month_summary(), prev_month_label)
+    print()
+    _print_summary_block(get_monthly_summary(), month_label)
     print_divider()
 
 
