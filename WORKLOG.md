@@ -238,3 +238,16 @@ Last updated: 12 July 2026
 ### Decisions Made
 - **Shell script (`.command`) chosen over Automator or Platypus** — simplest option with no new dependencies. Covers the goal (single-click launch, no venv setup) with minimal complexity. Electron was considered but ruled out as the interaction quality inside the app was not a concern at this stage.
 - **Launcher kept in the project root** — natural home alongside the rest of the project; easy to find and double-click from Finder or pin to the Dock's file area.
+
+---
+
+## 16 July 2026 — Previous Month Summary in Summary Command
+
+### What Was Done
+- Extended the `summary` / `s` command to show both the previous month's full summary and the current month-to-date summary in a single view, with the previous month displayed first.
+- Added `get_previous_month_summary()` to `db.py` — derives the previous month's year-month prefix by stepping back from the first day of the current month, then queries using the same `date LIKE 'YYYY-MM-%'` pattern as `get_monthly_summary()`.
+- Refactored `show_monthly_summary()` in `cli.py` by extracting a reusable `_print_summary_block()` helper to avoid duplicating the table-rendering logic for each month.
+
+### Decisions Made
+- **Previous month shown first** — provides a natural reading order from older to newer, and gives the previous month as a reference point before seeing the current month's running total.
+- **Empty previous month handled gracefully** — if no expenses exist for the previous month, a "No expenses recorded" note is shown rather than an empty table.
