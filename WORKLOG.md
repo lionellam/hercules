@@ -251,3 +251,14 @@ Last updated: 12 July 2026
 ### Decisions Made
 - **Previous month shown first** — provides a natural reading order from older to newer, and gives the previous month as a reference point before seeing the current month's running total.
 - **Empty previous month handled gracefully** — if no expenses exist for the previous month, a "No expenses recorded" note is shown rather than an empty table.
+
+---
+
+## 30 August 2026 — Summary Table Alignment Fix
+
+### What Was Done
+- Fixed column misalignment in the `summary` command when a category name exceeds 22 characters (e.g. "Professional Development").
+- Updated `_print_summary_block()` in `cli.py` to calculate the category column width dynamically based on the longest category name in the results, with a minimum of 22 characters.
+
+### Decisions Made
+- **Dynamic column width** — a hardcoded width is fragile as categories are user-configurable. Sizing to the longest name ensures the table always renders correctly regardless of what categories exist.
