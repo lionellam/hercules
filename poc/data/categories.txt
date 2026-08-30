@@ -6,6 +6,8 @@ Utilities
 Health & Medical
 Household
 Shopping
+Rent
+Clothes
 Education
 Travel
 Other
