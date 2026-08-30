@@ -194,17 +194,19 @@ def _print_summary_block(rows: list, month_label: str):
         print(f"\n  No expenses recorded for {month_label}.")
         return
 
+    col = max(22, max(len(row['category']) for row in rows))
+
     print(f"📊  SUMMARY — {month_label}:\n")
-    print(f"  {'Category':<22} {'Expenses':>9}  {'Total (SGD)':>12}")
-    print(f"  {'─' * 22}  {'─' * 9}  {'─' * 12}")
+    print(f"  {'Category':<{col}} {'Expenses':>9}  {'Total (SGD)':>12}")
+    print(f"  {'─' * col}  {'─' * 9}  {'─' * 12}")
 
     grand_total = 0.0
     for row in rows:
-        print(f"  {row['category']:<22} {row['count']:>9}  {row['total']:>12.2f}")
+        print(f"  {row['category']:<{col}} {row['count']:>9}  {row['total']:>12.2f}")
         grand_total += row["total"]
 
-    print(f"  {'─' * 22}  {'─' * 9}  {'─' * 12}")
-    print(f"  {'TOTAL':<22} {'':>9}  {grand_total:>12.2f}")
+    print(f"  {'─' * col}  {'─' * 9}  {'─' * 12}")
+    print(f"  {'TOTAL':<{col}} {'':>9}  {grand_total:>12.2f}")
 
 
 def show_monthly_summary():
