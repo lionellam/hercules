@@ -64,7 +64,7 @@ The language model is called only to parse a single expense into structured fiel
 | # | Decision | Reason |
 |---|---|---|
 | 4 | **Expense text may be sent to a cloud model provider**, using a provider whose API data is not used for training | Enables a hosted app without running inference at home. Accepted trade-off against the earlier local-only privacy stance |
-| 5 | **Anthropic, Claude Haiku 5.5** (`claude-haiku-5-5`), with structured outputs | Fast and inexpensive (US$0.10 / US$0.50 per million input/output tokens); simple extraction is well within its abilities; structured outputs guarantee valid JSON, removing parse failures seen with the local model. Swapping models later is a configuration change |
+| 5 | **Anthropic, Claude Haiku 5.5** (`claude-haiku-5-5`), with structured outputs | Fast and inexpensive (US$0.10 / US$0.50 per million input/output tokens); simple extraction is well within its abilities; structured outputs guarantee valid JSON, removing parse failures seen with the local model. Swapping models later is a configuration change. Gemini's free tier was considered (26 Oct 2026) but not chosen: its terms allow free-tier inputs to be used to improve Google's products, conflicting with decision 4, while Haiku's expected cost is only around US$0.10/month |
 | 6 | **Cloud model only** for the web app | A cloud-hosted app cannot reach Ollama on a home machine. The parser code is kept tidy enough to add another backend later |
 | 7 | **Cost guards:** US$5/month spend limit on the Anthropic account; 100 parses per user per day in the app | Normal use costs cents per month; the limits protect against bugs or misuse |
 
@@ -110,5 +110,5 @@ With these decisions, Project Hercules is framed as a **hosted, invite-only fami
 
 - ~~Update the UI mockup's sign-in button from Apple to Google~~ — *Done (26 October 2026)*
 - Confirm Vercel Hobby plan terms on sign-up
-- Decide how the allow-list is stored (environment configuration or a database table) during implementation
+- ~~Decide how the allow-list is stored (environment configuration or a database table) during implementation~~ — *Decided (26 October 2026): an `allowed_emails` database table, managed with `npm run allow`, so invitations don't require a redeploy*
 - Allow-list administration, category management, and export are deferred to Phase 4

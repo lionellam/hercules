@@ -85,6 +85,7 @@ This spec exists to align the team before the process flow diagram (UPN) and fea
 | `created_at` | timestamp | System-generated |
 | `updated_at` | timestamp | Set when a saved record is edited from History |
 | `deleted_at` | timestamp (optional) | Set when a record is deleted (soft delete). Deleted records are hidden from History and Summary but remain recoverable, in line with the audit-friendly principle |
+| `source_ref` | string (optional) | Origin of imported records (e.g. `cli:42` for a CLI record); empty for entries made in the app. Makes the one-off CLI import safe to re-run |
 
 ### 5.2 `Category`
 

@@ -320,3 +320,40 @@ Last updated: 12 July 2026
 
 ### Decisions Made
 - **Follow Google's standard button styling** — a recognisable, familiar sign-in button, consistent with Google's branding guidance, rather than restyling it to match the app's monochrome theme.
+
+---
+
+## 26 October 2026 — Web App v1 Built (Local)
+
+### What Was Done
+- Built the Phase 2 web app in a new `web/` folder: Next.js 16 (TypeScript), Auth.js with Google sign-in, Postgres via `pg`, and the Anthropic SDK.
+  - **Screens:** Google sign-in, Log (with inline review card), History (month-by-month, tap to edit or delete), Summary (current and previous month, with change vs the previous month).
+  - **Parser:** the CLI prompt ported to TypeScript, calling Claude Haiku 5.5 with structured outputs; the category is constrained to the user's own list. Locally, a keyword stand-in is used when no API key is set.
+  - **Access:** allow-list stored in an `allowed_emails` table and re-checked on every request; uninvited accounts see a friendly "not invited" message. Sessions last 90 days.
+  - **Safeguards:** 100 parses per user per rolling 24 hours; soft delete; edits recorded with `updated_at` and the `edited` flag.
+  - **PWA:** web manifest and generated app icons for Add to Home Screen.
+  - **Scripts:** `db:migrate`, `allow` (add / remove / list), and `import:cli` (one-off import of the CLI's SQLite data, with a dry-run option).
+- Tested end to end locally (PGlite database, dev sign-in): sign-in refusal and success, parse and save, History month navigation, edit, soft delete, Summary, and the import of all 229 CLI records (monthly counts and totals match the CLI exactly).
+- Added `web/README.md` with local setup and step-by-step deployment instructions.
+- Added a `source_ref` field to the Expense table in the Specification.
+
+### Decisions Made
+- **Allow-list in a database table** — invitations take effect without redeploying.
+- **Imported records tracked by their CLI id (`source_ref`)** — the first approach (matching on raw text and timestamp) would have silently skipped 11 genuine expenses, because a batch of CLI records shares identical text and timestamps.
+- **History shows the original text when there is no merchant** — most CLI records have no merchant, so a dash was uninformative.
+- **Dev sign-in for local testing only** — enabled by `DEV_LOGIN=true` and never available in production builds.
+- **Today's date comes from the phone** — so relative dates ("yesterday") resolve in the user's own timezone, not the server's.
+
+### Assumptions
+- Deployment still requires accounts and keys to be set up by the owner (Anthropic, Vercel, Neon, Google Cloud); see `web/README.md`.
+
+---
+
+## 26 October 2026 — Real Parsing Verified with Claude Haiku 5.5
+
+### What Was Done
+- Added an Anthropic API key locally (in `web/.env.local`, which is not committed) and tested the real parser with six informal inputs. All were parsed correctly, including relative dates ("yesterday", "last Friday"), slang amounts ("12 bucks"), dates without a year ("3 Oct"), and category choices such as Household for aircon servicing and Professional Development for an online course. Responses took about 1–3 seconds.
+- Fixed a bug found during testing: a detected non-SGD currency (e.g. "USD 15") was shown and saved as SGD. The review card now shows the detected currency, it is saved with the expense, and lists show the currency for non-SGD amounts. Summaries still add amounts without conversion, as decided.
+
+### Decisions Made
+- **Stayed with Claude Haiku 5.5** — Gemini's free tier was considered but not chosen, because its terms allow free-tier inputs to be used to improve Google's products. Recorded in the Architecture document (decision 5).
