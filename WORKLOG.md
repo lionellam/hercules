@@ -262,3 +262,26 @@ Last updated: 12 July 2026
 
 ### Decisions Made
 - **Dynamic column width** — a hardcoded width is fragile as categories are user-configurable. Sizing to the longest name ensures the table always renders correctly regardless of what categories exist.
+
+---
+
+## 26 October 2026 — Web App UI Mockup
+
+### What Was Done
+- Added **Professional Development** as a new expense category in `poc/data/categories.txt`, and saved a backup of the parser prompt template to `poc/prompts/Backup/parse_expense.txt`.
+- Created a clickable, mobile-first HTML mockup of a proposed web app UI at `design/ui-mockup.html`, covering four screens:
+  - **Sign in** — a single "Sign in with Apple" button.
+  - **Log** — natural language input with an inline, editable review card (amount, category, merchant, date, remarks) and Save / Discard actions.
+  - **History** — month-to-date entries grouped by day, with a month switcher and an "edited" tag on corrected entries.
+  - **Summary** — current / previous month toggle, total spent with change vs the previous month, and per-category bars.
+- The mockup's parsing is a simple keyword and pattern-matching stand-in to demonstrate the flow; no language model is called.
+
+### Decisions Made
+- **Mobile-first** — expenses are typically logged on the go, so the log screen is designed for one-handed use with a bottom tab bar.
+- **Clean, minimal visual tone** — monochrome with a single accent, following the system light / dark setting.
+- **User authentication via Sign in with Apple** — replaces the Phase 1 hardcoded profile picker described in the Specification.
+- **Confirmation shown inline, not on a separate screen** — preserves the mandatory human-in-the-loop review from the Specification while keeping logging to a single screen.
+
+### Assumptions
+- The web app will reuse the existing parser prompt, with the review, edit, and save flow unchanged.
+- Moving to a cloud-hosted model and Apple sign-in will require updates to the Charter and Specification; an architecture proposal will be drafted for review before any app code is written.

@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Hercules Mockup</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #f4f4f2; --surface: #ffffff; --text: #18181b; --muted: #71717a;
+    --line: #e7e7e4; --accent: #18181b; --accent-text: #ffffff; --soft: #f4f4f5;
+    --bar: #18181b; --bar-prev: #d4d4d8; --good: #15803d;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0b0b0c; --surface: #18181b; --text: #f4f4f5; --muted: #a1a1aa;
+      --line: #27272a; --accent: #f4f4f5; --accent-text: #18181b; --soft: #27272a;
+      --bar: #f4f4f5; --bar-prev: #52525b; --good: #4ade80;
+    }
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Inter, -apple-system, sans-serif; background: var(--bg); color: var(--text);
+         min-height: 100vh; display: flex; justify-content: center; align-items: flex-start; padding: 24px 16px; }
+  .phone { width: 100%; max-width: 390px; height: 800px; background: var(--surface); border-radius: 36px;
+           border: 1px solid var(--line); overflow: hidden; display: flex; flex-direction: column; position: relative;
+           box-shadow: 0 20px 60px rgba(0,0,0,.08); }
+  .screen { display: none; flex: 1; flex-direction: column; overflow-y: auto; padding: 56px 20px 20px; }
+  .screen.active { display: flex; }
+  h1 { font-size: 28px; font-weight: 700; letter-spacing: -0.02em; }
+  .sub { color: var(--muted); font-size: 14px; margin-top: 4px; }
+
+  /* Sign in */
+  #signin { justify-content: space-between; padding-bottom: 48px; }
+  .brand { margin-top: 140px; text-align: center; }
+  .logo { width: 64px; height: 64px; border-radius: 18px; background: var(--accent); color: var(--accent-text);
+          display: grid; place-items: center; font-size: 30px; font-weight: 700; margin: 0 auto 20px; }
+  .apple-btn { width: 100%; height: 52px; border-radius: 14px; border: none; background: var(--accent); color: var(--accent-text);
+               font: 600 16px Inter, sans-serif; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; }
+  .fine { text-align: center; color: var(--muted); font-size: 12px; margin-top: 14px; }
+
+  /* Log */
+  .greet { margin-bottom: 24px; }
+  .input-wrap { background: var(--soft); border-radius: 16px; padding: 14px; }
+  textarea { width: 100%; border: none; background: transparent; resize: none; font: 400 17px Inter, sans-serif;
+             color: var(--text); outline: none; height: 56px; }
+  textarea::placeholder { color: var(--muted); }
+  .row-end { display: flex; justify-content: flex-end; }
+  .btn { height: 44px; padding: 0 20px; border-radius: 12px; border: none; font: 600 15px Inter, sans-serif; cursor: pointer; }
+  .btn-primary { background: var(--accent); color: var(--accent-text); }
+  .btn-ghost { background: transparent; color: var(--muted); }
+  .btn:disabled { opacity: .35; cursor: default; }
+  .card { margin-top: 20px; border: 1px solid var(--line); border-radius: 16px; padding: 16px; display: none; }
+  .card.show { display: block; }
+  .card-title { font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 12px; }
+  .amount-field { display: flex; align-items: baseline; gap: 6px; margin-bottom: 14px; }
+  .amount-field span { color: var(--muted); font-size: 18px; }
+  .amount-field input { font: 700 34px Inter, sans-serif; border: none; background: none; color: var(--text); width: 100%; outline: none; }
+  .field { display: flex; justify-content: space-between; align-items: center; padding: 11px 0; border-top: 1px solid var(--line); font-size: 15px; }
+  .field label { color: var(--muted); }
+  .field input, .field select { border: none; background: none; text-align: right; font: 500 15px Inter, sans-serif; color: var(--text); outline: none; max-width: 60%; }
+  .actions { display: flex; justify-content: space-between; margin-top: 14px; }
+  .toast { margin-top: 16px; color: var(--good); font-size: 14px; font-weight: 500; text-align: center; opacity: 0; transition: opacity .3s; }
+  .toast.show { opacity: 1; }
+  .recent-h { margin-top: 28px; font-size: 13px; color: var(--muted); font-weight: 600; }
+
+  /* Lists */
+  .day { font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; margin: 22px 0 6px; }
+  .item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--line); }
+  .item .m { font-weight: 500; font-size: 15px; }
+  .item .c { color: var(--muted); font-size: 13px; margin-top: 2px; }
+  .item .a { font-weight: 600; font-variant-numeric: tabular-nums; }
+  .edited { font-size: 11px; color: var(--muted); border: 1px solid var(--line); border-radius: 6px; padding: 1px 5px; margin-left: 6px; }
+  .month-switch { display: flex; align-items: center; justify-content: space-between; margin-top: 16px; }
+  .month-switch button { background: var(--soft); border: none; width: 34px; height: 34px; border-radius: 10px; color: var(--text); font-size: 16px; cursor: pointer; }
+  .month-switch strong { font-size: 15px; }
+
+  /* Summary */
+  .seg { display: flex; background: var(--soft); border-radius: 12px; padding: 3px; margin-top: 18px; }
+  .seg button { flex: 1; height: 34px; border: none; background: none; border-radius: 10px; font: 500 14px Inter, sans-serif; color: var(--muted); cursor: pointer; }
+  .seg button.on { background: var(--surface); color: var(--text); box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+  .total { margin-top: 24px; }
+  .total .big { font-size: 38px; font-weight: 700; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+  .total .delta { font-size: 13px; color: var(--muted); margin-top: 2px; }
+  .cat { margin-top: 18px; }
+  .cat-top { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 6px; }
+  .cat-top .n { color: var(--muted); font-size: 12px; margin-left: 6px; }
+  .track { height: 6px; background: var(--soft); border-radius: 3px; overflow: hidden; }
+  .fill { height: 100%; background: var(--bar); border-radius: 3px; }
+
+  /* Tab bar */
+  .tabs { display: none; border-top: 1px solid var(--line); padding: 8px 0 26px; background: var(--surface); }
+  .tabs.show { display: flex; }
+  .tabs button { flex: 1; background: none; border: none; display: flex; flex-direction: column; align-items: center; gap: 4px;
+                 font: 500 11px Inter, sans-serif; color: var(--muted); cursor: pointer; }
+  .tabs button.on { color: var(--text); }
+  .tabs svg { width: 22px; height: 22px; }
+  .signout { margin-top: auto; padding-top: 32px; text-align: center; }
+  .signout button { background: none; border: none; color: var(--muted); font: 500 13px Inter, sans-serif; cursor: pointer; }
+</style>
+</head>
+<body>
+<div class="phone">
+
+  <section class="screen active" id="signin">
+    <div class="brand">
+      <div class="logo">H</div>
+      <h1>Hercules</h1>
+      <p class="sub">Log expenses the way you'd say them.</p>
+    </div>
+    <div>
+      <button class="apple-btn" onclick="signIn()">
+        <svg width="16" height="19" viewBox="0 0 16 19" fill="currentColor"><path d="M13.2 10.1c0-2.3 1.9-3.4 2-3.5-1.1-1.6-2.8-1.8-3.4-1.8-1.4-.1-2.8.9-3.5.9-.7 0-1.8-.8-3-.8C3.7 4.9 2.2 5.8 1.4 7.3c-1.7 2.9-.4 7.2 1.2 9.6.8 1.2 1.7 2.4 3 2.4 1.2 0 1.6-.8 3.1-.8 1.4 0 1.8.8 3.1.8 1.3 0 2.1-1.2 2.9-2.3.9-1.3 1.3-2.6 1.3-2.7 0 0-2.8-1.1-2.8-4.2zM10.9 3.2C11.6 2.4 12 1.3 11.9.2c-1 0-2.1.6-2.8 1.4-.6.7-1.2 1.8-1 2.9 1.1.1 2.1-.5 2.8-1.3z"/></svg>
+        Sign in with Apple
+      </button>
+      <p class="fine">Your expenses are private to your account.</p>
+    </div>
+  </section>
+
+  <section class="screen" id="log">
+    <div class="greet">
+      <p class="sub">Monday, 26 October</p>
+      <h1>Log an expense</h1>
+    </div>
+    <div class="input-wrap">
+      <textarea id="raw" placeholder="e.g. Lunch at LJS for $4.50 yesterday" oninput="document.getElementById('parseBtn').disabled=!this.value.trim()"></textarea>
+      <div class="row-end"><button class="btn btn-primary" id="parseBtn" disabled onclick="parse()">Parse</button></div>
+    </div>
+
+    <div class="card" id="card">
+      <div class="card-title">Review before saving</div>
+      <div class="amount-field"><span>SGD</span><input id="f-amount" inputmode="decimal" /></div>
+      <div class="field"><label>Category</label><select id="f-cat"></select></div>
+      <div class="field"><label>Merchant</label><input id="f-merchant" placeholder="—" /></div>
+      <div class="field"><label>Date</label><input id="f-date" type="date" /></div>
+      <div class="field"><label>Remarks</label><input id="f-remarks" placeholder="Optional" /></div>
+      <div class="actions">
+        <button class="btn btn-ghost" onclick="discard()">Discard</button>
+        <button class="btn btn-primary" onclick="save()">Save</button>
+      </div>
+    </div>
+    <p class="toast" id="toast">Saved</p>
+
+    <p class="recent-h">TODAY</p>
+    <div id="todayList"></div>
+  </section>
+
+  <section class="screen" id="history">
+    <h1>History</h1>
+    <div class="month-switch">
+      <button onclick="shiftMonth(-1)">‹</button>
+      <strong id="histMonth"></strong>
+      <button onclick="shiftMonth(1)">›</button>
+    </div>
+    <div id="histList"></div>
+  </section>
+
+  <section class="screen" id="summary">
+    <h1>Summary</h1>
+    <div class="seg">
+      <button id="seg-cur" class="on" onclick="setSummary(0)">October</button>
+      <button id="seg-prev" onclick="setSummary(-1)">September</button>
+    </div>
+    <div class="total">
+      <div class="sub" id="sumLabel"></div>
+      <div class="big" id="sumTotal"></div>
+      <div class="delta" id="sumDelta"></div>
+    </div>
+    <div id="sumCats"></div>
+    <div class="signout"><button onclick="signOut()">Sign out</button></div>
+  </section>
+
+  <nav class="tabs" id="tabs">
+    <button class="on" data-t="log" onclick="go('log')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Log</button>
+    <button data-t="history" onclick="go('history')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg>History</button>
+    <button data-t="summary" onclick="go('summary')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 20V10M12 20V4M18 20v-6"/></svg>Summary</button>
+  </nav>
+</div>
+
+<script>
+const CATS = ["Food & Dining","Transport","Groceries","Entertainment","Utilities","Health & Medical","Household","Shopping","Rent","Clothes","Education","Professional Development","Travel","Other"];
+const TODAY = "2026-10-26";
+let expenses = [
+  {d:"2026-10-26",m:"Ya Kun",c:"Food & Dining",a:4.5},
+  {d:"2026-10-25",m:"FairPrice",c:"Groceries",a:38.2},
+  {d:"2026-10-25",m:"Grab",c:"Transport",a:14.0,e:true},
+  {d:"2026-10-24",m:"Sukiya",c:"Food & Dining",a:9.2},
+  {d:"2026-10-22",m:"Uniqlo",c:"Clothes",a:59.9},
+  {d:"2026-10-20",m:"SP Group",c:"Utilities",a:112.4},
+  {d:"2026-10-15",m:"Coursera",c:"Professional Development",a:65.0},
+  {d:"2026-10-01",m:"Landlord",c:"Rent",a:1200},
+  {d:"2026-09-28",m:"Guardian",c:"Health & Medical",a:22.8},
+  {d:"2026-09-20",m:"Shaw Theatres",c:"Entertainment",a:27.0},
+  {d:"2026-09-15",m:"FairPrice",c:"Groceries",a:146.3},
+  {d:"2026-09-10",m:"SP Group",c:"Utilities",a:98.7},
+  {d:"2026-09-05",m:"Hawker centre",c:"Food & Dining",a:186.4},
+  {d:"2026-09-01",m:"Landlord",c:"Rent",a:1200},
+];
+const $ = id => document.getElementById(id);
+$("f-cat").innerHTML = CATS.map(c => `<option>${c}</option>`).join("");
+
+function signIn(){ $("tabs").classList.add("show"); go("log"); }
+function signOut(){ $("tabs").classList.remove("show"); show("signin"); }
+function show(id){ document.querySelectorAll(".screen").forEach(s=>s.classList.toggle("active", s.id===id)); }
+function go(id){
+  show(id);
+  document.querySelectorAll(".tabs button").forEach(b=>b.classList.toggle("on", b.dataset.t===id));
+  if(id==="log") renderToday();
+  if(id==="history") renderHistory();
+  if(id==="summary") setSummary(sumOffset);
+}
+
+const KEYWORDS = {"Food & Dining":/lunch|dinner|breakfast|coffee|kopi|meal|food/i,"Transport":/grab|taxi|bus|mrt|ride|petrol/i,
+  "Groceries":/grocer|fairprice|ntuc|cold storage/i,"Entertainment":/movie|cinema|concert|netflix/i,"Clothes":/shirt|shoes|uniqlo|clothes/i,
+  "Health & Medical":/clinic|doctor|pharmacy|guardian|medicine/i,"Utilities":/sp group|electric|water|internet|phone bill/i};
+function parse(){
+  const raw = $("raw").value;
+  const amt = raw.match(/\$?\s?(\d+(?:\.\d{1,2})?)/);
+  const merch = raw.match(/\bat\s+([A-Z][\w'&]*(?:\s+[A-Z][\w'&]*)*)/);
+  let cat = "Other";
+  for (const [k,re] of Object.entries(KEYWORDS)) if (re.test(raw)) { cat = k; break; }
+  $("f-amount").value = amt ? parseFloat(amt[1]).toFixed(2) : "";
+  $("f-cat").value = cat;
+  $("f-merchant").value = merch ? merch[1] : "";
+  $("f-date").value = /yesterday/i.test(raw) ? "2026-10-25" : TODAY;
+  $("f-remarks").value = "";
+  $("card").classList.add("show");
+}
+function discard(){ $("card").classList.remove("show"); $("raw").value=""; $("parseBtn").disabled=true; }
+function save(){
+  const a = parseFloat($("f-amount").value);
+  if (isNaN(a)) { $("f-amount").focus(); return; }
+  expenses.unshift({d:$("f-date").value, m:$("f-merchant").value || "—", c:$("f-cat").value, a});
+  discard();
+  $("toast").classList.add("show"); setTimeout(()=>$("toast").classList.remove("show"), 1600);
+  renderToday();
+}
+
+const fmt = n => n.toLocaleString("en-SG",{minimumFractionDigits:2,maximumFractionDigits:2});
+const itemHTML = x => `<div class="item"><div><div class="m">${x.m}${x.e?'<span class="edited">edited</span>':''}</div><div class="c">${x.c}</div></div><div class="a">${fmt(x.a)}</div></div>`;
+function renderToday(){
+  const t = expenses.filter(x=>x.d===TODAY);
+  $("todayList").innerHTML = t.length ? t.map(itemHTML).join("") : `<p class="sub">Nothing logged yet today.</p>`;
+}
+
+let histOffset = 0;
+function ym(off){ const d = new Date(2026, 9 + off, 1); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}`; }
+function mlabel(off){ return new Date(2026, 9 + off, 1).toLocaleString("en-SG",{month:"long",year:"numeric"}); }
+function shiftMonth(n){ histOffset = Math.min(0, histOffset + n); renderHistory(); }
+function renderHistory(){
+  $("histMonth").textContent = mlabel(histOffset);
+  const rows = expenses.filter(x=>x.d.startsWith(ym(histOffset))).sort((a,b)=>b.d.localeCompare(a.d));
+  if(!rows.length){ $("histList").innerHTML = `<p class="sub" style="margin-top:24px">No expenses this month.</p>`; return; }
+  let html = "", last = "";
+  for (const r of rows) {
+    if (r.d !== last) { last = r.d; html += `<div class="day">${new Date(r.d).toLocaleDateString("en-SG",{weekday:"short",day:"numeric",month:"short"})}</div>`; }
+    html += itemHTML(r);
+  }
+  $("histList").innerHTML = html;
+}
+
+let sumOffset = 0;
+const totals = off => { const t = {}; expenses.filter(x=>x.d.startsWith(ym(off))).forEach(x=>{ t[x.c] = t[x.c]||{s:0,n:0}; t[x.c].s+=x.a; t[x.c].n++; }); return t; };
+function setSummary(off){
+  sumOffset = off;
+  $("seg-cur").classList.toggle("on", off===0); $("seg-prev").classList.toggle("on", off===-1);
+  const t = totals(off), sum = Object.values(t).reduce((s,v)=>s+v.s,0);
+  const prevSum = Object.values(totals(off-1)).reduce((s,v)=>s+v.s,0);
+  $("sumLabel").textContent = off===0 ? "Spent so far this month" : "Spent in " + mlabel(off);
+  $("sumTotal").textContent = "$" + fmt(sum);
+  $("sumDelta").textContent = prevSum ? `${sum>=prevSum?"+":"−"}$${fmt(Math.abs(sum-prevSum))} vs ${mlabel(off-1).split(" ")[0]}` : "";
+  const sorted = Object.entries(t).sort((a,b)=>b[1].s-a[1].s), max = sorted.length ? sorted[0][1].s : 1;
+  $("sumCats").innerHTML = sorted.map(([c,v])=>`<div class="cat"><div class="cat-top"><span>${c}<span class="n">${v.n}</span></span><strong>${fmt(v.s)}</strong></div><div class="track"><div class="fill" style="width:${v.s/max*100}%"></div></div></div>`).join("");
+}
+</script>
+</body>
+</html>
