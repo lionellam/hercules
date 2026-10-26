@@ -308,3 +308,15 @@ Last updated: 12 July 2026
 ### Assumptions
 - James Wong may review these decisions later; the new document versions are authored by Lionel Lam only.
 - The Vercel Hobby plan's terms permit a personal, non-commercial family app (to be confirmed on sign-up).
+
+---
+
+## 26 October 2026 — Mockup Updated to Google Sign-In
+
+### What Was Done
+- Replaced the "Sign in with Apple" button in `design/ui-mockup.html` with a standard "Sign in with Google" button (multicolour Google logo, Google's light and dark button colours).
+- Updated the sign-in screen's note to "Invite only. Your expenses are private to your account."
+- Marked the mockup follow-up as done in the Architecture document.
+
+### Decisions Made
+- **Follow Google's standard button styling** — a recognisable, familiar sign-in button, consistent with Google's branding guidance, rather than restyling it to match the app's monochrome theme.

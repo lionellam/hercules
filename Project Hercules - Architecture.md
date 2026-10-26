@@ -108,7 +108,7 @@ With these decisions, Project Hercules is framed as a **hosted, invite-only fami
 
 ## 5. Known Gaps and Follow-ups
 
-- Update the UI mockup's sign-in button from Apple to Google
+- ~~Update the UI mockup's sign-in button from Apple to Google~~ — *Done (26 October 2026)*
 - Confirm Vercel Hobby plan terms on sign-up
 - Decide how the allow-list is stored (environment configuration or a database table) during implementation
 - Allow-list administration, category management, and export are deferred to Phase 4
