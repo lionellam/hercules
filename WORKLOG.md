@@ -285,3 +285,26 @@ Last updated: 12 July 2026
 ### Assumptions
 - The web app will reuse the existing parser prompt, with the review, edit, and save flow unchanged.
 - Moving to a cloud-hosted model and Apple sign-in will require updates to the Charter and Specification; an architecture proposal will be drafted for review before any app code is written.
+
+---
+
+## 26 October 2026 — Web App Architecture Decisions and Document Updates
+
+### What Was Done
+- Worked through a 21-question decision list covering users and access, the language model, hosting and data, the application stack, first-version scope, and process.
+- Created the **Architecture document** (v0.1), recording all 21 decisions with the reason for each, plus a system overview diagram.
+- Updated the **Project Charter** (v0.4 → v0.5), **Project Plan** (v0.5 → v0.6) and **Specification** (v0.6 → v0.7) to reflect the hosted web app.
+- In the Project Plan, added an **Invited Family Member** persona and moved the Mei, Priya and Sam personas to a new Appendix B (Future / Out of Current Scope). Sam's quote was updated to remove the outdated reference to a 3.8B model.
+
+### Decisions Made
+- **Reframed as a hosted, invite-only family app** — self-hosting and local inference moved to non-goals. A "two tracks" framing (hosted app plus self-hosted CLI) was considered but not chosen.
+- **Google sign-in with an allow-list** — Sign in with Apple was the first choice, but it requires a paid Apple Developer Program membership (US$99/year); Google sign-in is free and also covers Android users.
+- **Claude Haiku 5.5 via the Anthropic API** — fast and inexpensive for simple extraction; structured outputs guarantee valid JSON. Sending expense text to a cloud provider was accepted, on the basis that API data is not used for training.
+- **Cost guards** — US$5/month spend limit on the Anthropic account and 100 parses per user per day.
+- **Vercel, Neon and Next.js (TypeScript)** — chosen together; Python was not required for the web app, and SQLite cannot persist on Vercel.
+- **CLI kept separate** — it continues as a local, offline, experimental tool using Phi-4 and SQLite; existing CLI data will be imported into the web app once.
+- **First version limited** to sign-in, Log, History and Summary, with edit and soft delete; installable as a PWA; SGD only; no offline logging; per-user categories with no management screen.
+
+### Assumptions
+- James Wong may review these decisions later; the new document versions are authored by Lionel Lam only.
+- The Vercel Hobby plan's terms permit a personal, non-commercial family app (to be confirmed on sign-up).
