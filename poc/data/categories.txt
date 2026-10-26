@@ -9,5 +9,6 @@ Shopping
 Rent
 Clothes
 Education
+Professional Development
 Travel
 Other
