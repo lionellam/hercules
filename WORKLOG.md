@@ -357,3 +357,28 @@ Last updated: 12 July 2026
 
 ### Decisions Made
 - **Stayed with Claude Haiku 5.5** — Gemini's free tier was considered but not chosen, because its terms allow free-tier inputs to be used to improve Google's products. Recorded in the Architecture document (decision 5).
+
+---
+
+## 01 November 2026 — Web App v1 Live on Vercel
+
+### What Was Done
+- Deployed the web app to Vercel (Hobby plan) from the `web/` folder: `https://hercules-eta-three.vercel.app`. Pushes to `main` now redeploy automatically.
+- Created a Neon Postgres database (`hercules-db`, Free plan, Singapore region) through Vercel's Storage tab, applied the schema, and verified it with a read-only check against `db/schema.sql` (all tables, columns, indexes and foreign keys present).
+- Set up Google sign-in in Google Cloud (project `hercules-513414`): an External consent screen named "Hercules" and an OAuth client ("Hercules web") with redirect URIs for the Vercel address and `localhost:3000`.
+- Added the production settings in Vercel: `ANTHROPIC_API_KEY`, `AUTH_SECRET`, `AUTH_GOOGLE_ID`, `AUTH_GOOGLE_SECRET`, and `DATABASE_URL` (from Neon).
+- Signed in on the live site, then imported the CLI history: 229 records imported, 0 skipped, 0 invalid. History shows July and August correctly.
+- Allowed the local dev server to be opened from a phone on the home network (`allowedDevOrigins` in `web/next.config.ts`), for trying the app on an iPhone before deployment.
+
+### Decisions Made
+- **Kept the generated Vercel address** (`hercules-eta-three.vercel.app`) rather than renaming it.
+- **Google consent screen stays in Testing mode** — each invitee is added as a Google test user (limit 100) as well as to the Hercules allow-list. Publishing would require a home page, a privacy policy and, most likely, a custom domain, which is more than a family app needs for now.
+- **Neon variables use the `DATABASE` prefix** — so the connection string arrives as `DATABASE_URL`, the name the app already expects.
+- **Summary stays limited to this month and last month for v1** — imported July and August data is viewable in History; a month switcher for Summary was considered and deferred.
+
+### Challenges
+- Vercel asks for an authenticator code before deploying or redeploying, which the owner must enter; a first redeploy attempt silently did not go through because of this prompt.
+- The project owner is not automatically a Google test user; the owner's own email had to be added to the test-user list before the first sign-in.
+
+### Assumptions
+- Vercel's Hobby plan terms suit a private, non-commercial family app (still to be confirmed by the owner).
