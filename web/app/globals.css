@@ -61,7 +61,7 @@ textarea::placeholder { color: var(--muted); }
 .today-total { display: flex; justify-content: space-between; align-items: baseline; margin-top: 12px; color: var(--muted); font-size: 14px; }
 .today-total strong { color: var(--text); font-size: 16px; font-variant-numeric: tabular-nums; }
 .row-end { display: flex; justify-content: flex-end; }
-.row-start { display: flex; margin: 16px 0 8px; }
+.row-start { display: flex; margin-top: 16px; }
 .btn { height: 44px; padding: 0 20px; border-radius: 12px; border: none; font-size: 15px; font-weight: 600; cursor: pointer; }
 .btn-primary { background: var(--accent); color: var(--accent-text); }
 .btn-ghost { background: transparent; color: var(--muted); }

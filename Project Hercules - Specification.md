@@ -1,7 +1,7 @@
 # Project Hercules — Specification Sheet: "Log an Expense" Flow
 
 ```
-Version 0.19 · Draft 
+Version 0.20 · Draft 
 Last Reviewed: 2 November 2026
 Produced with AI Assistance (Claude Code)
 ```
@@ -29,6 +29,7 @@ Produced with AI Assistance (Claude Code)
 | 0.17 | 2026-11-02 | Lionel Lam | Over-budget bars in Summary turn red |
 | 0.18 | 2026-11-02 | Lionel Lam | History keeps its heading and month switcher fixed at the top while the list scrolls |
 | 0.19 | 2026-11-02 | Lionel Lam | Summary keeps its heading and month selector fixed at the top while the content scrolls |
+| 0.20 | 2026-11-02 | Lionel Lam | Categories screen keeps its heading and add button fixed at the top while the list scrolls |
 
 ---
 
@@ -113,7 +114,7 @@ Per-user and extensible — this is a **user preference**, not a global constant
 | `is_other` | boolean | Flags the built-in "Other" catch-all; ensures only one such category exists per user. When `true`, the expense entry will prompt for an `other_sub_label` to capture specificity |
 | `monthly_budget` | number (optional) | The category's current monthly budget in SGD; empty means no budget. Only the current amount is kept, so past months' budgets are not recorded |
 
-**Preset behavior:** each new user is seeded with their own copy of the starter list — Food & Dining, Transport, Groceries, Entertainment, Utilities, Health & Medical, Household, Shopping, Rent, Clothes, Education, Professional Development, Travel — plus an **"Other"** catch-all. The Categories screen adds and renames categories and sets their monthly budgets. Names must be unique for the user regardless of capitalisation, with a limit of 50 categories per user. "Other" cannot be renamed and stays last in the list, because the application falls back to it by name. Retiring a category is not yet available in the app and is done directly in the database.
+**Preset behavior:** each new user is seeded with their own copy of the starter list — Food & Dining, Transport, Groceries, Entertainment, Utilities, Health & Medical, Household, Shopping, Rent, Clothes, Education, Professional Development, Travel — plus an **"Other"** catch-all. The Categories screen adds and renames categories and sets their monthly budgets; its heading and add button stay fixed at the top while the list scrolls. Names must be unique for the user regardless of capitalisation, with a limit of 50 categories per user. "Other" cannot be renamed and stays last in the list, because the application falls back to it by name. Retiring a category is not yet available in the app and is done directly in the database.
 
 ### 5.3 `Merchant` — no dedicated table (for now)
 

@@ -108,7 +108,6 @@ export default function HerculesApp({ email }: { email: string }) {
 
   return (
     <main className="app">
-      {tab === "categories" && <ThemeToggle />}
       {tab === "log" && <LogScreen categories={categories} online={online} cache={cache} onSaved={cache.reloadAll} />}
       {tab === "history" && <HistoryScreen categories={categories} online={online} cache={cache} onChanged={cache.reloadAll} />}
       {tab === "summary" && <SummaryScreen email={email} cache={cache} />}
@@ -567,11 +566,14 @@ function CategoriesScreen({ categories, online, onChanged }: { categories: Categ
   const [editing, setEditing] = useState<Category | "new" | null>(null);
 
   return (
-    <section className="screen">
-      <h1>Categories</h1>
-      <p className="sub">Monthly budgets are optional and in SGD.</p>
-      <div className="row-start">
-        <button className="btn btn-primary" disabled={!online} onClick={() => setEditing("new")}>Add category</button>
+    <section className="screen pinned-screen">
+      <div className="pinned-top">
+        <ThemeToggle />
+        <h1>Categories</h1>
+        <p className="sub">Monthly budgets are optional and in SGD.</p>
+        <div className="row-start">
+          <button className="btn btn-primary" disabled={!online} onClick={() => setEditing("new")}>Add category</button>
+        </div>
       </div>
       {categories.length === 0 ? (
         <p className="sub empty">Loading…</p>

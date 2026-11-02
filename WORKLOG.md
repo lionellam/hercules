@@ -580,3 +580,12 @@ Last updated: 2 November 2026
 - Switching month now returns to the top of the screen, as on History.
 - Updated the Specification to v0.19 (process flow step 8).
 - Tested locally on a short phone-sized screen with local data: the section stays in place while scrolling, switching month returns to the top, the toggle works, and the other tabs still have their toggle. Type-check, lint and a production build all passed.
+
+---
+
+## 02 November 2026 — Fixed Top Section on the Categories Screen
+
+### What Was Done
+- The "Categories" heading, its note, the theme toggle and the Add category button now stay fixed at the top while the list scrolls, so all four screens work the same way.
+- Updated the Specification to v0.20 (Section 5.2).
+- Tested locally on a short phone-sized screen: the section stays in place while scrolling, Add category and the category rows open their sheets above it, and every tab still has one toggle. Type-check, lint and a production build all passed.
