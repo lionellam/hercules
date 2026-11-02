@@ -18,7 +18,7 @@ Tracks the steps to take the web app from "working locally" to "live on your pho
 - [x] **Anthropic** — create an API key in the Anthropic Console — *You* (done 26 Oct; saved in `web/.env.local`, real parsing verified locally)
 - [x] **Anthropic** — set a US$5 monthly spend limit on the account — *You* (done 26 Oct)
 - [x] **Vercel** — sign up / sign in with GitHub — *You* (done 1 Nov)
-- [ ] **Vercel** — check the Hobby plan terms suit a personal family app — *You*
+- [x] **Vercel** — check the Hobby plan terms suit a personal family app — *You* (done 2 Nov; Hobby plan active, no payment method on file; terms accepted as suitable for a private, non-commercial family app)
 - [x] **Vercel** — import the `hercules` repository with **Root Directory** set to `web` — *You* (done 1 Nov; first deploy Ready, address `https://hercules-eta-three.vercel.app`)
 - [x] **Neon** — add Neon from the Vercel project's Storage / Marketplace tab and connect it (sets `DATABASE_URL`) — *You* (done 1 Nov; `hercules-db`, Free plan, env prefix `DATABASE`)
 - [x] **Google Cloud** — create a project and configure the OAuth consent screen (External, "Hercules") — *You* (done 1 Nov; project ID `hercules-513414`, currently in Testing)

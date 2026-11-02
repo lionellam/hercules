@@ -109,6 +109,6 @@ With these decisions, Project Hercules is framed as a **hosted, invite-only fami
 ## 5. Known Gaps and Follow-ups
 
 - ~~Update the UI mockup's sign-in button from Apple to Google~~ — *Done (26 October 2026)*
-- Confirm Vercel Hobby plan terms on sign-up
+- ~~Confirm Vercel Hobby plan terms on sign-up~~ — *Done (2 November 2026): Hobby plan active with no payment method on file; terms confirmed as suitable for a private, non-commercial family app*
 - ~~Decide how the allow-list is stored (environment configuration or a database table) during implementation~~ — *Decided (26 October 2026): an `allowed_emails` database table, managed with `npm run allow`, so invitations don't require a redeploy*
 - Allow-list administration, category management, and export are deferred to Phase 4

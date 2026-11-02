@@ -419,3 +419,11 @@ Last updated: 2 November 2026
 
 ### Decisions Made
 - **Amounts are added without currency conversion** — the same rule as Summary, since the first version is SGD only.
+
+---
+
+## 02 November 2026 — Vercel Hobby Plan Confirmed
+
+### What Was Done
+- Confirmed in Vercel's billing settings that the team is on the Hobby plan (active), with no payment method on file and no paid add-ons, so no charges can arise.
+- The owner reviewed the Hobby plan terms and confirmed they suit a private, non-commercial family app. Ticked on the Go-Live Checklist and marked as done in the Architecture document's follow-ups.
