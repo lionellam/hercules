@@ -4,7 +4,7 @@
 Maintained by: Lionel Lam Song Poh, James Wong
 Purpose: Record of work done, decisions made, challenges encountered, and assumptions held —
 to serve as a lessons learned reference for current and future contributors.
-Last updated: 12 July 2026
+Last updated: 2 November 2026
 ```
 
 ---
@@ -395,3 +395,14 @@ Last updated: 12 July 2026
 
 ### Decisions Made
 - **Reuse History's edit sheet rather than editing inline** — one consistent way to edit an expense across the app, and no new code paths on the server.
+
+---
+
+## 02 November 2026 — First Family Member Invited
+
+### What Was Done
+- Invited the first family member: added as a Google test user in the Hercules Google Cloud project, and to the Hercules allow-list in the live Neon database.
+- Confirmed with `npm run allow -- list` against Neon that the allow-list holds exactly two emails: the owner's (added 1 Nov) and the family member's (added 2 Nov).
+
+### Challenges
+- Google Cloud's "Add users" panel did not save the test user on the first click of Save (the same happened on 1 Nov); a second Save worked. Worth re-checking the test-user list after adding someone.

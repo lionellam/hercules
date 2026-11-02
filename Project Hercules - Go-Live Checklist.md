@@ -1,7 +1,7 @@
 # Project Hercules — Go-Live Checklist (Web App v1)
 
 ```
-Last updated: 1 November 2026
+Last updated: 2 November 2026
 ```
 
 Tracks the steps to take the web app from "working locally" to "live on your phone". Detailed instructions for each step are in `web/README.md`; ask Claude to walk through any of them.
@@ -22,7 +22,7 @@ Tracks the steps to take the web app from "working locally" to "live on your pho
 - [x] **Vercel** — import the `hercules` repository with **Root Directory** set to `web` — *You* (done 1 Nov; first deploy Ready, address `https://hercules-eta-three.vercel.app`)
 - [x] **Neon** — add Neon from the Vercel project's Storage / Marketplace tab and connect it (sets `DATABASE_URL`) — *You* (done 1 Nov; `hercules-db`, Free plan, env prefix `DATABASE`)
 - [x] **Google Cloud** — create a project and configure the OAuth consent screen (External, "Hercules") — *You* (done 1 Nov; project ID `hercules-513414`, currently in Testing)
-- [x] **Google Cloud** — publish the consent screen, or add each invitee as a test user — *You* (decided 1 Nov: stay in Testing and add test users; `lionel552@gmail.com` added. Publishing would need a home page, privacy policy and likely a custom domain)
+- [x] **Google Cloud** — publish the consent screen, or add each invitee as a test user — *You* (decided 1 Nov: stay in Testing and add test users; owner added. Publishing would need a home page, privacy policy and likely a custom domain)
 - [x] **Google Cloud** — create an OAuth client ID (Web application) with the redirect URIs for `localhost:3000` and the Vercel address — *You* (done 1 Nov; client "Hercules web")
 
 ## 3. Configuration
@@ -46,7 +46,7 @@ Tracks the steps to take the web app from "working locally" to "live on your pho
 
 ## 6. Rollout
 
-- [ ] Invite family members and close friends, adding each email in **both** places — *You*:
+- [ ] Invite family members and close friends, adding each email in **both** places — *You* (ongoing; first family member added to both on 2 Nov):
   - Hercules allow-list: `npm run allow -- add <email>` (with the Neon URL)
   - Google Cloud → Google Auth Platform → Audience → Test users → Add users (project `hercules-513414`, limit 100)
 - [ ] Optional: ask James Wong to review the Architecture document's decisions — *You*
