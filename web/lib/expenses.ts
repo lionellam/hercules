@@ -3,8 +3,9 @@ import { z } from "zod";
 import { query } from "./db";
 
 export const DAILY_PARSE_LIMIT = 100;
+export const MAX_CATEGORIES = 50;
 
-export type Category = { id: number; name: string };
+export type Category = { id: number; name: string; is_other: boolean; monthly_budget: number | null };
 
 export type Expense = {
   id: number;
@@ -32,11 +33,47 @@ export const expenseInput = z.object({
   was_edited: z.boolean(),
 });
 
+export const categoryInput = z.object({
+  name: z.string().trim().min(1).max(50).regex(/^[^\r\n]+$/),
+  monthly_budget: z.number().positive().max(10_000_000).nullable(),
+});
+
+// "Other" always sorts last; the Log screen falls back to the last category
 export function getCategories(userId: string) {
   return query<Category>(
-    "SELECT id, name FROM categories WHERE user_id = $1 AND is_active ORDER BY sort_order, name",
+    `SELECT id, name, is_other, monthly_budget FROM categories
+     WHERE user_id = $1 AND is_active ORDER BY is_other, sort_order, name`,
     [userId],
   );
+}
+
+// Returns null if the name is taken (ignoring case) or the user has reached the category limit.
+export async function createCategory(userId: string, input: z.infer<typeof categoryInput>) {
+  const rows = await query<{ id: number }>(
+    `INSERT INTO categories (user_id, name, is_default, monthly_budget, sort_order)
+     SELECT $1::uuid, $2::text, FALSE, $3::numeric,
+            COALESCE((SELECT MAX(sort_order) FROM categories WHERE user_id = $1::uuid), 0) + 1
+     WHERE NOT EXISTS (SELECT 1 FROM categories WHERE user_id = $1::uuid AND lower(name) = lower($2::text))
+       AND (SELECT COUNT(*) FROM categories WHERE user_id = $1::uuid AND is_active) < $4
+     ON CONFLICT DO NOTHING RETURNING id`,
+    [userId, input.name, input.monthly_budget, MAX_CATEGORIES],
+  );
+  return rows[0]?.id ?? null;
+}
+
+// "Other" keeps its name because the parser falls back to it by name; its budget can still change.
+// Returns false if the category isn't found or the new name is taken (ignoring case).
+export async function updateCategory(userId: string, id: number, input: z.infer<typeof categoryInput>) {
+  const rows = await query(
+    `UPDATE categories c SET name = CASE WHEN c.is_other THEN c.name ELSE $3::text END, monthly_budget = $4::numeric
+     WHERE c.id = $1 AND c.user_id = $2 AND c.is_active
+       AND (c.is_other OR NOT EXISTS (
+         SELECT 1 FROM categories o WHERE o.user_id = $2 AND lower(o.name) = lower($3::text) AND o.id <> $1
+       ))
+     RETURNING c.id`,
+    [id, userId, input.name, input.monthly_budget],
+  );
+  return rows.length > 0;
 }
 
 async function ownsCategory(userId: string, categoryId: number) {
@@ -67,11 +104,11 @@ export function listExpenses(userId: string, month: string) {
 
 export function monthSummary(userId: string, month: string) {
   const [start, end] = monthRange(month);
-  return query<{ category: string; total: number; count: number }>(
-    `SELECT c.name AS category, SUM(e.amount)::numeric(12,2) AS total, COUNT(*)::int AS count
+  return query<{ category: string; total: number; count: number; budget: number | null }>(
+    `SELECT c.name AS category, SUM(e.amount)::numeric(12,2) AS total, COUNT(*)::int AS count, c.monthly_budget AS budget
      FROM expenses e JOIN categories c ON c.id = e.category_id
      WHERE e.user_id = $1 AND e.deleted_at IS NULL AND e.date >= $2 AND e.date < $3
-     GROUP BY c.name ORDER BY total DESC`,
+     GROUP BY c.name, c.monthly_budget ORDER BY total DESC`,
     [userId, start, end],
   );
 }

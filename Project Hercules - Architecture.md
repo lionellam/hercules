@@ -1,7 +1,7 @@
 # Project Hercules — Architecture: Web App v1
 
 ```
-Version 0.3 · Draft
+Version 0.4 · Draft
 Last Reviewed: 2 November 2026
 Produced with AI Assistance (Claude Code)
 ```
@@ -13,6 +13,7 @@ Produced with AI Assistance (Claude Code)
 | 0.1 | 2026-10-26 | Lionel Lam | Initial architecture and decision record for the hosted web app |
 | 0.2 | 2026-11-02 | Lionel Lam | Performance decisions: server moved to Vercel's Singapore region; screens keep loaded data in memory and refresh it in the background |
 | 0.3 | 2026-11-02 | Lionel Lam | Interface decisions: moderately wider layout for tablets and computers; light and dark mode toggle |
+| 0.4 | 2026-11-02 | Lionel Lam | Category management and monthly budgets brought forward; decision 17 superseded |
 
 ---
 
@@ -97,9 +98,11 @@ The language model is called only to parse a single expense into structured fiel
 | # | Decision | Reason |
 |---|---|---|
 | 16 | **Screens:** Google sign-in, Log, History, Summary | Matches the UI mockup (`design/ui-mockup.html`); gets a working app into use quickly |
-| 17 | **Per-user categories**, each new user seeded with the 14 default categories; changes made directly in the database; no management screen | The database matches the Specification's per-user Category model from the start, so a management screen can be added later without schema changes |
+| ~~17~~ | ~~**Per-user categories**, each new user seeded with the 14 default categories; changes made directly in the database; no management screen~~ *Superseded by decision 26* | The database matches the Specification's per-user Category model from the start, so a management screen can be added later without schema changes |
 | 18 | **Edit and soft delete** from History, reusing the review card | No new screen needed. Soft delete (`deleted_at`) keeps records recoverable, in line with the audit-friendly principle |
 | 19 | **SGD only** | Nearly all expenses are in SGD; currency is still stored per expense, but summaries do not convert |
+| 26 | **Categories screen** to add and rename per-user categories, as a fourth tab. Retiring and deleting are left out for now; each new user is still seeded with the 14 defaults | Expenses link to categories by ID, so renames carry through history, and the parser reads the live list. Retiring needs more work: an older expense in a retired category must still open and save correctly in the edit sheet |
+| 27 | **Optional monthly budget per category**, stored as `categories.monthly_budget` rather than a separate table; Summary shows "x of budget" for the current month only | The simplest start on Phase 3 budgets. Only the current amount is kept, so past months are not compared against budgets. A separate table can replace the column if budget history is needed |
 
 ### 3.6 Process
 
@@ -117,4 +120,5 @@ With these decisions, Project Hercules is framed as a **hosted, invite-only fami
 - ~~Update the UI mockup's sign-in button from Apple to Google~~ — *Done (26 October 2026)*
 - ~~Confirm Vercel Hobby plan terms on sign-up~~ — *Done (2 November 2026): Hobby plan active with no payment method on file; terms confirmed as suitable for a private, non-commercial family app*
 - ~~Decide how the allow-list is stored (environment configuration or a database table) during implementation~~ — *Decided (26 October 2026): an `allowed_emails` database table, managed with `npm run allow`, so invitations don't require a redeploy*
-- Allow-list administration, category management, and export are deferred to Phase 4
+- Allow-list administration, retiring categories, and export are deferred to Phase 4
+- Budget history, alerts and fuller budget tracking remain in Phase 3

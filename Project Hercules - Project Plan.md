@@ -1,8 +1,8 @@
 # Project Hercules — Project Plan
 
 ```
-Version 0.6 · Draft 
-Last Reviewed: 26 October 2026
+Version 0.7 · Draft 
+Last Reviewed: 2 November 2026
 Produced with AI Assistance (Claude Code)
 ```
 
@@ -16,6 +16,7 @@ Produced with AI Assistance (Claude Code)
 | 0.4 | 2026-07-12 | James Wong, Lionel Lam | Updated NL Parsing Engine model reference from Phi-4-mini to Phi-4 |
 | 0.5 | 2026-07-12 | James Wong, Lionel Lam | Replaced "SLM" / "Small Language Model" terminology with "local model" / "locally-hosted language model" |
 | 0.6 | 2026-10-26 | Lionel Lam | Reframed as a hosted, invite-only web app using a cloud language model; rewrote overview, objectives, vision, features, milestones and risks; added Invited Family Member persona; moved self-hosting personas to future scope |
+| 0.7 | 2026-11-02 | Lionel Lam | Category management and per-category monthly budgets delivered ahead of Phases 3 and 4; features and milestones updated |
 
 ---
 
@@ -65,8 +66,8 @@ A high-level look at the functional pieces of the system. These will be broken d
 - **Confirmation Screen** — editable review step before data is committed to the database
 - **Expense Storage** — structured, queryable storage of logged expenses, scoped per user; edits and soft deletes supported
 - **History & Summary** — month-by-month list of expenses, and category totals for the current and previous month
-- **Budget Tracking** — category-based budgets and tracking against them
-- **Category Taxonomy** — a per-user, extensible set of expense categories; new users are seeded with a starter list
+- **Budget Tracking** — category-based budgets and tracking against them; an optional monthly budget per category, shown against the current month's spend in Summary, is in place
+- **Category Taxonomy** — a per-user, extensible set of expense categories; new users are seeded with a starter list, and can add and rename categories on a Categories screen
 - **Export / Download** — ability to export a list of expenses (deferred beyond the first version)
 - **Hosting & Deployment** — Vercel, with a Neon Postgres database; installable as a Progressive Web App (PWA)
 
@@ -79,9 +80,9 @@ Python CLI with natural language parsing working end-to-end via a local model (P
 - **Phase 2 — Web App v1**
 Google sign-in with allow-list; Log screen with inline confirmation card; History (month-by-month, with edit and soft delete); Summary (current and previous month). Installable as a PWA. One-off import of existing CLI data.
 - **Phase 3 — Budgets & Queries**
-Budget definitions by category, and the ability to query/report on spending via natural language or simple views.
+Budget definitions by category (a simple monthly budget per category was delivered early, in November 2026), and the ability to query/report on spending via natural language or simple views.
 - **Phase 4 — Polish**
-Export, category management screen, allow-list administration, and other refinements based on use.
+Export, retiring categories (adding and renaming were delivered early, in November 2026), allow-list administration, and other refinements based on use.
 
 ## 7. Risks, Dependencies and Open Questions
 

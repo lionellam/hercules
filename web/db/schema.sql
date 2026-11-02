@@ -25,6 +25,8 @@ CREATE TABLE IF NOT EXISTS categories (
   UNIQUE (user_id, name)
 );
 
+ALTER TABLE categories ADD COLUMN IF NOT EXISTS monthly_budget NUMERIC(12, 2);
+
 CREATE UNIQUE INDEX IF NOT EXISTS categories_one_other_per_user
   ON categories (user_id) WHERE is_other;
 

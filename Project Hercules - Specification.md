@@ -1,7 +1,7 @@
 # Project Hercules — Specification Sheet: "Log an Expense" Flow
 
 ```
-Version 0.14 · Draft 
+Version 0.15 · Draft 
 Last Reviewed: 2 November 2026
 Produced with AI Assistance (Claude Code)
 ```
@@ -24,6 +24,7 @@ Produced with AI Assistance (Claude Code)
 | 0.12 | 2026-11-02 | Lionel Lam | Log screen keeps its heading and text input fixed at the top while the content below scrolls |
 | 0.13 | 2026-11-02 | Lionel Lam | Log screen shows today's total spend below the text input, in the fixed top section |
 | 0.14 | 2026-11-02 | Lionel Lam | Summary's pie chart shows for any month with expenses, including a month with one category |
+| 0.15 | 2026-11-02 | Lionel Lam | Categories screen to add and rename categories and set an optional monthly budget; Summary shows spend against budget for the current month |
 
 ---
 
@@ -68,7 +69,7 @@ This spec exists to align the team before the process flow diagram (UPN) and fea
 5. **Confirmation screen is presented** — parsed fields shown as editable form elements (not a static summary).
 6. **User reviews and optionally edits fields directly** — this is the human-in-the-loop step. No re-prompting of the model occurs; corrections are direct field edits.
 7. **User confirms/saves** — the system writes the structured record, the original raw text, and a flag indicating whether any edit occurred.
-8. **Record is available for viewing** — in History and Summary, and in the "Today" list on the Log screen for expenses dated today. A saved record can be reopened from History or from the Today list in the same editable card to be edited or deleted (soft delete, with confirmation). Below the Today list, the Log screen shows today's total spend broken down by category (amounts are added without currency conversion, as in Summary). Below its category list, Summary shows a pie chart of the month's spend by category for any month with expenses: up to six slices, with any beyond the largest five grouped as "Everything else". Screens show the last-loaded data straight away and refresh it in the background; saving, editing or deleting a record reloads it. Export is deferred beyond the first version.
+8. **Record is available for viewing** — in History and Summary, and in the "Today" list on the Log screen for expenses dated today. A saved record can be reopened from History or from the Today list in the same editable card to be edited or deleted (soft delete, with confirmation). Below the Today list, the Log screen shows today's total spend broken down by category (amounts are added without currency conversion, as in Summary). For the current month, a category with a budget shows its spend as "x of budget". Below its category list, Summary shows a pie chart of the month's spend by category for any month with expenses: up to six slices, with any beyond the largest five grouped as "Everything else". Screens show the last-loaded data straight away and refresh it in the background; saving, editing or deleting a record reloads it. Export is deferred beyond the first version.
 
 ---
 
@@ -106,8 +107,9 @@ Per-user and extensible — this is a **user preference**, not a global constant
 | `is_default` | boolean | Distinguishes preset/seeded categories from user-added ones |
 | `is_active` | boolean | Allows retiring a category without deleting historical records that reference it |
 | `is_other` | boolean | Flags the built-in "Other" catch-all; ensures only one such category exists per user. When `true`, the expense entry will prompt for an `other_sub_label` to capture specificity |
+| `monthly_budget` | number (optional) | The category's current monthly budget in SGD; empty means no budget. Only the current amount is kept, so past months' budgets are not recorded |
 
-**Preset behavior:** each new user is seeded with their own copy of the starter list — Food & Dining, Transport, Groceries, Entertainment, Utilities, Health & Medical, Household, Shopping, Rent, Clothes, Education, Professional Development, Travel — plus an **"Other"** catch-all. In the first version there is no category management screen; changes (rename, add, retire) are made directly in the database.
+**Preset behavior:** each new user is seeded with their own copy of the starter list — Food & Dining, Transport, Groceries, Entertainment, Utilities, Health & Medical, Household, Shopping, Rent, Clothes, Education, Professional Development, Travel — plus an **"Other"** catch-all. The Categories screen adds and renames categories and sets their monthly budgets. Names must be unique for the user regardless of capitalisation, with a limit of 50 categories per user. "Other" cannot be renamed and stays last in the list, because the application falls back to it by name. Retiring a category is not yet available in the app and is done directly in the database.
 
 ### 5.3 `Merchant` — no dedicated table (for now)
 
@@ -171,14 +173,14 @@ Carried forward, not yet resolved:
 
 ## 8. Explicitly Out of Scope (This Spec)
 
-- Budget definitions and tracking logic
+- Budget tracking beyond showing the current month's spend against each category's budget (alerts, budget history, rollover)
 - Query/export functionality
 - Shared or collaborative visibility between user accounts
 - Receipt photo / OCR capture
 - Bank/account sync or import
 - Offline expense logging (the app shows an offline message and keeps the typed text)
 - Multi-currency conversion
-- Category management screen
+- Deleting or retiring categories in the app
 - Allow-list administration screen
 
 ---

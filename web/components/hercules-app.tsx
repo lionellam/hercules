@@ -5,10 +5,10 @@ import { signOutAction } from "@/app/actions";
 import ReviewCard, { type Fields } from "./review-card";
 import ThemeToggle from "./theme-toggle";
 
-type Category = { id: number; name: string };
+type Category = { id: number; name: string; is_other: boolean; monthly_budget: number | null };
 type Expense = Fields & { id: number; amount: number; raw_input: string; category: string; was_edited: boolean };
-type SummaryRow = { category: string; total: number; count: number };
-type Tab = "log" | "history" | "summary";
+type SummaryRow = { category: string; total: number; count: number; budget?: number | null };
+type Tab = "log" | "history" | "summary" | "categories";
 
 const pad = (n: number) => String(n).padStart(2, "0");
 const localToday = () => {
@@ -94,13 +94,12 @@ function useCached<T>({ data, load }: ApiCache, url: string) {
 
 export default function HerculesApp({ email }: { email: string }) {
   const [tab, setTab] = useState<Tab>("log");
-  const [categories, setCategories] = useState<Category[]>([]);
   const cache = useApiCache();
+  const categories = useCached<Category[]>(cache, "/api/categories") ?? [];
   const { load } = cache;
   const online = useOnline();
 
   useEffect(() => {
-    api<Category[]>("/api/categories").then(setCategories).catch(() => {});
     // Load the other tabs' default views up front so they open instantly
     load(expensesUrl(monthKey(0)));
     load(summaryUrl(monthKey(0)));
@@ -113,10 +112,12 @@ export default function HerculesApp({ email }: { email: string }) {
       {tab === "log" && <LogScreen categories={categories} online={online} cache={cache} onSaved={cache.reloadAll} />}
       {tab === "history" && <HistoryScreen categories={categories} online={online} cache={cache} onChanged={cache.reloadAll} />}
       {tab === "summary" && <SummaryScreen email={email} cache={cache} />}
+      {tab === "categories" && <CategoriesScreen categories={categories} online={online} onChanged={cache.reloadAll} />}
       <nav className="tabs">
         <TabButton id="log" tab={tab} setTab={setTab} label="Log" path="M12 5v14M5 12h14" />
         <TabButton id="history" tab={tab} setTab={setTab} label="History" path="M4 6h16M4 12h16M4 18h10" />
         <TabButton id="summary" tab={tab} setTab={setTab} label="Summary" path="M6 20V10M12 20V4M18 20v-6" />
+        <TabButton id="categories" tab={tab} setTab={setTab} label="Categories" path="M4 5h7l9 9-6 6-9-9V5zM8 9h.01" />
       </nav>
     </main>
   );
@@ -459,7 +460,10 @@ function SummaryScreen({ email, cache }: { email: string; cache: ApiCache }) {
                   {r.category}
                   <span className="n">{r.count}</span>
                 </span>
-                <strong>{fmt(r.total)}</strong>
+                <strong>
+                  {fmt(r.total)}
+                  {offset === 0 && r.budget != null && <span className="of"> of {fmt(r.budget)}</span>}
+                </strong>
               </div>
               <div className="track">
                 <div className="fill" style={{ width: `${(r.total / max) * 100}%` }} />
@@ -478,6 +482,87 @@ function SummaryScreen({ email, cache }: { email: string; cache: ApiCache }) {
         <p>Signed in as {email}</p>
         <button type="submit">Sign out</button>
       </form>
+    </section>
+  );
+}
+
+function CategorySheet({ category, online, onClose, onChanged }: { category: Category | null; online: boolean; onClose: () => void; onChanged: () => void }) {
+  const [name, setName] = useState(category?.name ?? "");
+  const [budget, setBudget] = useState(category?.monthly_budget?.toFixed(2) ?? "");
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState("");
+
+  async function save() {
+    const value = Number(budget);
+    if (budget.trim() && (!Number.isFinite(value) || value <= 0)) {
+      setError("Enter a budget above zero, or leave it blank.");
+      return;
+    }
+    setBusy(true);
+    setError("");
+    try {
+      const body = JSON.stringify({ name, monthly_budget: budget.trim() ? Math.round(value * 100) / 100 : null });
+      if (category) await api(`/api/categories/${category.id}`, { method: "PATCH", body });
+      else await api("/api/categories", { method: "POST", body });
+      onClose();
+      onChanged();
+    } catch (e) {
+      setError((e as Error).message);
+      setBusy(false);
+    }
+  }
+
+  return (
+    <div className="sheet-backdrop" onClick={onClose}>
+      <div className="sheet" onClick={(ev) => ev.stopPropagation()}>
+        <div className="card">
+          <div className="card-title">{category ? "Edit category" : "Add category"}</div>
+          <div className="field">
+            <label htmlFor="c-name">Name</label>
+            <input id="c-name" value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. Pets" maxLength={50} disabled={category?.is_other} />
+          </div>
+          <div className="field">
+            <label htmlFor="c-budget">Monthly budget (SGD)</label>
+            <input id="c-budget" inputMode="decimal" value={budget} onChange={(e) => setBudget(e.target.value)} placeholder="Optional" />
+          </div>
+          {category?.is_other && <p className="sub">The built-in &quot;Other&quot; category can&apos;t be renamed.</p>}
+          {error && <p className="error">{error}</p>}
+          <div className="actions">
+            <div />
+            <div className="right">
+              <button className="btn btn-ghost" disabled={busy} onClick={onClose}>Cancel</button>
+              <button className="btn btn-primary" disabled={busy || !online || !name.trim()} onClick={save}>{busy ? "Saving…" : "Save"}</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function CategoriesScreen({ categories, online, onChanged }: { categories: Category[]; online: boolean; onChanged: () => void }) {
+  const [editing, setEditing] = useState<Category | "new" | null>(null);
+
+  return (
+    <section className="screen">
+      <h1>Categories</h1>
+      <p className="sub">Monthly budgets are optional and in SGD.</p>
+      <div className="row-start">
+        <button className="btn btn-primary" disabled={!online} onClick={() => setEditing("new")}>Add category</button>
+      </div>
+      {categories.length === 0 ? (
+        <p className="sub empty">Loading…</p>
+      ) : (
+        categories.map((c) => (
+          <button className="item" key={c.id} onClick={() => setEditing(c)}>
+            <div>
+              <div className="m">{c.name}</div>
+            </div>
+            {c.monthly_budget == null ? <div className="c">No budget</div> : <div className="a">{fmt(c.monthly_budget)}</div>}
+          </button>
+        ))
+      )}
+      {editing && <CategorySheet category={editing === "new" ? null : editing} online={online} onClose={() => setEditing(null)} onChanged={onChanged} />}
     </section>
   );
 }

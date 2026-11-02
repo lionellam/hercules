@@ -1,8 +1,8 @@
 **Natural Language Expense & Budget Tracker**
 
 ```
-Version 0.5 · Draft
-Last Reviewed: 26 October 2026
+Version 0.6 · Draft
+Last Reviewed: 2 November 2026
 Produced with AI Assistance (Claude Code)
 ```
 
@@ -15,6 +15,7 @@ Produced with AI Assistance (Claude Code)
 | 0.3 | 2026-07-12 | James Wong, Lionel Lam | Updated model reference from Phi-4-mini to Phi-4 |
 | 0.4 | 2026-07-12 | James Wong, Lionel Lam | Replaced "SLM" / "Small Language Model" terminology with "local model" / "locally-hosted language model" |
 | 0.5 | 2026-10-26 | Lionel Lam | Reframed as a hosted, invite-only web app using a cloud language model (Claude Haiku 5.5); self-hosting moved to non-goals; architecture, goals, success criteria and risks updated accordingly. See Architecture document v0.1 |
+| 0.6 | 2026-11-02 | Lionel Lam | Category management and per-category monthly budgets delivered ahead of Phases 3 and 4; data model and milestones updated |
 
 ---
 
@@ -80,8 +81,8 @@ Friction of maintaining an up-to-date expense and budget log can be due to the f
 
 - **User —** Google account, email, allow-listed
 - **Expense —** amount, category, date and time, merchant, notes, payment method
-- **Budget —** category, monthly limit, period
-- **Category —** per-user, extensible taxonomy; new users are seeded with a starter list (e.g. Food & Dining, Transport, Groceries, Utilities, Other); changes are made directly in the database until a management screen is built
+- **Budget —** an optional monthly limit stored on each category; a fuller budget record (period, history) may follow in Phase 3
+- **Category —** per-user, extensible taxonomy; new users are seeded with a starter list (e.g. Food & Dining, Transport, Groceries, Utilities, Other); users add and rename categories on a Categories screen
 
 *Full field-level schema maintained separately (see project repo / design doc).*
 
@@ -105,5 +106,5 @@ Friction of maintaining an up-to-date expense and budget log can be due to the f
 
 - **Phase 1 —** CLI parsing + local database (complete — proof of concept)
 - **Phase 2 —** Web App v1: sign-in, log with confirmation, history, summary, edit/delete, CLI data import
-- **Phase 3 —** Budgets & queries
-- **Phase 4 —** Polish (export, category management, allow-list administration)
+- **Phase 3 —** Budgets & queries (category management and monthly budgets per category delivered early, November 2026)
+- **Phase 4 —** Polish (export, retiring categories, allow-list administration)

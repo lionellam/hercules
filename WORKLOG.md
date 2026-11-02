@@ -517,3 +517,25 @@ Last updated: 2 November 2026
 - A month with one category now shows a full circle at 100%. A month with no expenses still shows only the "No expenses this month." message, as there is nothing to chart.
 - Updated the Specification to v0.14 (process flow step 8).
 - Tested locally on both month tabs with local data, and with mocked summaries of none, one and two categories. Type-check, lint and a production build all passed.
+
+---
+
+## 02 November 2026 — Categories Screen and Monthly Budgets
+
+### What Was Done
+- Added a fourth tab, Categories, listing the user's categories with their monthly budgets. Categories can be added and renamed, and each can have an optional monthly budget in SGD.
+- Added a `monthly_budget` column to the `categories` table (`db/schema.sql`). The migration is safe to re-run and does not change existing data. It must be applied to Neon before this code is deployed.
+- Summary now shows "x of budget" beside a category for the current month only, when that category has a budget. Previous months show the total alone.
+- Categories now load through the in-memory cache, so changes reach the Log, History and Summary screens straight away.
+- Updated the Charter to v0.6, the Project Plan to v0.7, the Architecture document to v0.4 (decisions 26 and 27; decision 17 superseded) and the Specification to v0.15.
+- Tested locally: add, rename and budget changes through the screen; duplicate names regardless of capitals; blank names, line breaks and invalid budgets; "Other" keeping its name and last place; another user's category refused; renames carrying through History and Summary; 320 pixels and tablet widths. A real parse of "vet checkup for my dog" chose a newly added "Pets" category. Test data removed afterwards. Type-check, lint and a production build all passed.
+
+### Decisions Made
+- **Keep "Other" fixed** — the application falls back to it by name, so it can't be renamed and stays last. Its budget can still be set.
+- **No deleting or retiring yet** — an older expense in a retired category would not open and save correctly in the edit sheet. To be handled as a separate change.
+- **Store budgets as a column, not a table** — only the current amount is kept, so past months aren't compared against budgets. A table can replace it if budget history is needed.
+- **Limit of 50 categories per user** — every category is sent to the language model with each parse, so the list needs an upper bound.
+
+### Assumptions
+- A category with a budget and no spend this month doesn't appear in Summary, because Summary lists only categories with spending.
+- The bars in Summary still compare categories with each other rather than with their budgets.

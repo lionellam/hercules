@@ -61,6 +61,7 @@ textarea::placeholder { color: var(--muted); }
 .today-total { display: flex; justify-content: space-between; align-items: baseline; margin-top: 12px; color: var(--muted); font-size: 14px; }
 .today-total strong { color: var(--text); font-size: 16px; font-variant-numeric: tabular-nums; }
 .row-end { display: flex; justify-content: flex-end; }
+.row-start { display: flex; margin: 16px 0 8px; }
 .btn { height: 44px; padding: 0 20px; border-radius: 12px; border: none; font-size: 15px; font-weight: 600; cursor: pointer; }
 .btn-primary { background: var(--accent); color: var(--accent-text); }
 .btn-ghost { background: transparent; color: var(--muted); }
@@ -107,7 +108,9 @@ textarea::placeholder { color: var(--muted); }
 .total .big { font-size: 38px; font-weight: 700; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
 .total .delta { font-size: 13px; color: var(--muted); margin-top: 2px; }
 .cat { margin-top: 18px; }
-.cat-top { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 6px; }
+.cat-top { display: flex; justify-content: space-between; gap: 12px; font-size: 14px; margin-bottom: 6px; }
+.cat-top strong { flex-shrink: 0; }
+.cat-top .of { color: var(--muted); font-weight: 400; }
 .cat-top .n { color: var(--muted); font-size: 12px; margin-left: 6px; }
 .track { height: 6px; background: var(--soft); border-radius: 3px; overflow: hidden; }
 .fill { height: 100%; background: var(--bar); border-radius: 3px; }
