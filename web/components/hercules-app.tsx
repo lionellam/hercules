@@ -376,7 +376,7 @@ function SpendPie({ rows }: { rows: SummaryRow[] }) {
   const percent = (value: number) => {
     const p = (value / total) * 100;
     if (p < 1) return "<1%";
-    return p > 99 ? ">99%" : `${Math.round(p)}%`;
+    return p > 99 && p < 100 ? ">99%" : `${Math.round(p)}%`;
   };
   const point = (fraction: number) => {
     const angle = 2 * Math.PI * fraction;
@@ -391,10 +391,19 @@ function SpendPie({ rows }: { rows: SummaryRow[] }) {
           {slices.map((s, i) => {
             const start = slices.slice(0, i).reduce((sum, p) => sum + p.total, 0) / total;
             const fraction = s.total / total;
+            const title = <title>{`${s.name}: $${fmt(s.total)} (${percent(s.total)})`}</title>;
+            // An arc can't start and end at the same point, so a lone category is a plain circle
+            if (slices.length === 1) {
+              return (
+                <circle key={s.name} cx="50" cy="50" r="50" fill={s.color}>
+                  {title}
+                </circle>
+              );
+            }
             const d = `M50 50 L${point(start)} A50 50 0 ${fraction > 0.5 ? 1 : 0} 1 ${point(start + fraction)} Z`;
             return (
               <path key={s.name} d={d} fill={s.color}>
-                <title>{`${s.name}: $${fmt(s.total)} (${percent(s.total)})`}</title>
+                {title}
               </path>
             );
           })}
@@ -458,7 +467,7 @@ function SummaryScreen({ email, cache }: { email: string; cache: ApiCache }) {
             </div>
           ))}
         </div>
-        {rows && rows.length >= 2 && (
+        {rows && rows.length > 0 && (
           <div>
             <SpendPie rows={rows} />
           </div>

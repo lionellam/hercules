@@ -1,7 +1,7 @@
 # Project Hercules — Specification Sheet: "Log an Expense" Flow
 
 ```
-Version 0.13 · Draft 
+Version 0.14 · Draft 
 Last Reviewed: 2 November 2026
 Produced with AI Assistance (Claude Code)
 ```
@@ -23,6 +23,7 @@ Produced with AI Assistance (Claude Code)
 | 0.11 | 2026-11-02 | Lionel Lam | Summary shows a pie chart of the month's spend by category below the category list |
 | 0.12 | 2026-11-02 | Lionel Lam | Log screen keeps its heading and text input fixed at the top while the content below scrolls |
 | 0.13 | 2026-11-02 | Lionel Lam | Log screen shows today's total spend below the text input, in the fixed top section |
+| 0.14 | 2026-11-02 | Lionel Lam | Summary's pie chart shows for any month with expenses, including a month with one category |
 
 ---
 
@@ -67,7 +68,7 @@ This spec exists to align the team before the process flow diagram (UPN) and fea
 5. **Confirmation screen is presented** — parsed fields shown as editable form elements (not a static summary).
 6. **User reviews and optionally edits fields directly** — this is the human-in-the-loop step. No re-prompting of the model occurs; corrections are direct field edits.
 7. **User confirms/saves** — the system writes the structured record, the original raw text, and a flag indicating whether any edit occurred.
-8. **Record is available for viewing** — in History and Summary, and in the "Today" list on the Log screen for expenses dated today. A saved record can be reopened from History or from the Today list in the same editable card to be edited or deleted (soft delete, with confirmation). Below the Today list, the Log screen shows today's total spend broken down by category (amounts are added without currency conversion, as in Summary). Below its category list, Summary shows a pie chart of the month's spend by category when there are at least two categories: up to six slices, with any beyond the largest five grouped as "Everything else". Screens show the last-loaded data straight away and refresh it in the background; saving, editing or deleting a record reloads it. Export is deferred beyond the first version.
+8. **Record is available for viewing** — in History and Summary, and in the "Today" list on the Log screen for expenses dated today. A saved record can be reopened from History or from the Today list in the same editable card to be edited or deleted (soft delete, with confirmation). Below the Today list, the Log screen shows today's total spend broken down by category (amounts are added without currency conversion, as in Summary). Below its category list, Summary shows a pie chart of the month's spend by category for any month with expenses: up to six slices, with any beyond the largest five grouped as "Everything else". Screens show the last-loaded data straight away and refresh it in the background; saving, editing or deleting a record reloads it. Export is deferred beyond the first version.
 
 ---
 

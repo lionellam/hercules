@@ -507,3 +507,13 @@ Last updated: 2 November 2026
 ### Decisions Made
 - **Amounts are added without currency conversion** — the same rule as Summary and Today by Category, since the first version is SGD only.
 - **Keep the total in Today by Category as well** — that heading scrolls away with the list, so the two serve different moments.
+
+---
+
+## 02 November 2026 — Pie Chart Shown for Every Month with Expenses
+
+### What Was Done
+- The owner asked for the pie chart on both month tabs in Summary. It had been hidden for months with only one category, which is why it could be missing from the current month. This reverses the earlier "no chart for fewer than two categories" decision.
+- A month with one category now shows a full circle at 100%. A month with no expenses still shows only the "No expenses this month." message, as there is nothing to chart.
+- Updated the Specification to v0.14 (process flow step 8).
+- Tested locally on both month tabs with local data, and with mocked summaries of none, one and two categories. Type-check, lint and a production build all passed.
