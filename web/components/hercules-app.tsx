@@ -453,23 +453,28 @@ function SummaryScreen({ email, cache }: { email: string; cache: ApiCache }) {
       </div>
       <div className="columns">
         <div>
-          {rows?.map((r) => (
-            <div className="cat" key={r.category}>
-              <div className="cat-top">
-                <span>
-                  {r.category}
-                  <span className="n">{r.count}</span>
-                </span>
-                <strong>
-                  {fmt(r.total)}
-                  {offset === 0 && r.budget != null && <span className="of"> of {fmt(r.budget)}</span>}
-                </strong>
+          {rows?.map((r) => {
+            const budget = offset === 0 ? r.budget : null;
+            // Against the budget where there is one; otherwise relative to the month's largest category
+            const share = Math.min(r.total / (budget ?? max), 1);
+            return (
+              <div className="cat" key={r.category}>
+                <div className="cat-top">
+                  <span>
+                    {r.category}
+                    <span className="n">{r.count}</span>
+                  </span>
+                  <strong>
+                    {fmt(r.total)}
+                    {budget != null && <span className="of"> of {fmt(budget)}</span>}
+                  </strong>
+                </div>
+                <div className="track">
+                  <div className="fill" style={{ width: `${share * 100}%` }} />
+                </div>
               </div>
-              <div className="track">
-                <div className="fill" style={{ width: `${(r.total / max) * 100}%` }} />
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
         {rows && rows.length > 0 && (
           <div>

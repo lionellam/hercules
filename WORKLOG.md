@@ -539,3 +539,15 @@ Last updated: 2 November 2026
 ### Assumptions
 - A category with a budget and no spend this month doesn't appear in Summary, because Summary lists only categories with spending.
 - The bars in Summary still compare categories with each other rather than with their budgets.
+
+---
+
+## 02 November 2026 — Summary Bars Show Spend Against Budget
+
+### What Was Done
+- In the current month on Summary, a category with a budget now has a bar showing the share of its budget used, full at 100% or above. Categories without a budget, and all categories in the previous month, keep bars relative to the month's largest category.
+- Updated the Specification to v0.16 (process flow step 8) and the wording of Architecture decision 27.
+- Tested locally with mocked summaries: under, exactly at and over budget, no budget, and the previous month ignoring budgets. Type-check, lint and a production build all passed.
+
+### Assumptions
+- An over-budget bar looks the same as one exactly at budget; the "x of budget" text shows the difference.

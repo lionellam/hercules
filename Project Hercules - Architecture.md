@@ -102,7 +102,7 @@ The language model is called only to parse a single expense into structured fiel
 | 18 | **Edit and soft delete** from History, reusing the review card | No new screen needed. Soft delete (`deleted_at`) keeps records recoverable, in line with the audit-friendly principle |
 | 19 | **SGD only** | Nearly all expenses are in SGD; currency is still stored per expense, but summaries do not convert |
 | 26 | **Categories screen** to add and rename per-user categories, as a fourth tab. Retiring and deleting are left out for now; each new user is still seeded with the 14 defaults | Expenses link to categories by ID, so renames carry through history, and the parser reads the live list. Retiring needs more work: an older expense in a retired category must still open and save correctly in the edit sheet |
-| 27 | **Optional monthly budget per category**, stored as `categories.monthly_budget` rather than a separate table; Summary shows "x of budget" for the current month only | The simplest start on Phase 3 budgets. Only the current amount is kept, so past months are not compared against budgets. A separate table can replace the column if budget history is needed |
+| 27 | **Optional monthly budget per category**, stored as `categories.monthly_budget` rather than a separate table; Summary shows "x of budget" and a bar of the budget used for the current month only | The simplest start on Phase 3 budgets. Only the current amount is kept, so past months are not compared against budgets. A separate table can replace the column if budget history is needed |
 
 ### 3.6 Process
 
