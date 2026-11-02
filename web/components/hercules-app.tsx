@@ -108,7 +108,7 @@ export default function HerculesApp({ email }: { email: string }) {
 
   return (
     <main className="app">
-      {tab !== "log" && <ThemeToggle />}
+      {(tab === "summary" || tab === "categories") && <ThemeToggle />}
       {tab === "log" && <LogScreen categories={categories} online={online} cache={cache} onSaved={cache.reloadAll} />}
       {tab === "history" && <HistoryScreen categories={categories} online={online} cache={cache} onChanged={cache.reloadAll} />}
       {tab === "summary" && <SummaryScreen email={email} cache={cache} />}
@@ -268,8 +268,8 @@ function LogScreen({ categories, online, cache, onSaved }: { categories: Categor
   const today = new Date().toLocaleDateString("en-SG", { weekday: "long", day: "numeric", month: "long" });
 
   return (
-    <section className="screen log-screen">
-      <div className="log-top">
+    <section className="screen pinned-screen">
+      <div className="pinned-top">
         <ThemeToggle />
         <div className="greet">
           <p className="sub">{today}</p>
@@ -329,14 +329,23 @@ function HistoryScreen({ categories, online, cache, onChanged }: { categories: C
   const month = monthKey(offset);
   const rows = useCached<Expense[]>(cache, expensesUrl(month));
 
+  function changeMonth(by: number) {
+    setOffset(offset + by);
+    // Otherwise the new month opens partway down its list
+    window.scrollTo({ top: 0 });
+  }
+
   let lastDay = "";
   return (
-    <section className="screen">
-      <h1>History</h1>
-      <div className="month-switch">
-        <button onClick={() => setOffset(offset - 1)} aria-label="Previous month">‹</button>
-        <strong>{monthLabel(month)}</strong>
-        <button onClick={() => setOffset(offset + 1)} disabled={offset >= 0} aria-label="Next month">›</button>
+    <section className="screen pinned-screen">
+      <div className="pinned-top">
+        <ThemeToggle />
+        <h1>History</h1>
+        <div className="month-switch">
+          <button onClick={() => changeMonth(-1)} aria-label="Previous month">‹</button>
+          <strong>{monthLabel(month)}</strong>
+          <button onClick={() => changeMonth(1)} disabled={offset >= 0} aria-label="Next month">›</button>
+        </div>
       </div>
       {!rows ? (
         <p className="sub empty">Loading…</p>

@@ -51,8 +51,8 @@ h1 { font-size: 28px; font-weight: 700; letter-spacing: -0.02em; }
 .dev-form input { flex: 1; height: 44px; border-radius: 12px; border: 1px solid var(--line); background: var(--soft); color: var(--text); padding: 0 12px; font-size: 15px; }
 
 /* Log */
-.log-screen { padding-top: 0; }
-.log-top { position: sticky; top: 0; z-index: 1; flex-shrink: 0; background: var(--bg); border-bottom: 1px solid var(--line);
+.pinned-screen { padding-top: 0; }
+.pinned-top { position: sticky; top: 0; z-index: 1; flex-shrink: 0; background: var(--bg); border-bottom: 1px solid var(--line);
            margin: 0 -20px; padding: calc(env(safe-area-inset-top) + 32px) 20px 16px; }
 .greet { margin-bottom: 24px; }
 .input-wrap { background: var(--soft); border-radius: 16px; padding: 14px; }
@@ -146,7 +146,7 @@ textarea::placeholder { color: var(--muted); }
 @media (min-width: 768px) {
   .app { max-width: 820px; }
   .screen { padding-left: 32px; padding-right: 32px; }
-  .log-top { margin: 0 -32px; padding-left: 32px; padding-right: 32px; }
+  .pinned-top { margin: 0 -32px; padding-left: 32px; padding-right: 32px; }
   .theme-toggle { right: 26px; }
   .signin { width: 100%; max-width: 480px; align-self: center; }
   .columns { display: grid; grid-template-columns: 1fr 1fr; column-gap: 40px; align-items: start; }
@@ -160,5 +160,5 @@ textarea::placeholder { color: var(--muted); }
 
 /* On short screens such as a phone held sideways, the fixed section would leave little room to scroll */
 @media (max-height: 500px) {
-  .log-top { position: static; }
+  .pinned-top { position: static; }
 }

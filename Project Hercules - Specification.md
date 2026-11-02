@@ -1,7 +1,7 @@
 # Project Hercules — Specification Sheet: "Log an Expense" Flow
 
 ```
-Version 0.17 · Draft 
+Version 0.18 · Draft 
 Last Reviewed: 2 November 2026
 Produced with AI Assistance (Claude Code)
 ```
@@ -19,7 +19,7 @@ Produced with AI Assistance (Claude Code)
 | 0.7 | 2026-10-26 | Lionel Lam | Updated for the hosted web app: language model changed to Claude Haiku 5.5 with structured outputs; Google sign-in with allow-list replaces hardcoded profiles; soft delete and edits added to Expense; first-version scope and out-of-scope items updated |
 | 0.8 | 2026-11-02 | Lionel Lam | Expenses in the Log screen's "Today" list can be opened to edit or delete them, as in History |
 | 0.9 | 2026-11-02 | Lionel Lam | Log screen shows today's total spend by category below the "Today" list |
-| 0.10 | 2026-11-02 | Lionel Lam | Screens show the last-loaded data straight away and refresh it in the background |
+| 0.10 | 2026-11-02 | Lionel Lam | History keeps its heading and month switcher fixed at the top while its list scrolls. Screens show the last-loaded data straight away and refresh it in the background |
 | 0.11 | 2026-11-02 | Lionel Lam | Summary shows a pie chart of the month's spend by category below the category list |
 | 0.12 | 2026-11-02 | Lionel Lam | Log screen keeps its heading and text input fixed at the top while the content below scrolls |
 | 0.13 | 2026-11-02 | Lionel Lam | Log screen shows today's total spend below the text input, in the fixed top section |
@@ -27,6 +27,7 @@ Produced with AI Assistance (Claude Code)
 | 0.15 | 2026-11-02 | Lionel Lam | Categories screen to add and rename categories and set an optional monthly budget; Summary shows spend against budget for the current month |
 | 0.16 | 2026-11-02 | Lionel Lam | Summary's bars show spend against budget for budgeted categories in the current month |
 | 0.17 | 2026-11-02 | Lionel Lam | Over-budget bars in Summary turn red |
+| 0.18 | 2026-11-02 | Lionel Lam | History keeps its heading and month switcher fixed at the top while the list scrolls |
 
 ---
 

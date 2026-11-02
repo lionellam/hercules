@@ -560,3 +560,13 @@ Last updated: 2 November 2026
 - In the current month on Summary, a category's bar turns red once its spend is above its budget. A category exactly on budget stays in the normal colour. This replaces the earlier assumption that over-budget bars would look the same as bars exactly at budget.
 - Updated the Specification to v0.17 (process flow step 8).
 - Tested locally with mocked summaries in light and dark mode: over budget, one cent over, exactly on budget, under budget and no budget, with no red bars in the previous month. Type-check, lint and a production build all passed.
+
+---
+
+## 02 November 2026 — Fixed Top Section on the History Screen
+
+### What Was Done
+- The "History" heading, theme toggle and month switcher now stay fixed at the top of the History screen while the list scrolls, using the same fixed section as the Log screen. This changes the earlier decision to fix the top section on the Log screen only.
+- Switching month now returns to the top of the list, because the new month would otherwise open partway down.
+- Updated the Specification to v0.18 (process flow step 8).
+- Tested locally at phone and tablet widths with local data: the section stays in place while scrolling, the month buttons work and the toggle stays reachable when scrolled, and the edit sheet opens above the section. Log, Summary and Categories were rechecked. Type-check, lint and a production build all passed.
