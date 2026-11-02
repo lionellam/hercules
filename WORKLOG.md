@@ -494,3 +494,16 @@ Last updated: 2 November 2026
 - **Log screen only** — History and Summary scroll as before, since they have no input to keep within reach.
 - **The review card scrolls** — it is too tall to fix in place on a phone without leaving almost no room for anything else.
 - **Not fixed on very short screens** — below 500 pixels tall, such as a phone held sideways, the section scrolls with the page, so it doesn't take up most of the screen.
+
+---
+
+## 02 November 2026 — Today's Total in the Log Screen's Fixed Section
+
+### What Was Done
+- Added a "Spent today" line directly below the text input on the Log screen, inside the fixed top section, so today's total stays visible while the list scrolls. It updates after saving, editing or deleting an expense, and uses the same reload as the Today list, so no server changes were needed.
+- Updated the Specification to v0.13 (process flow step 1).
+- Tested locally with no expenses and with 25 mocked expenses (24 dated today): the total counted only today's and matched the expected sum and the Today by Category total, and the line stayed in place while scrolling. Type-check, lint and a production build all passed.
+
+### Decisions Made
+- **Amounts are added without currency conversion** — the same rule as Summary and Today by Category, since the first version is SGD only.
+- **Keep the total in Today by Category as well** — that heading scrolls away with the list, so the two serve different moments.

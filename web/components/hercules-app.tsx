@@ -288,6 +288,10 @@ function LogScreen({ categories, online, cache, onSaved }: { categories: Categor
             </button>
           </div>
         </div>
+        <p className="today-total">
+          <span>Spent today</span>
+          <strong>{monthRows ? `$${fmt(todays.reduce((sum, e) => sum + e.amount, 0))}` : "—"}</strong>
+        </p>
         {error && <p className="error">{error}</p>}
         {toast && <p className="toast">{toast}</p>}
       </div>
