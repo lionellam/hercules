@@ -108,7 +108,7 @@ export default function HerculesApp({ email }: { email: string }) {
 
   return (
     <main className="app">
-      {(tab === "summary" || tab === "categories") && <ThemeToggle />}
+      {tab === "categories" && <ThemeToggle />}
       {tab === "log" && <LogScreen categories={categories} online={online} cache={cache} onSaved={cache.reloadAll} />}
       {tab === "history" && <HistoryScreen categories={categories} online={online} cache={cache} onChanged={cache.reloadAll} />}
       {tab === "summary" && <SummaryScreen email={email} cache={cache} />}
@@ -444,12 +444,21 @@ function SummaryScreen({ email, cache }: { email: string; cache: ApiCache }) {
   const max = rows?.[0]?.total || 1;
   const diff = total - prevTotal;
 
+  function showMonth(to: number) {
+    setOffset(to);
+    // Otherwise the other month opens partway down
+    window.scrollTo({ top: 0 });
+  }
+
   return (
-    <section className="screen">
-      <h1>Summary</h1>
-      <div className="seg">
-        <button className={offset === 0 ? "on" : ""} onClick={() => setOffset(0)}>{monthLabel(monthKey(0), { month: "long" })}</button>
-        <button className={offset === -1 ? "on" : ""} onClick={() => setOffset(-1)}>{monthLabel(monthKey(-1), { month: "long" })}</button>
+    <section className="screen pinned-screen">
+      <div className="pinned-top">
+        <ThemeToggle />
+        <h1>Summary</h1>
+        <div className="seg">
+          <button className={offset === 0 ? "on" : ""} onClick={() => showMonth(0)}>{monthLabel(monthKey(0), { month: "long" })}</button>
+          <button className={offset === -1 ? "on" : ""} onClick={() => showMonth(-1)}>{monthLabel(monthKey(-1), { month: "long" })}</button>
+        </div>
       </div>
       <div className="total">
         <div className="sub">{offset === 0 ? "Spent so far this month" : `Spent in ${monthLabel(month)}`}</div>

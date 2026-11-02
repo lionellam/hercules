@@ -570,3 +570,13 @@ Last updated: 2 November 2026
 - Switching month now returns to the top of the list, because the new month would otherwise open partway down.
 - Updated the Specification to v0.18 (process flow step 8).
 - Tested locally at phone and tablet widths with local data: the section stays in place while scrolling, the month buttons work and the toggle stays reachable when scrolled, and the edit sheet opens above the section. Log, Summary and Categories were rechecked. Type-check, lint and a production build all passed.
+
+---
+
+## 02 November 2026 — Fixed Top Section on the Summary Screen
+
+### What Was Done
+- The "Summary" heading, theme toggle and month selector now stay fixed at the top of the Summary screen while the content scrolls, using the same fixed section as Log and History.
+- Switching month now returns to the top of the screen, as on History.
+- Updated the Specification to v0.19 (process flow step 8).
+- Tested locally on a short phone-sized screen with local data: the section stays in place while scrolling, switching month returns to the top, the toggle works, and the other tabs still have their toggle. Type-check, lint and a production build all passed.
