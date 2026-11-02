@@ -1,7 +1,7 @@
 # Project Hercules — Specification Sheet: "Log an Expense" Flow
 
 ```
-Version 0.11 · Draft 
+Version 0.12 · Draft 
 Last Reviewed: 2 November 2026
 Produced with AI Assistance (Claude Code)
 ```
@@ -21,6 +21,7 @@ Produced with AI Assistance (Claude Code)
 | 0.9 | 2026-11-02 | Lionel Lam | Log screen shows today's total spend by category below the "Today" list |
 | 0.10 | 2026-11-02 | Lionel Lam | Screens show the last-loaded data straight away and refresh it in the background |
 | 0.11 | 2026-11-02 | Lionel Lam | Summary shows a pie chart of the month's spend by category below the category list |
+| 0.12 | 2026-11-02 | Lionel Lam | Log screen keeps its heading and text input fixed at the top while the content below scrolls |
 
 ---
 
@@ -58,7 +59,7 @@ This spec exists to align the team before the process flow diagram (UPN) and fea
 
 ## 4. Process Flow (Narrative)
 
-1. **User enters expense** — free text, e.g. *"spent $12 on lunch at McDonald's yesterday"*
+1. **User enters expense** — free text, e.g. *"spent $12 on lunch at McDonald's yesterday"*. The heading and text input stay fixed at the top of the Log screen while the content below scrolls, so a new expense can be entered from anywhere in the list
 2. **Application fetches active categories** — before calling the language model, the application queries the Category table for the user's active categories and injects the list into the prompt. This is an application-side step; no AI is involved.
 3. **Language model parses input** — the AI step. Produces structured fields (amount, category, merchant, date, etc.) from the raw text, returned via structured outputs so the response is always valid JSON in the expected shape. For category, the language model is instructed to return exactly one name from the injected category list, or "Other" if nothing fits. No free-text category invention.
 4. **Application resolves `category_id`** — the returned category name is matched via exact lookup against the Category table. "Other" maps to the row where `is_other = true`. No fuzzy matching required.

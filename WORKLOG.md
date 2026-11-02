@@ -479,3 +479,18 @@ Last updated: 2 November 2026
 - **Keep History in one column** — it is a single list, so two columns would add nothing.
 - **Save the theme in the browser, not the database** — it is a display preference for each device, so it doesn't follow the user across devices. Once used, the toggle overrides the device's setting and there is no option in the app to return to following it.
 - **No toggle on the sign-in page** — that page follows a saved choice or the device's setting.
+
+---
+
+## 02 November 2026 — Fixed Top Section on the Log Screen
+
+### What Was Done
+- The date, "Log an expense" heading, text input and Parse button now stay fixed at the top of the Log screen while the review card and lists scroll beneath them. The theme toggle, any error, the offline notice and the "Saved" message are in the same section, so they stay visible too.
+- Pressing Parse now returns to the top of the screen, because the review card could otherwise open out of view when the list has been scrolled.
+- Updated the Specification to v0.12 (process flow step 1).
+- Tested locally with 25 mocked expenses and a mocked parse at phone and tablet widths, in light and dark mode: the section stays in place while scrolling, the toggle works when scrolled, and the review card opens in view. Type-check, lint and a production build all passed. Not yet tried on a physical iPhone, including with the on-screen keyboard open.
+
+### Decisions Made
+- **Log screen only** — History and Summary scroll as before, since they have no input to keep within reach.
+- **The review card scrolls** — it is too tall to fix in place on a phone without leaving almost no room for anything else.
+- **Not fixed on very short screens** — below 500 pixels tall, such as a phone held sideways, the section scrolls with the page, so it doesn't take up most of the screen.

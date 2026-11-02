@@ -109,7 +109,7 @@ export default function HerculesApp({ email }: { email: string }) {
 
   return (
     <main className="app">
-      <ThemeToggle />
+      {tab !== "log" && <ThemeToggle />}
       {tab === "log" && <LogScreen categories={categories} online={online} cache={cache} onSaved={cache.reloadAll} />}
       {tab === "history" && <HistoryScreen categories={categories} online={online} cache={cache} onChanged={cache.reloadAll} />}
       {tab === "summary" && <SummaryScreen email={email} cache={cache} />}
@@ -242,6 +242,8 @@ function LogScreen({ categories, online, cache, onSaved }: { categories: Categor
         body: JSON.stringify({ text: raw, today: localToday() }),
       });
       setParsed({ raw, fields: { ...r, category_id: r.category_id ?? categories.at(-1)?.id ?? 0 } });
+      // The review card sits at the top of the scrolling content, so it could otherwise open out of view
+      window.scrollTo({ top: 0 });
     } catch (e) {
       setError((e as Error).message);
     } finally {
@@ -265,26 +267,30 @@ function LogScreen({ categories, online, cache, onSaved }: { categories: Categor
   const today = new Date().toLocaleDateString("en-SG", { weekday: "long", day: "numeric", month: "long" });
 
   return (
-    <section className="screen">
-      <div className="greet">
-        <p className="sub">{today}</p>
-        <h1>Log an expense</h1>
-      </div>
-      {!online && <p className="offline">You&apos;re offline. Your text is kept — parse it when you&apos;re back online.</p>}
-      <div className="input-wrap">
-        <textarea
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          placeholder="e.g. Lunch at LJS for $4.50 yesterday"
-          maxLength={500}
-        />
-        <div className="row-end">
-          <button className="btn btn-primary" disabled={!text.trim() || busy || !online || !!parsed} onClick={parse}>
-            {busy ? "Parsing…" : "Parse"}
-          </button>
+    <section className="screen log-screen">
+      <div className="log-top">
+        <ThemeToggle />
+        <div className="greet">
+          <p className="sub">{today}</p>
+          <h1>Log an expense</h1>
         </div>
+        {!online && <p className="offline">You&apos;re offline. Your text is kept — parse it when you&apos;re back online.</p>}
+        <div className="input-wrap">
+          <textarea
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            placeholder="e.g. Lunch at LJS for $4.50 yesterday"
+            maxLength={500}
+          />
+          <div className="row-end">
+            <button className="btn btn-primary" disabled={!text.trim() || busy || !online || !!parsed} onClick={parse}>
+              {busy ? "Parsing…" : "Parse"}
+            </button>
+          </div>
+        </div>
+        {error && <p className="error">{error}</p>}
+        {toast && <p className="toast">{toast}</p>}
       </div>
-      {error && <p className="error">{error}</p>}
       {parsed && (
         <ReviewCard
           title="Review before saving"
@@ -296,7 +302,6 @@ function LogScreen({ categories, online, cache, onSaved }: { categories: Categor
           disabled={!online}
         />
       )}
-      <p className="toast">{toast}</p>
       <div className="columns">
         <div>
           <p className="recent-h">TODAY</p>
