@@ -137,6 +137,43 @@ function EditSheet({ expense, categories, online, onClose, onChanged }: { expens
   );
 }
 
+// Totals are added without currency conversion, as in Summary
+function TodayByCategory({ expenses }: { expenses: Expense[] }) {
+  const byCategory = new Map<string, SummaryRow>();
+  for (const e of expenses) {
+    const row = byCategory.get(e.category) ?? { category: e.category, total: 0, count: 0 };
+    row.total += e.amount;
+    row.count += 1;
+    byCategory.set(e.category, row);
+  }
+  const rows = [...byCategory.values()].sort((a, b) => b.total - a.total);
+  const total = rows.reduce((s, r) => s + r.total, 0);
+  const max = rows[0]?.total || 1;
+
+  return (
+    <>
+      <p className="recent-h split">
+        <span>TODAY BY CATEGORY</span>
+        <span>${fmt(total)}</span>
+      </p>
+      {rows.map((r) => (
+        <div className="cat" key={r.category}>
+          <div className="cat-top">
+            <span>
+              {r.category}
+              <span className="n">{r.count}</span>
+            </span>
+            <strong>{fmt(r.total)}</strong>
+          </div>
+          <div className="track">
+            <div className="fill" style={{ width: `${(r.total / max) * 100}%` }} />
+          </div>
+        </div>
+      ))}
+    </>
+  );
+}
+
 function LogScreen({ categories, online, version, onSaved }: { categories: Category[]; online: boolean; version: number; onSaved: () => void }) {
   const [text, setText] = useState("");
   const [parsed, setParsed] = useState<{ raw: string; fields: Fields } | null>(null);
@@ -220,6 +257,7 @@ function LogScreen({ categories, online, version, onSaved }: { categories: Categ
       <p className="toast">{toast}</p>
       <p className="recent-h">TODAY</p>
       {todays.length ? todays.map((e) => <ExpenseRow key={e.id} e={e} onClick={() => setEditing(e)} />) : <p className="sub">Nothing logged yet today.</p>}
+      {todays.length > 0 && <TodayByCategory expenses={todays} />}
       {editing && <EditSheet expense={editing} categories={categories} online={online} onClose={() => setEditing(null)} onChanged={onSaved} />}
     </section>
   );

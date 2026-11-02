@@ -60,6 +60,8 @@ textarea::placeholder { color: var(--muted); }
 .toast { margin-top: 16px; color: var(--good); font-size: 14px; font-weight: 500; text-align: center; min-height: 20px; }
 .error { margin-top: 12px; color: var(--bad); font-size: 14px; text-align: center; }
 .recent-h { margin-top: 28px; font-size: 13px; color: var(--muted); font-weight: 600; letter-spacing: .04em; }
+.recent-h.split { display: flex; justify-content: space-between; }
+.recent-h.split span:last-child { color: var(--text); font-variant-numeric: tabular-nums; }
 
 /* Lists */
 .day { font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; margin: 22px 0 6px; }

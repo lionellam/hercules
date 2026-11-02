@@ -406,3 +406,16 @@ Last updated: 2 November 2026
 
 ### Challenges
 - Google Cloud's "Add users" panel did not save the test user on the first click of Save (the same happened on 1 Nov); a second Save worked. Worth re-checking the test-user list after adding someone.
+
+---
+
+## 02 November 2026 — Today's Spend by Category on the Log Screen
+
+### What Was Done
+- Added a "Today by category" section below the Today list on the Log screen: today's total spend, then one row per category (largest first) with the number of expenses, the amount, and a bar, matching the Summary screen's style. It only appears once something has been logged today.
+- Totals are worked out in the app from today's expenses, which the Log screen already loads, so no server changes were needed. They update straight away after saving, editing or deleting an expense.
+- Updated the Specification to v0.9 (process flow step 8).
+- Tested locally with three test expenses in two categories (totals correct, sorted largest first), then deleted one from the Today list and confirmed the totals updated. Test data removed afterwards.
+
+### Decisions Made
+- **Amounts are added without currency conversion** — the same rule as Summary, since the first version is SGD only.
