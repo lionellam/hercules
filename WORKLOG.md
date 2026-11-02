@@ -463,3 +463,19 @@ Last updated: 2 November 2026
 - **"Everything else" rather than "Other"** — "Other" is already a real category.
 - **No chart for fewer than two categories** — a full circle adds nothing to the single row above it.
 - **Colours follow rank, not category** — the largest category is always blue, so a category's colour can differ between months. Fixed colours were not used because 14 categories cannot have distinct colours without some looking alike.
+
+---
+
+## 02 November 2026 — Wider Layout and Light/Dark Toggle
+
+### What Was Done
+- Made the app moderately responsive. Below 768 pixels wide, the phone layout is unchanged apart from the toggle. From 768 pixels, the app grows to a maximum of 820 pixels wide, centred on the screen. Log shows Today and Today by Category side by side, Summary shows the category list beside a larger pie chart, and edit sheets become centred dialogs. The sign-in page keeps its narrower width.
+- Added a light/dark toggle at the top right of the Log, History and Summary screens. It follows the device's setting until first used, then remembers the choice in that browser. A saved choice is applied before the page first draws, so dark mode doesn't flash white, and the phone's status bar colour is updated to match on the main screens.
+- Updated the Architecture document to v0.3 (decisions 24 and 25).
+- Tested locally at 375, 768 and 1280 pixels wide: no sideways scrolling and the expected columns and centred dialog. Tested the toggle in both directions, including a saved choice that differs from the device's setting and surviving a reload, with no hydration errors. Type-check, lint and a production build all passed. Not yet tried on a physical iPhone or iPad.
+
+### Decisions Made
+- **Keep the bottom tab bar at every width** — one way to navigate, and it suits a tablet. A top bar or sidebar would be a larger redesign than "moderately responsive" calls for.
+- **Keep History in one column** — it is a single list, so two columns would add nothing.
+- **Save the theme in the browser, not the database** — it is a display preference for each device, so it doesn't follow the user across devices. Once used, the toggle overrides the device's setting and there is no option in the app to return to following it.
+- **No toggle on the sign-in page** — that page follows a saved choice or the device's setting.

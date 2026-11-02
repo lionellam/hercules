@@ -1,7 +1,7 @@
 # Project Hercules — Architecture: Web App v1
 
 ```
-Version 0.2 · Draft
+Version 0.3 · Draft
 Last Reviewed: 2 November 2026
 Produced with AI Assistance (Claude Code)
 ```
@@ -12,6 +12,7 @@ Produced with AI Assistance (Claude Code)
 |---|---|---|---|
 | 0.1 | 2026-10-26 | Lionel Lam | Initial architecture and decision record for the hosted web app |
 | 0.2 | 2026-11-02 | Lionel Lam | Performance decisions: server moved to Vercel's Singapore region; screens keep loaded data in memory and refresh it in the background |
+| 0.3 | 2026-11-02 | Lionel Lam | Interface decisions: moderately wider layout for tablets and computers; light and dark mode toggle |
 
 ---
 
@@ -88,6 +89,8 @@ The language model is called only to parse a single expense into structured fiel
 | 14 | **Progressive Web App (PWA)** | Installs on the phone's home screen and opens full-screen like an app, without App Store distribution or fees |
 | 15 | **No offline logging** in v1 | Parsing needs the network. When offline, the app shows a clear message and keeps the typed text |
 | 23 | **Loaded data kept in memory, refreshed in the background** | Switching tabs is instant: screens show the last-loaded data while a fresh copy loads, and the app loads this month's expenses and Summary when it opens. Any save, edit or delete reloads everything held. Nothing is stored on the device, so data is gone when the app closes. Server-side caching was not used because the allow-list is re-checked on every request, so that removing someone takes effect immediately |
+| 24 | **Moderately responsive layout:** phone layout up to 767 pixels wide; from 768 pixels, the app is up to 820 pixels wide, with two columns on Log and Summary and edit sheets as centred dialogs | Makes good use of a tablet or computer screen without a separate desktop design. The bottom tab bar stays at every width, so there is one way to navigate |
+| 25 | **Light and dark mode toggle**, following the device's setting until first used; the choice is saved per device in the browser | One tap on every main screen. It is a display preference, not personal data, so it does not need the database or need to follow the user between devices |
 
 ### 3.5 First-version scope
 

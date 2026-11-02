@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { signOutAction } from "@/app/actions";
 import ReviewCard, { type Fields } from "./review-card";
+import ThemeToggle from "./theme-toggle";
 
 type Category = { id: number; name: string };
 type Expense = Fields & { id: number; amount: number; raw_input: string; category: string; was_edited: boolean };
@@ -108,6 +109,7 @@ export default function HerculesApp({ email }: { email: string }) {
 
   return (
     <main className="app">
+      <ThemeToggle />
       {tab === "log" && <LogScreen categories={categories} online={online} cache={cache} onSaved={cache.reloadAll} />}
       {tab === "history" && <HistoryScreen categories={categories} online={online} cache={cache} onChanged={cache.reloadAll} />}
       {tab === "summary" && <SummaryScreen email={email} cache={cache} />}
@@ -295,9 +297,17 @@ function LogScreen({ categories, online, cache, onSaved }: { categories: Categor
         />
       )}
       <p className="toast">{toast}</p>
-      <p className="recent-h">TODAY</p>
-      {todays.length ? todays.map((e) => <ExpenseRow key={e.id} e={e} onClick={() => setEditing(e)} />) : <p className="sub">Nothing logged yet today.</p>}
-      {todays.length > 0 && <TodayByCategory expenses={todays} />}
+      <div className="columns">
+        <div>
+          <p className="recent-h">TODAY</p>
+          {todays.length ? todays.map((e) => <ExpenseRow key={e.id} e={e} onClick={() => setEditing(e)} />) : <p className="sub">Nothing logged yet today.</p>}
+        </div>
+        {todays.length > 0 && (
+          <div>
+            <TodayByCategory expenses={todays} />
+          </div>
+        )}
+      </div>
       {editing && <EditSheet expense={editing} categories={categories} online={online} onClose={() => setEditing(null)} onChanged={onSaved} />}
     </section>
   );
@@ -422,21 +432,29 @@ function SummaryScreen({ email, cache }: { email: string; cache: ApiCache }) {
           </div>
         )}
       </div>
-      {rows?.map((r) => (
-        <div className="cat" key={r.category}>
-          <div className="cat-top">
-            <span>
-              {r.category}
-              <span className="n">{r.count}</span>
-            </span>
-            <strong>{fmt(r.total)}</strong>
-          </div>
-          <div className="track">
-            <div className="fill" style={{ width: `${(r.total / max) * 100}%` }} />
-          </div>
+      <div className="columns">
+        <div>
+          {rows?.map((r) => (
+            <div className="cat" key={r.category}>
+              <div className="cat-top">
+                <span>
+                  {r.category}
+                  <span className="n">{r.count}</span>
+                </span>
+                <strong>{fmt(r.total)}</strong>
+              </div>
+              <div className="track">
+                <div className="fill" style={{ width: `${(r.total / max) * 100}%` }} />
+              </div>
+            </div>
+          ))}
         </div>
-      ))}
-      {rows && rows.length >= 2 && <SpendPie rows={rows} />}
+        {rows && rows.length >= 2 && (
+          <div>
+            <SpendPie rows={rows} />
+          </div>
+        )}
+      </div>
       {rows?.length === 0 && <p className="sub empty">No expenses this month.</p>}
       <form className="signout" action={signOutAction}>
         <p>Signed in as {email}</p>
