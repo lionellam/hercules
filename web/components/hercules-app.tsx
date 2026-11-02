@@ -343,6 +343,57 @@ function HistoryScreen({ categories, online, cache, onChanged }: { categories: C
   );
 }
 
+const MAX_SLICES = 6;
+
+// Expects rows sorted largest first; beyond six slices, the smallest are grouped so each stays readable
+function SpendPie({ rows }: { rows: SummaryRow[] }) {
+  const total = rows.reduce((s, r) => s + r.total, 0);
+  const shown = rows.length > MAX_SLICES ? rows.slice(0, MAX_SLICES - 1) : rows;
+  const rest = rows.slice(shown.length);
+  const slices = shown.map((r, i) => ({ name: r.category, total: r.total, color: `var(--pie-${i + 1})` }));
+  if (rest.length) {
+    slices.push({ name: `Everything else (${rest.length})`, total: rest.reduce((s, r) => s + r.total, 0), color: "var(--pie-rest)" });
+  }
+  const percent = (value: number) => {
+    const p = (value / total) * 100;
+    if (p < 1) return "<1%";
+    return p > 99 ? ">99%" : `${Math.round(p)}%`;
+  };
+  const point = (fraction: number) => {
+    const angle = 2 * Math.PI * fraction;
+    return `${50 + 50 * Math.sin(angle)} ${50 - 50 * Math.cos(angle)}`;
+  };
+
+  return (
+    <>
+      <p className="recent-h">SHARE OF SPEND</p>
+      <div className="pie">
+        <svg viewBox="0 0 100 100" role="img" aria-label={slices.map((s) => `${s.name} ${percent(s.total)}`).join(", ")}>
+          {slices.map((s, i) => {
+            const start = slices.slice(0, i).reduce((sum, p) => sum + p.total, 0) / total;
+            const fraction = s.total / total;
+            const d = `M50 50 L${point(start)} A50 50 0 ${fraction > 0.5 ? 1 : 0} 1 ${point(start + fraction)} Z`;
+            return (
+              <path key={s.name} d={d} fill={s.color}>
+                <title>{`${s.name}: $${fmt(s.total)} (${percent(s.total)})`}</title>
+              </path>
+            );
+          })}
+        </svg>
+        <ul>
+          {slices.map((s) => (
+            <li key={s.name}>
+              <span className="swatch" style={{ background: s.color }} />
+              <span className="name">{s.name}</span>
+              <span className="pct">{percent(s.total)}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </>
+  );
+}
+
 function SummaryScreen({ email, cache }: { email: string; cache: ApiCache }) {
   const [offset, setOffset] = useState(0);
   const month = monthKey(offset);
@@ -385,6 +436,7 @@ function SummaryScreen({ email, cache }: { email: string; cache: ApiCache }) {
           </div>
         </div>
       ))}
+      {rows && rows.length >= 2 && <SpendPie rows={rows} />}
       {rows?.length === 0 && <p className="sub empty">No expenses this month.</p>}
       <form className="signout" action={signOutAction}>
         <p>Signed in as {email}</p>

@@ -447,3 +447,19 @@ Last updated: 2 November 2026
 
 ### Assumptions
 - The first open after a quiet spell will still be slower, because Neon's free plan suspends an idle database and Vercel's server needs a moment to start. The Parse button's speed also depends on the model's response time.
+
+---
+
+## 02 November 2026 — Pie Chart on the Summary Screen
+
+### What Was Done
+- Added a "Share of spend" pie chart below the category list on the Summary screen, with a legend showing each category's name and percentage. It follows the selected month and uses the data Summary already loads, so no server changes were needed.
+- Updated the Specification to v0.11 (process flow step 8).
+- Ran the chart colours through a palette validator for colour-blind separation and contrast against the app's own backgrounds, in light and dark mode. All hard checks passed. Three light-mode colours are below 3:1 contrast against white, so the legend and the category list carry the labels.
+- Tested locally with real data and with mocked summaries: none, one, two, six, seven and 14 categories, at 320 and 375 pixels wide. Fixed cut-off legend names, a "100%" label beside "<1%", an over-bright grey slice in dark mode and a label collision at 320 pixels. Type-check, lint and a production build all passed.
+
+### Decisions Made
+- **At most six slices** — with more than six categories, the largest five are shown and the rest are grouped as "Everything else", because 14 slices would be unreadable. The full list stays directly above the chart.
+- **"Everything else" rather than "Other"** — "Other" is already a real category.
+- **No chart for fewer than two categories** — a full circle adds nothing to the single row above it.
+- **Colours follow rank, not category** — the largest category is always blue, so a category's colour can differ between months. Fixed colours were not used because 14 categories cannot have distinct colours without some looking alike.
