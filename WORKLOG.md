@@ -551,3 +551,12 @@ Last updated: 2 November 2026
 
 ### Assumptions
 - An over-budget bar looks the same as one exactly at budget; the "x of budget" text shows the difference.
+
+---
+
+## 02 November 2026 — Over-Budget Bars Turn Red
+
+### What Was Done
+- In the current month on Summary, a category's bar turns red once its spend is above its budget. A category exactly on budget stays in the normal colour. This replaces the earlier assumption that over-budget bars would look the same as bars exactly at budget.
+- Updated the Specification to v0.17 (process flow step 8).
+- Tested locally with mocked summaries in light and dark mode: over budget, one cent over, exactly on budget, under budget and no budget, with no red bars in the previous month. Type-check, lint and a production build all passed.

@@ -470,7 +470,7 @@ function SummaryScreen({ email, cache }: { email: string; cache: ApiCache }) {
                   </strong>
                 </div>
                 <div className="track">
-                  <div className="fill" style={{ width: `${share * 100}%` }} />
+                  <div className={budget != null && r.total > budget ? "fill over" : "fill"} style={{ width: `${share * 100}%` }} />
                 </div>
               </div>
             );

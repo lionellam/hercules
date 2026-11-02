@@ -114,6 +114,7 @@ textarea::placeholder { color: var(--muted); }
 .cat-top .n { color: var(--muted); font-size: 12px; margin-left: 6px; }
 .track { height: 6px; background: var(--soft); border-radius: 3px; overflow: hidden; }
 .fill { height: 100%; background: var(--bar); border-radius: 3px; }
+.fill.over { background: var(--bad); }
 .pie { display: flex; align-items: center; gap: 16px; margin-top: 16px; }
 .pie svg { flex: 0 0 116px; width: 116px; height: 116px; }
 .pie path { stroke: var(--surface); stroke-width: 1.5; }
