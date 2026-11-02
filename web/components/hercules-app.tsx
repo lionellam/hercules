@@ -104,6 +104,39 @@ function ExpenseRow({ e, onClick }: { e: Expense; onClick?: () => void }) {
   );
 }
 
+function EditSheet({ expense, categories, online, onClose, onChanged }: { expense: Expense; categories: Category[]; online: boolean; onClose: () => void; onChanged: () => void }) {
+  async function save(fields: Fields, edited: boolean) {
+    await api(`/api/expenses/${expense.id}`, { method: "PATCH", body: JSON.stringify({ ...fields, was_edited: edited }) });
+    onClose();
+    onChanged();
+  }
+
+  async function remove() {
+    if (!confirm("Delete this expense?")) return;
+    await api(`/api/expenses/${expense.id}`, { method: "DELETE" });
+    onClose();
+    onChanged();
+  }
+
+  return (
+    <div className="sheet-backdrop" onClick={onClose}>
+      <div className="sheet" onClick={(ev) => ev.stopPropagation()}>
+        <ReviewCard
+          title="Edit expense"
+          rawInput={expense.raw_input}
+          initial={expense}
+          categories={categories}
+          onSave={save}
+          onCancel={onClose}
+          cancelLabel="Cancel"
+          onDelete={remove}
+          disabled={!online}
+        />
+      </div>
+    </div>
+  );
+}
+
 function LogScreen({ categories, online, version, onSaved }: { categories: Category[]; online: boolean; version: number; onSaved: () => void }) {
   const [text, setText] = useState("");
   const [parsed, setParsed] = useState<{ raw: string; fields: Fields } | null>(null);
@@ -111,6 +144,7 @@ function LogScreen({ categories, online, version, onSaved }: { categories: Categ
   const [error, setError] = useState("");
   const [toast, setToast] = useState("");
   const [todays, setTodays] = useState<Expense[]>([]);
+  const [editing, setEditing] = useState<Expense | null>(null);
 
   useEffect(() => {
     const today = localToday();
@@ -185,7 +219,8 @@ function LogScreen({ categories, online, version, onSaved }: { categories: Categ
       )}
       <p className="toast">{toast}</p>
       <p className="recent-h">TODAY</p>
-      {todays.length ? todays.map((e) => <ExpenseRow key={e.id} e={e} />) : <p className="sub">Nothing logged yet today.</p>}
+      {todays.length ? todays.map((e) => <ExpenseRow key={e.id} e={e} onClick={() => setEditing(e)} />) : <p className="sub">Nothing logged yet today.</p>}
+      {editing && <EditSheet expense={editing} categories={categories} online={online} onClose={() => setEditing(null)} onChanged={onSaved} />}
     </section>
   );
 }
@@ -205,20 +240,6 @@ function HistoryScreen({ categories, online, version, onChanged }: { categories:
       live = false;
     };
   }, [month, version]);
-
-  async function save(fields: Fields, edited: boolean) {
-    if (!editing) return;
-    await api(`/api/expenses/${editing.id}`, { method: "PATCH", body: JSON.stringify({ ...fields, was_edited: edited }) });
-    setEditing(null);
-    onChanged();
-  }
-
-  async function remove() {
-    if (!editing || !confirm("Delete this expense?")) return;
-    await api(`/api/expenses/${editing.id}`, { method: "DELETE" });
-    setEditing(null);
-    onChanged();
-  }
 
   let lastDay = "";
   return (
@@ -249,23 +270,7 @@ function HistoryScreen({ categories, online, version, onChanged }: { categories:
           );
         })
       )}
-      {editing && (
-        <div className="sheet-backdrop" onClick={() => setEditing(null)}>
-          <div className="sheet" onClick={(ev) => ev.stopPropagation()}>
-            <ReviewCard
-              title="Edit expense"
-              rawInput={editing.raw_input}
-              initial={editing}
-              categories={categories}
-              onSave={save}
-              onCancel={() => setEditing(null)}
-              cancelLabel="Cancel"
-              onDelete={remove}
-              disabled={!online}
-            />
-          </div>
-        </div>
-      )}
+      {editing && <EditSheet expense={editing} categories={categories} online={online} onClose={() => setEditing(null)} onChanged={onChanged} />}
     </section>
   );
 }

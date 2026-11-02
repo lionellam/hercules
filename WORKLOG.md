@@ -382,3 +382,16 @@ Last updated: 12 July 2026
 
 ### Assumptions
 - Vercel's Hobby plan terms suit a private, non-commercial family app (still to be confirmed by the owner).
+
+---
+
+## 02 November 2026 — Editable "Today" List on the Log Screen
+
+### What Was Done
+- Expenses in the "Today" list on the Log screen can now be tapped to open the same edit sheet as History, to edit or delete them (deletion still asks for confirmation and is a soft delete).
+- Moved the edit sheet into a shared component used by both the Log and History screens.
+- Updated the Specification to v0.8 (process flow step 8).
+- Tested locally: saved an expense, edited its amount from the Today list (list refreshed with the "edited" tag), deleted it, and confirmed History's edit sheet still works.
+
+### Decisions Made
+- **Reuse History's edit sheet rather than editing inline** — one consistent way to edit an expense across the app, and no new code paths on the server.

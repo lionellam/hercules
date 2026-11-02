@@ -1,8 +1,8 @@
 # Project Hercules — Specification Sheet: "Log an Expense" Flow
 
 ```
-Version 0.7 · Draft 
-Last Reviewed: 26 October 2026
+Version 0.8 · Draft 
+Last Reviewed: 2 November 2026
 Produced with AI Assistance (Claude Code)
 ```
 
@@ -17,6 +17,7 @@ Produced with AI Assistance (Claude Code)
 | 0.5 | 2026-07-12 | James Wong, Lionel Lam | Updated SLM actor reference from Phi-4-mini to Phi-4 |
 | 0.6 | 2026-07-12 | James Wong, Lionel Lam | Replaced "SLM" terminology with "local model" throughout |
 | 0.7 | 2026-10-26 | Lionel Lam | Updated for the hosted web app: language model changed to Claude Haiku 5.5 with structured outputs; Google sign-in with allow-list replaces hardcoded profiles; soft delete and edits added to Expense; first-version scope and out-of-scope items updated |
+| 0.8 | 2026-11-02 | Lionel Lam | Expenses in the Log screen's "Today" list can be opened to edit or delete them, as in History |
 
 ---
 
@@ -61,7 +62,7 @@ This spec exists to align the team before the process flow diagram (UPN) and fea
 5. **Confirmation screen is presented** — parsed fields shown as editable form elements (not a static summary).
 6. **User reviews and optionally edits fields directly** — this is the human-in-the-loop step. No re-prompting of the model occurs; corrections are direct field edits.
 7. **User confirms/saves** — the system writes the structured record, the original raw text, and a flag indicating whether any edit occurred.
-8. **Record is available for viewing** — in History and Summary. A saved record can be reopened from History in the same editable card to be edited or deleted (soft delete, with confirmation). Export is deferred beyond the first version.
+8. **Record is available for viewing** — in History and Summary, and in the "Today" list on the Log screen for expenses dated today. A saved record can be reopened from History or from the Today list in the same editable card to be edited or deleted (soft delete, with confirmation). Export is deferred beyond the first version.
 
 ---
 
