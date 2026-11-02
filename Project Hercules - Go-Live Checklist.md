@@ -40,8 +40,8 @@ Tracks the steps to take the web app from "working locally" to "live on your pho
 - [x] Deploy, then sign in once with Google — *You* (done 1 Nov)
 - [x] Import CLI history: dry run first, then the real import — *You* (done 1 Nov; 229 imported, 0 skipped, 0 invalid)
 - [x] Check History shows July–August correctly — *You* (done 1 Nov. Summary only covers this month and last month in v1, so July–August aren't visible there. A Summary month switcher was considered and left out of v1)
-- [ ] Log a few real expenses to test Claude Haiku parsing (first real test of the model) — *You*
-- [ ] On iPhone: Safari → Share → Add to Home Screen — *You*
+- [x] Log a few real expenses to test Claude Haiku parsing (first real test of the model) — *You* (done by 2 Nov)
+- [x] On iPhone: Safari → Share → Add to Home Screen — *You* (done by 2 Nov)
 - [ ] Report anything odd back to Claude for fixes — *You*
 
 ## 6. Rollout
