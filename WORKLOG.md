@@ -427,3 +427,23 @@ Last updated: 2 November 2026
 ### What Was Done
 - Confirmed in Vercel's billing settings that the team is on the Hobby plan (active), with no payment method on file and no paid add-ons, so no charges can arise.
 - The owner reviewed the Hobby plan terms and confirmed they suit a private, non-commercial family app. Ticked on the Go-Live Checklist and marked as done in the Architecture document's follow-ups.
+
+---
+
+## 02 November 2026 — Faster Page Loads
+
+### What Was Done
+- Investigated slow navigation between screens and found two causes: the live server was running in Vercel's default US East region (`iad1`) while the Neon database is in Singapore, and each screen discarded its data when left, so every tab switch reloaded it.
+- Measured the live site before the change: four test requests, made without signing in, each took 1.1–1.5 seconds.
+- Added `web/vercel.json` to run the server in Singapore (`sin1`), next to the database. This takes effect on the next deployment.
+- Added an in-memory cache to the app. It loads this month's expenses and Summary when the app opens. Screens show the last-loaded data straight away and refresh it in the background. Any save, edit or delete reloads everything held.
+- Updated the Architecture document to v0.2 (decisions 22 and 23) and the Specification to v0.10 (process flow step 8).
+- Tested locally with an artificial delay on every request: tabs with loaded data opened within 60 ms despite a 1.5-second delay. Editing an expense updated History, Today and Summary, deleting it returned the totals to their previous values, and a failed background refresh left the existing data on screen. Type-check, lint and a production build all passed.
+
+### Decisions Made
+- **Keep cached data in memory only** — nothing stays on the device once the app closes or the user signs out. The trade-off is that cold starts are not sped up by the cache.
+- **No server-side caching** — the allow-list is re-checked on every request so that removing someone takes effect immediately, and the region move is expected to remove most of the delay.
+- **Show last-loaded data while refreshing** — a figure can look out of date for a moment after a change or an entry from another device, until the refresh finishes.
+
+### Assumptions
+- The first open after a quiet spell will still be slower, because Neon's free plan suspends an idle database and Vercel's server needs a moment to start. The Parse button's speed also depends on the model's response time.

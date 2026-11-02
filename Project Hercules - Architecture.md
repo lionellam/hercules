@@ -1,8 +1,8 @@
 # Project Hercules — Architecture: Web App v1
 
 ```
-Version 0.1 · Draft
-Last Reviewed: 26 October 2026
+Version 0.2 · Draft
+Last Reviewed: 2 November 2026
 Produced with AI Assistance (Claude Code)
 ```
 
@@ -11,6 +11,7 @@ Produced with AI Assistance (Claude Code)
 | Version | Date | Author | Changes |
 |---|---|---|---|
 | 0.1 | 2026-10-26 | Lionel Lam | Initial architecture and decision record for the hosted web app |
+| 0.2 | 2026-11-02 | Lionel Lam | Performance decisions: server moved to Vercel's Singapore region; screens keep loaded data in memory and refresh it in the background |
 
 ---
 
@@ -77,6 +78,7 @@ The language model is called only to parse a single expense into structured fiel
 | 10 | **Neon** (hosted Postgres) | SQLite cannot persist on Vercel. Neon is plain Postgres designed for serverless hosts, available through Vercel's marketplace with a free tier |
 | 11 | **One-off import** of existing CLI data into the owner's account | Keeps the full spending history (July 2026 onwards) in one place from day one |
 | 12 | **CLI stays separate** — local SQLite and Phi-4, unchanged | Remains a lightweight, offline, experimental tool (e.g. for trying prompt changes). The web app is the main record; entries logged in the CLI after the import are not synced |
+| 22 | **Server runs in Vercel's Singapore region** (`sin1`, set in `web/vercel.json`) | Puts the server next to the Neon database (`ap-southeast-1`) and the app's users. Vercel's default (`iad1`, US East) sent each signed-in request across the Pacific and back, plus again for each database lookup |
 
 ### 3.4 Application
 
@@ -85,6 +87,7 @@ The language model is called only to parse a single expense into structured fiel
 | 13 | **TypeScript with Next.js** for frontend and backend | Best fit for Vercel; one language across the app. The Python parser prompt is reused and ported (mostly the prompt plus one API call) |
 | 14 | **Progressive Web App (PWA)** | Installs on the phone's home screen and opens full-screen like an app, without App Store distribution or fees |
 | 15 | **No offline logging** in v1 | Parsing needs the network. When offline, the app shows a clear message and keeps the typed text |
+| 23 | **Loaded data kept in memory, refreshed in the background** | Switching tabs is instant: screens show the last-loaded data while a fresh copy loads, and the app loads this month's expenses and Summary when it opens. Any save, edit or delete reloads everything held. Nothing is stored on the device, so data is gone when the app closes. Server-side caching was not used because the allow-list is re-checked on every request, so that removing someone takes effect immediately |
 
 ### 3.5 First-version scope
 

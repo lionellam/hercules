@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { signOutAction } from "@/app/actions";
 import ReviewCard, { type Fields } from "./review-card";
 
@@ -50,22 +50,67 @@ function useOnline() {
   return online;
 }
 
+const expensesUrl = (month: string) => `/api/expenses?month=${month}`;
+const summaryUrl = (month: string) => `/api/summary?month=${month}`;
+
+// Holds API responses in memory only, so they are gone once the app closes or the user signs out
+function useApiCache() {
+  const [data, setData] = useState<Record<string, unknown>>({});
+  // The newest request for each URL still in flight; older responses are ignored so they can't overwrite newer data
+  const pending = useRef(new Map<string, object>());
+
+  const load = useCallback((url: string, force = false) => {
+    if (!force && pending.current.has(url)) return;
+    const request = {};
+    pending.current.set(url, request);
+    const isNewest = () => pending.current.get(url) === request;
+    api<unknown>(url)
+      .then((result) => {
+        if (isNewest()) setData((d) => ({ ...d, [url]: result }));
+      })
+      .catch(() => {
+        // Keep what's already showing; every cached endpoint returns a list
+        if (isNewest()) setData((d) => (url in d ? d : { ...d, [url]: [] }));
+      })
+      .finally(() => {
+        if (isNewest()) pending.current.delete(url);
+      });
+  }, []);
+
+  const reloadAll = () => {
+    for (const url of new Set([...Object.keys(data), ...pending.current.keys()])) load(url, true);
+  };
+
+  return { data, load, reloadAll };
+}
+type ApiCache = ReturnType<typeof useApiCache>;
+
+// Returns the last-loaded response straight away, and fetches a fresh copy each time a screen opens
+function useCached<T>({ data, load }: ApiCache, url: string) {
+  useEffect(() => load(url), [load, url]);
+  return data[url] as T | undefined;
+}
+
 export default function HerculesApp({ email }: { email: string }) {
   const [tab, setTab] = useState<Tab>("log");
   const [categories, setCategories] = useState<Category[]>([]);
-  const [version, setVersion] = useState(0);
-  const refresh = useCallback(() => setVersion((v) => v + 1), []);
+  const cache = useApiCache();
+  const { load } = cache;
   const online = useOnline();
 
   useEffect(() => {
     api<Category[]>("/api/categories").then(setCategories).catch(() => {});
-  }, []);
+    // Load the other tabs' default views up front so they open instantly
+    load(expensesUrl(monthKey(0)));
+    load(summaryUrl(monthKey(0)));
+    load(summaryUrl(monthKey(-1)));
+  }, [load]);
 
   return (
     <main className="app">
-      {tab === "log" && <LogScreen categories={categories} online={online} version={version} onSaved={refresh} />}
-      {tab === "history" && <HistoryScreen categories={categories} online={online} version={version} onChanged={refresh} />}
-      {tab === "summary" && <SummaryScreen email={email} version={version} />}
+      {tab === "log" && <LogScreen categories={categories} online={online} cache={cache} onSaved={cache.reloadAll} />}
+      {tab === "history" && <HistoryScreen categories={categories} online={online} cache={cache} onChanged={cache.reloadAll} />}
+      {tab === "summary" && <SummaryScreen email={email} cache={cache} />}
       <nav className="tabs">
         <TabButton id="log" tab={tab} setTab={setTab} label="Log" path="M12 5v14M5 12h14" />
         <TabButton id="history" tab={tab} setTab={setTab} label="History" path="M4 6h16M4 12h16M4 18h10" />
@@ -174,21 +219,16 @@ function TodayByCategory({ expenses }: { expenses: Expense[] }) {
   );
 }
 
-function LogScreen({ categories, online, version, onSaved }: { categories: Category[]; online: boolean; version: number; onSaved: () => void }) {
+function LogScreen({ categories, online, cache, onSaved }: { categories: Category[]; online: boolean; cache: ApiCache; onSaved: () => void }) {
   const [text, setText] = useState("");
   const [parsed, setParsed] = useState<{ raw: string; fields: Fields } | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [toast, setToast] = useState("");
-  const [todays, setTodays] = useState<Expense[]>([]);
   const [editing, setEditing] = useState<Expense | null>(null);
-
-  useEffect(() => {
-    const today = localToday();
-    api<Expense[]>(`/api/expenses?month=${today.slice(0, 7)}`)
-      .then((rows) => setTodays(rows.filter((r) => r.date === today)))
-      .catch(() => {});
-  }, [version]);
+  const todayKey = localToday();
+  const monthRows = useCached<Expense[]>(cache, expensesUrl(todayKey.slice(0, 7)));
+  const todays = monthRows?.filter((r) => r.date === todayKey) ?? [];
 
   async function parse() {
     setBusy(true);
@@ -263,21 +303,11 @@ function LogScreen({ categories, online, version, onSaved }: { categories: Categ
   );
 }
 
-function HistoryScreen({ categories, online, version, onChanged }: { categories: Category[]; online: boolean; version: number; onChanged: () => void }) {
+function HistoryScreen({ categories, online, cache, onChanged }: { categories: Category[]; online: boolean; cache: ApiCache; onChanged: () => void }) {
   const [offset, setOffset] = useState(0);
-  const [rows, setRows] = useState<Expense[] | null>(null);
   const [editing, setEditing] = useState<Expense | null>(null);
   const month = monthKey(offset);
-
-  useEffect(() => {
-    let live = true;
-    api<Expense[]>(`/api/expenses?month=${month}`)
-      .then((r) => live && setRows(r))
-      .catch(() => live && setRows([]));
-    return () => {
-      live = false;
-    };
-  }, [month, version]);
+  const rows = useCached<Expense[]>(cache, expensesUrl(month));
 
   let lastDay = "";
   return (
@@ -288,7 +318,7 @@ function HistoryScreen({ categories, online, version, onChanged }: { categories:
         <strong>{monthLabel(month)}</strong>
         <button onClick={() => setOffset(offset + 1)} disabled={offset >= 0} aria-label="Next month">›</button>
       </div>
-      {rows === null ? (
+      {!rows ? (
         <p className="sub empty">Loading…</p>
       ) : rows.length === 0 ? (
         <p className="sub empty">No expenses this month.</p>
@@ -313,25 +343,17 @@ function HistoryScreen({ categories, online, version, onChanged }: { categories:
   );
 }
 
-function SummaryScreen({ email, version }: { email: string; version: number }) {
+function SummaryScreen({ email, cache }: { email: string; cache: ApiCache }) {
   const [offset, setOffset] = useState(0);
-  const [data, setData] = useState<{ rows: SummaryRow[]; prevTotal: number } | null>(null);
   const month = monthKey(offset);
   const prevMonth = monthKey(offset - 1);
+  const rows = useCached<SummaryRow[]>(cache, summaryUrl(month));
+  const prev = useCached<SummaryRow[]>(cache, summaryUrl(prevMonth));
 
-  useEffect(() => {
-    let live = true;
-    Promise.all([api<SummaryRow[]>(`/api/summary?month=${month}`), api<SummaryRow[]>(`/api/summary?month=${prevMonth}`)])
-      .then(([rows, prev]) => live && setData({ rows, prevTotal: prev.reduce((s, r) => s + r.total, 0) }))
-      .catch(() => live && setData({ rows: [], prevTotal: 0 }));
-    return () => {
-      live = false;
-    };
-  }, [month, prevMonth, version]);
-
-  const total = data?.rows.reduce((s, r) => s + r.total, 0) ?? 0;
-  const max = data?.rows[0]?.total || 1;
-  const diff = total - (data?.prevTotal ?? 0);
+  const total = rows?.reduce((s, r) => s + r.total, 0) ?? 0;
+  const prevTotal = prev?.reduce((s, r) => s + r.total, 0) ?? 0;
+  const max = rows?.[0]?.total || 1;
+  const diff = total - prevTotal;
 
   return (
     <section className="screen">
@@ -343,13 +365,13 @@ function SummaryScreen({ email, version }: { email: string; version: number }) {
       <div className="total">
         <div className="sub">{offset === 0 ? "Spent so far this month" : `Spent in ${monthLabel(month)}`}</div>
         <div className="big">${fmt(total)}</div>
-        {!!data?.prevTotal && (
+        {!!prevTotal && (
           <div className="delta">
             {diff >= 0 ? "+" : "−"}${fmt(Math.abs(diff))} vs {monthLabel(prevMonth, { month: "long" })}
           </div>
         )}
       </div>
-      {data?.rows.map((r) => (
+      {rows?.map((r) => (
         <div className="cat" key={r.category}>
           <div className="cat-top">
             <span>
@@ -363,7 +385,7 @@ function SummaryScreen({ email, version }: { email: string; version: number }) {
           </div>
         </div>
       ))}
-      {data && data.rows.length === 0 && <p className="sub empty">No expenses this month.</p>}
+      {rows?.length === 0 && <p className="sub empty">No expenses this month.</p>}
       <form className="signout" action={signOutAction}>
         <p>Signed in as {email}</p>
         <button type="submit">Sign out</button>
