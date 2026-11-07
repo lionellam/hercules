@@ -646,3 +646,13 @@ Last updated: 7 November 2026
 
 ### Challenges
 - The item 1 error came from an edit script that replaced the first occurrence of a phrase appearing twice in the document. Edits now check that the text being replaced occurs exactly once.
+
+---
+
+## 07 November 2026 — Readable Guide Added to the Repository
+
+### What Was Done
+- Added `Project Hercules - How Hercules Works.html`, a standalone copy of the readable guide to the Specification (v0.25) and Architecture (v0.6), with screen mockups. It opens directly in a browser. The same guide is also kept as a private claude.ai artifact.
+
+### Assumptions
+- The Markdown documents remain the source of truth. The guide is a snapshot and should be refreshed when either document changes significantly.

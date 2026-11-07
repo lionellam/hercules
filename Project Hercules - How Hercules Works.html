@@ -1,0 +1,655 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>How Hercules Works</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+body { margin: 0; }
+[hidden] { display: none !important; }
+/* Layout: a reading column with a sticky contents rail on wide screens; app mockups sit in phone frames beside or between the text. */
+:root {
+  --bg: #f7f8f6;
+  --paper: #ffffff;
+  --ink: #16191d;
+  --ink-2: #4a5058;
+  --rule: #dfe3df;
+  --accent: #1d6b52;
+  --accent-soft: #e3efe9;
+  --warn: #9b2c1f;
+  --code-bg: #eef1ee;
+  --font-display: "Bricolage Grotesque", "Avenir Next", system-ui, sans-serif;
+  --font-body: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+  --frame: #d8ddd9;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #111416; --paper: #181c1f; --ink: #e9ece9; --ink-2: #a9b0b5; --rule: #2a3034;
+    --accent: #6cc9a4; --accent-soft: #1d2c27; --warn: #f08a7c; --code-bg: #1f2528; --frame: #2f363a;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #111416; --paper: #181c1f; --ink: #e9ece9; --ink-2: #a9b0b5; --rule: #2a3034;
+  --accent: #6cc9a4; --accent-soft: #1d2c27; --warn: #f08a7c; --code-bg: #1f2528; --frame: #2f363a;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 17px; line-height: 1.6;
+       padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); -webkit-font-smoothing: antialiased; }
+.wrap { max-width: 1180px; margin: 0 auto; padding-block: 40px 96px; display: grid; grid-template-columns: 210px minmax(0, 1fr); gap: 56px; }
+nav.toc { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 24px); align-self: start; font-size: 14.5px; }
+nav.toc p { font-family: var(--font-display); font-weight: 700; margin: 0 0 10px; font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-2); }
+nav.toc ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
+nav.toc li.part { margin-top: 14px; font-weight: 700; color: var(--ink); font-size: 13px; letter-spacing: .04em; text-transform: uppercase; }
+nav.toc a { color: var(--ink-2); text-decoration: none; display: block; padding: 3px 0 3px 10px; border-left: 2px solid transparent; }
+nav.toc a:hover, nav.toc a:focus-visible { color: var(--accent); border-left-color: var(--accent); outline: none; }
+main { min-width: 0; }
+header.hero { padding-bottom: 28px; border-bottom: 1px solid var(--rule); margin-bottom: 8px; }
+.eyebrow { font-family: var(--font-mono); font-size: 12.5px; color: var(--accent); letter-spacing: .04em; margin: 0 0 14px; }
+h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; letter-spacing: -0.015em; }
+h1 { font-size: clamp(36px, 6vw, 56px); line-height: 1.05; margin: 0 0 18px; font-weight: 700; }
+h2 { font-size: 30px; line-height: 1.15; margin: 64px 0 14px; font-weight: 700; scroll-margin-top: 24px; }
+h3 { font-size: 21px; margin: 36px 0 8px; font-weight: 500; scroll-margin-top: 24px; }
+.part-title { font-family: var(--font-mono); font-size: 13px; text-transform: uppercase; letter-spacing: .08em; color: var(--ink-2); margin: 80px 0 -40px; padding-top: 22px; border-top: 3px solid var(--ink); }
+p, li { max-width: 68ch; }
+.lede { font-size: 20px; color: var(--ink-2); line-height: 1.5; margin: 0 0 22px; }
+.meta { display: flex; flex-wrap: wrap; gap: 8px 22px; font-size: 14.5px; color: var(--ink-2); }
+.meta b { color: var(--ink); font-weight: 600; }
+a { color: var(--accent); }
+code, .mono { font-family: var(--font-mono); font-size: .86em; background: var(--code-bg); padding: 1px 5px; border-radius: 4px; }
+.formula { font-family: var(--font-mono); font-size: 15px; background: var(--accent-soft); color: var(--ink); padding: 14px 18px; border-radius: 10px; max-width: 68ch; overflow-x: auto; }
+.callout { border-left: 3px solid var(--accent); padding: 4px 0 4px 16px; margin: 20px 0; max-width: 68ch; color: var(--ink-2); }
+.callout b { color: var(--ink); }
+
+.principles { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; margin: 20px 0; }
+.principle { background: var(--paper); border: 1px solid var(--rule); border-radius: 12px; padding: 16px 18px; min-width: 0; }
+.principle h4 { font-family: var(--font-display); font-size: 17px; margin: 0 0 6px; font-weight: 700; }
+.principle p { margin: 0; color: var(--ink-2); font-size: 15.5px; line-height: 1.5; }
+
+.table-wrap { overflow-x: auto; margin: 18px 0; border: 1px solid var(--rule); border-radius: 12px; background: var(--paper); }
+table { border-collapse: collapse; width: 100%; font-size: 15px; }
+th, td { text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+th { font-family: var(--font-body); font-weight: 700; font-size: 13px; letter-spacing: .04em; text-transform: uppercase; color: var(--ink-2); background: var(--code-bg); }
+tr:last-child td { border-bottom: none; }
+td.num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.red { color: var(--warn); font-weight: 600; }
+
+.steps { list-style: none; padding: 0; margin: 22px 0; counter-reset: step; display: grid; gap: 14px; max-width: 72ch; }
+.steps li { counter-increment: step; display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 12px; max-width: none; }
+.steps li::before { content: counter(step); font-family: var(--font-mono); font-size: 13px; width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; background: var(--paper); border: 1px solid var(--rule); color: var(--ink-2); margin-top: 1px; }
+.steps li.ai::before { background: var(--accent); color: var(--paper); border-color: var(--accent); }
+.steps b { font-weight: 700; }
+.tag-ai { font-family: var(--font-mono); font-size: 11.5px; color: var(--accent); border: 1px solid var(--accent); border-radius: 4px; padding: 0 5px; margin-left: 6px; white-space: nowrap; }
+
+.boundary { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 18px 0; }
+.boundary > div { background: var(--paper); border: 1px solid var(--rule); border-radius: 12px; padding: 16px 18px; min-width: 0; }
+.boundary h4 { margin: 0 0 8px; font-family: var(--font-display); font-size: 16px; }
+.boundary .yes h4 { color: var(--accent); }
+.boundary ul { margin: 0; padding-left: 18px; color: var(--ink-2); font-size: 15.5px; }
+
+.decisions { display: grid; gap: 10px; margin: 16px 0 8px; }
+.decision { display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 12px; background: var(--paper); border: 1px solid var(--rule); border-radius: 12px; padding: 14px 16px; }
+.decision .n { font-family: var(--font-mono); font-size: 13px; color: var(--ink-2); padding-top: 3px; }
+.decision h4 { margin: 0 0 4px; font-size: 16.5px; font-weight: 700; font-family: var(--font-body); }
+.decision p { margin: 0; color: var(--ink-2); font-size: 15.5px; line-height: 1.5; }
+.decision.old { opacity: .7; }
+.decision.old h4 { text-decoration: line-through; }
+
+.figure-row { display: flex; flex-wrap: wrap; gap: 28px; align-items: flex-start; margin: 26px 0 10px; }
+figure { margin: 0; min-width: 0; }
+figcaption { font-size: 14px; color: var(--ink-2); margin-top: 10px; max-width: 320px; line-height: 1.45; }
+figcaption b { color: var(--ink); }
+.diagram { overflow-x: auto; background: var(--paper); border: 1px solid var(--rule); border-radius: 12px; padding: 16px; margin: 20px 0; }
+.diagram svg { display: block; min-width: 640px; width: 100%; height: auto; }
+
+.costs { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; margin: 18px 0; }
+.cost { background: var(--paper); border: 1px solid var(--rule); border-radius: 12px; padding: 14px 16px; }
+.cost .v { font-family: var(--font-display); font-size: 24px; font-weight: 700; }
+.cost .k { font-size: 14px; color: var(--ink-2); }
+ul.plain { padding-left: 20px; }
+ul.plain li { margin-bottom: 6px; }
+footer { margin-top: 72px; padding-top: 18px; border-top: 1px solid var(--rule); font-size: 14px; color: var(--ink-2); }
+
+/* ---------- App mockups: the real app's tokens, light theme, inside a phone frame ---------- */
+.phone { width: 300px; max-width: 100%; border-radius: 26px; border: 1px solid var(--frame); overflow: hidden; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,.05), 0 10px 26px rgba(0,0,0,.07); }
+.m { --m-bg: #fff; --m-text: #18181b; --m-muted: #71717a; --m-line: #e7e7e4; --m-soft: #f4f4f5; --m-bar: #18181b; --m-bad: #b91c1c; --m-good: #15803d;
+     --m-pie-1: #2a78d6; --m-pie-2: #eb6834; --m-pie-3: #1baf7a; --m-pie-4: #eda100; --m-pie-5: #e87ba4; --m-pie-rest: #a1a1aa;
+     background: var(--m-bg); color: var(--m-text); font-family: Inter, -apple-system, system-ui, sans-serif; font-size: 13px; line-height: 1.35; color-scheme: light; }
+.m .top { padding: 20px 16px 12px; border-bottom: 1px solid var(--m-line); position: relative; }
+.m .top.flat { border-bottom: none; }
+.m .tgl { position: absolute; top: 20px; right: 14px; width: 18px; height: 18px; color: var(--m-muted); }
+.m h5 { font-size: 22px; font-weight: 700; letter-spacing: -0.02em; margin: 0; }
+.m .sub { color: var(--m-muted); font-size: 11.5px; }
+.m .body { padding: 0 16px 16px; }
+.m .input { background: var(--m-soft); border-radius: 12px; padding: 10px 11px 8px; margin-top: 12px; }
+.m .input .txt { font-size: 14px; min-height: 36px; }
+.m .input .row { display: flex; justify-content: flex-end; }
+.m .btn { display: inline-grid; place-items: center; height: 32px; padding: 0 14px; border-radius: 9px; font-size: 12.5px; font-weight: 600; background: var(--m-bar); color: var(--m-bg); }
+.m .btn.ghost { background: none; color: var(--m-muted); }
+.m .btn.dim { opacity: .35; }
+.m .spent { display: flex; justify-content: space-between; align-items: baseline; margin-top: 10px; color: var(--m-muted); font-size: 12px; }
+.m .spent b { color: var(--m-text); font-size: 13.5px; font-variant-numeric: tabular-nums; }
+.m .h { margin-top: 18px; font-size: 10.5px; color: var(--m-muted); font-weight: 600; letter-spacing: .05em; display: flex; justify-content: space-between; }
+.m .h span:last-child { color: var(--m-text); }
+.m .item { display: flex; justify-content: space-between; align-items: center; padding: 9px 0; border-bottom: 1px solid var(--m-line); }
+.m .item .nm { font-weight: 500; font-size: 13px; }
+.m .item .c { color: var(--m-muted); font-size: 11px; margin-top: 1px; }
+.m .item .a { font-weight: 600; font-variant-numeric: tabular-nums; }
+.m .edited { font-size: 9.5px; color: var(--m-muted); border: 1px solid var(--m-line); border-radius: 5px; padding: 0 4px; margin-left: 5px; }
+.m .day { font-size: 10px; font-weight: 600; color: var(--m-muted); letter-spacing: .06em; margin: 14px 0 2px; }
+.m .cat { margin-top: 13px; }
+.m .cat.open { background: var(--m-soft); margin: 13px -10px 0; padding: 10px 10px 8px; border-radius: 12px; }
+.m .cat-top { display: flex; justify-content: space-between; gap: 8px; font-size: 12px; margin-bottom: 5px; align-items: baseline; }
+.m .cat-top .n { color: var(--m-muted); font-size: 10.5px; margin-left: 4px; }
+.m .cat-top strong { font-variant-numeric: tabular-nums; }
+.m .of { color: var(--m-muted); font-weight: 400; }
+.m .meter { position: relative; }
+.m .track { height: 5px; background: var(--m-soft); border-radius: 3px; overflow: hidden; }
+.m .cat.open .track { background: var(--m-line); }
+.m .fill { height: 100%; background: var(--m-bar); border-radius: 3px; }
+.m .fill.over { background: var(--m-bad); }
+.m .tick { position: absolute; top: -3px; width: 2px; height: 11px; background: var(--m-text); transform: translateX(-1px); border-radius: 1px; box-shadow: 0 0 0 1.5px var(--m-bg); }
+.m .cat.open .tick { box-shadow: 0 0 0 1.5px var(--m-soft); }
+.m .pace { margin-top: 5px; font-size: 10.5px; color: var(--m-muted); }
+.m .pace b { color: var(--m-text); font-weight: 600; }
+.m .pace.bad, .m .pace.bad b { color: var(--m-bad); }
+.m .seg { display: flex; background: var(--m-soft); border-radius: 10px; padding: 3px; margin-top: 12px; }
+.m .seg span { flex: 1; text-align: center; padding: 6px 0; border-radius: 8px; font-size: 12px; color: var(--m-muted); }
+.m .seg span.on { background: var(--m-bg); color: var(--m-text); box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+.m .big { font-size: 28px; font-weight: 700; letter-spacing: -0.02em; margin-top: 2px; font-variant-numeric: tabular-nums; }
+.m .dayline { font-size: 11px; color: var(--m-muted); margin-top: 3px; }
+.m .dayline b { color: var(--m-text); }
+.m .chart { margin-top: 10px; }
+.m .chart svg { display: block; width: 100%; height: auto; overflow: visible; }
+.m .month { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; font-weight: 600; font-size: 13px; }
+.m .month i { font-style: normal; background: var(--m-soft); width: 28px; height: 28px; border-radius: 8px; display: grid; place-items: center; color: var(--m-text); }
+.m .card { border: 1px solid var(--m-line); border-radius: 14px; padding: 12px; margin-top: 14px; }
+.m .card-t { font-size: 10px; font-weight: 600; color: var(--m-muted); letter-spacing: .06em; margin-bottom: 8px; }
+.m .raw { font-size: 11.5px; color: var(--m-muted); font-style: italic; margin-bottom: 6px; }
+.m .amt { display: flex; align-items: baseline; gap: 5px; margin-bottom: 8px; }
+.m .amt span { color: var(--m-muted); font-size: 14px; }
+.m .amt b { font-size: 26px; font-weight: 700; }
+.m .field { display: flex; justify-content: space-between; padding: 8px 0; border-top: 1px solid var(--m-line); font-size: 12.5px; }
+.m .field span:first-child { color: var(--m-muted); }
+.m .field span:last-child { font-weight: 500; }
+.m .acts { display: flex; justify-content: flex-end; gap: 6px; margin-top: 10px; }
+.m .tabs { display: flex; border-top: 1px solid var(--m-line); padding: 7px 0 10px; }
+.m .tabs span { flex: 1; text-align: center; font-size: 9.5px; color: var(--m-muted); font-weight: 500; }
+.m .tabs span.on { color: var(--m-text); }
+.m .tabs svg { display: block; width: 18px; height: 18px; margin: 0 auto 2px; }
+.m .m-pie { display: flex; align-items: center; gap: 12px; margin-top: 10px; }
+.m .m-pie svg { flex: 0 0 92px; width: 92px; height: 92px; }
+.m .m-pie path { stroke: var(--m-bg); stroke-width: 1.5; }
+.m .m-pie ul { flex: 1; list-style: none; margin: 0; padding: 0; min-width: 0; }
+.m .m-pie li { display: flex; gap: 6px; align-items: center; font-size: 10.5px; padding: 1.5px 0; max-width: none; }
+.m .m-pie .sw { width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0; }
+.m .m-pie .nm { flex: 1; min-width: 0; }
+.m .m-pie .pct { color: var(--m-muted); font-variant-numeric: tabular-nums; }
+.m .signin { padding: 70px 22px 34px; text-align: center; }
+.m .logo { width: 52px; height: 52px; border-radius: 15px; background: var(--m-bar); color: var(--m-bg); display: grid; place-items: center; font-size: 24px; font-weight: 700; margin: 0 auto 14px; }
+.m .gbtn { margin-top: 90px; height: 42px; border-radius: 12px; border: 1px solid #747775; display: flex; align-items: center; justify-content: center; gap: 8px; font-weight: 500; font-size: 13.5px; }
+.m .fine { color: var(--m-muted); font-size: 10.5px; margin-top: 10px; }
+.m .cat-row { display: flex; justify-content: space-between; padding: 9px 0; border-bottom: 1px solid var(--m-line); font-size: 13px; }
+.m .cat-row span:last-child { color: var(--m-muted); font-size: 11.5px; }
+.m .cat-row span.set { color: var(--m-text); font-weight: 600; font-size: 13px; font-variant-numeric: tabular-nums; }
+
+@media (max-width: 960px) {
+  .wrap { grid-template-columns: minmax(0, 1fr); gap: 0; }
+  nav.toc { position: static; border: 1px solid var(--rule); border-radius: 12px; background: var(--paper); padding: 14px 16px; margin-bottom: 24px; }
+  nav.toc ol { grid-template-columns: 1fr 1fr; column-gap: 16px; }
+  nav.toc li.part { grid-column: 1 / -1; }
+}
+@media (max-width: 560px) {
+  body { font-size: 16px; }
+  .boundary { grid-template-columns: 1fr; }
+  nav.toc ol { grid-template-columns: 1fr; }
+  h2 { font-size: 26px; }
+  .phone { width: 100%; }
+  figcaption { max-width: none; }
+}
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+html { scroll-behavior: smooth; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav class="toc" aria-label="Contents">
+    <p>Contents</p>
+    <ol>
+      <li><a href="#overview">At a glance</a></li>
+      <li class="part">The app</li>
+      <li><a href="#principles">Principles</a></li>
+      <li><a href="#roles">Who does what</a></li>
+      <li><a href="#logging">Logging an expense</a></li>
+      <li><a href="#screens">The other screens</a></li>
+      <li><a href="#pace">Spending pace</a></li>
+      <li><a href="#data">What's stored</a></li>
+      <li><a href="#ai">What Claude does</a></li>
+      <li><a href="#open">Open questions</a></li>
+      <li class="part">How it's built</li>
+      <li><a href="#system">The system</a></li>
+      <li><a href="#decisions">Key decisions</a></li>
+      <li><a href="#costs">Costs and limits</a></li>
+      <li><a href="#next">What's next</a></li>
+    </ol>
+  </nav>
+
+  <main>
+    <header class="hero" id="overview">
+      <p class="eyebrow">PROJECT HERCULES · READABLE EDITION</p>
+      <h1>How Hercules works</h1>
+      <p class="lede">Hercules is a private expense tracker for family and close friends. You type an expense the way you'd say it, Claude turns it into a tidy record, and you check it before it's saved.</p>
+      <div class="meta">
+        <span><b>Based on:</b> Specification v0.25 and Architecture v0.6</span>
+        <span><b>Status:</b> live on Vercel since 1 November 2026</span>
+        <span><b>Owner:</b> Lionel Lam</span>
+      </div>
+    </header>
+
+    <p>This page explains the two technical documents in plain language, with mockups of the screens. The original documents remain the source of truth. Where this page simplifies, they have the full detail.</p>
+
+    <!-- ========== PART 1 ========== -->
+    <p class="part-title">Part 1 · The app (from the Specification)</p>
+
+    <h2 id="principles">The four principles</h2>
+    <p>Every feature is checked against these.</p>
+    <div class="principles">
+      <div class="principle"><h4>You always check first</h4><p>Nothing Claude reads from your text is saved until you've seen it and had the chance to fix it.</p></div>
+      <div class="principle"><h4>AI only where it helps</h4><p>Claude only reads your words and suggests the fields. Saving, checking, totals and everything else is ordinary, predictable code.</p></div>
+      <div class="principle"><h4>Your words are kept</h4><p>What you typed is stored alongside the record, so parsing mistakes can be looked into later.</p></div>
+      <div class="principle"><h4>Private by account</h4><p>Several people use one app, but nobody can see anyone else's expenses.</p></div>
+    </div>
+
+    <h2 id="roles">Who does what</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Who</th><th>Their part</th></tr></thead>
+      <tbody>
+        <tr><td><b>You</b></td><td>Sign in with Google, type an expense, check what Claude found, fix anything, save.</td></tr>
+        <tr><td><b>Claude</b> (Haiku 5.5)</td><td>Reads your text and suggests the amount, category, merchant and date. That's all.</td></tr>
+        <tr><td><b>The app</b></td><td>Everything else: sign-in and the invite list, checking the fields, storing, totals, budgets and the daily usage limit.</td></tr>
+      </tbody>
+    </table></div>
+    <p>An earlier version runs entirely on a home computer (a command-line tool using a local model) and is kept separately for experiments.</p>
+
+    <h2 id="logging">Logging an expense</h2>
+    <p>The main flow, start to finish. The highlighted step is the only one involving AI.</p>
+    <ol class="steps">
+      <li><span><b>You type it in plain words</b>, for example "Lunch at Ya Kun for $4.50". The heading, the box and today's running total stay pinned at the top of the screen, so you can log from anywhere in the list.</span></li>
+      <li><span><b>The app gathers your categories</b> and passes the list to Claude, so it can only choose from your own.</span></li>
+      <li class="ai"><span><b>Claude reads the text</b> and returns the amount, category, merchant and date in a fixed format.<span class="tag-ai">AI</span> It must pick one of your categories, or "Other" if nothing fits. It can't invent new ones.</span></li>
+      <li><span><b>The app matches the category</b> by its exact name. No guessing.</span></li>
+      <li><span><b>You see a review card</b> with every field editable.</span></li>
+      <li><span><b>You fix anything that's wrong</b> by editing the fields directly. Claude isn't asked again.</span></li>
+      <li><span><b>You save.</b> The record is stored with your original words and a note of whether you changed anything, which shows how accurate the parsing is over time.</span></li>
+      <li><span><b>It appears everywhere</b>: in Today, History and Summary. Tap any saved expense to edit or delete it. Deleting asks first, and the record can still be recovered.</span></li>
+    </ol>
+
+    <div class="figure-row">
+      <figure>
+        <div class="phone"><div class="m">
+          <div class="top">
+            <svg class="tgl" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z"/></svg>
+            <div class="sub">Saturday, 7 November</div>
+            <h5>Log an expense</h5>
+            <div class="input"><div class="txt">Lunch at Ya Kun for $4.50</div><div class="row"><span class="btn">Parse</span></div></div>
+            <div class="spent"><span>Spent today</span><b>$39.50</b></div>
+          </div>
+          <div class="body">
+            <div class="h"><span>TODAY</span></div>
+            <div class="item"><div><div class="nm">Toast Box</div><div class="c">Food &amp; Dining</div></div><div class="a">30.00</div></div>
+            <div class="item"><div><div class="nm">MRT</div><div class="c">Transport</div></div><div class="a">9.50</div></div>
+            <div class="h"><span>TODAY BY CATEGORY</span><span>$39.50</span></div>
+            <div class="cat"><div class="cat-top"><span>Food &amp; Dining<span class="n">1</span></span><strong>30.00</strong></div><div class="track"><div class="fill" style="width:100%"></div></div></div>
+            <div class="cat"><div class="cat-top"><span>Transport<span class="n">1</span></span><strong>9.50</strong></div><div class="track"><div class="fill" style="width:32%"></div></div></div>
+          </div>
+          <div class="tabs">
+            <span class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Log</span>
+            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg>History</span>
+            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 20V10M12 20V4M18 20v-6"/></svg>Summary</span>
+            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 5h7l9 9-6 6-9-9V5zM8 9h.01"/></svg>Categories</span>
+          </div>
+        </div></div>
+        <figcaption><b>Step 1 · Log.</b> The top section stays in place while Today and Today by Category scroll beneath it.</figcaption>
+      </figure>
+
+      <figure>
+        <div class="phone"><div class="m">
+          <div class="top flat">
+            <div class="sub">Saturday, 7 November</div>
+            <h5>Log an expense</h5>
+            <div class="input"><div class="txt">Lunch at Ya Kun for $4.50</div><div class="row"><span class="btn dim">Parse</span></div></div>
+          </div>
+          <div class="body">
+            <div class="card">
+              <div class="card-t">REVIEW BEFORE SAVING</div>
+              <div class="amt"><span>SGD</span><b>4.50</b></div>
+              <div class="field"><span>Category</span><span>Food &amp; Dining</span></div>
+              <div class="field"><span>Merchant</span><span>Ya Kun</span></div>
+              <div class="field"><span>Date</span><span>07/11/2026</span></div>
+              <div class="field"><span>Remarks</span><span style="color:var(--m-muted);font-weight:400">Optional</span></div>
+              <div class="acts"><span class="btn ghost">Discard</span><span class="btn">Save</span></div>
+            </div>
+          </div>
+        </div></div>
+        <figcaption><b>Steps 5–7 · Review.</b> Every field Claude filled in can be changed before saving. Nothing is stored until you press Save.</figcaption>
+      </figure>
+
+      <figure>
+        <div class="phone"><div class="m">
+          <div class="signin">
+            <div class="logo">H</div>
+            <h5>Hercules</h5>
+            <div class="sub" style="margin-top:4px">Log expenses the way you'd say them.</div>
+            <div class="gbtn"><svg width="16" height="16" viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>Sign in with Google</div>
+            <div class="fine">Invite only. Your expenses are private to your account.</div>
+          </div>
+        </div></div>
+        <figcaption><b>Sign-in.</b> Google only, and only for invited email addresses. Anyone else is turned away.</figcaption>
+      </figure>
+    </div>
+
+    <h2 id="screens">The other screens</h2>
+    <p>There are four tabs: Log, History, Summary and Categories. On every one, the heading and its main control stay pinned at the top while the rest scrolls. A sun or moon icon switches between light and dark mode. On a tablet or computer, the app widens to two columns.</p>
+
+    <div class="figure-row">
+      <figure>
+        <div class="phone"><div class="m">
+          <div class="top">
+            <svg class="tgl" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z"/></svg>
+            <h5>History</h5>
+            <div class="month"><i>‹</i><span>November 2026</span><i style="opacity:.35">›</i></div>
+          </div>
+          <div class="body">
+            <div class="day">SAT, 7 NOV</div>
+            <div class="item"><div><div class="nm">Toast Box</div><div class="c">Food &amp; Dining</div></div><div class="a">30.00</div></div>
+            <div class="item"><div><div class="nm">MRT</div><div class="c">Transport</div></div><div class="a">9.50</div></div>
+            <div class="day">FRI, 6 NOV</div>
+            <div class="item"><div><div class="nm">Golden Village</div><div class="c">Entertainment<span class="edited">edited</span></div></div><div class="a">80.00</div></div>
+            <div class="item"><div><div class="nm">Saizeriya</div><div class="c">Food &amp; Dining</div></div><div class="a">35.00</div></div>
+            <div class="day">THU, 5 NOV</div>
+            <div class="item"><div><div class="nm">Polyclinic</div><div class="c">Health &amp; Medical</div></div><div class="a">45.00</div></div>
+          </div>
+        </div></div>
+        <figcaption><b>History.</b> Month by month, grouped by day. "Edited" marks records where you changed what Claude suggested. Tap any row to edit or delete it.</figcaption>
+      </figure>
+
+      <figure>
+        <div class="phone"><div class="m">
+          <div class="top">
+            <svg class="tgl" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z"/></svg>
+            <h5>Categories</h5>
+            <div class="sub" style="margin-top:3px">Monthly budgets are optional and in SGD.</div>
+            <div style="margin-top:10px"><span class="btn">Add category</span></div>
+          </div>
+          <div class="body">
+            <div class="cat-row"><span>Food &amp; Dining</span><span class="set">500.00</span></div>
+            <div class="cat-row"><span>Transport</span><span class="set">150.00</span></div>
+            <div class="cat-row"><span>Groceries</span><span class="set">400.00</span></div>
+            <div class="cat-row"><span>Entertainment</span><span class="set">100.00</span></div>
+            <div class="cat-row"><span>Utilities</span><span>No budget</span></div>
+            <div class="cat-row"><span>Health &amp; Medical</span><span>No budget</span></div>
+            <div class="cat-row"><span>Rent</span><span class="set">2,000.00</span></div>
+            <div class="cat-row"><span>Other</span><span>No budget</span></div>
+          </div>
+        </div></div>
+        <figcaption><b>Categories.</b> Add or rename categories and set an optional monthly budget. "Other" can't be renamed and always stays last.</figcaption>
+      </figure>
+    </div>
+
+    <h3>Summary</h3>
+    <p>Summary shows the current month and the one before. For each category it shows the amount spent and a bar. If you've set a budget, the bar fills against that budget, turning red once you're over. A pie chart shows each category's share, with at most six slices. Categories with nothing spent that month aren't listed. For the current month only, budgeted categories also show your <a href="#pace">spending pace</a>.</p>
+
+    <div class="figure-row">
+      <figure>
+        <div class="phone"><div class="m">
+          <div class="top">
+            <svg class="tgl" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z"/></svg>
+            <h5>Summary</h5>
+            <div class="seg"><span class="on">November</span><span>October</span></div>
+          </div>
+          <div class="body">
+            <div style="margin-top:14px" class="sub">Spent so far this month</div>
+            <div class="big">$3,184.40</div>
+            <div class="dayline"><b>Day 7 of 30</b> · Sat, 7 Nov</div>
+            <div class="cat"><div class="cat-top"><span>Rent<span class="n">1</span></span><span><strong>2,000.00</strong> <span class="of">of 2,000.00</span></span></div><div class="meter"><div class="track"><div class="fill" style="width:100%"></div></div><div class="tick" style="left:23.3%"></div></div><div class="pace"><b>Budget used</b> · $0.00 left</div></div>
+            <div class="cat"><div class="cat-top"><span>Shopping<span class="n">1</span></span><strong>640.00</strong></div><div class="track"><div class="fill" style="width:32%"></div></div></div>
+            <div class="cat open"><div class="cat-top"><span>Food &amp; Dining<span class="n">7</span></span><span><strong>210.00</strong> <span class="of">of 500.00</span></span></div><div class="meter"><div class="track"><div class="fill" style="width:42%"></div></div><div class="tick" style="left:23.3%"></div></div><div class="pace"><b>$93.33 over pace</b> · $290.00 left, about $12.61/day</div>
+              <div class="chart"><svg viewBox="0 0 335 172" role="img" aria-label="Food and Dining burn-up chart: $210.00 spent by 7 November against $116.67 expected from a $500 monthly budget.">
+<line x1="44" x2="277.0" y1="146.0" y2="146.0" stroke="var(--m-muted)" stroke-opacity=".5"/>
+<line x1="44" x2="277.0" y1="29.6" y2="29.6" stroke="var(--m-muted)" stroke-opacity=".35"/>
+<text x="277.0" y="24.6" text-anchor="end" font-size="10.5" fill="var(--m-muted)">Budget 500</text>
+<line x1="44.0" y1="146.0" x2="277.0" y2="29.6" stroke="var(--m-muted)" stroke-width="1.5" stroke-dasharray="4 3"/>
+<line x1="98.4" x2="98.4" y1="14" y2="146.0" stroke="var(--m-muted)" stroke-opacity=".7"/>
+<text x="98.4" y="11" text-anchor="middle" font-size="10.5" fill="var(--m-muted)">Today</text>
+<path d="M44.0 146.0 L51.8 146.0 L51.8 141.7 L59.5 141.7 L59.5 134.2 L67.3 134.2 L67.3 128.4 L75.1 128.4 L75.1 118.8 L82.8 118.8 L82.8 112.3 L90.6 112.3 L90.6 104.1 L98.4 104.1 L98.4 97.1 L98.4 146.0 Z" fill="var(--m-bar)" fill-opacity=".09"/>
+<path d="M44.0 146.0 L51.8 146.0 L51.8 141.7 L59.5 141.7 L59.5 134.2 L67.3 134.2 L67.3 128.4 L75.1 128.4 L75.1 118.8 L82.8 118.8 L82.8 112.3 L90.6 112.3 L90.6 104.1 L98.4 104.1 L98.4 97.1" fill="none" stroke="var(--m-bar)" stroke-width="2" stroke-linejoin="round"/>
+<text x="37" y="149.5" text-anchor="end" font-size="10.5" fill="var(--m-muted)">0</text>
+<text x="37" y="33.1" text-anchor="end" font-size="10.5" fill="var(--m-muted)">500</text>
+<text x="51.8" y="162.0" text-anchor="middle" font-size="10.5" fill="var(--m-muted)">1 Nov</text><text x="121.7" y="162.0" text-anchor="middle" font-size="10.5" fill="var(--m-muted)">10</text><text x="199.3" y="162.0" text-anchor="middle" font-size="10.5" fill="var(--m-muted)">20</text><text x="277.0" y="162.0" text-anchor="middle" font-size="10.5" fill="var(--m-muted)">30</text>
+<circle cx="98.4" cy="97.1" r="4.5" fill="var(--m-bar)" stroke="var(--m-soft)" stroke-width="2"/>
+<text x="107.4" y="90.1" font-size="11.5" font-weight="600" fill="var(--m-text)">$210.00</text>
+</svg></div>
+            </div>
+            <div class="cat"><div class="cat-top"><span>Entertainment<span class="n">2</span></span><span><strong>128.00</strong> <span class="of">of 100.00</span></span></div><div class="meter"><div class="track"><div class="fill over" style="width:100%"></div></div><div class="tick" style="left:23.3%"></div></div><div class="pace bad"><b>Over budget by $28.00</b></div></div>
+            <div class="cat"><div class="cat-top"><span>Transport<span class="n">3</span></span><span><strong>30.00</strong> <span class="of">of 150.00</span></span></div><div class="meter"><div class="track"><div class="fill" style="width:20%"></div></div><div class="tick" style="left:23.3%"></div></div><div class="pace"><b>On pace</b> · $120.00 left, about $5.22/day</div></div>
+            <div class="h" style="margin-top:20px"><span>SHARE OF SPEND</span></div>
+            <div class="m-pie"><svg viewBox="0 0 100 100" role="img" aria-label="Share of spend pie chart"><path d="M50 50 L50.00 0.00 A50 50 0 1 1 13.97 84.67 Z" fill="var(--m-pie-1)"/><path d="M50 50 L13.97 84.67 A50 50 0 0 1 6.04 26.18 Z" fill="var(--m-pie-2)"/><path d="M50 50 L6.04 26.18 A50 50 0 0 1 19.35 10.49 Z" fill="var(--m-pie-3)"/><path d="M50 50 L19.35 10.49 A50 50 0 0 1 30.20 4.09 Z" fill="var(--m-pie-4)"/><path d="M50 50 L30.20 4.09 A50 50 0 0 1 38.27 1.40 Z" fill="var(--m-pie-5)"/><path d="M50 50 L38.27 1.40 A50 50 0 0 1 50.00 0.00 Z" fill="var(--m-pie-rest)"/></svg><ul><li><span class="sw" style="background:var(--m-pie-1)"></span><span class="nm">Rent</span><span class="pct">63%</span></li><li><span class="sw" style="background:var(--m-pie-2)"></span><span class="nm">Shopping</span><span class="pct">20%</span></li><li><span class="sw" style="background:var(--m-pie-3)"></span><span class="nm">Food &amp; Dining</span><span class="pct">7%</span></li><li><span class="sw" style="background:var(--m-pie-4)"></span><span class="nm">Entertainment</span><span class="pct">4%</span></li><li><span class="sw" style="background:var(--m-pie-5)"></span><span class="nm">Utilities</span><span class="pct">3%</span></li><li><span class="sw" style="background:var(--m-pie-rest)"></span><span class="nm">Everything else (3)</span><span class="pct">4%</span></li></ul></div>
+          </div>
+        </div></div>
+        <figcaption><b>Summary, current month.</b> The small upright marker on each budgeted bar shows where spending "should" be today. Food &amp; Dining is open to show its burn-up chart. Utilities, Groceries and Health &amp; Medical are further down the list.</figcaption>
+      </figure>
+    </div>
+
+    <h2 id="pace">Spending pace, explained</h2>
+    <p>Pace answers one question: <b>am I spending faster than my budget allows?</b> It only applies to the current month, and only to categories that have a budget and some spending.</p>
+    <p>First, the app works out how much of the budget you'd have used by today if you spent it evenly through the month. Today counts as a full day, so on the last day of the month the expected amount equals the whole budget.</p>
+    <p class="formula">expected by today = budget × today's day of the month ÷ days in the month</p>
+    <p>Then it picks the note under the bar. The rules are checked in order, and the <b>first</b> one that matches wins.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Check</th><th>If…</th><th>The note says</th></tr></thead>
+      <tbody>
+        <tr><td class="num">1st</td><td>You've spent more than the whole budget</td><td><span class="red">Over budget by $X</span>, in red with a warning icon</td></tr>
+        <tr><td class="num">2nd</td><td>You've spent exactly the whole budget</td><td>Budget used · $0.00 left</td></tr>
+        <tr><td class="num">3rd</td><td>Spent is within 5% of the <b>full monthly budget</b> either side of expected</td><td>On pace</td></tr>
+        <tr><td class="num">4th</td><td>Spent is above that range</td><td>$X over pace (spent − expected)</td></tr>
+        <tr><td class="num">5th</td><td>Spent is below that range</td><td>$X under pace (expected − spent)</td></tr>
+      </tbody>
+    </table></div>
+    <p>For the 3rd to 5th notes, the app adds what's left and roughly how much you can spend a day: "$Y left, about $Z/day". Z is what's left divided by the days remaining after today. On the last day it reads "$Y left today" instead.</p>
+    <div class="callout"><b>Why rent says "Budget used", not "over pace".</b> Paying the whole $2,000 on day 1 is early, not overspending. Because the "Budget used" check comes before the pace checks, that's what rent shows. For the same reason, red is used only for going over budget. Being over pace stays in the normal colour.</div>
+
+    <h3>A worked example: 7 November, day 7 of 30</h3>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Category</th><th>Budget</th><th>Expected by today</th><th>On pace if spent is</th><th>Spent</th><th>Note</th></tr></thead>
+      <tbody>
+        <tr><td>Food &amp; Dining</td><td class="num">$500</td><td class="num">$116.67</td><td class="num">$91.67 – $141.67</td><td class="num">$210.00</td><td>$93.33 over pace · $290.00 left, about $12.61/day</td></tr>
+        <tr><td>Transport</td><td class="num">$150</td><td class="num">$35.00</td><td class="num">$27.50 – $42.50</td><td class="num">$30.00</td><td>On pace · $120.00 left, about $5.22/day</td></tr>
+        <tr><td>Groceries</td><td class="num">$400</td><td class="num">$93.33</td><td class="num">$73.33 – $113.33</td><td class="num">$45.00</td><td>$48.33 under pace · $355.00 left, about $15.43/day</td></tr>
+        <tr><td>Entertainment</td><td class="num">$100</td><td class="num">$23.33</td><td class="num">—</td><td class="num">$128.00</td><td><span class="red">Over budget by $28.00</span></td></tr>
+        <tr><td>Rent</td><td class="num">$2,000</td><td class="num">$466.67</td><td class="num">—</td><td class="num">$2,000.00</td><td>Budget used · $0.00 left</td></tr>
+      </tbody>
+    </table></div>
+    <p><b>Reading the burn-up chart.</b> Tap a budgeted category to open its chart. The solid line is your running total, which steps up on each day you spent. The dashed line is the budget spread evenly over the month, and the upright line marks today. Above the dashed line means over pace. Point at or drag across the chart to see any day, and the "Daily figures" table underneath lists the same numbers.</p>
+    <p><b>Things it deliberately doesn't do.</b></p>
+    <ul class="plain">
+      <li><b>No month-end forecast.</b> Projecting from spending so far is badly wrong early in the month or after a one-off purchase. A $640 purchase on day 3 would "forecast" $6,400.</li>
+      <li><b>No settling-in period.</b> Early in the month the expected amounts are small, so a single coffee can show as over pace. This was chosen to keep things simple.</li>
+      <li><b>No budget history.</b> Only the current budget is stored, so earlier months aren't compared against a budget.</li>
+    </ul>
+
+    <h2 id="data">What's stored</h2>
+    <p>Three kinds of record, each belonging to one person's account.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Record</th><th>What it holds</th><th>Worth knowing</th></tr></thead>
+      <tbody>
+        <tr><td><b>Expense</b></td><td>Amount, currency, category, merchant, date, remarks, and the words you originally typed</td><td>Notes whether you edited Claude's suggestion. Deleting hides the record but keeps it recoverable. Imported records note where they came from, so the import is safe to run twice.</td></tr>
+        <tr><td><b>Category</b></td><td>Name, an optional monthly budget, and flags for "Other" and for retired categories</td><td>Everyone starts with 14 categories (Food &amp; Dining, Transport, Groceries, Entertainment, Utilities, Health &amp; Medical, Household, Shopping, Rent, Clothes, Education, Professional Development, Travel and Other). Names must be unique regardless of capitals, up to 50 per person.</td></tr>
+        <tr><td><b>User</b></td><td>Google account, display name, and whether the account is active</td><td>Created and given the starter categories the first time an invited person signs in.</td></tr>
+      </tbody>
+    </table></div>
+    <p>Amounts are in Singapore dollars. An expense can record another currency, but totals add the numbers as they are without converting. Each person can parse up to 100 expenses a day, which keeps model costs in check.</p>
+
+    <h2 id="ai">What Claude does, and doesn't</h2>
+    <div class="boundary">
+      <div class="yes"><h4>Claude does</h4><ul>
+        <li>Read your text and suggest the amount, merchant and date</li>
+        <li>Pick the best category from your own list, or "Other"</li>
+      </ul></div>
+      <div><h4>The app does, never Claude</h4><ul>
+        <li>Check what Claude returned</li>
+        <li>Fetch your categories and match the chosen one</li>
+        <li>Save, find and edit records</li>
+        <li>Manage categories and budgets</li>
+        <li>Sign-in, the invite list and usage limits</li>
+      </ul></div>
+    </div>
+    <p>Keeping this line clear keeps the AI part small, cheap and easy to check, and stops the model creeping into jobs that ordinary code does better.</p>
+
+    <h2 id="open">Open questions and not yet in scope</h2>
+    <h3>Still to decide</h3>
+    <ul class="plain">
+      <li><b>Several items at once.</b> Should "coffee $4 and lunch $12" become one record or two?</li>
+      <li><b>Uncertain fields.</b> Should the review card flag fields Claude had to guess, such as a date you didn't mention?</li>
+      <li><b>Storing the original words.</b> Keep them in the same record, as now, or in a separate audit table?</li>
+      <li><b>Which fields were edited.</b> Record which fields you changed, not just whether you changed any.</li>
+    </ul>
+    <h3>Described but not built yet</h3>
+    <ul class="plain">
+      <li><b>Merchant suggestions</b> from your past entries. The merchant field is plain text for now.</li>
+      <li><b>A sub-label for "Other"</b>, such as "gift" or "charity". The database has room for it, but the review card doesn't ask for it yet.</li>
+    </ul>
+    <h3>Not in this version</h3>
+    <ul class="plain">
+      <li>Budget alerts, budget history and rollover</li>
+      <li>Searching and exporting</li>
+      <li>Sharing between accounts</li>
+      <li>Receipt photos and bank imports</li>
+      <li>Logging while offline (the app keeps what you've typed until you're back online)</li>
+      <li>Currency conversion</li>
+      <li>Deleting or retiring categories in the app</li>
+      <li>Managing invitations in the app</li>
+    </ul>
+
+    <!-- ========== PART 2 ========== -->
+    <p class="part-title">Part 2 · How it's built (from the Architecture)</p>
+
+    <h2 id="system">The system</h2>
+    <p>One web app, hosted on Vercel in Singapore, talks to three outside services. Your phone runs it like an app from the home screen.</p>
+    <div class="diagram" role="img" aria-label="System diagram: the phone app connects over HTTPS to the Hercules app on Vercel in Singapore, which connects to Google sign-in, the Anthropic API running Claude Haiku 5.5 for parsing only, and a Neon Postgres database in Singapore. A separate command-line tool runs locally.">
+      <svg viewBox="0 0 760 330">
+        <defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="var(--ink-2)"/></marker></defs>
+        <rect x="20" y="110" width="160" height="96" rx="14" fill="var(--paper)" stroke="var(--ink)" stroke-width="1.5"/>
+        <text x="100" y="146" text-anchor="middle" font-family="var(--font-display)" font-weight="700" font-size="16" fill="var(--ink)">Your phone</text>
+        <text x="100" y="168" text-anchor="middle" font-size="13" fill="var(--ink-2)">Home-screen web app</text>
+        <text x="100" y="186" text-anchor="middle" font-size="13" fill="var(--ink-2)">4 tabs · light/dark</text>
+        <line x1="182" y1="158" x2="266" y2="158" stroke="var(--ink-2)" stroke-width="1.5" marker-end="url(#arr)"/>
+        <text x="224" y="150" text-anchor="middle" font-size="12" fill="var(--ink-2)" font-family="var(--font-mono)">HTTPS</text>
+        <rect x="268" y="74" width="214" height="168" rx="14" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="1.5"/>
+        <text x="375" y="106" text-anchor="middle" font-family="var(--font-display)" font-weight="700" font-size="16" fill="var(--ink)">Hercules app</text>
+        <text x="375" y="126" text-anchor="middle" font-size="13" fill="var(--ink-2)">Next.js on Vercel · Singapore</text>
+        <text x="290" y="156" font-size="13" fill="var(--ink)">• Screens and API</text>
+        <text x="290" y="178" font-size="13" fill="var(--ink)">• Invite list and limits</text>
+        <text x="290" y="200" font-size="13" fill="var(--ink)">• Totals, budgets, pace</text>
+        <text x="290" y="222" font-size="13" fill="var(--ink)">• Keeps data in memory</text>
+        <rect x="560" y="20" width="182" height="74" rx="12" fill="var(--paper)" stroke="var(--rule)" stroke-width="1.5"/>
+        <text x="651" y="50" text-anchor="middle" font-weight="700" font-size="14.5" fill="var(--ink)">Google sign-in</text>
+        <text x="651" y="70" text-anchor="middle" font-size="12.5" fill="var(--ink-2)">Who you are</text>
+        <rect x="560" y="121" width="182" height="74" rx="12" fill="var(--paper)" stroke="var(--rule)" stroke-width="1.5"/>
+        <text x="651" y="151" text-anchor="middle" font-weight="700" font-size="14.5" fill="var(--ink)">Claude Haiku 5.5</text>
+        <text x="651" y="171" text-anchor="middle" font-size="12.5" fill="var(--ink-2)">Anthropic API · parsing only</text>
+        <rect x="560" y="222" width="182" height="74" rx="12" fill="var(--paper)" stroke="var(--rule)" stroke-width="1.5"/>
+        <text x="651" y="252" text-anchor="middle" font-weight="700" font-size="14.5" fill="var(--ink)">Neon database</text>
+        <text x="651" y="272" text-anchor="middle" font-size="12.5" fill="var(--ink-2)">Postgres · Singapore</text>
+        <line x1="484" y1="110" x2="556" y2="62" stroke="var(--ink-2)" stroke-width="1.5" marker-end="url(#arr)"/>
+        <line x1="484" y1="158" x2="556" y2="158" stroke="var(--ink-2)" stroke-width="1.5" marker-end="url(#arr)"/>
+        <line x1="484" y1="206" x2="556" y2="254" stroke="var(--ink-2)" stroke-width="1.5" marker-end="url(#arr)"/>
+        <text x="20" y="300" font-size="12.5" fill="var(--ink-2)" font-family="var(--font-mono)">Separate, on a home computer only: command-line tool → Phi-4 (local model) → SQLite</text>
+      </svg>
+    </div>
+
+    <h2 id="decisions">Key decisions</h2>
+    <p>Each decision keeps the number it has in the Architecture document. Numbers are in the order decisions were made, so they don't run in sequence within each group.</p>
+
+    <h3>Who can use it</h3>
+    <div class="decisions">
+      <div class="decision"><span class="n">#1</span><div><h4>Family and close friends only</h4><p>It meets a personal and family need. It isn't a public product.</p></div></div>
+      <div class="decision"><span class="n">#2</span><div><h4>An invite list of email addresses</h4><p>Anyone can try to sign in with Google, but only invited addresses get in. The list is re-checked on every request, so removing someone takes effect at once.</p></div></div>
+      <div class="decision"><span class="n">#3</span><div><h4>Google sign-in only</h4><p>Free, familiar, and works on iPhone and Android. Sign in with Apple would need a US$99-a-year developer membership.</p></div></div>
+    </div>
+
+    <h3>Claude and privacy</h3>
+    <div class="decisions">
+      <div class="decision"><span class="n">#4</span><div><h4>Expense text is sent to a cloud AI provider</h4><p>Only to a provider that doesn't train on API data. This allows a hosted app with no computer running at home, a trade-off against the earlier "everything local" approach.</p></div></div>
+      <div class="decision"><span class="n">#5</span><div><h4>Claude Haiku 5.5, with a fixed answer format</h4><p>Fast and cheap, and simple extraction is well within its abilities. The fixed format means replies always come back in the expected shape. Gemini's free tier was turned down because its terms allow free-tier inputs to be used to improve Google's products.</p></div></div>
+      <div class="decision"><span class="n">#6</span><div><h4>Cloud model only for the web app</h4><p>A hosted app can't reach a model running on a home computer.</p></div></div>
+      <div class="decision"><span class="n">#7</span><div><h4>Two cost guards</h4><p>A US$5 monthly spend limit on the Anthropic account, and 100 parses per person per day. Normal use costs cents a month; the limits protect against bugs or misuse.</p></div></div>
+    </div>
+
+    <h3>Hosting and data</h3>
+    <div class="decisions">
+      <div class="decision"><span class="n">#8</span><div><h4>Hosted on Vercel's free Hobby plan</h4><p>A natural fit for this kind of app. The plan's terms were checked and suit a private, non-commercial family app.</p></div></div>
+      <div class="decision"><span class="n">#9</span><div><h4>A free vercel.app web address, for now</h4><p>No cost, and Google sign-in works with it. A custom domain can be added later without code changes.</p></div></div>
+      <div class="decision"><span class="n">#10</span><div><h4>Neon for the database</h4><p>Standard Postgres built for this kind of hosting, with a free tier. A simple file database can't persist on Vercel.</p></div></div>
+      <div class="decision"><span class="n">#11</span><div><h4>A one-off import of the old data</h4><p>229 records from July 2026 onwards were brought across, so the full history is in one place.</p></div></div>
+      <div class="decision"><span class="n">#12</span><div><h4>The old command-line tool stays separate</h4><p>Kept as an offline tool for experiments. Anything logged there after the import isn't synced.</p></div></div>
+      <div class="decision"><span class="n">#22</span><div><h4>The server runs in Singapore</h4><p>Next to the database and the people using it. The default US location sent every request across the Pacific and back. Unauthenticated test requests went from 1.1–1.5 seconds to 0.06–0.88 seconds after the move.</p></div></div>
+    </div>
+
+    <h3>How the app behaves</h3>
+    <div class="decisions">
+      <div class="decision"><span class="n">#13</span><div><h4>One language, front to back</h4><p>TypeScript with Next.js for both the screens and the server. The parsing prompt was carried over from the earlier Python version.</p></div></div>
+      <div class="decision"><span class="n">#14</span><div><h4>Installs from the browser</h4><p>Add it to the home screen and it opens full-screen like an app, with no App Store needed.</p></div></div>
+      <div class="decision"><span class="n">#15</span><div><h4>No offline logging</h4><p>Parsing needs the internet. Offline, the app says so and keeps what you've typed.</p></div></div>
+      <div class="decision"><span class="n">#23</span><div><h4>Data kept in memory for instant tabs</h4><p>Screens show what was last loaded straight away and refresh quietly in the background. Any save, edit or delete reloads everything. Nothing is stored on the phone, so it's gone when the app closes.</p></div></div>
+      <div class="decision"><span class="n">#24</span><div><h4>Moderately wider on bigger screens</h4><p>Phone layout up to 767 pixels wide. From 768 pixels the app widens to 820 pixels, with two columns on Log and Summary and edit forms as centred dialogs. The bottom tab bar stays at every size.</p></div></div>
+      <div class="decision"><span class="n">#25</span><div><h4>Light and dark mode</h4><p>Follows the device until you tap the toggle, then remembers your choice on that device. It's a display preference, so it isn't stored in your account.</p></div></div>
+    </div>
+
+    <h3>Scope</h3>
+    <div class="decisions">
+      <div class="decision"><span class="n">#16</span><div><h4>Started with four screens</h4><p>Sign-in, Log, History and Summary, to get a working app into use quickly. Categories came later (#26).</p></div></div>
+      <div class="decision old"><span class="n">#17</span><div><h4>Categories edited directly in the database</h4><p>Replaced by #26. The database was designed per person from the start, so adding a screen needed no restructuring.</p></div></div>
+      <div class="decision"><span class="n">#18</span><div><h4>Edit and delete by reusing the review card</h4><p>No extra screen needed. Deleted records stay recoverable.</p></div></div>
+      <div class="decision"><span class="n">#19</span><div><h4>Singapore dollars only</h4><p>Nearly every expense is in SGD. The currency is still recorded, but totals don't convert.</p></div></div>
+      <div class="decision"><span class="n">#26</span><div><h4>A Categories tab to add and rename</h4><p>Expenses link to categories by ID, so a rename carries through the whole history, and Claude reads the up-to-date list. Retiring categories is left for later.</p></div></div>
+      <div class="decision"><span class="n">#27</span><div><h4>An optional monthly budget per category</h4><p>The simplest start on budgets. Only the current amount is kept; a fuller budget record can replace it if history is ever needed.</p></div></div>
+      <div class="decision"><span class="n">#28</span><div><h4>Spending pace on Summary</h4><p>Answers "am I spending too fast?" without a new screen. Worked out on your phone from data already loaded, so no server or database changes were needed. See <a href="#pace">Spending pace</a>.</p></div></div>
+    </div>
+
+    <h3>How the project is run</h3>
+    <div class="decisions">
+      <div class="decision"><span class="n">#20</span><div><h4>Documents are updated before code</h4><p>Keeps the documents and the app in step.</p></div></div>
+      <div class="decision"><span class="n">#21</span><div><h4>Decisions made by Lionel Lam</h4><p>James Wong may review them later.</p></div></div>
+    </div>
+
+    <h2 id="costs">Costs and limits</h2>
+    <div class="costs">
+      <div class="cost"><div class="v">US$0</div><div class="k">Vercel Hobby plan, no payment method on file</div></div>
+      <div class="cost"><div class="v">US$0</div><div class="k">Neon database, free plan</div></div>
+      <div class="cost"><div class="v">≈ US$0.10</div><div class="k">Expected Claude cost a month, capped at US$5</div></div>
+      <div class="cost"><div class="v">100</div><div class="k">Parses per person per day</div></div>
+    </div>
+    <p>One cost of the free database: it sleeps after a few idle minutes, so the first open after a quiet spell is a little slower.</p>
+
+    <h2 id="next">What's next</h2>
+    <ul class="plain">
+      <li><b>Budgets, phase 3:</b> budget history, alerts and fuller tracking.</li>
+      <li><b>Polish, phase 4:</b> managing invitations in the app, retiring categories, and exporting expenses.</li>
+      <li><b>Open questions:</b> settle the four questions under <a href="#open">Still to decide</a>.</li>
+      <li><b>Review:</b> James Wong may review the architecture decisions.</li>
+    </ul>
+
+    <footer>
+      Source documents: <span class="mono">Project Hercules - Specification.md</span> (v0.25) and <span class="mono">Project Hercules - Architecture.md</span> (v0.6) in the hercules repository. Mockups use sample data, not anyone's real expenses.
+    </footer>
+  </main>
+</div>
+
+</body>
+</html>
