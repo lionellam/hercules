@@ -1,7 +1,7 @@
 # Project Hercules — Architecture: Web App v1
 
 ```
-Version 0.4 · Draft
+Version 0.5 · Draft
 Last Reviewed: 2 November 2026
 Produced with AI Assistance (Claude Code)
 ```
@@ -14,6 +14,7 @@ Produced with AI Assistance (Claude Code)
 | 0.2 | 2026-11-02 | Lionel Lam | Performance decisions: server moved to Vercel's Singapore region; screens keep loaded data in memory and refresh it in the background |
 | 0.3 | 2026-11-02 | Lionel Lam | Interface decisions: moderately wider layout for tablets and computers; light and dark mode toggle |
 | 0.4 | 2026-11-02 | Lionel Lam | Category management and monthly budgets brought forward; decision 17 superseded |
+| 0.5 | 2026-11-07 | Lionel Lam | Spending pace against budget on Summary (decision 28) |
 
 ---
 
@@ -103,6 +104,7 @@ The language model is called only to parse a single expense into structured fiel
 | 19 | **SGD only** | Nearly all expenses are in SGD; currency is still stored per expense, but summaries do not convert |
 | 26 | **Categories screen** to add and rename per-user categories, as a fourth tab. Retiring and deleting are left out for now; each new user is still seeded with the 14 defaults | Expenses link to categories by ID, so renames carry through history, and the parser reads the live list. Retiring needs more work: an older expense in a retired category must still open and save correctly in the edit sheet |
 | 27 | **Optional monthly budget per category**, stored as `categories.monthly_budget` rather than a separate table; Summary shows "x of budget" and a bar of the budget used for the current month only | The simplest start on Phase 3 budgets. Only the current amount is kept, so past months are not compared against budgets. A separate table can replace the column if budget history is needed |
+| 28 | **Spending pace on Summary**, current month only: an expected-by-today marker and note on each budgeted bar, and a burn-up chart on tap, worked out in the app from the month's expense list and categories | Answers "am I spending faster than my budget allows?" without a new screen. Linear pro-rata is simple and predictable; red stays reserved for over budget, since spending early (such as rent on day 1) isn't overspending. No month-end forecast, as it is badly wrong early in the month and for one-off spends. No server or database changes |
 
 ### 3.6 Process
 

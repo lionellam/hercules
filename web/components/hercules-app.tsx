@@ -110,7 +110,7 @@ export default function HerculesApp({ email }: { email: string }) {
     <main className="app">
       {tab === "log" && <LogScreen categories={categories} online={online} cache={cache} onSaved={cache.reloadAll} />}
       {tab === "history" && <HistoryScreen categories={categories} online={online} cache={cache} onChanged={cache.reloadAll} />}
-      {tab === "summary" && <SummaryScreen email={email} cache={cache} />}
+      {tab === "summary" && <SummaryScreen email={email} cache={cache} categories={categories} />}
       {tab === "categories" && <CategoriesScreen categories={categories} online={online} onChanged={cache.reloadAll} />}
       <nav className="tabs">
         <TabButton id="log" tab={tab} setTab={setTab} label="Log" path="M12 5v14M5 12h14" />
@@ -431,20 +431,213 @@ function SpendPie({ rows }: { rows: SummaryRow[] }) {
   );
 }
 
-function SummaryScreen({ email, cache }: { email: string; cache: ApiCache }) {
+const daysInMonth = (key: string) => {
+  const [y, m] = key.split("-").map(Number);
+  return new Date(y, m, 0).getDate();
+};
+
+type PaceRow = SummaryRow & { id: number; daily: number[] };
+
+// Current month rows built from the expense list, so totals, bars and pace always agree.
+// daily[d] holds each day's spend in cents; budgeted categories with no spending yet are included.
+function paceRows(expenses: Expense[], categories: Category[], days: number): PaceRow[] {
+  const byId = new Map<number, PaceRow>();
+  const row = (id: number, name: string) => {
+    let r = byId.get(id);
+    if (!r) {
+      r = { id, category: name, total: 0, count: 0, budget: null, daily: Array(days + 1).fill(0) };
+      byId.set(id, r);
+    }
+    return r;
+  };
+  for (const e of expenses) {
+    const r = row(e.category_id, e.category);
+    r.daily[Number(e.date.slice(8))] += Math.round(e.amount * 100);
+    r.count += 1;
+  }
+  for (const c of categories) if (c.monthly_budget != null) row(c.id, c.name).budget = c.monthly_budget;
+  for (const r of byId.values()) r.total = r.daily.reduce((sum, v) => sum + v, 0) / 100;
+  return [...byId.values()].sort((a, b) => b.total - a.total);
+}
+
+const expectedBy = (budget: number, day: number, days: number) => (budget * day) / days;
+const cents = (n: number) => Math.round(n * 100);
+
+function AlertIcon() {
+  return (
+    <svg width="13" height="13" viewBox="0 0 16 16" aria-hidden="true">
+      <circle cx="8" cy="8" r="8" fill="currentColor" />
+      <path d="M8 4v5" stroke="var(--bg)" strokeWidth="2" strokeLinecap="round" />
+      <circle cx="8" cy="11.8" r="1.1" fill="var(--bg)" />
+    </svg>
+  );
+}
+
+// "On pace" allows 5% of the budget either side of the amount expected by today
+function PaceNote({ total, budget, day, days }: { total: number; budget: number; day: number; days: number }) {
+  const left = budget - total;
+  const leftText = day < days ? `$${fmt(left)} left, about $${fmt(left / (days - day))}/day` : `$${fmt(left)} left today`;
+  if (cents(total) > cents(budget)) {
+    return (
+      <p className="pace bad">
+        <AlertIcon />
+        <b>Over budget by ${fmt(total - budget)}</b>
+      </p>
+    );
+  }
+  if (cents(total) === cents(budget)) return <p className="pace"><span><b>Budget used</b> · $0.00 left</span></p>;
+  const diff = total - expectedBy(budget, day, days);
+  if (Math.abs(diff) <= 0.05 * budget) return <p className="pace"><span><b>On pace</b> · {leftText}</span></p>;
+  return (
+    <p className="pace">
+      <span>
+        <b>${fmt(Math.abs(diff))} {diff > 0 ? "over" : "under"} pace</b> · {leftText}
+      </span>
+    </p>
+  );
+}
+
+const shortDay = (month: string, day: number) =>
+  new Date(`${month}-${String(day).padStart(2, "0")}T00:00:00`).toLocaleDateString("en-SG", { weekday: "short", day: "numeric", month: "short" });
+
+// Running total against the budget spread evenly over the month
+function BurnUp({ row, budget, month, day, days }: { row: PaceRow; budget: number; month: string; day: number; days: number }) {
+  const [hover, setHover] = useState<number | null>(null);
+  const W = 335, H = 172, m = { l: 44, r: 58, t: 18, b: 26 };
+  const pw = W - m.l - m.r, ph = H - m.t - m.b;
+  const cum = row.daily.reduce<number[]>((acc, v, i) => [...acc, (i ? acc[i - 1] : 0) + v], []).map((v) => v / 100);
+  const spent = cum[day];
+  const over = cents(row.total) > cents(budget);
+  const top = Math.max(budget, row.total) * 1.1;
+  const x = (d: number) => m.l + (d / days) * pw;
+  const y = (v: number) => m.t + ph - (v / top) * ph;
+  const ink = over ? "var(--bad)" : "var(--bar)";
+  let step = `M${x(0)} ${y(0)}`;
+  for (let d = 1; d <= day; d++) step += ` L${x(d)} ${y(cum[d - 1])} L${x(d)} ${y(cum[d])}`;
+  const whole = (n: number) => fmt(n).replace(/\.00$/, "");
+  const label = `${row.category}: $${fmt(spent)} spent by day ${day} of ${days}, $${fmt(expectedBy(budget, day, days))} expected by today against a $${fmt(budget)} monthly budget.`;
+
+  function pick(clientX: number, el: Element) {
+    const r = el.getBoundingClientRect();
+    const px = ((clientX - r.left) / r.width) * W;
+    setHover(Math.max(1, Math.min(day, Math.round(((px - m.l) / pw) * days))));
+  }
+
+  function onKey(e: React.KeyboardEvent) {
+    if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
+    e.preventDefault();
+    const from = hover ?? day;
+    setHover(Math.max(1, Math.min(day, from + (e.key === "ArrowRight" ? 1 : -1))));
+  }
+
+  const hv = hover == null ? null : { spent: cum[hover], expected: expectedBy(budget, hover, days) };
+  const hoverDiff = hv ? hv.spent - hv.expected : 0;
+  const spendDays = row.daily.map((v, d) => (v && d <= day ? d : 0)).filter(Boolean);
+
+  return (
+    <>
+      <div className="chart">
+        <svg
+          viewBox={`0 0 ${W} ${H}`}
+          role="img"
+          aria-label={label}
+          tabIndex={0}
+          onPointerMove={(e) => pick(e.clientX, e.currentTarget)}
+          onPointerDown={(e) => pick(e.clientX, e.currentTarget)}
+          onPointerLeave={() => setHover(null)}
+          onBlur={() => setHover(null)}
+          onKeyDown={onKey}
+        >
+          <line x1={m.l} x2={x(days)} y1={y(0)} y2={y(0)} stroke="var(--muted)" strokeOpacity=".5" />
+          <line x1={m.l} x2={x(days)} y1={y(budget)} y2={y(budget)} stroke="var(--muted)" strokeOpacity=".35" />
+          <text x={x(days)} y={y(budget) - 5} textAnchor="end" fontSize="10.5" fill="var(--muted)">Budget {whole(budget)}</text>
+          <line x1={x(0)} y1={y(0)} x2={x(days)} y2={y(budget)} stroke="var(--muted)" strokeWidth="1.5" strokeDasharray="4 3" />
+          <line x1={x(day)} x2={x(day)} y1={m.t - 4} y2={y(0)} stroke="var(--muted)" strokeOpacity=".7" />
+          <text x={x(day)} y={m.t - 7} textAnchor="middle" fontSize="10.5" fill="var(--muted)">Today</text>
+          <path d={`${step} L${x(day)} ${y(0)} Z`} fill={ink} fillOpacity=".09" />
+          <path d={step} fill="none" stroke={ink} strokeWidth="2" strokeLinejoin="round" />
+          <text x={m.l - 7} y={y(0) + 3.5} textAnchor="end" fontSize="10.5" fill="var(--muted)">0</text>
+          <text x={m.l - 7} y={y(budget) + 3.5} textAnchor="end" fontSize="10.5" fill="var(--muted)">{whole(budget)}</text>
+          {[1, 10, 20, days].map((d) => (
+            <text key={d} x={x(d)} y={y(0) + 16} textAnchor="middle" fontSize="10.5" fill="var(--muted)">
+              {d === 1 ? shortDay(month, 1).replace(/^\w+,?\s*/, "") : d}
+            </text>
+          ))}
+          {hover != null && hv && (
+            <>
+              <line x1={x(hover)} x2={x(hover)} y1={m.t} y2={y(0)} stroke="var(--text)" strokeOpacity=".55" />
+              <circle cx={x(hover)} cy={y(hv.expected)} r="4" fill="var(--muted)" stroke="var(--surface)" strokeWidth="2" />
+              <circle cx={x(hover)} cy={y(hv.spent)} r="4" fill={ink} stroke="var(--surface)" strokeWidth="2" />
+            </>
+          )}
+          <circle cx={x(day)} cy={y(spent)} r="4.5" fill={ink} stroke="var(--surface)" strokeWidth="2" />
+          <text x={x(day) + 9} y={y(spent) + (y(spent) < m.t + 12 ? 12 : -7)} fontSize="11.5" fontWeight="600" fill="var(--text)">
+            ${fmt(spent)}
+          </text>
+        </svg>
+        {hover != null && hv && (
+          // Sits in the empty side of the plot so it doesn't cover the lines it describes
+          <div className="tip" style={x(hover) > W / 2 ? { top: 22, left: "15%" } : { bottom: 34, right: "18%" }}>
+            <div className="tip-day">{shortDay(month, hover)}</div>
+            <div><span className="tip-k">Spent </span><b>${fmt(hv.spent)}</b></div>
+            <div><span className="tip-k">Expected </span><b>${fmt(hv.expected)}</b></div>
+            <div className="tip-k">
+              {Math.abs(hoverDiff) <= 0.05 * budget ? "On pace" : `$${fmt(Math.abs(hoverDiff))} ${hoverDiff > 0 ? "over" : "under"} pace`}
+            </div>
+          </div>
+        )}
+      </div>
+      <details className="daily">
+        <summary>Daily figures</summary>
+        {spendDays.length ? (
+          <table>
+            <thead>
+              <tr><th>Day</th><th>Spent</th><th>Running total</th><th>Expected</th></tr>
+            </thead>
+            <tbody>
+              {spendDays.map((d) => (
+                <tr key={d}>
+                  <td>{shortDay(month, d)}</td>
+                  <td>{fmt(row.daily[d] / 100)}</td>
+                  <td>{fmt(cum[d])}</td>
+                  <td>{fmt(expectedBy(budget, d, days))}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        ) : (
+          <p>Nothing spent yet this month.</p>
+        )}
+      </details>
+    </>
+  );
+}
+
+function SummaryScreen({ email, cache, categories }: { email: string; cache: ApiCache; categories: Category[] }) {
   const [offset, setOffset] = useState(0);
+  const [open, setOpen] = useState<number | null>(null);
   const month = monthKey(offset);
   const prevMonth = monthKey(offset - 1);
-  const rows = useCached<SummaryRow[]>(cache, summaryUrl(month));
+  const isCurrent = offset === 0;
+  const today = localToday();
+  const day = Number(today.slice(8));
+  const days = daysInMonth(monthKey(0));
+  const summaryRows = useCached<SummaryRow[]>(cache, summaryUrl(month));
+  const currentExpenses = useCached<Expense[]>(cache, expensesUrl(monthKey(0)));
+  const rows: (SummaryRow | PaceRow)[] | undefined = isCurrent
+    ? currentExpenses && paceRows(currentExpenses, categories, days)
+    : summaryRows;
   const prev = useCached<SummaryRow[]>(cache, summaryUrl(prevMonth));
+  const spentRows = rows?.filter((r) => r.total > 0);
 
   const total = rows?.reduce((s, r) => s + r.total, 0) ?? 0;
   const prevTotal = prev?.reduce((s, r) => s + r.total, 0) ?? 0;
-  const max = rows?.[0]?.total || 1;
+  const max = Math.max(...(rows ?? []).map((r) => r.total), 0) || 1;
   const diff = total - prevTotal;
 
   function showMonth(to: number) {
     setOffset(to);
+    setOpen(null);
     // Otherwise the other month opens partway down
     window.scrollTo({ top: 0 });
   }
@@ -462,6 +655,11 @@ function SummaryScreen({ email, cache }: { email: string; cache: ApiCache }) {
       <div className="total">
         <div className="sub">{offset === 0 ? "Spent so far this month" : `Spent in ${monthLabel(month)}`}</div>
         <div className="big">${fmt(total)}</div>
+        {isCurrent && (
+          <div className="dayline">
+            <b>Day {day} of {days}</b> · {shortDay(monthKey(0), day)}
+          </div>
+        )}
         {!!prevTotal && (
           <div className="delta">
             {diff >= 0 ? "+" : "−"}${fmt(Math.abs(diff))} vs {monthLabel(prevMonth, { month: "long" })}
@@ -471,31 +669,54 @@ function SummaryScreen({ email, cache }: { email: string; cache: ApiCache }) {
       <div className="columns">
         <div>
           {rows?.map((r) => {
-            const budget = offset === 0 ? r.budget : null;
+            const budget = isCurrent ? (r.budget ?? null) : null;
+            const pace = budget != null && "daily" in r ? r : null;
+            const isOpen = pace != null && open === pace.id;
             // Against the budget where there is one; otherwise relative to the month's largest category
             const share = Math.min(r.total / (budget ?? max), 1);
-            return (
-              <div className="cat" key={r.category}>
+            const body = (
+              <>
                 <div className="cat-top">
                   <span>
                     {r.category}
                     <span className="n">{r.count}</span>
                   </span>
-                  <strong>
-                    {fmt(r.total)}
-                    {budget != null && <span className="of"> of {fmt(budget)}</span>}
-                  </strong>
+                  <span className="cat-amt">
+                    <strong>{fmt(r.total)}</strong>
+                    {budget != null && <span className="of">of {fmt(budget)}</span>}
+                    {pace && (
+                      <svg className="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                        <path d={isOpen ? "M6 15l6-6 6 6" : "M6 9l6 6 6-6"} />
+                      </svg>
+                    )}
+                  </span>
                 </div>
-                <div className="track">
-                  <div className={budget != null && r.total > budget ? "fill over" : "fill"} style={{ width: `${share * 100}%` }} />
+                <div className="meter">
+                  <div className="track">
+                    <div className={budget != null && cents(r.total) > cents(budget) ? "fill over" : "fill"} style={{ width: `${share * 100}%` }} />
+                  </div>
+                  {pace && <div className="tick" style={{ left: `${Math.min(day / days, 1) * 100}%` }} />}
                 </div>
+                {pace && budget != null && <PaceNote total={r.total} budget={budget} day={day} days={days} />}
+              </>
+            );
+            return pace && budget != null ? (
+              <div className={isOpen ? "cat open" : "cat"} key={pace.id}>
+                <button className="cat-toggle" aria-expanded={isOpen} onClick={() => setOpen(isOpen ? null : pace.id)}>
+                  {body}
+                </button>
+                {isOpen && <BurnUp row={pace} budget={budget} month={monthKey(0)} day={day} days={days} />}
+              </div>
+            ) : (
+              <div className="cat" key={"id" in r ? r.id : r.category}>
+                {body}
               </div>
             );
           })}
         </div>
-        {rows && rows.length > 0 && (
+        {spentRows && spentRows.length > 0 && (
           <div>
-            <SpendPie rows={rows} />
+            <SpendPie rows={spentRows} />
           </div>
         )}
       </div>

@@ -4,7 +4,7 @@
 Maintained by: Lionel Lam Song Poh, James Wong
 Purpose: Record of work done, decisions made, challenges encountered, and assumptions held —
 to serve as a lessons learned reference for current and future contributors.
-Last updated: 2 November 2026
+Last updated: 7 November 2026
 ```
 
 ---
@@ -589,3 +589,25 @@ Last updated: 2 November 2026
 - The "Categories" heading, its note, the theme toggle and the Add category button now stay fixed at the top while the list scrolls, so all four screens work the same way.
 - Updated the Specification to v0.20 (Section 5.2).
 - Tested locally on a short phone-sized screen: the section stays in place while scrolling, Add category and the category rows open their sheets above it, and every tab still has one toggle. Type-check, lint and a production build all passed.
+
+---
+
+## 07 November 2026 — Spending Pace Against Budget on Summary
+
+### What Was Done
+- Explored ways to show spending pace against budget, like a burn-up chart. A planning subagent compared three options, and mockups of each were drawn in `design/summary-pace-mockups.html`. The owner chose Option A and asked to drop the "too early to tell" step for the first days of the month, to keep things simpler.
+- For the current month on Summary, each budgeted bar now has a marker at the amount expected by today (budget × day of month ÷ days in month, counting today), and a note beneath it: "Over budget by $X" (red, with an icon), "Budget used", "On pace" (within 5% of the budget either side of the expected amount) or "$X over/under pace", then the amount left and about how much a day remains.
+- Tapping a budgeted category opens a burn-up chart: its running total, the budget spread evenly over the month (dashed), and today. Pointing at or dragging across the chart, or using the arrow keys, shows any day's spend and expected amount. A "Daily figures" table lists the same numbers. One chart opens at a time.
+- Budgeted categories with no spending yet now appear at $0, and "Day 7 of 30" is shown under the month's total. The previous month is unchanged.
+- The current month's figures are now worked out in the app from the month's expense list and categories, so the totals, bars and pace always agree. No server or database changes.
+- Updated the Specification to v0.21 (process flow step 8) and the Architecture document to v0.5 (decision 28).
+- Tested locally with sample budgets and expenses for 1–7 November: Budget used, Over budget, On pace, under pace and over pace wording, the expected-by-today markers, opening and closing charts, the tooltip by pointer and keyboard, the daily figures, the October tab without pace, and tablet width. Test data removed afterwards. Type-check, lint and a production build all passed.
+
+### Decisions Made
+- **No "too early to tell" period** — chosen by the owner for simplicity. In the first days of the month, a single expense can therefore show as over pace.
+- **Red only for over budget** — spending early, such as rent on day 1, is not overspending, so over pace stays in the normal colour.
+- **No month-end forecast** — it would be badly wrong early in the month and for one-off spends.
+- **Charts only for budgeted categories** — categories without a budget have nothing to pace against.
+
+### Assumptions
+- Budget changes made on another device appear after the app reloads its data, for example after saving an expense or reopening the app.
