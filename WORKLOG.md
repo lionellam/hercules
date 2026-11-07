@@ -623,3 +623,10 @@ Last updated: 7 November 2026
 
 ### Challenges
 - During testing, the owner was also setting budgets in the same local app. A test change briefly overwrote and then cleared their local Groceries budget ($300); it was restored straight away. Live data was not affected.
+
+---
+
+## 07 November 2026 — Spending Pace Rules Documented
+
+### What Was Done
+- Added Section 4.1 to the Specification (now v0.23): the spending pace rules as an ordered table, showing which note wins, how each amount is calculated, the "about $Z/day" figure, the last day of the month, and that the on-pace band is 5% of the full monthly budget. It includes a worked example for 7 November. Process flow step 8 now points to it. Documentation only; the app is unchanged.

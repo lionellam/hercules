@@ -1,7 +1,7 @@
 # Project Hercules — Specification Sheet: "Log an Expense" Flow
 
 ```
-Version 0.22 · Draft 
+Version 0.23 · Draft 
 Last Reviewed: 2 November 2026
 Produced with AI Assistance (Claude Code)
 ```
@@ -32,6 +32,7 @@ Produced with AI Assistance (Claude Code)
 | 0.20 | 2026-11-02 | Lionel Lam | Categories screen keeps its heading and add button fixed at the top while the list scrolls |
 | 0.21 | 2026-11-07 | Lionel Lam | Summary shows spending pace against budget for the current month: an expected-by-today marker and note on each budgeted category, and a burn-up chart on tap |
 | 0.22 | 2026-11-07 | Lionel Lam | Summary no longer lists budgeted categories with no spending yet |
+| 0.23 | 2026-11-07 | Lionel Lam | Added Section 4.1, the spending pace rules with a worked example |
 
 ---
 
@@ -76,7 +77,41 @@ This spec exists to align the team before the process flow diagram (UPN) and fea
 5. **Confirmation screen is presented** — parsed fields shown as editable form elements (not a static summary).
 6. **User reviews and optionally edits fields directly** — this is the human-in-the-loop step. No re-prompting of the model occurs; corrections are direct field edits.
 7. **User confirms/saves** — the system writes the structured record, the original raw text, and a flag indicating whether any edit occurred.
-8. **Record is available for viewing** — in History and Summary, and in the "Today" list on the Log screen for expenses dated today. A saved record can be reopened from History or from the Today list in the same editable card to be edited or deleted (soft delete, with confirmation). Below the Today list, the Log screen shows today's total spend broken down by category (amounts are added without currency conversion, as in Summary). For the current month, a category with a budget shows its spend as "x of budget", with its bar showing the share of the budget used (full at or above 100%, and red once spend is over the budget). Each budgeted bar also has a marker at the amount expected by today (budget × day of month ÷ days in month, counting today), and a note: "Over budget by $X" (red), "Budget used", "On pace" (within 5% of the budget either side of the expected amount), or "$X over/under pace", followed by the amount left and about how much a day remains. Tapping a budgeted category opens a burn-up chart of its running total against the budget spread evenly over the month, with a "Daily figures" table. Categories with no spending in the month are not listed, whether or not they have a budget. The previous month is shown without pace. Other bars show the category's spend relative to the month's largest category. Below its category list, Summary shows a pie chart of the month's spend by category for any month with expenses: up to six slices, with any beyond the largest five grouped as "Everything else". Screens show the last-loaded data straight away and refresh it in the background; saving, editing or deleting a record reloads it. Export is deferred beyond the first version.
+8. **Record is available for viewing** — in History and Summary, and in the "Today" list on the Log screen for expenses dated today. A saved record can be reopened from History or from the Today list in the same editable card to be edited or deleted (soft delete, with confirmation). Below the Today list, the Log screen shows today's total spend broken down by category (amounts are added without currency conversion, as in Summary). For the current month, a category with a budget shows its spend as "x of budget", with its bar showing the share of the budget used (full at or above 100%, and red once spend is over the budget). Each budgeted bar also has a marker at the amount expected by today (budget × day of month ÷ days in month, counting today), and a note: "Over budget by $X" (red), "Budget used", "On pace" (within 5% of the budget either side of the expected amount), or "$X over/under pace", followed by the amount left and about how much a day remains (see Section 4.1 for the exact rules). Tapping a budgeted category opens a burn-up chart of its running total against the budget spread evenly over the month, with a "Daily figures" table. Categories with no spending in the month are not listed, whether or not they have a budget. The previous month is shown without pace. Other bars show the category's spend relative to the month's largest category. Below its category list, Summary shows a pie chart of the month's spend by category for any month with expenses: up to six slices, with any beyond the largest five grouped as "Everything else". Screens show the last-loaded data straight away and refresh it in the background; saving, editing or deleting a record reloads it. Export is deferred beyond the first version.
+
+### 4.1 Spending Pace Rules (Summary, Current Month)
+
+Applies to each category that has a monthly budget and spending in the current month. The previous month shows no pace.
+
+**Expected by today** = budget × today's day of the month ÷ days in the month. Today counts as a full day, so on the last day the expected amount equals the budget. The day is taken from the device's local date. The marker on the bar sits at this amount.
+
+The note under the bar uses the **first** rule that matches:
+
+| Order | Rule | Note shows |
+|---|---|---|
+| 1 | Spent is more than the budget | "Over budget by $X" in red with a warning icon, where X = spent − budget |
+| 2 | Spent equals the budget | "Budget used · $0.00 left" |
+| 3 | Spent is within 5% of the **full monthly budget** either side of expected | "On pace" |
+| 4 | Spent is above that band | "$X over pace", where X = spent − expected |
+| 5 | Spent is below that band | "$X under pace", where X = expected − spent |
+
+For rules 3–5, the note continues with "$Y left, about $Z/day", where Y = budget − spent and Z = Y ÷ the days remaining after today. On the last day of the month it reads "$Y left today" instead.
+
+Notes:
+- Order matters: a one-off payment of the whole budget (such as rent on day 1) shows "Budget used" rather than "over pace".
+- Red is used only for over budget. Spending early is not overspending, so "over pace" stays in the normal colour.
+- There is no "too early to tell" period: early in the month, a single expense can show as over pace.
+- Amounts are compared in whole cents and added without currency conversion, as elsewhere in Summary.
+
+**Worked example** — 7 November, day 7 of 30:
+
+| Category | Budget | Expected by today | On-pace band | Spent | Note |
+|---|---|---|---|---|---|
+| Food & Dining | $500 | $500 × 7 ÷ 30 = $116.67 | $91.67 – $141.67 (±$25) | $210.00 | $93.33 over pace · $290.00 left, about $12.61/day |
+| Transport | $150 | $35.00 | $27.50 – $42.50 (±$7.50) | $30.00 | On pace · $120.00 left, about $5.22/day |
+| Groceries | $400 | $93.33 | $73.33 – $113.33 (±$20) | $45.00 | $48.33 under pace · $355.00 left, about $15.43/day |
+| Entertainment | $100 | $23.33 | — | $128.00 | Over budget by $28.00 (red) |
+| Rent | $2,000 | $466.67 | — | $2,000.00 | Budget used · $0.00 left |
 
 ---
 
