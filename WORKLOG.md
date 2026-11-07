@@ -687,3 +687,10 @@ Last updated: 7 November 2026
 
 ### Assumptions
 - Expenses dated later in the current month count towards the month's total and pace note, as before. This only arises if someone logs an expense with a future date.
+
+---
+
+## 07 November 2026 — Readable Guide Refreshed
+
+### What Was Done
+- Updated the readable guide (repository copy and the private claude.ai artifact) for Specification v0.27: its Summary mockup now shows the larger burn-up chart, drawn with the same layout and label rules as the app, and its document versions now read Specification v0.27 and Architecture v0.7.
