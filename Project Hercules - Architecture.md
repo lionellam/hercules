@@ -1,8 +1,8 @@
 # Project Hercules — Architecture: Web App v1
 
 ```
-Version 0.5 · Draft
-Last Reviewed: 2 November 2026
+Version 0.6 · Draft
+Last Reviewed: 7 November 2026
 Produced with AI Assistance (Claude Code)
 ```
 
@@ -15,6 +15,7 @@ Produced with AI Assistance (Claude Code)
 | 0.3 | 2026-11-02 | Lionel Lam | Interface decisions: moderately wider layout for tablets and computers; light and dark mode toggle |
 | 0.4 | 2026-11-02 | Lionel Lam | Category management and monthly budgets brought forward; decision 17 superseded |
 | 0.5 | 2026-11-07 | Lionel Lam | Spending pace against budget on Summary (decision 28) |
+| 0.6 | 2026-11-07 | Lionel Lam | Corrections: system overview now lists the Categories screen; decision 8 records that the Hobby plan terms were confirmed |
 
 ---
 
@@ -27,7 +28,8 @@ Record the architecture of the Project Hercules web app (Phase 2 — Web App v1)
 ```
  ┌──────────────────────────┐
  │  Phone (PWA, Safari)     │
- │  Log · History · Summary │
+ │  Log · History ·         │
+ │  Summary · Categories    │
  └────────────┬─────────────┘
               │ HTTPS
  ┌────────────▼─────────────┐        ┌──────────────────────────┐
@@ -76,7 +78,7 @@ The language model is called only to parse a single expense into structured fiel
 
 | # | Decision | Reason |
 |---|---|---|
-| 8 | **Vercel** for hosting | Strong fit for a TypeScript / Next.js app; free Hobby plan suits a personal, non-commercial family app (terms to be checked on sign-up) |
+| 8 | **Vercel** for hosting | Strong fit for a TypeScript / Next.js app; free Hobby plan suits a personal, non-commercial family app (terms confirmed 2 November 2026: Hobby plan active, no payment method on file) |
 | 9 | **Free Vercel address** (`*.vercel.app`) for now | No cost; Google sign-in works with it; a custom domain can be added later without code changes |
 | 10 | **Neon** (hosted Postgres) | SQLite cannot persist on Vercel. Neon is plain Postgres designed for serverless hosts, available through Vercel's marketplace with a free tier |
 | 11 | **One-off import** of existing CLI data into the owner's account | Keeps the full spending history (July 2026 onwards) in one place from day one |

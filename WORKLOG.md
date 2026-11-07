@@ -568,7 +568,7 @@ Last updated: 7 November 2026
 ### What Was Done
 - The "History" heading, theme toggle and month switcher now stay fixed at the top of the History screen while the list scrolls, using the same fixed section as the Log screen. This changes the earlier decision to fix the top section on the Log screen only.
 - Switching month now returns to the top of the list, because the new month would otherwise open partway down.
-- Updated the Specification to v0.18 (process flow step 8).
+- Updated the Specification to v0.18 (process flow step 8). *Amended 7 November 2026: the step 8 sentence was placed in the v0.10 version history row by mistake instead of step 8; moved to step 8 and the v0.10 row restored in Specification v0.24.*
 - Tested locally at phone and tablet widths with local data: the section stays in place while scrolling, the month buttons work and the toggle stays reachable when scrolled, and the edit sheet opens above the section. Log, Summary and Categories were rechecked. Type-check, lint and a production build all passed.
 
 ---
@@ -578,7 +578,7 @@ Last updated: 7 November 2026
 ### What Was Done
 - The "Summary" heading, theme toggle and month selector now stay fixed at the top of the Summary screen while the content scrolls, using the same fixed section as Log and History.
 - Switching month now returns to the top of the screen, as on History.
-- Updated the Specification to v0.19 (process flow step 8).
+- Updated the Specification to v0.19 (process flow step 8). *Amended 7 November 2026: as with v0.18, the step 8 change was placed in the v0.10 version history row by mistake; corrected in Specification v0.24.*
 - Tested locally on a short phone-sized screen with local data: the section stays in place while scrolling, switching month returns to the top, the toggle works, and the other tabs still have their toggle. Type-check, lint and a production build all passed.
 
 ---
@@ -630,3 +630,19 @@ Last updated: 7 November 2026
 
 ### What Was Done
 - Added Section 4.1 to the Specification (now v0.23): the spending pace rules as an ordered table, showing which note wins, how each amount is calculated, the "about $Z/day" figure, the last day of the month, and that the on-pace band is 5% of the full monthly budget. It includes a worked example for 7 November. Process flow step 8 now points to it. Documentation only; the app is unchanged.
+
+---
+
+## 07 November 2026 — Documentation Corrections
+
+### What Was Done
+- Produced a readable guide to the Specification and Architecture, with screen mockups, as a private claude.ai artifact ("How Hercules Works"). Writing it surfaced five problems in the source documents, which the owner reviewed one by one before they were fixed.
+- **Item 1:** the Specification's v0.10 version history row had wrongly absorbed the History and Summary pinned-header sentence intended for process flow step 8 (in v0.18 and v0.19). The row was restored, the sentence moved to step 8 (Specification v0.24), and the two original worklog entries amended.
+- **Item 2:** "Last Reviewed" dates in both documents updated from 2 to 7 November 2026.
+- **Item 3:** the Architecture system overview now lists all four screens, including Categories.
+- **Item 4:** Architecture decision 8 now records that the Vercel Hobby plan terms were confirmed on 2 November 2026, instead of "to be checked on sign-up".
+- **Item 5:** two features described in the Specification are not built in the web app: merchant suggestions from past entries, and the "Other" category's sub-label prompt. Both are now marked as not yet built (Specification v0.25). The sub-label column exists in the database but is always empty.
+- Documentation only; the app is unchanged. Specification now v0.25, Architecture v0.6.
+
+### Challenges
+- The item 1 error came from an edit script that replaced the first occurrence of a phrase appearing twice in the document. Edits now check that the text being replaced occurs exactly once.

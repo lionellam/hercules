@@ -1,8 +1,8 @@
 # Project Hercules — Specification Sheet: "Log an Expense" Flow
 
 ```
-Version 0.23 · Draft 
-Last Reviewed: 2 November 2026
+Version 0.25 · Draft 
+Last Reviewed: 7 November 2026
 Produced with AI Assistance (Claude Code)
 ```
 
@@ -19,7 +19,7 @@ Produced with AI Assistance (Claude Code)
 | 0.7 | 2026-10-26 | Lionel Lam | Updated for the hosted web app: language model changed to Claude Haiku 5.5 with structured outputs; Google sign-in with allow-list replaces hardcoded profiles; soft delete and edits added to Expense; first-version scope and out-of-scope items updated |
 | 0.8 | 2026-11-02 | Lionel Lam | Expenses in the Log screen's "Today" list can be opened to edit or delete them, as in History |
 | 0.9 | 2026-11-02 | Lionel Lam | Log screen shows today's total spend by category below the "Today" list |
-| 0.10 | 2026-11-02 | Lionel Lam | History and Summary keep their heading and month control fixed at the top while the content below scrolls. Screens show the last-loaded data straight away and refresh it in the background |
+| 0.10 | 2026-11-02 | Lionel Lam | Screens show the last-loaded data straight away and refresh it in the background |
 | 0.11 | 2026-11-02 | Lionel Lam | Summary shows a pie chart of the month's spend by category below the category list |
 | 0.12 | 2026-11-02 | Lionel Lam | Log screen keeps its heading and text input fixed at the top while the content below scrolls |
 | 0.13 | 2026-11-02 | Lionel Lam | Log screen shows today's total spend below the text input, in the fixed top section |
@@ -33,6 +33,8 @@ Produced with AI Assistance (Claude Code)
 | 0.21 | 2026-11-07 | Lionel Lam | Summary shows spending pace against budget for the current month: an expected-by-today marker and note on each budgeted category, and a burn-up chart on tap |
 | 0.22 | 2026-11-07 | Lionel Lam | Summary no longer lists budgeted categories with no spending yet |
 | 0.23 | 2026-11-07 | Lionel Lam | Added Section 4.1, the spending pace rules with a worked example |
+| 0.24 | 2026-11-07 | Lionel Lam | Corrected the v0.10 entry and moved the History and Summary pinned-header note into process flow step 8, where it was intended in v0.18 and v0.19 |
+| 0.25 | 2026-11-07 | Lionel Lam | Marked merchant suggestions and the "Other" sub-label prompt as not yet built in the web app |
 
 ---
 
@@ -77,7 +79,7 @@ This spec exists to align the team before the process flow diagram (UPN) and fea
 5. **Confirmation screen is presented** — parsed fields shown as editable form elements (not a static summary).
 6. **User reviews and optionally edits fields directly** — this is the human-in-the-loop step. No re-prompting of the model occurs; corrections are direct field edits.
 7. **User confirms/saves** — the system writes the structured record, the original raw text, and a flag indicating whether any edit occurred.
-8. **Record is available for viewing** — in History and Summary, and in the "Today" list on the Log screen for expenses dated today. A saved record can be reopened from History or from the Today list in the same editable card to be edited or deleted (soft delete, with confirmation). Below the Today list, the Log screen shows today's total spend broken down by category (amounts are added without currency conversion, as in Summary). For the current month, a category with a budget shows its spend as "x of budget", with its bar showing the share of the budget used (full at or above 100%, and red once spend is over the budget). Each budgeted bar also has a marker at the amount expected by today (budget × day of month ÷ days in month, counting today), and a note: "Over budget by $X" (red), "Budget used", "On pace" (within 5% of the budget either side of the expected amount), or "$X over/under pace", followed by the amount left and about how much a day remains (see Section 4.1 for the exact rules). Tapping a budgeted category opens a burn-up chart of its running total against the budget spread evenly over the month, with a "Daily figures" table. Categories with no spending in the month are not listed, whether or not they have a budget. The previous month is shown without pace. Other bars show the category's spend relative to the month's largest category. Below its category list, Summary shows a pie chart of the month's spend by category for any month with expenses: up to six slices, with any beyond the largest five grouped as "Everything else". Screens show the last-loaded data straight away and refresh it in the background; saving, editing or deleting a record reloads it. Export is deferred beyond the first version.
+8. **Record is available for viewing** — in History and Summary, and in the "Today" list on the Log screen for expenses dated today. A saved record can be reopened from History or from the Today list in the same editable card to be edited or deleted (soft delete, with confirmation). Below the Today list, the Log screen shows today's total spend broken down by category (amounts are added without currency conversion, as in Summary). For the current month, a category with a budget shows its spend as "x of budget", with its bar showing the share of the budget used (full at or above 100%, and red once spend is over the budget). Each budgeted bar also has a marker at the amount expected by today (budget × day of month ÷ days in month, counting today), and a note: "Over budget by $X" (red), "Budget used", "On pace" (within 5% of the budget either side of the expected amount), or "$X over/under pace", followed by the amount left and about how much a day remains (see Section 4.1 for the exact rules). Tapping a budgeted category opens a burn-up chart of its running total against the budget spread evenly over the month, with a "Daily figures" table. Categories with no spending in the month are not listed, whether or not they have a budget. The previous month is shown without pace. Other bars show the category's spend relative to the month's largest category. Below its category list, Summary shows a pie chart of the month's spend by category for any month with expenses: up to six slices, with any beyond the largest five grouped as "Everything else". History and Summary keep their heading and month control fixed at the top while the content below scrolls. Screens show the last-loaded data straight away and refresh it in the background; saving, editing or deleting a record reloads it. Export is deferred beyond the first version.
 
 ### 4.1 Spending Pace Rules (Summary, Current Month)
 
@@ -127,9 +129,9 @@ Notes:
 | `amount` | number | Parsed or user-edited |
 | `currency` | string | Defaulted to SGD; not asked of the user each time. SGD only in the first version — summaries do not convert other currencies |
 | `category_id` | identifier (FK → `Category`) | References a category from the user's own list, not a raw string |
-| `merchant` | string (optional) | Free text; autocomplete-suggested from the user's prior entries, not constrained to a list |
+| `merchant` | string (optional) | Free text; autocomplete-suggested from the user's prior entries, not constrained to a list. *Suggestions not yet built in the web app* |
 | `date` | date | Parsed or defaulted to today |
-| `other_sub_label` | string (optional) | Only populated when the selected category has `is_other = true`; captures specificity (e.g. "gift", "charity") without overloading `remarks` |
+| `other_sub_label` | string (optional) | Only populated when the selected category has `is_other = true`; captures specificity (e.g. "gift", "charity") without overloading `remarks`. *Not yet built in the web app: the column exists, but the review card doesn't ask for it, so it is currently always empty* |
 | `remarks` | string (optional) | Freeform, **user-authored** notes — distinct from `raw_input`, which is model input |
 | `was_edited` | boolean | Flags whether the user modified any parsed field before saving — a proxy signal for parsing accuracy over time |
 | `created_at` | timestamp | System-generated |
@@ -148,14 +150,14 @@ Per-user and extensible — this is a **user preference**, not a global constant
 | `name` | string | e.g. "Food", "Transport", or a user-added custom category |
 | `is_default` | boolean | Distinguishes preset/seeded categories from user-added ones |
 | `is_active` | boolean | Allows retiring a category without deleting historical records that reference it |
-| `is_other` | boolean | Flags the built-in "Other" catch-all; ensures only one such category exists per user. When `true`, the expense entry will prompt for an `other_sub_label` to capture specificity |
+| `is_other` | boolean | Flags the built-in "Other" catch-all; ensures only one such category exists per user. When `true`, the expense entry will prompt for an `other_sub_label` to capture specificity (*prompt not yet built in the web app*) |
 | `monthly_budget` | number (optional) | The category's current monthly budget in SGD; empty means no budget. Only the current amount is kept, so past months' budgets are not recorded |
 
 **Preset behavior:** each new user is seeded with their own copy of the starter list — Food & Dining, Transport, Groceries, Entertainment, Utilities, Health & Medical, Household, Shopping, Rent, Clothes, Education, Professional Development, Travel — plus an **"Other"** catch-all. The Categories screen adds and renames categories and sets their monthly budgets; its heading and add button stay fixed at the top while the list scrolls. Names must be unique for the user regardless of capitalisation, with a limit of 50 categories per user. "Other" cannot be renamed and stays last in the list, because the application falls back to it by name. Retiring a category is not yet available in the app and is done directly in the database.
 
 ### 5.3 `Merchant` — no dedicated table (for now)
 
-Merchant is handled as autocomplete-over-free-text, not a constrained/enum list. Suggestions are derived from the user's own prior entries (e.g. distinct prior `merchant` values for that `user_id`), rather than stored as a separate managed list.
+Merchant is handled as autocomplete-over-free-text, not a constrained/enum list. Suggestions are derived from the user's own prior entries (e.g. distinct prior `merchant` values for that `user_id`), rather than stored as a separate managed list. *Not yet built in the web app: the merchant field is currently plain free text with no suggestions.*
 
 *Flagged as a possible future refinement:* a dedicated `Merchant` table would become worthwhile if richer metadata is ever needed (e.g. a default category per merchant, merchant aliases/name normalization) — not required for this phase.
 
