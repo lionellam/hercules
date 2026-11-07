@@ -1,7 +1,7 @@
 # Project Hercules — Specification Sheet: "Log an Expense" Flow
 
 ```
-Version 0.27 · Draft 
+Version 0.28 · Draft 
 Last Reviewed: 7 November 2026
 Produced with AI Assistance (Claude Code)
 ```
@@ -36,7 +36,8 @@ Produced with AI Assistance (Claude Code)
 | 0.24 | 2026-11-07 | Lionel Lam | Corrected the v0.10 entry and moved the History and Summary pinned-header note into process flow step 8, where it was intended in v0.18 and v0.19 |
 | 0.25 | 2026-11-07 | Lionel Lam | Marked merchant suggestions and the "Other" sub-label prompt as not yet built in the web app |
 | 0.26 | 2026-11-07 | Lionel Lam | Allow-list storage and `updated_at` wording brought up to date; the July 2026 diagrams noted as historical |
-| 0.27 | 2026-11-07 | Lionel Lam | Burn-up chart made larger: no y-axis labels or side margins, runs to the edges of the open category, and its labels move to stay clear of each other (Section 4.1) |
+| 0.27 | 2026-11-07 | Lionel Lam | Burn-up chart made larger: no y-axis labels and smaller side margins, runs to the edges of the open category, and its labels move to stay clear of each other (Section 4.1) |
+| 0.28 | 2026-11-07 | Lionel Lam | Corrected the v0.27 entry's wording on side margins, and stated exactly when the "Today" label aligns to the chart's edges |
 
 ---
 
@@ -120,7 +121,7 @@ Notes:
 **Burn-up chart layout.** The chart spans the full width of the open category, with no y-axis labels and only small side margins, so the plot uses most of the screen. It shows the running total (solid, red once over budget), the budget spread evenly over the month (dashed), the budget line with a "Budget X" label, today's line with a "Today" label, and today's amount beside today's dot. Labels move to stay clear of each other:
 - **Today's amount** sits above and to the right of the dot, and moves to the dot's left when it would run past the right edge.
 - **"Budget X"** sits at the right end of the budget line, and moves to the left end late in the month once spending reaches 80% of the budget, where the line and dot would otherwise reach it.
-- **"Today"** is centred on today's line, and aligned to the chart's edge on the first and last days.
+- **"Today"** is centred on today's line, and aligned to the chart's left edge on the first day and its right edge on the last two days of the month.
 - **Dates** run along the bottom, with the first day aligned to the left edge and the last day to the right edge.
 
 ---

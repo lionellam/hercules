@@ -709,3 +709,11 @@ Last updated: 7 November 2026
 ### Decisions Made
 - **Option A over the wider Option B** — Option B (up to 1,120 pixels, list column favoured) would have made the burn-up chart's text oversized unless the chart was rewritten to keep its labels a fixed size.
 - **History and Categories use the full width too** — their rows are a little wider at 1,000 pixels but still read comfortably, so they weren't capped.
+
+---
+
+## 07 November 2026 — Second Document Integrity Check
+
+### What Was Done
+- Re-checked all project documents against each other, the readable guide and the code after the burn-up chart and wider layout changes. Versions, layout widths, chart rules and the guide all agreed.
+- Fixed two wording issues in the Specification (now v0.28): the v0.27 entry said the chart has no side margins (it has small ones), and Section 4.1 now states that the "Today" label aligns left on the first day and right on the last two days of the month, as the code does. The readable guide now cites Specification v0.28. Documentation only.
