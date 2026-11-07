@@ -672,3 +672,18 @@ Last updated: 7 November 2026
 - Added two notes to `web/README.md`: apply schema changes to Neon before pushing code that relies on them, and keep the server and database in the same region (`vercel.json` uses `sin1`).
 - Noted that the diagrams from July 2026 (flow diagram, Entity Relationship Diagram, Application Wireframes) and the October UI mockup are historical, pending a redraw.
 - Charter now v0.7, Project Plan v0.8, Specification v0.26, Architecture v0.7. The readable guide's version references were updated to match. Documentation only; the app is unchanged.
+
+---
+
+## 07 November 2026 — Larger Burn-up Chart
+
+### What Was Done
+- The owner felt the burn-up chart on Summary wasted space at its sides. Mockups compared several options (`design/burnup-chart-mockups.html`): removing the y-axis, narrower margins, and a full-width layout with and without the amount beside today's dot, including how labels move near the end of a month that runs over budget. The owner chose the full-width layout with the amount kept beside the dot.
+- The chart now runs to the edges of the open category, with no y-axis labels and small side margins, and is a little taller. On a 375-pixel phone, the plotted area grew from about 233 to 347 pixels wide (62% to 93% of the screen).
+- Labels move to stay clear of each other: today's amount moves to the dot's left when it would run past the right edge, "Budget X" moves to the left end of its line late in the month once spending reaches 80% of the budget, and "Today" and the end dates align to the chart's edges.
+- This also fixes an overlap in the previous chart, where today's amount could run into "Budget X" late in the month when spending was close to the budget.
+- Updated the Specification to v0.27 (Section 4.1, burn-up chart layout).
+- Tested locally with temporary expenses and simulated dates (days 22, 26, 28 and 30), plus today's real date with the tooltip showing. A check of every label against the other labels, the dots and both lines found no overlaps, and the chart filled the open panel exactly. Test data removed afterwards. Type-check, lint and a production build all passed.
+
+### Assumptions
+- Expenses dated later in the current month count towards the month's total and pace note, as before. This only arises if someone logs an expense with a future date.

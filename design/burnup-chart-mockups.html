@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Burn-up Chart Sizing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root { --page: #ececea; --page-text: #18181b; --page-muted: #5f5f66; --page-card: #fafaf9; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--page); color: var(--page-text); font-family: Inter, -apple-system, system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  main { max-width: 1260px; margin: 0 auto; padding: 36px 16px 80px; }
+  h1 { font-size: 28px; letter-spacing: -0.02em; margin: 0 0 8px; }
+  .intro p { color: var(--page-muted); max-width: 780px; line-height: 1.55; margin: 0 0 10px; font-size: 15px; }
+  section { margin-top: 48px; }
+  section > h2 { font-size: 20px; margin: 0 0 6px; }
+  section > p { color: var(--page-muted); max-width: 780px; line-height: 1.55; margin: 0 0 20px; font-size: 14.5px; }
+  .tag { display: inline-block; font-size: 11px; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; padding: 3px 8px; border-radius: 6px; background: #18181b; color: #fff; margin-left: 8px; vertical-align: 3px; }
+  .frames { display: flex; flex-wrap: wrap; gap: 30px 26px; align-items: flex-start; }
+  figure { margin: 0; max-width: 100%; }
+  figcaption { max-width: 375px; font-size: 13px; color: var(--page-muted); margin-top: 12px; line-height: 1.5; }
+  figcaption b { color: var(--page-text); }
+  .meas { display: inline-block; font-variant-numeric: tabular-nums; background: #fff; border: 1px solid rgba(0,0,0,.1); border-radius: 6px; padding: 1px 6px; color: var(--page-text); font-size: 12px; margin-top: 4px; }
+  .phone { width: 375px; max-width: 100%; border-radius: 30px; overflow: hidden; border: 1px solid rgba(0,0,0,.08); box-shadow: 0 1px 2px rgba(0,0,0,.06), 0 10px 28px rgba(0,0,0,.08); }
+  .notes { margin-top: 56px; background: var(--page-card); border-radius: 16px; padding: 22px 26px; max-width: 860px; }
+  .notes h2 { margin: 0 0 10px; font-size: 18px; }
+  .notes ul { margin: 0; padding-left: 20px; line-height: 1.6; font-size: 14.5px; }
+
+  /* App tokens, from web/app/globals.css */
+  .app { --bg: #fff; --surface: #fff; --text: #18181b; --muted: #71717a; --line: #e7e7e4; --soft: #f4f4f5; --bar: #18181b; --bad: #b91c1c;
+         background: var(--bg); color: var(--text); font-size: 15px; position: relative; }
+  .app.dark { --bg: #18181b; --surface: #18181b; --text: #f4f4f5; --muted: #a1a1aa; --line: #27272a; --soft: #27272a; --bar: #f4f4f5; --bad: #f87171; }
+  .app .top { padding: 26px 20px 16px; border-bottom: 1px solid var(--line); }
+  .app h3 { font-size: 28px; font-weight: 700; letter-spacing: -0.02em; margin: 0; }
+  .app .seg { display: flex; background: var(--soft); border-radius: 12px; padding: 3px; margin-top: 16px; }
+  .app .seg span { flex: 1; height: 34px; display: grid; place-items: center; border-radius: 10px; font-size: 14px; font-weight: 500; color: var(--muted); }
+  .app .seg span.on { background: var(--surface); color: var(--text); box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+  .app .body { padding: 2px 20px 26px; }
+  .app .cat { margin-top: 18px; }
+  .app .cat.open { background: var(--soft); margin-left: -12px; margin-right: -12px; padding: 12px 12px 10px; border-radius: 14px; }
+  .app .cat-top { display: flex; justify-content: space-between; gap: 12px; font-size: 14px; margin-bottom: 6px; align-items: baseline; }
+  .app .cat-top .n { color: var(--muted); font-size: 12px; margin-left: 6px; }
+  .app .cat-top strong { font-variant-numeric: tabular-nums; }
+  .app .of { color: var(--muted); font-weight: 400; }
+  .app .meter { position: relative; }
+  .app .track { height: 6px; background: var(--soft); border-radius: 3px; overflow: hidden; }
+  .app .cat.open .track { background: var(--line); }
+  .app .fill { height: 100%; background: var(--bar); border-radius: 3px; }
+  .app .fill.over { background: var(--bad); }
+  .app .tick { position: absolute; top: -3px; width: 2px; height: 12px; background: var(--text); transform: translateX(-1px); border-radius: 1px; box-shadow: 0 0 0 1.5px var(--bg); }
+  .app .cat.open .tick { box-shadow: 0 0 0 1.5px var(--soft); }
+  .app .pace { margin-top: 6px; font-size: 12.5px; color: var(--muted); }
+  .app .pace b { color: var(--text); font-weight: 600; }
+  .app .pace.bad, .app .pace.bad b { color: var(--bad); }
+  .app .chart { position: relative; margin-top: 12px; }
+  .app .chart.bleed { margin-left: -12px; margin-right: -12px; }
+  .app .chart svg { display: block; width: 100%; height: auto; overflow: visible; }
+  .app .daily { margin-top: 8px; font-size: 12.5px; color: var(--muted); }
+  .app .tip { position: absolute; background: var(--surface); color: var(--text); border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px;
+              font-size: 12px; line-height: 1.5; box-shadow: 0 4px 14px rgba(0,0,0,.12); white-space: nowrap; }
+  .app .tip .k { color: var(--muted); }
+  .app .tip b { font-variant-numeric: tabular-nums; }
+</style>
+</head>
+<body>
+<main>
+  <div class="intro">
+    <h1>Burn-up chart sizing</h1>
+    <p>Proposals for making the burn-up chart on Summary larger and easier to read on a phone. Each mockup uses the app's own colours, with sample data for Food &amp; Dining ($500 budget) on 7 November, day 7 of 30. Nothing in the app has changed.</p>
+    <p>The measurement under each mockup is the share of the screen's width used by the plot itself: the area where the lines are drawn.</p>
+  </div>
+
+  <section>
+    <h2>Step by step</h2>
+    <p>Two small changes, one at a time. Everything else stays as it is now: the chart's height, the "$210.00" label on today's dot, the "Budget 500" label and the grey panel's padding.</p>
+    <div class="frames" id="steps"></div>
+  </section>
+
+  <section>
+    <h2>Steps 1 and 2 in other situations</h2>
+    <p>The same two changes in the awkward cases: a one-off payment on day 1, going over budget, late in the month, and dark mode with the pointer resting on 5 November.</p>
+    <div class="frames" id="steps-cases"></div>
+  </section>
+
+  <section>
+    <h2>Proposal B, keeping the amount beside the dot</h2>
+    <p>Proposal B's sizing (no side margins, edge to edge, a little taller) with the "$210.00" label kept on today's dot. The label sits just above and to the right of the dot while there's room, and moves to its left near the end of the month. The taller chart always leaves room above the dot, so the label never needs to drop below it.</p>
+    <div class="frames" id="b-end"></div>
+  </section>
+
+  <section>
+    <h2>Near the end of a month that runs over</h2>
+    <p>One month where Food &amp; Dining spending runs ahead of its $500 budget, shown on four days near the end. Watch the "$" label, "Today" and "Budget 500" move as the line crosses the budget.</p>
+    <div class="frames" id="b-end-month"></div>
+  </section>
+
+  <section>
+    <h2>Further options: side by side</h2>
+    <p>Today, the left and right edges of the chart are reserved for labels: "0" and "500" on the left, and the "$210.00" end label on the right. Both proposals remove those margins: the budget amount appears only in the "Budget 500" label, and the end label is dropped because the amount is already shown above the chart.</p>
+    <div class="frames" id="compare"></div>
+  </section>
+
+  <section>
+    <h2>Proposal B in other situations <span class="tag">Recommended</span></h2>
+    <p>Checking that the remaining labels stay clear of the lines in the awkward cases: a one-off payment on day 1, going over budget, late in the month, and dark mode. A pointer is resting on 5 November in one of them to show the tooltip.</p>
+    <div class="frames" id="cases"></div>
+  </section>
+
+  <div class="notes">
+    <h2>What changes in Proposals A and B</h2>
+    <ul>
+      <li><b>No y-axis labels.</b> The "0" is the baseline and the budget amount moves into the "Budget 500" label at the right end of the budget line. Exact figures are still in the tooltip and "Daily figures".</li>
+      <li><b>No "$210.00" label on the end dot.</b> The same amount is shown just above the chart ("210.00 of 500.00"), and late in the month the label would run into "Budget 500".</li>
+      <li><b>"Budget 500" moves out of the way.</b> It sits at the right end of the budget line, and moves to the left end when today's dot gets close to it late in the month.</li>
+      <li><b>Date labels hug the edges.</b> "1 Nov" is left-aligned and the last day is right-aligned, so neither needs spare margin.</li>
+      <li><b>Slightly taller:</b> 200 instead of 172, so the steps are easier to tell apart.</li>
+      <li><b>Proposal B only:</b> the chart also runs to the edges of the grey open-category panel, using its 12-pixel padding on each side.</li>
+      <li>Early in the month the spending line still covers only the first part of the chart, because the chart shows the whole month. That's what lets the dashed line show the full budget.</li>
+    </ul>
+  </div>
+</main>
+
+<script>
+const N = 30, MONTH = 10;
+const FOOD = { name: "Food & Dining", budget: 500, count: 7, days: { 1: 18.5, 2: 32, 3: 25, 4: 41.2, 5: 28.3, 6: 35, 7: 30 } };
+const FOOD_LATE = { name: "Food & Dining", budget: 500, count: 24, days: { 1: 18.5, 2: 32, 3: 25, 4: 41.2, 5: 28.3, 6: 35, 7: 30, 8: 12, 9: 14.5, 10: 22, 11: 9.8, 12: 16, 13: 31, 14: 12.4, 15: 18, 17: 21.5, 18: 11, 19: 15.2, 20: 26, 21: 10.5, 22: 14, 23: 19.9, 24: 8.5, 26: 16.7 } };
+// A month where Food & Dining runs ahead of its budget and goes over around day 28
+const FOOD_HOT = { name: "Food & Dining", budget: 500, count: 0, days: {} };
+[18.5, 32, 25, 41.2, 28.3, 35, 30, 12, 14.5, 22, 9.8, 16, 31, 12.4, 18, 0, 21.5, 11, 15.2, 26, 10.5, 8.2, 19.9, 8.5, 0, 16.7, 6.1, 12.4, 14.8, 11.2]
+  .forEach((v, i) => { if (v) { FOOD_HOT.days[i + 1] = v; FOOD_HOT.count++; } });
+const RENT = { name: "Rent", budget: 2000, count: 1, days: { 1: 2000 } };
+const ENT = { name: "Entertainment", budget: 100, count: 2, days: { 3: 48, 6: 80 } };
+
+const fmt = (n) => n.toLocaleString("en-SG", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const whole = (n) => fmt(n).replace(/\.00$/, "");
+const dayLabel = (k) => new Date(2026, MONTH, k).toLocaleDateString("en-SG", { weekday: "short", day: "numeric", month: "short" });
+
+function cumulative(c) {
+  const cum = [0];
+  for (let k = 1; k <= N; k++) cum[k] = cum[k - 1] + Math.round((c.days[k] || 0) * 100);
+  return cum.map((v) => v / 100);
+}
+
+// current: today's chart. step1: y-axis labels removed. step2: also narrower side margins. inside: Proposals A and B.
+const STYLES = {
+  current: { l: 44, r: 58, H: 172, yAxis: true, endLabel: true },
+  step1: { l: 16, r: 58, H: 172, yAxis: false, endLabel: true },
+  step2: { l: 16, r: 24, H: 172, yAxis: false, endLabel: true },
+  inside: { l: 6, r: 6, H: 200, yAxis: false, endLabel: false },
+  insideEnd: { l: 6, r: 6, H: 200, yAxis: false, endLabel: true },
+};
+
+function chart(c, d, { style, W, hover }) {
+  const inside = style.startsWith("inside");
+  const st = STYLES[style];
+  const H = st.H;
+  const m = { l: st.l, r: st.r, t: inside ? 20 : 18, b: inside ? 24 : 26 };
+  const pw = W - m.l - m.r, ph = H - m.t - m.b;
+  const cum = cumulative(c), spent = cum[d];
+  const over = spent > c.budget;
+  const top = Math.max(c.budget, spent) * (inside ? 1.12 : 1.1);
+  const x = (k) => m.l + (k / N) * pw, y = (v) => m.t + ph - (v / top) * ph;
+  const ink = over ? "var(--bad)" : "var(--bar)";
+  let step = `M${x(0)} ${y(0)}`;
+  for (let k = 1; k <= d; k++) step += ` L${x(k)} ${y(cum[k - 1])} L${x(k)} ${y(cum[k])}`;
+  const t = [];
+  const txt = (X, Y, s, anchor = "middle", extra = "") => `<text x="${X}" y="${Y}" text-anchor="${anchor}" font-size="10.5" fill="var(--muted)" ${extra}>${s}</text>`;
+  t.push(`<line x1="${m.l}" x2="${x(N)}" y1="${y(0)}" y2="${y(0)}" stroke="var(--muted)" stroke-opacity=".5"/>`);
+  t.push(`<line x1="${m.l}" x2="${x(N)}" y1="${y(c.budget)}" y2="${y(c.budget)}" stroke="var(--muted)" stroke-opacity=".35"/>`);
+  // The budget label normally sits at the right end of its line; it moves to the left end when today's dot would touch it
+  const budgetText = `Budget ${whole(c.budget)}`;
+  const labelW = budgetText.length * 6 + 10;
+  // Late in the month with spending at 80% of the budget or more, the line and today's dot reach the right end of the budget line, so the label moves left
+  const lateMonth = x(d) > x(N) - labelW - (st.endLabel ? 60 : 0);
+  const dotNearLabel = style !== "current" && lateMonth && spent >= 0.8 * c.budget;
+  t.push(dotNearLabel ? txt(x(0), y(c.budget) - 5, budgetText, "start") : txt(x(N), y(c.budget) - 5, budgetText, "end"));
+  t.push(`<line x1="${x(0)}" y1="${y(0)}" x2="${x(N)}" y2="${y(c.budget)}" stroke="var(--muted)" stroke-width="1.5" stroke-dasharray="4 3"/>`);
+  t.push(`<line x1="${x(d)}" x2="${x(d)}" y1="${m.t - 4}" y2="${y(0)}" stroke="var(--muted)" stroke-opacity=".7"/>`);
+  const todayAnchor = inside && x(d) < m.l + 18 ? "start" : inside && x(d) > W - m.r - 18 ? "end" : "middle";
+  t.push(txt(x(d), m.t - 7, "Today", todayAnchor));
+  t.push(`<path d="${step} L${x(d)} ${y(0)} Z" fill="${ink}" fill-opacity=".09"/>`);
+  t.push(`<path d="${step}" fill="none" stroke="${ink}" stroke-width="2" stroke-linejoin="round"/>`);
+  if (st.yAxis) {
+    t.push(txt(m.l - 7, y(0) + 3.5, "0", "end"));
+    t.push(txt(m.l - 7, y(c.budget) + 3.5, whole(c.budget), "end"));
+  }
+  for (const k of [1, 10, 20, N]) {
+    const anchor = inside ? (k === 1 ? "start" : k === N ? "end" : "middle") : "middle";
+    const X = inside && k === 1 ? x(1) - 4 : x(k);
+    t.push(txt(X, y(0) + 16, k === 1 ? "1 Nov" : k, anchor));
+  }
+  if (hover) {
+    const he = (c.budget * hover) / N;
+    t.push(`<line x1="${x(hover)}" x2="${x(hover)}" y1="${m.t}" y2="${y(0)}" stroke="var(--text)" stroke-opacity=".55"/>`);
+    t.push(`<circle cx="${x(hover)}" cy="${y(he)}" r="4" fill="var(--muted)" stroke="var(--soft)" stroke-width="2"/>`);
+    t.push(`<circle cx="${x(hover)}" cy="${y(cum[hover])}" r="4" fill="${ink}" stroke="var(--soft)" stroke-width="2"/>`);
+  }
+  t.push(`<circle cx="${x(d)}" cy="${y(spent)}" r="4.5" fill="${ink}" stroke="var(--soft)" stroke-width="2"/>`);
+  // The end dot keeps its label, except in Proposals A and B. With a narrow right margin it moves to the dot's left once it would run off the edge.
+  if (st.endLabel) {
+    const label = `$${fmt(spent)}`;
+    const fitsRight = x(d) + 9 + label.length * 6.6 <= W - 2;
+    // As in the app: below the dot when it's near the top of the chart, so it clears the "Today" label
+    const ly = y(spent) + (y(spent) < m.t + 12 ? 12 : -7);
+    t.push(`<text x="${x(d) + (fitsRight ? 9 : -9)}" y="${ly}" text-anchor="${fitsRight ? "start" : "end"}" font-size="11.5" font-weight="600" fill="var(--text)">${label}</text>`);
+  }
+  let tip = "";
+  if (hover) {
+    const exp = (c.budget * hover) / N, diff = cum[hover] - exp;
+    const words = Math.abs(diff) <= 0.05 * c.budget ? "On pace" : `$${fmt(Math.abs(diff))} ${diff > 0 ? "over" : "under"} pace`;
+    tip = `<div class="tip" style="bottom:34px;right:${inside ? "8%" : "18%"}"><div style="font-weight:600">${dayLabel(hover)}</div><div><span class="k">Spent </span><b>$${fmt(cum[hover])}</b></div><div><span class="k">Expected </span><b>$${fmt(exp)}</b></div><div class="k">${words}</div></div>`;
+  }
+  return { html: `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${c.name} burn-up chart">${t.join("")}</svg>${tip}`, plotShare: pw / W };
+}
+
+function pace(c, d) {
+  const spent = cumulative(c)[d], exp = (c.budget * d) / N, left = c.budget - spent;
+  const leftText = `$${fmt(left)} left, about $${fmt(left / (N - d))}/day`;
+  if (spent > c.budget) return `<div class="pace bad"><b>Over budget by $${fmt(spent - c.budget)}</b></div>`;
+  if (Math.abs(left) < 0.005) return `<div class="pace"><b>Budget used</b> · $0.00 left</div>`;
+  const diff = spent - exp;
+  if (Math.abs(diff) <= 0.05 * c.budget) return `<div class="pace"><b>On pace</b> · ${leftText}</div>`;
+  return `<div class="pace"><b>$${fmt(Math.abs(diff))} ${diff > 0 ? "over" : "under"} pace</b> · ${leftText}</div>`;
+}
+
+function openRow(c, d, opts) {
+  const spent = cumulative(c)[d];
+  const share = Math.min(spent / c.budget, 1) * 100;
+  const bleed = opts.bleed;
+  // Chart width in viewBox units matches its rendered width: 335 inside the panel's padding, 359 when it runs to the panel's edges
+  const W = bleed ? 359 : 335;
+  const ch = chart(c, d, { style: opts.style, W, hover: opts.hover });
+  const plotPx = ch.plotShare * W;
+  return {
+    html: `<div class="cat open">
+      <div class="cat-top"><span>${c.name}<span class="n">${Object.keys(c.days).filter((k) => +k <= d).length}</span></span><span><strong>${fmt(spent)}</strong> <span class="of">of ${fmt(c.budget)}</span></span></div>
+      <div class="meter"><div class="track"><div class="fill${spent > c.budget ? " over" : ""}" style="width:${share}%"></div></div><div class="tick" style="left:${(d / N) * 100}%"></div></div>
+      ${pace(c, d)}
+      <div class="chart${bleed ? " bleed" : ""}">${ch.html}</div>
+      <div class="daily">▸ Daily figures</div></div>`,
+    plotPx,
+  };
+}
+
+function phone(inner, dark) {
+  return `<div class="phone"><div class="app${dark ? " dark" : ""}"><div class="top"><h3>Summary</h3><div class="seg"><span class="on">November</span><span>October</span></div></div><div class="body">${inner}</div></div></div>`;
+}
+
+function fig(target, c, d, opts, caption) {
+  const row = openRow(c, d, opts);
+  const pct = Math.round((row.plotPx / 375) * 100);
+  document.getElementById(target).insertAdjacentHTML("beforeend",
+    `<figure>${phone(row.html, opts.dark)}<figcaption>${caption}<br><span class="meas">Plot ≈ ${Math.round(row.plotPx)}px wide, ${pct}% of a 375px screen</span></figcaption></figure>`);
+}
+
+fig("steps", FOOD, 7, { style: "current" }, `<b>Now.</b> "0" and "500" on the left, a wide margin on the right for the "$210.00" label.`);
+fig("steps", FOOD, 7, { style: "step1" }, `<b>Step 1 · y-axis removed.</b> The "0" and "500" labels go, and the left margin shrinks from 44 to 16. The budget amount is still shown in "Budget 500".`);
+fig("steps", FOOD, 7, { style: "step2" }, `<b>Steps 1 and 2 · narrower margins.</b> As step 1, and the right margin shrinks from 58 to 24. Some space is kept on both sides.`);
+
+fig("steps-cases", RENT, 7, { style: "step2" }, `<b>One-off payment.</b> Rent paid on day 1, with "$2,000.00" beside today's dot.`);
+fig("steps-cases", ENT, 7, { style: "step2" }, `<b>Over budget.</b> The line rises above the budget line and turns red.`);
+fig("steps-cases", FOOD_LATE, 26, { style: "step2" }, `<b>Late in the month, day 26.</b> "$489.00" still just fits to the right of the dot. "Budget 500" moves to the left end of its line so the two don't overlap. (Today's chart has this overlap: "$489.00" runs into "Budget 500".) From day 27, a label this long moves to the dot's left.`);
+fig("steps-cases", FOOD, 7, { style: "step2", hover: 5, dark: true }, `<b>Dark mode, pointer on 5 Nov.</b> The tooltip still fits in the empty lower-right area.`);
+
+fig("b-end", FOOD, 7, { style: "insideEnd", bleed: true }, `<b>Day 7.</b> As Proposal B, with "$210.00" to the right of today's dot.`);
+fig("b-end", RENT, 7, { style: "insideEnd", bleed: true }, `<b>One-off payment.</b> Rent paid on day 1; "$2,000.00" sits beside the dot at the budget line.`);
+fig("b-end", ENT, 7, { style: "insideEnd", bleed: true }, `<b>Over budget.</b> The dot is near the top of the chart, and "$128.00" still fits between it and the "Today" label.`);
+fig("b-end", FOOD, 7, { style: "insideEnd", bleed: true, hover: 5, dark: true }, `<b>Dark mode, pointer on 5 Nov.</b> The tooltip still fits in the empty lower-right area.`);
+
+for (const [day, words] of [
+  [22, `<b>Day 22 · over pace.</b> $438.10 spent against $366.67 expected. "$438.10" still fits to the right of the dot. Spending has passed 80% of the budget, so "Budget 500" has already moved to the left end of its line.`],
+  [26, `<b>Day 26 · close to the budget.</b> $483.20 spent. There's no longer room to the right, so the label moves to the dot's left.`],
+  [28, `<b>Day 28 · just over budget.</b> $501.70 spent: the line crosses the budget line and turns red, and the note above says "Over budget by $1.70". The label stays to the dot's left.`],
+  [30, `<b>Day 30 · last day.</b> $527.70 spent. "Today" is right-aligned at the edge, and the label sits to the dot's left.`],
+]) fig("b-end-month", FOOD_HOT, day, { style: "insideEnd", bleed: true }, words);
+
+fig("compare", FOOD, 7, { style: "current" }, `<b>Now.</b> Labels sit in reserved margins on both sides, so the lines are squeezed into the middle.`);
+fig("compare", FOOD, 7, { style: "inside" }, `<b>Proposal A · no side margins.</b> The same chart without the side labels, and a little taller.`);
+fig("compare", FOOD, 7, { style: "inside", bleed: true }, `<b>Proposal B · no side margins, edge to edge.</b> As A, and the chart also runs to the edges of the grey panel.`);
+
+fig("cases", RENT, 7, { style: "inside", bleed: true }, `<b>One-off payment.</b> Rent paid on day 1: a single step up to the budget line, then flat while the dashed line catches up.`);
+fig("cases", ENT, 7, { style: "inside", bleed: true }, `<b>Over budget.</b> The line rises above the budget line and turns red; the chart's top stretches to fit it.`);
+fig("cases", FOOD_LATE, 26, { style: "inside", bleed: true }, `<b>Late in the month, day 26.</b> The line has almost reached the budget line, so the "Budget 500" label moves to the left end to keep clear of today's dot.`);
+fig("cases", FOOD, 7, { style: "inside", bleed: true, hover: 5, dark: true }, `<b>Dark mode, pointer on 5 Nov.</b> The tooltip still fits in the empty lower-right area.`);
+</script>
+</body>
+</html>

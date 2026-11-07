@@ -132,6 +132,8 @@ textarea::placeholder { color: var(--muted); }
 .pace.bad, .pace.bad b { color: var(--bad); }
 .pace svg { flex-shrink: 0; }
 .chart { position: relative; margin-top: 12px; }
+/* The chart runs to the edges of the open category, past its padding */
+.cat.open .chart { margin-left: -12px; margin-right: -12px; }
 .chart svg { display: block; width: 100%; height: auto; overflow: visible; touch-action: pan-y; outline-offset: 4px; }
 .tip { position: absolute; pointer-events: none; background: var(--surface); color: var(--text); border: 1px solid var(--line); border-radius: 10px;
        padding: 8px 10px; font-size: 12px; line-height: 1.5; box-shadow: 0 4px 14px rgba(0,0,0,.12); white-space: nowrap; }
