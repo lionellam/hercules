@@ -439,7 +439,7 @@ const daysInMonth = (key: string) => {
 type PaceRow = SummaryRow & { id: number; daily: number[] };
 
 // Current month rows built from the expense list, so totals, bars and pace always agree.
-// daily[d] holds each day's spend in cents; budgeted categories with no spending yet are included.
+// daily[d] holds each day's spend in cents. Only categories with spending are listed, to keep Summary short.
 function paceRows(expenses: Expense[], categories: Category[], days: number): PaceRow[] {
   const byId = new Map<number, PaceRow>();
   const row = (id: number, name: string) => {
@@ -455,7 +455,10 @@ function paceRows(expenses: Expense[], categories: Category[], days: number): Pa
     r.daily[Number(e.date.slice(8))] += Math.round(e.amount * 100);
     r.count += 1;
   }
-  for (const c of categories) if (c.monthly_budget != null) row(c.id, c.name).budget = c.monthly_budget;
+  for (const c of categories) {
+    const r = byId.get(c.id);
+    if (r) r.budget = c.monthly_budget;
+  }
   for (const r of byId.values()) r.total = r.daily.reduce((sum, v) => sum + v, 0) / 100;
   return [...byId.values()].sort((a, b) => b.total - a.total);
 }

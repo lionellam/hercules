@@ -611,3 +611,15 @@ Last updated: 7 November 2026
 
 ### Assumptions
 - Budget changes made on another device appear after the app reloads its data, for example after saving an expense or reopening the app.
+
+---
+
+## 07 November 2026 — Summary Lists Only Categories with Spending
+
+### What Was Done
+- On the owner's request, Summary no longer lists budgeted categories with no spending in the current month, to keep the page clean. This reverses the earlier choice to list them at $0. When nothing has been spent this month, Summary again shows "No expenses this month."
+- Updated the Specification to v0.22 (process flow step 8).
+- Tested locally with the owner's own local budgets and expenses: categories with spending appear with their pace notes, and budgeted categories with nothing spent are hidden. Type-check, lint and a production build all passed.
+
+### Challenges
+- During testing, the owner was also setting budgets in the same local app. A test change briefly overwrote and then cleared their local Groceries budget ($300); it was restored straight away. Live data was not affected.
