@@ -29,10 +29,12 @@ To use the real parser locally, add an Anthropic API key to `.env.local`.
 
 Scripts read `.env.local`. To run one against production, pass the URL for that command only: `DATABASE_URL="<neon url>" npm run db:migrate`.
 
+**Schema changes:** when `db/schema.sql` changes, run the migration against Neon *before* pushing the code that relies on it. Every push to `main` deploys straight away, and migrations only add, so the live app keeps working in the meantime.
+
 ## Deploying
 
 1. **Anthropic** — in the Anthropic Console, create an API key and set a **US$5 monthly spend limit** on the account.
-2. **Vercel** — import the `hercules` GitHub repository and set **Root Directory** to `web`.
+2. **Vercel** — import the `hercules` GitHub repository and set **Root Directory** to `web`. `vercel.json` runs the server in Singapore (`sin1`), next to the Neon database; keep the two in the same region.
 3. **Neon** — in the Vercel project, add Neon from the Storage / Marketplace tab and connect it to the project. This sets `DATABASE_URL`.
 4. **Google sign-in** — in Google Cloud Console, create a project, then:
    - Configure the OAuth consent screen (External, app name "Hercules"). With only the default email and profile scopes, the app can be published without Google's verification review; while it is in "Testing", only users listed as test users can sign in.

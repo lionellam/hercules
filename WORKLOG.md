@@ -656,3 +656,19 @@ Last updated: 7 November 2026
 
 ### Assumptions
 - The Markdown documents remain the source of truth. The guide is a snapshot and should be refreshed when either document changes significantly.
+
+---
+
+## 07 November 2026 — Document Integrity Check
+
+### What Was Done
+- Checked every project document against the others and against the app's code. Versions, limits (100 parses a day, 50 categories, 14 defaults, US$5 a month), the model, the server region, the layout breakpoints and the spending pace rules all agree.
+- Fixed four contradictions:
+  - The Charter's Expense data model listed "date and time" and "payment method", which the app doesn't have.
+  - The Specification and Project Plan said the allow-list lives in "configuration or the database"; it is the `allowed_emails` table, managed with `npm run allow`.
+  - The Project Plan still said the Vercel Hobby plan terms were "to be checked on sign-up".
+  - The Specification and Architecture said expenses are edited "from History"; they can also be edited from the Log screen's Today list.
+- Brought the Project Plan's feature list up to date with the pie chart and spending pace.
+- Added two notes to `web/README.md`: apply schema changes to Neon before pushing code that relies on them, and keep the server and database in the same region (`vercel.json` uses `sin1`).
+- Noted that the diagrams from July 2026 (flow diagram, Entity Relationship Diagram, Application Wireframes) and the October UI mockup are historical, pending a redraw.
+- Charter now v0.7, Project Plan v0.8, Specification v0.26, Architecture v0.7. The readable guide's version references were updated to match. Documentation only; the app is unchanged.

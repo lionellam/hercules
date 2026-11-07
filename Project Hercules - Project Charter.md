@@ -1,8 +1,8 @@
 **Natural Language Expense & Budget Tracker**
 
 ```
-Version 0.6 · Draft
-Last Reviewed: 2 November 2026
+Version 0.7 · Draft
+Last Reviewed: 7 November 2026
 Produced with AI Assistance (Claude Code)
 ```
 
@@ -16,6 +16,7 @@ Produced with AI Assistance (Claude Code)
 | 0.4 | 2026-07-12 | James Wong, Lionel Lam | Replaced "SLM" / "Small Language Model" terminology with "local model" / "locally-hosted language model" |
 | 0.5 | 2026-10-26 | Lionel Lam | Reframed as a hosted, invite-only web app using a cloud language model (Claude Haiku 5.5); self-hosting moved to non-goals; architecture, goals, success criteria and risks updated accordingly. See Architecture document v0.1 |
 | 0.6 | 2026-11-02 | Lionel Lam | Category management and per-category monthly budgets delivered ahead of Phases 3 and 4; data model and milestones updated |
+| 0.7 | 2026-11-07 | Lionel Lam | Expense data model aligned with the Specification (date only; no time or payment method) |
 
 ---
 
@@ -80,7 +81,7 @@ Friction of maintaining an up-to-date expense and budget log can be due to the f
 ## 6. Data Model (High-Level, Proposed)
 
 - **User —** Google account, email, allow-listed
-- **Expense —** amount, category, date and time, merchant, notes, payment method
+- **Expense —** amount, currency, category, date, merchant, remarks, and the original text as typed
 - **Budget —** an optional monthly limit stored on each category; a fuller budget record (period, history) may follow in Phase 3
 - **Category —** per-user, extensible taxonomy; new users are seeded with a starter list (e.g. Food & Dining, Transport, Groceries, Utilities, Other); users add and rename categories on a Categories screen
 

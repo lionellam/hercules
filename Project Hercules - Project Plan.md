@@ -1,8 +1,8 @@
 # Project Hercules — Project Plan
 
 ```
-Version 0.7 · Draft 
-Last Reviewed: 2 November 2026
+Version 0.8 · Draft 
+Last Reviewed: 7 November 2026
 Produced with AI Assistance (Claude Code)
 ```
 
@@ -17,6 +17,7 @@ Produced with AI Assistance (Claude Code)
 | 0.5 | 2026-07-12 | James Wong, Lionel Lam | Replaced "SLM" / "Small Language Model" terminology with "local model" / "locally-hosted language model" |
 | 0.6 | 2026-10-26 | Lionel Lam | Reframed as a hosted, invite-only web app using a cloud language model; rewrote overview, objectives, vision, features, milestones and risks; added Invited Family Member persona; moved self-hosting personas to future scope |
 | 0.7 | 2026-11-02 | Lionel Lam | Category management and per-category monthly budgets delivered ahead of Phases 3 and 4; features and milestones updated |
+| 0.8 | 2026-11-07 | Lionel Lam | Features updated for the pie chart and spending pace; allow-list storage and Hobby plan risk brought up to date |
 
 ---
 
@@ -65,8 +66,8 @@ A high-level look at the functional pieces of the system. These will be broken d
 - **NL Parsing Engine** — cloud language model (Claude Haiku 5.5 via the Anthropic API) that parses input into structured fields and suggests the best-matching expense category from the user's active category list
 - **Confirmation Screen** — editable review step before data is committed to the database
 - **Expense Storage** — structured, queryable storage of logged expenses, scoped per user; edits and soft deletes supported
-- **History & Summary** — month-by-month list of expenses, and category totals for the current and previous month
-- **Budget Tracking** — category-based budgets and tracking against them; an optional monthly budget per category, shown against the current month's spend in Summary, is in place
+- **History & Summary** — month-by-month list of expenses, and category totals for the current and previous month, with a pie chart of each category's share
+- **Budget Tracking** — category-based budgets and tracking against them; an optional monthly budget per category, shown against the current month's spend in Summary, is in place, along with spending pace (an expected-by-today marker, a pace note and a burn-up chart per budgeted category)
 - **Category Taxonomy** — a per-user, extensible set of expense categories; new users are seeded with a starter list, and can add and rename categories on a Categories screen
 - **Export / Download** — ability to export a list of expenses (deferred beyond the first version)
 - **Hosting & Deployment** — Vercel, with a Neon Postgres database; installable as a Progressive Web App (PWA)
@@ -92,8 +93,8 @@ Export, retiring categories (adding and renaming were delivered early, in Novemb
 - Dependency on third-party services: Anthropic (model), Vercel (hosting), Neon (database), Google (sign-in)
 - Model usage costs — mitigated by a US$5 monthly spend limit on the Anthropic account and a limit of 100 parses per user per day
 - Users need a Google account to sign in
-- The allow-list is managed manually (config or database) until an administration screen is built
-- Vercel's free Hobby plan is intended for personal, non-commercial use — terms to be checked on sign-up
+- The allow-list is managed manually (an `allowed_emails` database table, using `npm run allow`) until an administration screen is built
+- Vercel's free Hobby plan is intended for personal, non-commercial use — terms confirmed on 2 November 2026 as suitable for a private family app
 
 ## 8. Review Checkpoints
 

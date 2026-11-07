@@ -1,7 +1,7 @@
 # Project Hercules — Specification Sheet: "Log an Expense" Flow
 
 ```
-Version 0.25 · Draft 
+Version 0.26 · Draft 
 Last Reviewed: 7 November 2026
 Produced with AI Assistance (Claude Code)
 ```
@@ -35,6 +35,7 @@ Produced with AI Assistance (Claude Code)
 | 0.23 | 2026-11-07 | Lionel Lam | Added Section 4.1, the spending pace rules with a worked example |
 | 0.24 | 2026-11-07 | Lionel Lam | Corrected the v0.10 entry and moved the History and Summary pinned-header note into process flow step 8, where it was intended in v0.18 and v0.19 |
 | 0.25 | 2026-11-07 | Lionel Lam | Marked merchant suggestions and the "Other" sub-label prompt as not yet built in the web app |
+| 0.26 | 2026-11-07 | Lionel Lam | Allow-list storage and `updated_at` wording brought up to date; the July 2026 diagrams noted as historical |
 
 ---
 
@@ -135,7 +136,7 @@ Notes:
 | `remarks` | string (optional) | Freeform, **user-authored** notes — distinct from `raw_input`, which is model input |
 | `was_edited` | boolean | Flags whether the user modified any parsed field before saving — a proxy signal for parsing accuracy over time |
 | `created_at` | timestamp | System-generated |
-| `updated_at` | timestamp | Set when a saved record is edited from History |
+| `updated_at` | timestamp | Set when a saved record is edited (from History or the Log screen's Today list) |
 | `deleted_at` | timestamp (optional) | Set when a record is deleted (soft delete). Deleted records are hidden from History and Summary but remain recoverable, in line with the audit-friendly principle |
 | `source_ref` | string (optional) | Origin of imported records (e.g. `cli:42` for a CLI record); empty for entries made in the app. Makes the one-off CLI import safe to re-run |
 
@@ -175,7 +176,7 @@ Merchant is handled as autocomplete-over-free-text, not a constrained/enum list.
 **Authentication and access:**
 
 - **Google sign-in only.** Users sign in with their Google account; there are no app-specific passwords.
-- **Allow-list.** Only invited email addresses may sign in. Anyone else who signs in with Google is refused. In the first version, the allow-list is managed directly in configuration or the database; an administration screen is deferred.
+- **Allow-list.** Only invited email addresses may sign in. Anyone else who signs in with Google is refused. In the first version, the allow-list is an `allowed_emails` database table, managed with `npm run allow`; an administration screen is deferred.
 - **First sign-in.** When an allow-listed user signs in for the first time, a `User` record is created and seeded with the starter category list.
 - **Usage limits.** Each user may parse up to 100 expenses per day, as a safeguard on model costs.
 
@@ -232,5 +233,5 @@ Carried forward, not yet resolved:
 ## 9. Next Steps
 
 1. Review and resolve (or explicitly defer) the open questions in Section 7
-2. Redraw the UPN process flow diagram to reflect this spec (single bounded AI activity box, no re-parse loop, edit happens inline at confirmation)
+2. Redraw the UPN process flow diagram to reflect this spec (single bounded AI activity box, no re-parse loop, edit happens inline at confirmation). The flow diagram, Entity Relationship Diagram and Application Wireframes in the repository date from July 2026 and still show the proof-of-concept design (profile picker, local model); treat them as historical until they are redrawn
 3. Break this spec down into a feature breakdown structure → initial backlog → user story map
