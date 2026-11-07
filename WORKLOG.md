@@ -717,3 +717,16 @@ Last updated: 7 November 2026
 ### What Was Done
 - Re-checked all project documents against each other, the readable guide and the code after the burn-up chart and wider layout changes. Versions, layout widths, chart rules and the guide all agreed.
 - Fixed two wording issues in the Specification (now v0.28): the v0.27 entry said the chart has no side margins (it has small ones), and Section 4.1 now states that the "Today" label aligns left on the first day and right on the last two days of the month, as the code does. The readable guide now cites Specification v0.28. Documentation only.
+
+---
+
+## 07 November 2026 — Sample Data for Local Testing
+
+### What Was Done
+- Added `npm run sample -- add <email>` and `remove <email>` (`web/scripts/sample-data.mts`), which add 194 made-up expenses to the local database: full months for September and October 2026, and 1 to 7 November chosen so the Summary shows each pace state against the local budgets (Food & Dining and Transport over pace, Groceries on pace, Shopping under pace).
+- Loaded the sample into the owner's local database alongside their existing entries, and checked the Summary screen. Re-running `add` adds nothing new. Documented in the web README.
+
+### Decisions Made
+- **Tagged, not separate** — sample rows use `source_ref = 'sample:<n>'`, the same column the CLI import uses, so they can be removed exactly without touching real entries, and no schema change is needed.
+- **Local database only** — the script refuses to run unless `DATABASE_URL` points at the local machine, so sample data can't reach the live Neon database.
+- **Fixed, repeatable data** — a seeded generator produces the same expenses every time, so results are predictable when testing.

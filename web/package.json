@@ -10,6 +10,7 @@
     "db:local": "pglite-server --db=.pglite --port=5433 --max-connections=10",
     "db:migrate": "node --env-file-if-exists=.env.local scripts/migrate.mts",
     "allow": "node --env-file-if-exists=.env.local scripts/allow.mts",
+    "sample": "node --env-file-if-exists=.env.local scripts/sample-data.mts",
     "import:cli": "node --env-file-if-exists=.env.local scripts/import-cli.mts"
   },
   "dependencies": {

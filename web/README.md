@@ -25,6 +25,7 @@ To use the real parser locally, add an Anthropic API key to `.env.local`.
 | `npm run allow -- add <email>` | Invite someone |
 | `npm run allow -- remove <email>` | Revoke access (their data is kept) |
 | `npm run allow -- list` | Show the allow-list |
+| `npm run sample -- add <email>` / `remove <email>` | Local database only: add about three months of made-up expenses (September, October and early November 2026) to try the app, or remove them. Sample rows are tagged `sample:` and your own entries are never touched. Safe to re-run |
 | `npm run import:cli -- <email> [db path] [--dry-run]` | One-off import of the CLI's SQLite expenses (default `../poc/data/expenses.db`). The user must have signed in once. Safe to re-run |
 
 Scripts read `.env.local`. To run one against production, pass the URL for that command only: `DATABASE_URL="<neon url>" npm run db:migrate`.
