@@ -694,3 +694,18 @@ Last updated: 7 November 2026
 
 ### What Was Done
 - Updated the readable guide (repository copy and the private claude.ai artifact) for Specification v0.27: its Summary mockup now shows the larger burn-up chart, drawn with the same layout and label rules as the app, and its document versions now read Specification v0.27 and Architecture v0.7.
+
+---
+
+## 07 November 2026 — Wider Layout on Larger Screens
+
+### What Was Done
+- The owner noticed wide empty bands either side of the app in a laptop browser. Mockups (`design/wide-layout-mockups.html`) compared the current 820-pixel limit with two wider options in a 1,440-pixel laptop window and on an iPad held sideways; the owner chose Option A.
+- The app now widens to 920 pixels from 1,024-pixel windows (iPad held sideways, small laptops) and to 1,000 pixels from 1,280-pixel windows. Phones and upright iPads are unchanged, as are the two columns, the tab bar and the inner padding.
+- In a 1,440-pixel window, the app now uses 69% of the width instead of 57%, and each empty band shrinks from 310 to 220 pixels. The burn-up chart grows with its column, and its text from about 11 to 14 pixels, which stays comfortable to read.
+- Updated the Architecture document to v0.8 (decision 24) and the readable guide (repository copy and artifact).
+- Tested locally at 375, 900, 1,024, 1,279, 1,280 and 1,440 pixels across all four tabs and the edit dialog: the expected widths at each step, no sideways scrolling, and the edit dialog still 480 pixels. Type-check and a production build passed.
+
+### Decisions Made
+- **Option A over the wider Option B** — Option B (up to 1,120 pixels, list column favoured) would have made the burn-up chart's text oversized unless the chart was rewritten to keep its labels a fixed size.
+- **History and Categories use the full width too** — their rows are a little wider at 1,000 pixels but still read comfortably, so they weren't capped.

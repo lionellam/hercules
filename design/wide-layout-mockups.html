@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wide Screen Layout</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root { --page: #ececea; --page-text: #18181b; --page-muted: #5f5f66; --page-card: #fafaf9; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--page); color: var(--page-text); font-family: Inter, -apple-system, system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  main { max-width: 1300px; margin: 0 auto; padding: 36px 16px 80px; }
+  h1 { font-size: 28px; letter-spacing: -0.02em; margin: 0 0 8px; }
+  .intro p, section > p { color: var(--page-muted); max-width: 820px; line-height: 1.55; margin: 0 0 10px; font-size: 15px; }
+  section { margin-top: 44px; }
+  section > h2 { font-size: 20px; margin: 0 0 6px; }
+  .tag { display: inline-block; font-size: 11px; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; padding: 3px 8px; border-radius: 6px; background: #18181b; color: #fff; margin-left: 8px; vertical-align: 3px; }
+  .row { display: flex; flex-wrap: wrap; gap: 26px; align-items: flex-start; margin-top: 18px; }
+  figure { margin: 0; }
+  figcaption { font-size: 13px; color: var(--page-muted); margin-top: 10px; line-height: 1.5; max-width: 620px; }
+  figcaption b { color: var(--page-text); }
+  .meas { display: inline-block; font-variant-numeric: tabular-nums; background: #fff; border: 1px solid rgba(0,0,0,.1); border-radius: 6px; padding: 1px 6px; color: var(--page-text); font-size: 12px; margin: 4px 6px 0 0; }
+  /* A browser window drawn at real size, then scaled down to fit the page */
+  .window-box { overflow: hidden; border-radius: 12px; box-shadow: 0 1px 2px rgba(0,0,0,.08), 0 10px 26px rgba(0,0,0,.1); border: 1px solid rgba(0,0,0,.12); }
+  .window { transform-origin: top left; background: #18181b; }
+  .chrome { height: 34px; background: #2a2a2e; display: flex; align-items: center; gap: 7px; padding: 0 14px; }
+  .chrome i { width: 11px; height: 11px; border-radius: 50%; background: #55555c; display: block; }
+  .chrome span { margin-left: 14px; flex: 1; max-width: 420px; height: 20px; border-radius: 6px; background: #1d1d20; color: #8b8b93; font-size: 11px; display: flex; align-items: center; padding: 0 10px; }
+  .guide { position: relative; }
+  .guide .edge { position: absolute; top: 0; bottom: 0; width: 0; border-left: 2px dashed rgba(244,114,182,.55); }
+  .plan { margin-top: 52px; background: var(--page-card); border-radius: 16px; padding: 22px 26px; max-width: 900px; }
+  .plan h2 { margin: 0 0 10px; font-size: 18px; }
+  .plan table { border-collapse: collapse; width: 100%; font-size: 14px; }
+  .plan th, .plan td { text-align: left; padding: 8px 10px; border-bottom: 1px solid #e3e3e0; vertical-align: top; }
+  .plan th { font-size: 12px; color: var(--page-muted); text-transform: uppercase; letter-spacing: .04em; }
+  .plan ul { margin: 12px 0 0; padding-left: 20px; line-height: 1.6; font-size: 14.5px; }
+
+  /* App replica, dark theme, using web/app/globals.css values */
+  .app { --bg: #18181b; --surface: #18181b; --text: #f4f4f5; --muted: #a1a1aa; --line: #27272a; --soft: #27272a; --bar: #f4f4f5; --bad: #f87171;
+         --pie-1: #3987e5; --pie-2: #d95926; --pie-3: #199e70; --pie-4: #c98500; --pie-5: #d55181; --pie-6: #008300;
+         background: var(--bg); color: var(--text); font-size: 15px; margin: 0 auto; position: relative; }
+  .app .top { padding: 32px 32px 16px; border-bottom: 1px solid var(--line); position: relative; }
+  .app .tgl { position: absolute; top: 32px; right: 26px; width: 22px; height: 22px; color: var(--muted); }
+  .app h3 { font-size: 28px; font-weight: 700; letter-spacing: -0.02em; margin: 0; }
+  .app .seg { display: flex; background: var(--soft); border-radius: 12px; padding: 3px; margin-top: 18px; }
+  .app .seg span { flex: 1; height: 34px; display: grid; place-items: center; border-radius: 10px; font-size: 14px; font-weight: 500; color: var(--muted); }
+  .app .seg span.on { background: var(--surface); color: var(--text); }
+  .app .body { padding: 0 32px 28px; }
+  .app .sub { color: var(--muted); font-size: 14px; }
+  .app .total { margin-top: 22px; }
+  .app .big { font-size: 38px; font-weight: 700; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+  .app .dayline { font-size: 13px; color: var(--muted); margin-top: 6px; }
+  .app .dayline b { color: var(--text); }
+  .app .delta { font-size: 13px; color: var(--muted); margin-top: 2px; }
+  .app .columns { display: grid; column-gap: 40px; align-items: start; }
+  .app .columns > div > :first-child { margin-top: 24px; }
+  .app .cat { margin-top: 18px; }
+  .app .cat.open { background: var(--soft); margin-left: -12px; margin-right: -12px; padding: 12px 12px 10px; border-radius: 14px; }
+  .app .cat-top { display: flex; justify-content: space-between; gap: 12px; font-size: 14px; margin-bottom: 6px; align-items: baseline; }
+  .app .cat-top .n { color: var(--muted); font-size: 12px; margin-left: 6px; }
+  .app .cat-top strong { font-variant-numeric: tabular-nums; }
+  .app .of { color: var(--muted); font-weight: 400; }
+  .app .meter { position: relative; }
+  .app .track { height: 6px; background: var(--soft); border-radius: 3px; overflow: hidden; }
+  .app .cat.open .track { background: var(--line); }
+  .app .fill { height: 100%; background: var(--bar); border-radius: 3px; }
+  .app .tick { position: absolute; top: -3px; width: 2px; height: 12px; background: var(--text); transform: translateX(-1px); box-shadow: 0 0 0 1.5px var(--bg); }
+  .app .cat.open .tick { box-shadow: 0 0 0 1.5px var(--soft); }
+  .app .pace { margin-top: 6px; font-size: 12.5px; color: var(--muted); }
+  .app .pace b { color: var(--text); font-weight: 600; }
+  .app .chart { margin: 12px -12px 0; }
+  .app .chart svg { display: block; width: 100%; height: auto; overflow: visible; }
+  .app .daily { margin-top: 8px; font-size: 12.5px; color: var(--muted); }
+  .app .section-h { margin: 0; font-size: 13px; color: var(--muted); font-weight: 600; letter-spacing: .04em; }
+  .app .pie { display: flex; flex-direction: column; gap: 16px; margin-top: 16px; }
+  .app .pie svg { width: 180px; height: 180px; align-self: center; }
+  .app .pie path { stroke: var(--surface); stroke-width: 1.5; }
+  .app .pie ul { list-style: none; margin: 0; padding: 0; }
+  .app .pie li { display: flex; align-items: center; gap: 8px; font-size: 13px; padding: 3px 0; }
+  .app .pie .sw { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
+  .app .pie .nm { flex: 1; }
+  .app .pie .pct { color: var(--muted); font-variant-numeric: tabular-nums; }
+</style>
+</head>
+<body>
+<main>
+  <div class="intro">
+    <h1>Wide screen layout</h1>
+    <p>On tablets and computers the app is capped at 820 pixels wide and centred, so a laptop window leaves wide empty bands on either side. These mockups show the Summary screen in a 1,440-pixel laptop window and a 1,024-pixel iPad held sideways, now and with two options. They use the figures from your screenshot (7 November, dark mode). Nothing in the app has changed.</p>
+    <p>The dashed pink lines mark the edges of today's 820-pixel layout, so you can see how much each option widens it.</p>
+  </div>
+
+  <section>
+    <h2>Laptop window, 1,440 pixels wide</h2>
+    <div class="row" id="laptop"></div>
+  </section>
+
+  <section>
+    <h2>iPad held sideways, 1,024 pixels wide</h2>
+    <div class="row" id="ipad"></div>
+  </section>
+
+  <div class="plan">
+    <h2>The options</h2>
+    <table>
+      <thead><tr><th>Window width</th><th>Now</th><th>Option A · a little wider <span class="tag">Recommended</span></th><th>Option B · wider, list favoured</th></tr></thead>
+      <tbody>
+        <tr><td>Phone (under 768)</td><td>Full width</td><td>No change</td><td>No change</td></tr>
+        <tr><td>768 – 1,023 (iPad upright)</td><td>Up to 820</td><td>No change</td><td>No change</td></tr>
+        <tr><td>1,024 – 1,279 (iPad sideways, small laptop)</td><td>820</td><td>920</td><td>960</td></tr>
+        <tr><td>1,280 and wider (laptop, desktop)</td><td>820</td><td>1,000</td><td>1,120, with the list column wider than the pie column (3 : 2)</td></tr>
+      </tbody>
+    </table>
+    <ul>
+      <li><b>What stays the same:</b> the phone layout, the bottom tab bar, the two columns on Log and Summary, and the 32-pixel side padding inside the app.</li>
+      <li><b>Option A</b> widens the app in two gentle steps. Everything grows a little, including the burn-up chart, whose text grows with it (about 25% larger at 1,000 wide). That stays comfortable to read.</li>
+      <li><b>Option B</b> uses more of the window and gives the extra width to the category list and chart. At 1,120 the chart would be about 75% wider than on a phone, and its text would scale up with it unless the chart's labels are changed to keep a fixed size. That's more work, so B would need that change as well.</li>
+      <li>Both are CSS changes to the existing wide-screen rule. History and Categories are single lists, so they'd get longer lines too; I'd cap their lists at the current width if that reads better.</li>
+    </ul>
+  </div>
+</main>
+
+<script>
+const N = 30, D = 7;
+const FOOD = { name: "Food & Dining", budget: 500, count: 23, daily: [0, 20.5, 18.2, 31.4, 22.1, 25.6, 30.4, 23.52] };
+const ROWS = [
+  { name: "Food & Dining", total: 171.72, count: 23, budget: 500, open: true },
+  { name: "Transport", total: 146.77, count: 10, budget: 200 },
+  { name: "Groceries", total: 52.0, count: 3, budget: 300 },
+  { name: "Utilities", total: 25.2, count: 1, budget: null },
+];
+const fmt = (n) => n.toLocaleString("en-SG", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const whole = (n) => fmt(n).replace(/\.00$/, "");
+
+// The app's BurnUp layout (web/components/hercules-app.tsx)
+function burnup() {
+  const W = 359, H = 200, m = { l: 6, r: 6, t: 20, b: 24 }, pw = W - m.l - m.r, ph = H - m.t - m.b;
+  const cum = [0]; for (let k = 1; k <= N; k++) cum[k] = cum[k - 1] + (FOOD.daily[k] || 0);
+  const spent = cum[D], top = Math.max(FOOD.budget, spent) * 1.12;
+  const x = (k) => m.l + (k / N) * pw, y = (v) => m.t + ph - (v / top) * ph;
+  let step = `M${x(0)} ${y(0)}`; for (let k = 1; k <= D; k++) step += ` L${x(k)} ${y(cum[k - 1])} L${x(k)} ${y(cum[k])}`;
+  const t = (X, Y, s, a = "middle") => `<text x="${X}" y="${Y}" text-anchor="${a}" font-size="10.5" fill="var(--muted)">${s}</text>`;
+  return `<svg viewBox="0 0 ${W} ${H}">
+    <line x1="${m.l}" x2="${x(N)}" y1="${y(0)}" y2="${y(0)}" stroke="var(--muted)" stroke-opacity=".5"/>
+    <line x1="${m.l}" x2="${x(N)}" y1="${y(FOOD.budget)}" y2="${y(FOOD.budget)}" stroke="var(--muted)" stroke-opacity=".35"/>
+    ${t(x(N), y(FOOD.budget) - 5, "Budget 500", "end")}
+    <line x1="${x(0)}" y1="${y(0)}" x2="${x(N)}" y2="${y(FOOD.budget)}" stroke="var(--muted)" stroke-width="1.5" stroke-dasharray="4 3"/>
+    <line x1="${x(D)}" x2="${x(D)}" y1="${m.t - 4}" y2="${y(0)}" stroke="var(--muted)" stroke-opacity=".7"/>
+    ${t(x(D), m.t - 7, "Today")}
+    <path d="${step} L${x(D)} ${y(0)} Z" fill="var(--bar)" fill-opacity=".09"/>
+    <path d="${step}" fill="none" stroke="var(--bar)" stroke-width="2" stroke-linejoin="round"/>
+    ${t(x(1) - 4, y(0) + 16, "1 Nov", "start")}${t(x(10), y(0) + 16, "10")}${t(x(20), y(0) + 16, "20")}${t(x(N), y(0) + 16, "30", "end")}
+    <circle cx="${x(D)}" cy="${y(spent)}" r="4.5" fill="var(--bar)" stroke="var(--soft)" stroke-width="2"/>
+    <text x="${x(D) + 9}" y="${y(spent) - 7}" font-size="11.5" font-weight="600" fill="var(--text)">$${fmt(spent)}</text></svg>`;
+}
+
+function pace(r) {
+  const exp = (r.budget * D) / N, diff = r.total - exp, left = r.budget - r.total;
+  const tail = `$${fmt(left)} left, about $${fmt(left / (N - D))}/day`;
+  if (Math.abs(diff) <= 0.05 * r.budget) return `<b>On pace</b> · ${tail}`;
+  return `<b>$${fmt(Math.abs(diff))} ${diff > 0 ? "over" : "under"} pace</b> · ${tail}`;
+}
+
+function rows() {
+  const max = Math.max(...ROWS.map((r) => r.total));
+  return ROWS.map((r) => {
+    const share = Math.min(r.total / (r.budget ?? max), 1) * 100;
+    return `<div class="cat${r.open ? " open" : ""}">
+      <div class="cat-top"><span>${r.name}<span class="n">${r.count}</span></span><span><strong>${fmt(r.total)}</strong>${r.budget ? ` <span class="of">of ${fmt(r.budget)}</span>` : ""}</span></div>
+      <div class="meter"><div class="track"><div class="fill" style="width:${share}%"></div></div>${r.budget ? `<div class="tick" style="left:${(D / N) * 100}%"></div>` : ""}</div>
+      ${r.budget ? `<div class="pace">${pace(r)}</div>` : ""}
+      ${r.open ? `<div class="chart">${burnup()}</div><div class="daily">▸ Daily figures</div>` : ""}</div>`;
+  }).join("");
+}
+
+function pie() {
+  const total = ROWS.reduce((s, r) => s + r.total, 0);
+  const pt = (f) => `${50 + 50 * Math.sin(2 * Math.PI * f)} ${50 - 50 * Math.cos(2 * Math.PI * f)}`;
+  let s = 0;
+  const paths = ROWS.map((r, i) => { const f = r.total / total; const p = `<path d="M50 50 L${pt(s)} A50 50 0 ${f > 0.5 ? 1 : 0} 1 ${pt(s + f)} Z" fill="var(--pie-${i + 1})"/>`; s += f; return p; }).join("");
+  return `<p class="section-h">SHARE OF SPEND</p><div class="pie"><svg viewBox="0 0 100 100">${paths}</svg><ul>${ROWS.map((r, i) =>
+    `<li><span class="sw" style="background:var(--pie-${i + 1})"></span><span class="nm">${r.name}</span><span class="pct">${Math.round((r.total / total) * 100)}%</span></li>`).join("")}</ul></div>`;
+}
+
+const sun = `<svg class="tgl" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M5.6 18.4L7 17M17 7l1.4-1.4"/></svg>`;
+
+function app(maxW, cols) {
+  return `<div class="app" style="max-width:${maxW}px">
+    <div class="top">${sun}<h3>Summary</h3><div class="seg"><span class="on">November</span><span>October</span></div></div>
+    <div class="body">
+      <div class="total"><div class="sub">Spent so far this month</div><div class="big">$395.69</div><div class="dayline"><b>Day 7 of 30</b> · Sat, 7 Nov</div><div class="delta">+$333.47 vs October</div></div>
+      <div class="columns" style="grid-template-columns:${cols}"><div>${rows()}</div><div>${pie()}</div></div>
+    </div></div>`;
+}
+
+// Draws a browser window of the given width at real size, scaled to fit `fitW` on this page
+function frame(target, winW, maxW, cols, caption, fitW) {
+  const appW = Math.min(winW, maxW);
+  const scale = fitW / winW;
+  const winH = 900;
+  const left820 = (winW - Math.min(820, winW)) / 2;
+  const listCol = cols === "1fr 1fr" ? (appW - 64 - 40) / 2 : ((appW - 64 - 40) * 3) / 5;
+  const chartPx = listCol + 24;
+  const margin = (winW - appW) / 2;
+  document.getElementById(target).insertAdjacentHTML("beforeend", `<figure>
+    <div class="window-box" style="width:${fitW}px;height:${(winH + 34) * scale}px">
+      <div class="window" style="width:${winW}px;height:${winH + 34}px;transform:scale(${scale})">
+        <div class="chrome"><i></i><i></i><i></i><span>hercules-eta-three.vercel.app</span></div>
+        <div class="guide" style="height:${winH}px;overflow:hidden">${app(maxW, cols)}
+          ${maxW > 820 ? `<div class="edge" style="left:${left820}px"></div><div class="edge" style="left:${winW - left820}px"></div>` : ""}</div>
+      </div>
+    </div>
+    <figcaption>${caption}<br>
+      <span class="meas">App ${appW}px wide · ${Math.round((appW / winW) * 100)}% of the window</span><span class="meas">Empty band each side: ${Math.round(margin)}px</span><span class="meas">Chart ${Math.round(chartPx)}px wide (${(chartPx / 359).toFixed(2)}× a phone)</span>
+    </figcaption></figure>`);
+}
+
+const FIT = Math.min(600, document.querySelector("main").clientWidth - 32);
+frame("laptop", 1440, 820, "1fr 1fr", `<b>Now.</b> Capped at 820 pixels, as in your screenshot.`, FIT);
+frame("laptop", 1440, 1000, "1fr 1fr", `<b>Option A · a little wider.</b> Up to 1,000 pixels from 1,280-pixel windows; two equal columns.`, FIT);
+frame("laptop", 1440, 1120, "3fr 2fr", `<b>Option B · wider, list favoured.</b> Up to 1,120 pixels, with the list and chart column taking three-fifths.`, FIT);
+frame("ipad", 1024, 820, "1fr 1fr", `<b>Now.</b> 820 pixels on a 1,024-pixel iPad held sideways.`, FIT);
+frame("ipad", 1024, 920, "1fr 1fr", `<b>Option A.</b> Up to 920 pixels from 1,024-pixel windows.`, FIT);
+frame("ipad", 1024, 960, "3fr 2fr", `<b>Option B.</b> Up to 960 pixels, list column favoured.`, FIT);
+</script>
+</body>
+</html>

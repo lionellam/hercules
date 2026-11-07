@@ -247,7 +247,7 @@ html { scroll-behavior: smooth; }
       <h1>How Hercules works</h1>
       <p class="lede">Hercules is a private expense tracker for family and close friends. You type an expense the way you'd say it, Claude turns it into a tidy record, and you check it before it's saved.</p>
       <div class="meta">
-        <span><b>Based on:</b> Specification v0.27 and Architecture v0.7</span>
+        <span><b>Based on:</b> Specification v0.27 and Architecture v0.8</span>
         <span><b>Status:</b> live on Vercel since 1 November 2026</span>
         <span><b>Owner:</b> Lionel Lam</span>
       </div>
@@ -356,7 +356,7 @@ html { scroll-behavior: smooth; }
     </div>
 
     <h2 id="screens">The other screens</h2>
-    <p>There are four tabs: Log, History, Summary and Categories. On every one, the heading and its main control stay pinned at the top while the rest scrolls. A sun or moon icon switches between light and dark mode. On a tablet or computer, the app widens to two columns.</p>
+    <p>There are four tabs: Log, History, Summary and Categories. On every one, the heading and its main control stay pinned at the top while the rest scrolls. A sun or moon icon switches between light and dark mode. On a tablet or computer, the app widens to two columns, and uses more of the window on larger screens.</p>
 
     <div class="figure-row">
       <figure>
@@ -609,7 +609,7 @@ html { scroll-behavior: smooth; }
       <div class="decision"><span class="n">#14</span><div><h4>Installs from the browser</h4><p>Add it to the home screen and it opens full-screen like an app, with no App Store needed.</p></div></div>
       <div class="decision"><span class="n">#15</span><div><h4>No offline logging</h4><p>Parsing needs the internet. Offline, the app says so and keeps what you've typed.</p></div></div>
       <div class="decision"><span class="n">#23</span><div><h4>Data kept in memory for instant tabs</h4><p>Screens show what was last loaded straight away and refresh quietly in the background. Any save, edit or delete reloads everything. Nothing is stored on the phone, so it's gone when the app closes.</p></div></div>
-      <div class="decision"><span class="n">#24</span><div><h4>Moderately wider on bigger screens</h4><p>Phone layout up to 767 pixels wide. From 768 pixels the app widens to 820 pixels, with two columns on Log and Summary and edit forms as centred dialogs. The bottom tab bar stays at every size.</p></div></div>
+      <div class="decision"><span class="n">#24</span><div><h4>Moderately wider on bigger screens</h4><p>Phone layout up to 767 pixels wide. From 768 pixels the app widens to 820 pixels, then to 920 pixels on an iPad held sideways or a small laptop and 1,000 pixels on a larger laptop or desktop, with two columns on Log and Summary and edit forms as centred dialogs. The bottom tab bar stays at every size.</p></div></div>
       <div class="decision"><span class="n">#25</span><div><h4>Light and dark mode</h4><p>Follows the device until you tap the toggle, then remembers your choice on that device. It's a display preference, so it isn't stored in your account.</p></div></div>
     </div>
 
@@ -648,7 +648,7 @@ html { scroll-behavior: smooth; }
     </ul>
 
     <footer>
-      Source documents: <span class="mono">Project Hercules - Specification.md</span> (v0.27) and <span class="mono">Project Hercules - Architecture.md</span> (v0.7) in the hercules repository. Mockups use sample data, not anyone's real expenses.
+      Source documents: <span class="mono">Project Hercules - Specification.md</span> (v0.27) and <span class="mono">Project Hercules - Architecture.md</span> (v0.8) in the hercules repository. Mockups use sample data, not anyone's real expenses.
     </footer>
   </main>
 </div>

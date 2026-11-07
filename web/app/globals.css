@@ -190,6 +190,14 @@ textarea::placeholder { color: var(--muted); }
   .sheet { border-radius: 20px; padding-bottom: 16px; }
 }
 
+/* Wider windows: iPad held sideways and small laptops, then larger laptops and desktops */
+@media (min-width: 1024px) {
+  .app { max-width: 920px; }
+}
+@media (min-width: 1280px) {
+  .app { max-width: 1000px; }
+}
+
 /* On short screens such as a phone held sideways, the fixed section would leave little room to scroll */
 @media (max-height: 500px) {
   .pinned-top { position: static; }
