@@ -1,0 +1,40 @@
+# Publishes the user guide ("Project Hercules - How Hercules Works.html") to GitHub Pages as the site's home page.
+# Only the guide is published; nothing else in the repository goes on the site.
+name: Publish user guide
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "Project Hercules - How Hercules Works.html"
+      - ".github/workflows/guide-pages.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Prepare site
+        run: |
+          mkdir _site
+          cp "Project Hercules - How Hercules Works.html" _site/index.html
+          touch _site/.nojekyll
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - id: deployment
+        uses: actions/deploy-pages@v4

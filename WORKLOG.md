@@ -816,3 +816,16 @@ Last updated: 8 November 2026
 
 ### Decisions Made
 - **Plain privacy section** — states plainly that the owner can reach the database to fix problems or recover deleted expenses, rather than implying no one can.
+
+---
+
+## 08 November 2026 — User Guide Published on GitHub Pages
+
+### What Was Done
+- Published the user guide at https://lionellam.github.io/hercules/ using GitHub Pages, at the owner's request.
+- Added `.github/workflows/guide-pages.yml`, which copies `Project Hercules - How Hercules Works.html` to the site's `index.html` and deploys it whenever the guide changes on `main` (or when run by hand). Only the guide is published.
+- Turned on GitHub Pages for the repository with GitHub Actions as the source.
+
+### Decisions Made
+- **Publish only the guide** — the repository is already public, but the site shows just the guide, under a short address, without renaming or copying the file in the repository.
+- **Checked before publishing** — the guide contains no email addresses or link to the app; it names the owner by first name only.
