@@ -1,5 +1,6 @@
 import { currentUser, unauthorized } from "@/lib/session";
-import { monthSummary, MONTH } from "@/lib/expenses";
+import { MONTH } from "@/lib/dates";
+import { monthSummary } from "@/lib/expenses";
 
 export async function GET(req: Request) {
   const user = await currentUser();

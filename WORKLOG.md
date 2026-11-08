@@ -788,3 +788,18 @@ Last updated: 8 November 2026
 - **Unused request removed:** the app requested the current month's Summary totals each time it opened and each time Summary loaded, but the current month is worked out on the device from this month's expenses, so the result was never used. It is no longer requested, saving a database query on every app open. The month summary also no longer returns budgets, which only the current month uses. Architecture decision 23 updated (v0.11).
 - **Fragile query fixed:** restoring a category built part of its SQL by text-replacing a placeholder in a shared fragment. The fragment is now a small function that takes its parameter positions explicitly.
 - Tested in the local app: on opening, only this month's expenses, the categories and last month's totals are requested; Summary shows the same figures as before for November ($2,283.02, −$1,224.48 vs October, same pace notes) and October ($3,507.50, +$348.60 vs September). Retire, restore, restore-by-re-adding and the duplicate-name check all behaved as before, using temporary `zz-test-` categories that were then removed; local data was confirmed identical to a snapshot taken beforehand. Type-check, lint and a production build passed.
+
+---
+
+## 08 November 2026 — Code Reorganised by Role
+
+### What Was Done
+- Split `web/components/hercules-app.tsx` (1,066 lines) by role, with no change to behaviour:
+  - `components/screens/`: `log.tsx`, `history.tsx`, `summary.tsx`, `categories.tsx` (one file per screen).
+  - `components/`: `confirm.tsx` (confirmation sheet and Undo bar), `expense-sheet.tsx` (expense row and edit sheet), `pace.tsx` (pace note and burn-up chart), `spend-pie.tsx`. `hercules-app.tsx` keeps only the shell and tab bar (59 lines).
+  - `lib/types.ts`: `Category`, `Expense` and `SummaryRow`, defined once for the server and the screens (previously defined twice).
+  - `lib/dates.ts`: all date checks, arithmetic and formatting, previously split across `lib/expenses.ts`, `lib/parser.ts` and the screen file, with the same date format written out in five places. The parser no longer imports the database module just to check a date.
+  - `lib/pace.ts`: the spending pace maths, as plain functions that can be tested on their own.
+  - `lib/client.ts`: fetching, the in-memory cache, the online check and money formatting.
+- Architecture v0.12 records the layout as decision 31.
+- Checked that every block of the old file appears unchanged in the new files, apart from the intended changes (shared types and date helpers, two renamed parameters). Clicked through every screen in the local app: Log, History (day headings, delete confirmation), Summary ($2,283.02, −$1,224.48 vs October, the same pace notes, pie chart and burn-up chart) and Categories (14 categories, discard and retire confirmations), all matching earlier results; local data confirmed unchanged. Type-check, lint and a production build passed.

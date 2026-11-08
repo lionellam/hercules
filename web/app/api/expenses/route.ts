@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { currentUser, unauthorized } from "@/lib/session";
-import { createExpense, expenseInput, listExpenses, MONTH } from "@/lib/expenses";
+import { MONTH } from "@/lib/dates";
+import { createExpense, expenseInput, listExpenses } from "@/lib/expenses";
 
 export async function GET(req: Request) {
   const user = await currentUser();

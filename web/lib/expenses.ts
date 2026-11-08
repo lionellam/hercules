@@ -1,33 +1,12 @@
 import "server-only";
 import { z } from "zod";
+import { isRealDate, monthRange } from "./dates";
 import { query } from "./db";
+import type { Category, Expense, SummaryRow } from "./types";
 
 export const DAILY_PARSE_LIMIT = 100;
 export const MAX_CATEGORIES = 50;
 
-export type Category = { id: number; name: string; is_other: boolean; monthly_budget: number | null };
-
-export type Expense = {
-  id: number;
-  raw_input: string;
-  amount: number;
-  currency: string;
-  category_id: number;
-  category: string;
-  merchant: string | null;
-  date: string;
-  remarks: string | null;
-  was_edited: boolean;
-};
-
-export const MONTH = /^20\d{2}-(0[1-9]|1[0-2])$/;
-
-// A real calendar date in 2000–2099, so e.g. 2026-02-31 is refused here rather than failing in the database.
-export function isRealDate(s: string) {
-  if (!/^20\d{2}-\d{2}-\d{2}$/.test(s)) return false;
-  const d = new Date(`${s}T00:00:00Z`);
-  return !Number.isNaN(d.getTime()) && d.toISOString().slice(0, 10) === s;
-}
 export const realDate = z.string().refine(isRealDate);
 
 export const expenseInput = z.object({
@@ -132,12 +111,6 @@ async function ownsCategory(userId: string, categoryId: number) {
   return rows.length > 0;
 }
 
-function monthRange(month: string) {
-  const [y, m] = month.split("-").map(Number);
-  const next = m === 12 ? `${y + 1}-01` : `${y}-${String(m + 1).padStart(2, "0")}`;
-  return [`${month}-01`, `${next}-01`];
-}
-
 export function listExpenses(userId: string, month: string) {
   const [start, end] = monthRange(month);
   return query<Expense>(
@@ -153,7 +126,7 @@ export function listExpenses(userId: string, month: string) {
 export function monthSummary(userId: string, month: string) {
   const [start, end] = monthRange(month);
   // Budgets aren't included: Summary only compares against budgets for the current month, which it works out on the device
-  return query<{ category: string; total: number; count: number }>(
+  return query<SummaryRow>(
     `SELECT c.name AS category, SUM(e.amount)::numeric(12,2) AS total, COUNT(*)::int AS count
      FROM expenses e JOIN categories c ON c.id = e.category_id
      WHERE e.user_id = $1 AND e.deleted_at IS NULL AND e.date >= $2 AND e.date < $3

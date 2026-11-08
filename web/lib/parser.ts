@@ -2,7 +2,7 @@ import "server-only";
 import Anthropic from "@anthropic-ai/sdk";
 import { zodOutputFormat } from "@anthropic-ai/sdk/helpers/zod";
 import { z } from "zod";
-import { isRealDate } from "./expenses";
+import { isRealDate, shiftDays } from "./dates";
 
 export type ParsedExpense = {
   amount: number | null;
@@ -14,12 +14,6 @@ export type ParsedExpense = {
 };
 
 const MODEL = process.env.HERCULES_MODEL ?? "claude-haiku-5-5";
-
-function shiftDays(iso: string, days: number) {
-  const d = new Date(`${iso}T00:00:00Z`);
-  d.setUTCDate(d.getUTCDate() + days);
-  return d.toISOString().slice(0, 10);
-}
 
 function buildPrompt(rawInput: string, categories: string[], today: string) {
   const yesterday = shiftDays(today, -1);
