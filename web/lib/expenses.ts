@@ -191,6 +191,15 @@ export async function softDeleteExpense(userId: string, id: number) {
   return rows.length > 0;
 }
 
+// Undo for a delete: brings back the user's own deleted expense.
+export async function restoreExpense(userId: string, id: number) {
+  const rows = await query(
+    "UPDATE expenses SET deleted_at = NULL WHERE id = $1 AND user_id = $2 AND deleted_at IS NOT NULL RETURNING id",
+    [id, userId],
+  );
+  return rows.length > 0;
+}
+
 // Records the attempt and returns false once the user has hit today's limit (rolling 24 hours).
 export async function claimParse(userId: string) {
   const rows = await query<{ n: number }>(

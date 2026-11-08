@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
 import { signOutAction } from "@/app/actions";
 import ReviewCard, { type Fields } from "./review-card";
 import ThemeToggle from "./theme-toggle";
@@ -92,12 +92,85 @@ function useCached<T>({ data, load }: ApiCache, url: string) {
   return data[url] as T | undefined;
 }
 
+type ShowUndo = (message: string, undo: () => Promise<void>) => void;
+const UndoContext = createContext<ShowUndo>(() => {});
+
+// One "… · Undo" bar at a time, above the tab bar, for about five seconds
+function useUndoBar() {
+  const [bar, setBar] = useState<{ message: string; undo?: () => Promise<void> } | null>(null);
+  const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const show = useCallback((message: string, undo?: () => Promise<void>, ms = 5000) => {
+    clearTimeout(timer.current);
+    setBar({ message, undo });
+    timer.current = setTimeout(() => setBar(null), ms);
+  }, []);
+  useEffect(() => () => clearTimeout(timer.current), []);
+  const showUndo = useCallback<ShowUndo>((message, undo) => show(message, undo), [show]);
+  const element = bar && (
+    <div className="undo-bar" role="status">
+      <span>{bar.message}</span>
+      {bar.undo && (
+        <button
+          onClick={() => {
+            const undo = bar.undo!;
+            setBar(null);
+            undo().catch(() => show("Couldn't undo. Please try again.", undefined, 3000));
+          }}
+        >
+          Undo
+        </button>
+      )}
+    </div>
+  );
+  return { showUndo, element };
+}
+
+// The app's own confirmation, used instead of the browser's prompt (which some browsers switch off)
+function ConfirmSheet({ title, body, detail, confirmLabel, cancelLabel = "Cancel", danger = true, onConfirm, onCancel }: {
+  title: string;
+  body?: React.ReactNode;
+  detail?: React.ReactNode;
+  confirmLabel: string;
+  cancelLabel?: string;
+  danger?: boolean;
+  onConfirm: () => void | Promise<void>;
+  onCancel: () => void;
+}) {
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState("");
+  async function confirm() {
+    setBusy(true);
+    setError("");
+    try {
+      await onConfirm();
+    } catch (e) {
+      setError((e as Error).message);
+      setBusy(false);
+    }
+  }
+  return (
+    <div className="confirm-backdrop" onClick={(ev) => { ev.stopPropagation(); if (!busy) onCancel(); }}>
+      <div className="confirm-sheet" role="alertdialog" aria-modal="true" aria-label={title} onClick={(ev) => ev.stopPropagation()}>
+        <h2>{title}</h2>
+        {body && <div className="confirm-body">{body}</div>}
+        {detail}
+        {error && <p className="error">{error}</p>}
+        <div className="confirm-actions">
+          <button className={`btn ${danger ? "btn-red" : "btn-primary"}`} disabled={busy} onClick={confirm}>{busy ? "Please wait…" : confirmLabel}</button>
+          <button className="btn btn-ghost" disabled={busy} onClick={onCancel}>{cancelLabel}</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function HerculesApp({ email }: { email: string }) {
   const [tab, setTab] = useState<Tab>("log");
   const cache = useApiCache();
   const categories = useCached<Category[]>(cache, "/api/categories") ?? [];
   const { load } = cache;
   const online = useOnline();
+  const undoBar = useUndoBar();
 
   useEffect(() => {
     // Load the other tabs' default views up front so they open instantly
@@ -107,6 +180,7 @@ export default function HerculesApp({ email }: { email: string }) {
   }, [load]);
 
   return (
+    <UndoContext.Provider value={undoBar.showUndo}>
     <main className="app">
       {tab === "log" && <LogScreen categories={categories} online={online} cache={cache} onSaved={cache.reloadAll} />}
       {tab === "history" && <HistoryScreen categories={categories} online={online} cache={cache} onChanged={cache.reloadAll} />}
@@ -118,7 +192,9 @@ export default function HerculesApp({ email }: { email: string }) {
         <TabButton id="summary" tab={tab} setTab={setTab} label="Summary" path="M6 20V10M12 20V4M18 20v-6" />
         <TabButton id="categories" tab={tab} setTab={setTab} label="Categories" path="M4 5h7l9 9-6 6-9-9V5zM8 9h.01" />
       </nav>
+      {undoBar.element}
     </main>
+    </UndoContext.Provider>
   );
 }
 
@@ -164,15 +240,23 @@ function EditSheet({ expense, categories, online, onClose, onChanged }: { expens
     onChanged();
   }
 
+  const showUndo = useContext(UndoContext);
+  const [dirty, setDirty] = useState(false);
+  const [asking, setAsking] = useState<"delete" | "discard" | null>(null);
+  const requestClose = () => (dirty ? setAsking("discard") : onClose());
+
   async function remove() {
-    if (!confirm("Delete this expense?")) return;
     await api(`/api/expenses/${expense.id}`, { method: "DELETE" });
     onClose();
     onChanged();
+    showUndo("Expense deleted", async () => {
+      await api(`/api/expenses/${expense.id}/restore`, { method: "POST" });
+      onChanged();
+    });
   }
 
   return (
-    <div className="sheet-backdrop" onClick={onClose}>
+    <div className="sheet-backdrop" onClick={requestClose}>
       <div className="sheet" onClick={(ev) => ev.stopPropagation()}>
         <ReviewCard
           title="Edit expense"
@@ -180,12 +264,43 @@ function EditSheet({ expense, categories, online, onClose, onChanged }: { expens
           initial={expense}
           categories={options}
           onSave={save}
-          onCancel={onClose}
+          onCancel={requestClose}
           cancelLabel="Cancel"
-          onDelete={remove}
+          onDelete={() => setAsking("delete")}
           disabled={!online}
+          onDirtyChange={setDirty}
         />
       </div>
+      {asking === "delete" && (
+        <ConfirmSheet
+          title="Delete this expense?"
+          body="It will be removed from History and Summary."
+          detail={
+            <div className="confirm-ref">
+              <div>
+                <div>{expense.merchant || expense.raw_input}</div>
+                <div className="c">
+                  {expense.category} · {new Date(`${expense.date}T00:00:00`).toLocaleDateString("en-SG", { day: "numeric", month: "short" })}
+                </div>
+              </div>
+              <b>{fmt(expense.amount)}</b>
+            </div>
+          }
+          confirmLabel="Delete expense"
+          onConfirm={remove}
+          onCancel={() => setAsking(null)}
+        />
+      )}
+      {asking === "discard" && (
+        <ConfirmSheet
+          title="Discard changes?"
+          body="Your changes to this expense won't be saved."
+          confirmLabel="Discard changes"
+          cancelLabel="Keep editing"
+          onConfirm={onClose}
+          onCancel={() => setAsking(null)}
+        />
+      )}
     </div>
   );
 }
@@ -230,6 +345,8 @@ function TodayByCategory({ expenses }: { expenses: Expense[] }) {
 function LogScreen({ categories, online, cache, onSaved }: { categories: Category[]; online: boolean; cache: ApiCache; onSaved: () => void }) {
   const [text, setText] = useState("");
   const [parsed, setParsed] = useState<{ raw: string; fields: Fields } | null>(null);
+  const [reviewDirty, setReviewDirty] = useState(false);
+  const [askDiscard, setAskDiscard] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [toast, setToast] = useState("");
@@ -247,6 +364,7 @@ function LogScreen({ categories, online, cache, onSaved }: { categories: Categor
         method: "POST",
         body: JSON.stringify({ text: raw, today: localToday() }),
       });
+      setReviewDirty(false);
       setParsed({ raw, fields: { ...r, category_id: r.category_id ?? categories.at(-1)?.id ?? 0 } });
       // The review card sits at the top of the scrolling content, so it could otherwise open out of view
       window.scrollTo({ top: 0 });
@@ -307,9 +425,23 @@ function LogScreen({ categories, online, cache, onSaved }: { categories: Categor
           initial={parsed.fields}
           categories={categories}
           onSave={save}
-          onCancel={() => setParsed(null)}
+          onCancel={() => (reviewDirty ? setAskDiscard(true) : setParsed(null))}
           cancelLabel="Discard"
           disabled={!online}
+          onDirtyChange={setReviewDirty}
+        />
+      )}
+      {askDiscard && (
+        <ConfirmSheet
+          title="Discard your edits?"
+          body="The changes you made to the parsed details will be lost. Your typed text stays in the box, so you can parse it again."
+          confirmLabel="Discard"
+          cancelLabel="Keep reviewing"
+          onConfirm={() => {
+            setAskDiscard(false);
+            setParsed(null);
+          }}
+          onCancel={() => setAskDiscard(false)}
         />
       )}
       <div className="columns">
@@ -760,6 +892,10 @@ function CategorySheet({ category, retired, online, onClose, onChanged }: { cate
   const [error, setError] = useState("");
   // Adding a retired category's name restores that category
   const match = category ? undefined : retired.find((c) => c.name.toLowerCase() === name.trim().toLowerCase());
+  const showUndo = useContext(UndoContext);
+  const [asking, setAsking] = useState<"retire" | "discard" | null>(null);
+  const dirty = name !== (category?.name ?? "") || budget !== (category?.monthly_budget?.toFixed(2) ?? "");
+  const requestClose = () => (busy ? undefined : dirty ? setAsking("discard") : onClose());
 
   async function run(action: () => Promise<unknown>) {
     setBusy(true);
@@ -784,18 +920,19 @@ function CategorySheet({ category, retired, online, onClose, onChanged }: { cate
     run(() => (category ? api(`/api/categories/${category.id}`, { method: "PATCH", body }) : api("/api/categories", { method: "POST", body })));
   }
 
-  function retire() {
+  async function retire() {
     if (!category) return;
-    const budgetNote =
-      category.monthly_budget == null
-        ? ""
-        : ` Its $${fmt(category.monthly_budget)} budget stops being tracked; spending already logged this month stays in Summary.`;
-    if (!confirm(`Retire ${category.name}? It won't be offered for new expenses. Past expenses keep this category, and you can restore it any time.${budgetNote}`)) return;
-    run(() => api(`/api/categories/${category.id}`, { method: "DELETE" }));
+    await api(`/api/categories/${category.id}`, { method: "DELETE" });
+    onClose();
+    onChanged();
+    showUndo(`${category.name} retired`, async () => {
+      await api(`/api/categories/${category.id}/restore`, { method: "POST" });
+      onChanged();
+    });
   }
 
   return (
-    <div className="sheet-backdrop" onClick={onClose}>
+    <div className="sheet-backdrop" onClick={requestClose}>
       <div className="sheet" onClick={(ev) => ev.stopPropagation()}>
         <div className="card">
           <div className="card-title">{category ? "Edit category" : "Add category"}</div>
@@ -818,11 +955,11 @@ function CategorySheet({ category, retired, online, onClose, onChanged }: { cate
           <div className="actions">
             <div>
               {category && !category.is_other && (
-                <button className="btn btn-danger" disabled={busy || !online} onClick={retire}>Retire</button>
+                <button className="btn btn-danger" disabled={busy || !online} onClick={() => setAsking("retire")}>Retire</button>
               )}
             </div>
             <div className="right">
-              <button className="btn btn-ghost" disabled={busy} onClick={onClose}>Cancel</button>
+              <button className="btn btn-ghost" disabled={busy} onClick={requestClose}>Cancel</button>
               <button className="btn btn-primary" disabled={busy || !online || !name.trim()} onClick={save}>
                 {busy ? "Saving…" : match ? "Restore" : "Save"}
               </button>
@@ -830,6 +967,32 @@ function CategorySheet({ category, retired, online, onClose, onChanged }: { cate
           </div>
         </div>
       </div>
+      {asking === "retire" && category && (
+        <ConfirmSheet
+          title={`Retire ${category.name}?`}
+          body={
+            <>
+              <p>It won&apos;t be offered for new expenses. Past expenses keep this category, and you can restore it any time from Categories.</p>
+              {category.monthly_budget != null && (
+                <p>Its ${fmt(category.monthly_budget)} budget stops being tracked. Spending already logged this month stays in Summary.</p>
+              )}
+            </>
+          }
+          confirmLabel="Retire category"
+          onConfirm={retire}
+          onCancel={() => setAsking(null)}
+        />
+      )}
+      {asking === "discard" && (
+        <ConfirmSheet
+          title="Discard changes?"
+          body={`Your changes to this category won't be saved.`}
+          confirmLabel="Discard changes"
+          cancelLabel="Keep editing"
+          onConfirm={onClose}
+          onCancel={() => setAsking(null)}
+        />
+      )}
     </div>
   );
 }

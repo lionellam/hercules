@@ -247,7 +247,7 @@ html { scroll-behavior: smooth; }
       <h1>How Hercules works</h1>
       <p class="lede">Hercules is a private expense tracker for family and close friends. You type an expense the way you'd say it, Claude turns it into a tidy record, and you check it before it's saved.</p>
       <div class="meta">
-        <span><b>Based on:</b> Specification v0.30 and Architecture v0.9</span>
+        <span><b>Based on:</b> Specification v0.31 and Architecture v0.10</span>
         <span><b>Status:</b> live on Vercel since 1 November 2026</span>
         <span><b>Owner:</b> Lionel Lam</span>
       </div>
@@ -377,7 +377,7 @@ html { scroll-behavior: smooth; }
             <div class="item"><div><div class="nm">Polyclinic</div><div class="c">Health &amp; Medical</div></div><div class="a">45.00</div></div>
           </div>
         </div></div>
-        <figcaption><b>History.</b> Month by month, grouped by day. "Edited" marks records where you changed what Claude suggested. Tap any row to edit or delete it.</figcaption>
+        <figcaption><b>History.</b> Month by month, grouped by day. "Edited" marks records where you changed what Claude suggested. Tap any row to edit or delete it. Deleting asks first, then offers Undo for a few seconds.</figcaption>
       </figure>
 
       <figure>
@@ -611,6 +611,7 @@ html { scroll-behavior: smooth; }
       <div class="decision"><span class="n">#23</span><div><h4>Data kept in memory for instant tabs</h4><p>Screens show what was last loaded straight away and refresh quietly in the background. Any save, edit or delete reloads everything. Nothing is stored on the phone, so it's gone when the app closes.</p></div></div>
       <div class="decision"><span class="n">#24</span><div><h4>Moderately wider on bigger screens</h4><p>Phone layout up to 767 pixels wide. From 768 pixels the app widens to 820 pixels, then to 920 pixels on an iPad held sideways or a small laptop and 1,000 pixels on a larger laptop or desktop, with two columns on Log and Summary and edit forms as centred dialogs. The bottom tab bar stays at every size.</p></div></div>
       <div class="decision"><span class="n">#25</span><div><h4>Light and dark mode</h4><p>Follows the device until you tap the toggle, then remembers your choice on that device. It's a display preference, so it isn't stored in your account.</p></div></div>
+      <div class="decision"><span class="n">#30</span><div><h4>The app's own confirmations, with Undo</h4><p>Deleting an expense or retiring a category asks first in the app's own sheet, then offers Undo for a few seconds. Closing a sheet with unsaved changes asks before throwing them away. Routine saves never ask.</p></div></div>
     </div>
 
     <h3>Scope</h3>
@@ -649,7 +650,7 @@ html { scroll-behavior: smooth; }
     </ul>
 
     <footer>
-      Source documents: <span class="mono">Project Hercules - Specification.md</span> (v0.30) and <span class="mono">Project Hercules - Architecture.md</span> (v0.9) in the hercules repository. Mockups use sample data, not anyone's real expenses.
+      Source documents: <span class="mono">Project Hercules - Specification.md</span> (v0.31) and <span class="mono">Project Hercules - Architecture.md</span> (v0.10) in the hercules repository. Mockups use sample data, not anyone's real expenses.
     </footer>
   </main>
 </div>

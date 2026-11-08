@@ -760,3 +760,21 @@ Last updated: 8 November 2026
 - **Retire, not delete** — the row stays, using the existing `is_active` flag, so no database migration was needed. A permanent delete would fail anyway for any category an expense refers to, including deleted expenses.
 - **No text copy of the category name on expenses** — categories are never removed, so the name can always be looked up. A copy would either keep old names after a rename, against decision 26, or need rewriting on every rename.
 - **History not marked** — the owner chose to show retired categories in History as normal; only the edit sheet says "(retired)".
+
+---
+
+## 08 November 2026 — Confirmation Sheets, Undo and Unsaved Changes
+
+### What Was Done
+- While testing locally, the owner found Retire did nothing in the Claude app's built-in browser: it switches off the browser's own prompts and silently answers "Cancel". The same applied to deleting an expense. Earlier tests had missed it because they stood in for the prompt and answered "yes".
+- Mockups (`design/confirmation-mockups.html`) covered four uses of an in-app confirmation sheet. The owner chose to build the first two now, with both a confirmation and Undo for deleting and retiring; duplicate and unusual-value warnings are left for later.
+- **Confirmation sheet:** the app's own sheet slides up over the open screen (a centred dialog on wider screens). Delete expense shows which expense; Retire category explains what happens, with a budget paragraph when it has one.
+- **Undo:** after deleting an expense or retiring a category, an "… · Undo" bar shows above the tab bar for about five seconds. Deleting now has an in-app way back, through a new `POST /api/expenses/[id]/restore` route.
+- **Unsaved changes:** Edit expense, Edit category and Add category ask "Discard changes?" when closed with changes, by Cancel or by tapping outside. The Log screen's review card asks "Discard your edits?" only if a parsed detail was changed. Unchanged sheets close straight away.
+- Updated the Specification (v0.31, new Section 4.2), Architecture (v0.10, decision 30) and the readable guide (repository copy and artifact).
+- Tested in the local app with a temporary `zz-test-c` category and a `[TEST]` expense: delete with confirmation, Undo, the bar closing by itself after five seconds, retire with the budget paragraph, Undo and Restore, Cancel on each confirmation, discard checks with and without changes on all four sheets, and the centred dialog at 1,024 pixels. Two test parses were run. Test rows and parse records were then removed, and the owner's local expenses and categories were confirmed identical to a snapshot taken beforehand. Type-check, lint and a production build passed.
+
+### Decisions Made
+- **Both confirmation and Undo** for deleting and retiring — a delete is easy to tap by mistake, and Undo also covers a confirmation tapped through too quickly.
+- **Only ask when something changed** — so the discard prompt keeps its meaning.
+- **One Undo at a time** — a new action replaces the previous bar.

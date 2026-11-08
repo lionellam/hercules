@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export type Fields = {
   amount: number | null;
@@ -19,11 +19,13 @@ type Props = {
   onSave: (fields: Fields & { amount: number }, edited: boolean) => Promise<void>;
   onCancel: () => void;
   cancelLabel: string;
-  onDelete?: () => Promise<void>;
+  onDelete?: () => void;
   disabled?: boolean;
+  // Called whenever the fields start or stop differing from `initial`
+  onDirtyChange?: (dirty: boolean) => void;
 };
 
-export default function ReviewCard({ title, initial, categories, rawInput, onSave, onCancel, cancelLabel, onDelete, disabled }: Props) {
+export default function ReviewCard({ title, initial, categories, rawInput, onSave, onCancel, cancelLabel, onDelete, disabled, onDirtyChange }: Props) {
   const [amount, setAmount] = useState(initial.amount == null ? "" : initial.amount.toFixed(2));
   const [categoryId, setCategoryId] = useState(initial.category_id);
   const [merchant, setMerchant] = useState(initial.merchant ?? "");
@@ -31,6 +33,13 @@ export default function ReviewCard({ title, initial, categories, rawInput, onSav
   const [remarks, setRemarks] = useState(initial.remarks ?? "");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
+  const dirty =
+    amount !== (initial.amount == null ? "" : initial.amount.toFixed(2)) ||
+    categoryId !== initial.category_id ||
+    merchant !== (initial.merchant ?? "") ||
+    date !== initial.date ||
+    remarks !== (initial.remarks ?? "");
+  useEffect(() => onDirtyChange?.(dirty), [dirty, onDirtyChange]);
 
   async function run(action: () => Promise<void>) {
     setBusy(true);
@@ -98,7 +107,7 @@ export default function ReviewCard({ title, initial, categories, rawInput, onSav
       <div className="actions">
         <div>
           {onDelete && (
-            <button className="btn btn-danger" disabled={busy || disabled} onClick={() => run(onDelete)}>Delete</button>
+            <button className="btn btn-danger" disabled={busy || disabled} onClick={onDelete}>Delete</button>
           )}
         </div>
         <div className="right">

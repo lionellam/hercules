@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Confirmation Sheets</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root { --page: #ececea; --page-text: #18181b; --page-muted: #5f5f66; --page-card: #fafaf9; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--page); color: var(--page-text); font-family: Inter, -apple-system, system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  main { max-width: 1260px; margin: 0 auto; padding: 36px 16px 80px; }
+  h1 { font-size: 28px; letter-spacing: -0.02em; margin: 0 0 8px; }
+  .intro p { color: var(--page-muted); max-width: 800px; line-height: 1.55; margin: 0 0 10px; font-size: 15px; }
+  .switch { margin-top: 14px; display: inline-flex; gap: 4px; background: #fff; border-radius: 10px; padding: 3px; border: 1px solid rgba(0,0,0,.08); }
+  .switch button { border: none; background: none; padding: 6px 14px; border-radius: 8px; font: inherit; font-size: 13px; cursor: pointer; color: var(--page-muted); }
+  .switch button.on { background: #18181b; color: #fff; }
+  section { margin-top: 52px; }
+  section > h2 { font-size: 20px; margin: 0 0 6px; }
+  section > p { color: var(--page-muted); max-width: 800px; line-height: 1.55; margin: 0 0 18px; font-size: 14.5px; }
+  .rules { background: var(--page-card); border-radius: 14px; padding: 14px 18px; max-width: 800px; margin: 0 0 20px; font-size: 14px; line-height: 1.6; }
+  .rules b { font-weight: 600; }
+  .rules ul { padding-left: 18px; }
+  .frames { display: flex; flex-wrap: wrap; gap: 30px 26px; align-items: flex-start; }
+  figure { margin: 0; max-width: 100%; }
+  figcaption { max-width: 340px; font-size: 13px; color: var(--page-muted); margin-top: 12px; line-height: 1.5; }
+  figcaption b { color: var(--page-text); }
+  .badge { display: inline-block; font-size: 11px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; padding: 2px 7px; border-radius: 6px; margin-right: 6px; vertical-align: 1px; background: #1d4ed8; color: #fff; }
+  .badge.alt { background: #7c3aed; }
+  .phone { width: 340px; max-width: 100%; height: 640px; border-radius: 30px; overflow: hidden; border: 1px solid rgba(0,0,0,.08);
+           box-shadow: 0 1px 2px rgba(0,0,0,.06), 0 10px 28px rgba(0,0,0,.08); }
+  .notes { margin-top: 56px; background: var(--page-card); border-radius: 16px; padding: 22px 26px; max-width: 860px; }
+  .notes h2 { margin: 0 0 10px; font-size: 18px; }
+  .notes ul { padding-left: 20px; line-height: 1.6; font-size: 14.5px; }
+
+  /* App tokens and styles, from web/app/globals.css */
+  .app { --bg: #fff; --surface: #fff; --text: #18181b; --muted: #71717a; --line: #e7e7e4; --accent: #18181b; --accent-text: #fff; --soft: #f4f4f5; --bad: #b91c1c; --warn-bg: #fef3c7; --warn-text: #92400e;
+         background: var(--bg); color: var(--text); font-size: 15px; position: relative; height: 100%; display: flex; flex-direction: column; }
+  body.dark .app { --bg: #18181b; --surface: #18181b; --text: #f4f4f5; --muted: #a1a1aa; --line: #27272a; --accent: #f4f4f5; --accent-text: #18181b; --soft: #27272a; --bad: #f87171; --warn-bg: #422006; --warn-text: #fcd34d; }
+  .app .scroll { flex: 1; overflow: hidden; padding: 0 20px; }
+  .app .top { padding: 30px 20px 16px; border-bottom: 1px solid var(--line); }
+  .app .greet { color: var(--muted); font-size: 14px; }
+  .app h3 { font-size: 28px; font-weight: 700; letter-spacing: -0.02em; }
+  .app .sub { color: var(--muted); font-size: 14px; margin-top: 4px; }
+  .app .input-wrap { background: var(--soft); border-radius: 16px; padding: 14px; margin-top: 14px; }
+  .app .input-wrap .ph { color: var(--muted); font-size: 16px; height: 44px; }
+  .app .input-wrap .row { display: flex; justify-content: flex-end; }
+  .app .today-total { display: flex; justify-content: space-between; margin-top: 12px; color: var(--muted); font-size: 14px; }
+  .app .today-total strong { color: var(--text); font-size: 16px; }
+  .app .label { color: var(--muted); font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; margin-top: 18px; }
+  .app .btn { height: 44px; padding: 0 20px; border-radius: 12px; border: none; font: inherit; font-size: 15px; font-weight: 600; }
+  .app .btn-primary { background: var(--accent); color: var(--accent-text); }
+  .app .btn-ghost { background: transparent; color: var(--muted); }
+  .app .btn-danger { background: transparent; color: var(--bad); padding: 0 4px; }
+  .app .btn-soft { background: var(--soft); color: var(--muted); }
+  .app .item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--line); gap: 12px; }
+  .app .item .m { font-weight: 500; }
+  .app .item .c { color: var(--muted); font-size: 13px; margin-top: 2px; }
+  .app .item .a { font-weight: 600; font-variant-numeric: tabular-nums; }
+  .app .item .nb { color: var(--muted); font-size: 13px; }
+  .app .tabbar { display: flex; border-top: 1px solid var(--line); padding: 8px 0 18px; background: var(--bg); }
+  .app .tabbar span { flex: 1; text-align: center; font-size: 11px; color: var(--muted); }
+  .app .tabbar span i { display: block; font-style: normal; font-size: 17px; margin-bottom: 2px; }
+  .app .tabbar span.on { color: var(--text); font-weight: 600; }
+  .app .backdrop { position: absolute; inset: 0; background: rgba(0,0,0,.4); display: flex; align-items: flex-end; z-index: 5; }
+  .app .backdrop.deep { background: rgba(0,0,0,.25); z-index: 7; }
+  .app .sheet { width: 100%; background: var(--surface); border-radius: 20px 20px 0 0; padding: 8px 16px 24px; }
+  .app .card { padding: 8px 4px; }
+  .app .inline-card { border: 1px solid var(--line); border-radius: 16px; padding: 16px; margin-top: 16px; }
+  .app .card-title { font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; margin: 8px 0 12px; }
+  .app .inline-card .card-title { margin-top: 0; }
+  .app .raw { font-size: 13px; color: var(--muted); margin-bottom: 10px; font-style: italic; }
+  .app .amount { display: flex; align-items: baseline; gap: 6px; margin-bottom: 14px; }
+  .app .amount span { color: var(--muted); font-size: 18px; }
+  .app .amount b { font-size: 34px; font-weight: 700; }
+  .app .field { display: flex; justify-content: space-between; align-items: center; padding: 11px 0; border-top: 1px solid var(--line); gap: 12px; }
+  .app .field label { color: var(--muted); }
+  .app .field .v { font-weight: 500; text-align: right; }
+  .app .field .v.dim { color: var(--muted); font-weight: 400; }
+  .app .actions { display: flex; justify-content: space-between; align-items: center; margin-top: 14px; gap: 8px; }
+  .app .actions .right { display: flex; gap: 8px; }
+  /* New: confirmation sheet */
+  .app .confirm { position: absolute; left: 0; right: 0; bottom: 0; z-index: 8; background: var(--surface); border-radius: 20px 20px 0 0; padding: 22px 20px 26px;
+                  box-shadow: 0 -8px 30px rgba(0,0,0,.18); outline: 2px dashed #1d4ed8; outline-offset: -6px; }
+  .app .confirm h4 { font-size: 18px; font-weight: 700; letter-spacing: -0.01em; }
+  .app .confirm p { color: var(--muted); font-size: 14px; line-height: 1.5; margin-top: 8px; }
+  .app .confirm .ref { margin-top: 12px; border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; display: flex; justify-content: space-between; font-size: 14px; }
+  .app .confirm .ref .c { color: var(--muted); font-size: 12.5px; margin-top: 2px; }
+  .app .confirm .ref b { font-variant-numeric: tabular-nums; }
+  .app .confirm .warn { display: inline-block; margin-top: 2px; font-size: 12px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--warn-text); background: var(--warn-bg); border-radius: 6px; padding: 2px 7px; }
+  .app .confirm .stack { display: flex; flex-direction: column; gap: 8px; margin-top: 18px; }
+  .app .confirm .stack .btn { width: 100%; }
+  .app .btn-red { background: var(--bad); color: #fff; }
+  body.dark .app .btn-red { color: #18181b; }
+  .app .toast { position: absolute; left: 14px; right: 14px; bottom: 76px; z-index: 6; background: var(--accent); color: var(--accent-text); border-radius: 12px; padding: 12px 14px; display: flex; justify-content: space-between; align-items: center; font-size: 14px; box-shadow: 0 6px 20px rgba(0,0,0,.2); outline: 2px dashed #7c3aed; outline-offset: 3px; }
+  .app .toast b { font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
+  .app .changed { color: var(--text); background: var(--soft); border-radius: 6px; padding: 0 6px; }
+</style>
+</head>
+<body>
+<main>
+  <div class="intro">
+    <h1>Confirmation sheets</h1>
+    <p>Mockups for an in-app confirmation sheet, in four uses. The sheet slides up over whatever is open, with the main action on top and a way back underneath, like the edit sheets. On a tablet or computer it would appear as a centred dialog, as the edit sheets do. These use the app's own styles; nothing in the app has changed.</p>
+    <p>Blue dashed outlines mark the new confirmation sheet. Purple marks the "Undo" alternative in section 1.</p>
+    <div class="switch"><button class="on" data-mode="light">Light</button><button data-mode="dark">Dark</button></div>
+  </div>
+
+  <section>
+    <h2>1. Replacing the phone's own prompts</h2>
+    <p>Delete expense and Retire category, which today use the phone's prompt. The red button names the action, so it's clear what will happen. Tapping outside the sheet counts as Cancel.</p>
+    <div class="frames" id="s1"></div>
+  </section>
+
+  <section>
+    <h2>2. Discarding unsaved changes</h2>
+    <p>Shown only when something in the sheet has actually changed and you tap outside it or press Cancel. If nothing changed, the sheet closes straight away as it does today.</p>
+    <div class="rules"><b>Covers:</b> Edit expense, Edit category, Add category, and the review card on the Log screen after parsing, when you've changed any of the parsed details before pressing Discard.</div>
+    <div class="frames" id="s2"></div>
+  </section>
+
+  <section>
+    <h2>3. Possible duplicate</h2>
+    <p>Shown when saving a new expense from the Log screen if it looks like one you've already logged. It shows the earlier entry so you can compare.</p>
+    <div class="rules"><b>Proposed rule:</b> an expense that isn't deleted, with the <b>same amount</b> and the <b>same date</b>, in any category. Only checked when logging a new expense, not when editing. Checked on the phone against the month's expenses already loaded, so no server change is needed.</div>
+    <div class="frames" id="s3"></div>
+  </section>
+
+  <section>
+    <h2>4. Unusual values</h2>
+    <p>Shown when saving a new or edited expense whose date or amount looks like a likely parsing mistake. It names what looks unusual, and the second button takes you back to fix it.</p>
+    <div class="rules"><b>Proposed rules</b> (only one sheet is shown; if more than one applies, they're listed together):
+      <ul>
+        <li><b>Future date:</b> any date after today. Future-dated expenses already count towards that month's total and pace.</li>
+        <li><b>Old date:</b> more than 60 days before today.</li>
+        <li><b>Large amount:</b> over $500 <i>and</i> more than five times your typical (median) expense in that category over the last three months. With fewer than five past expenses in the category, over $1,000. So monthly rent at its usual amount never triggers it.</li>
+      </ul>
+    </div>
+    <div class="frames" id="s4"></div>
+  </section>
+
+  <div class="notes">
+    <h2>Not included</h2>
+    <ul>
+      <li><b>Routine actions</b> (normal saves, Restore, adding a category, changing a budget) don't ask, so the prompts keep their meaning.</li>
+      <li><b>Sign out</b> doesn't ask: signing back in is quick and nothing is lost.</li>
+      <li><b>Sections 3 and 4</b> warn but never block: "Save anyway" always works.</li>
+    </ul>
+  </div>
+</main>
+
+<script>
+const tabbar = (on) => `<div class="tabbar">${["+ Log","≡ History","▮ Summary","◇ Categories"].map(t => { const [i, ...n] = t.split(" "); const name = n.join(" "); return `<span class="${name === on ? "on" : ""}"><i>${i}</i>${name}</span>`; }).join("")}</div>`;
+
+const logTop = (typed = "") => `<div class="top"><div class="greet">Sunday, 8 November</div><h3>Log an expense</h3>
+  <div class="input-wrap"><div class="ph" style="${typed ? "color:var(--text)" : ""}">${typed || "e.g. Lunch at LJS for $4.50 yesterday"}</div><div class="row"><button class="btn btn-primary" style="height:38px;padding:0 18px">Parse</button></div></div>
+  <div class="today-total"><span>Spent today</span><strong>$17.50</strong></div></div>`;
+
+const historyScreen = () => `<div class="top"><h3>History</h3><div class="sub">November 2026</div></div>
+  <div class="scroll">
+    <div class="label">Sunday, 8 November</div>
+    <div class="item"><div><div class="m">Starbucks</div><div class="c">Food &amp; Dining</div></div><div class="a">7.80</div></div>
+    <div class="item"><div><div class="m">MRT</div><div class="c">Transport</div></div><div class="a">2.40</div></div>
+    <div class="label">Saturday, 7 November</div>
+    <div class="item"><div><div class="m">Ya Kun</div><div class="c">Food &amp; Dining</div></div><div class="a">5.20</div></div>
+    <div class="item"><div><div class="m">Sheng Siong</div><div class="c">Groceries</div></div><div class="a">22.40</div></div>
+  </div>${tabbar("History")}`;
+
+const catsScreen = () => `<div class="top"><h3>Categories</h3><p class="sub">Monthly budgets are optional and in SGD.</p></div>
+  <div class="scroll">
+    <div class="item"><div class="m">Food &amp; Dining</div><div class="a">500.00</div></div>
+    <div class="item"><div class="m">Transport</div><div class="a">200.00</div></div>
+    <div class="item"><div class="m">Groceries</div><div class="a">300.00</div></div>
+    <div class="item"><div class="m">Entertainment</div><div class="nb">No budget</div></div>
+  </div>${tabbar("Categories")}`;
+
+const editExpense = ({ amount = "7.80", merchant = "Starbucks", date = "8 Nov 2026", remarks = "Optional", hl = [] } = {}) => `
+  <div class="backdrop"><div class="sheet"><div class="card">
+    <div class="card-title">Edit expense</div>
+    <p class="raw">“starbucks latte 7.80”</p>
+    <div class="amount"><span>SGD</span><b class="${hl.includes("amount") ? "changed" : ""}">${amount}</b></div>
+    <div class="field"><label>Category</label><span class="v">Food &amp; Dining</span></div>
+    <div class="field"><label>Merchant</label><span class="v">${merchant}</span></div>
+    <div class="field"><label>Date</label><span class="v ${hl.includes("date") ? "changed" : ""}">${date}</span></div>
+    <div class="field"><label>Remarks</label><span class="v ${remarks === "Optional" ? "dim" : ""} ${hl.includes("remarks") ? "changed" : ""}">${remarks}</span></div>
+    <div class="actions"><div><button class="btn btn-danger">Delete</button></div><div class="right"><button class="btn btn-ghost">Cancel</button><button class="btn btn-primary">Save</button></div></div>
+  </div></div></div>`;
+
+const reviewCard = ({ raw, amount, category, merchant, date, hl = [] }) => `
+  <div class="scroll"><div class="inline-card">
+    <div class="card-title">Review</div>
+    <p class="raw">“${raw}”</p>
+    <div class="amount"><span>SGD</span><b class="${hl.includes("amount") ? "changed" : ""}">${amount}</b></div>
+    <div class="field"><label>Category</label><span class="v ${hl.includes("category") ? "changed" : ""}">${category}</span></div>
+    <div class="field"><label>Merchant</label><span class="v">${merchant}</span></div>
+    <div class="field"><label>Date</label><span class="v ${hl.includes("date") ? "changed" : ""}">${date}</span></div>
+    <div class="field"><label>Remarks</label><span class="v dim">Optional</span></div>
+    <div class="actions"><div></div><div class="right"><button class="btn btn-ghost">Discard</button><button class="btn btn-primary">Save</button></div></div>
+  </div></div>`;
+
+const confirmSheet = ({ title, body, ref = "", primary, primaryClass = "btn-red", secondary = "Cancel", tag = "" }) => `
+  <div class="backdrop deep"></div>
+  <div class="confirm">${tag ? `<span class="warn">${tag}</span>` : ""}<h4 style="${tag ? "margin-top:8px" : ""}">${title}</h4><p>${body}</p>${ref}
+    <div class="stack"><button class="btn ${primaryClass}">${primary}</button><button class="btn btn-ghost">${secondary}</button></div></div>`;
+
+const ref = (m, c, a) => `<div class="ref"><div><div>${m}</div><div class="c">${c}</div></div><b>${a}</b></div>`;
+
+const phone = (inner) => `<div class="phone"><div class="app">${inner}</div></div>`;
+const fig = (inner, cap, badge = "New") => `<figure>${phone(inner)}<figcaption><span class="badge ${badge === "Alternative" ? "alt" : ""}">${badge}</span>${cap}</figcaption></figure>`;
+
+document.getElementById("s1").innerHTML = [
+  fig(historyScreen() + editExpense() + confirmSheet({ title: "Delete this expense?", body: "It will be removed from History and Summary.", ref: ref("Starbucks", "Food &amp; Dining · 8 Nov", "7.80"), primary: "Delete expense" }),
+      "<b>Delete expense.</b> Shows which expense, so there's no doubt."),
+  fig(catsScreen() + confirmSheet({ title: "Retire Groceries?", body: "It won't be offered for new expenses. Past expenses keep this category, and you can restore it any time from Categories.<br><br>Its $300.00 budget stops being tracked. Spending already logged this month stays in Summary.", primary: "Retire category" }),
+      "<b>Retire category.</b> The budget paragraph appears only when the category has a budget."),
+  fig(historyScreen() + `<div class="toast"><span>Expense deleted</span><b>Undo</b></div>`,
+      "<b>Alternative: Undo instead of asking.</b> Delete happens straight away, and this bar stays for about 5 seconds. It would also give deleting an in-app way back, which it doesn't have today. It can be used instead of the confirmation, or as well as it.", "Alternative"),
+].join("");
+
+document.getElementById("s2").innerHTML = [
+  fig(historyScreen() + editExpense({ amount: "8.70", remarks: "with oat milk", hl: ["amount", "remarks"] }) + confirmSheet({ title: "Discard changes?", body: "Your changes to this expense won't be saved.", primary: "Discard changes", secondary: "Keep editing" }),
+      "<b>Edit expense,</b> after changing the amount and remarks (shaded) and tapping outside the sheet."),
+  fig(logTop("lunch at din tai fung 38.60 with team") + reviewCard({ raw: "lunch at din tai fung 38.60 with team", amount: "38.60", category: "Entertainment", merchant: "Din Tai Fung", date: "8 Nov 2026", hl: ["category"] }) + tabbar("Log") + confirmSheet({ title: "Discard your edits?", body: "The changes you made to the parsed details will be lost. Your typed text stays in the box, so you can parse it again.", primary: "Discard", secondary: "Keep reviewing" }),
+      "<b>Review card after parsing,</b> after changing the category (shaded) and pressing Discard. If nothing was changed, Discard works straight away as today, since the typed text is still there to parse again."),
+  fig(catsScreen() + `<div class="backdrop"><div class="sheet"><div class="card"><div class="card-title">Edit category</div>
+      <div class="field"><label>Name</label><span class="v changed">Groceries &amp; Household</span></div>
+      <div class="field"><label>Monthly budget (SGD)</label><span class="v">300.00</span></div>
+      <div class="actions"><div><button class="btn btn-danger">Retire</button></div><div class="right"><button class="btn btn-ghost">Cancel</button><button class="btn btn-primary">Save</button></div></div></div></div></div>`
+      + confirmSheet({ title: "Discard changes?", body: "Your changes to this category won't be saved.", primary: "Discard changes", secondary: "Keep editing" }),
+      "<b>Edit category,</b> after typing a new name."),
+].join("");
+
+document.getElementById("s3").innerHTML = [
+  fig(logTop("starbucks latte 7.80") + reviewCard({ raw: "starbucks latte 7.80", amount: "7.80", category: "Food &amp; Dining", merchant: "Starbucks", date: "8 Nov 2026" }) + tabbar("Log")
+      + confirmSheet({ tag: "Possible duplicate", title: "Already logged today?", body: "You have an expense of the same amount on the same date:", ref: ref("Starbucks", "Food &amp; Dining · 8 Nov · logged 9:14 am", "7.80"), primary: "Save anyway", primaryClass: "btn-primary", secondary: "Don't save" }),
+      "<b>Same amount, same date.</b> \"Don't save\" closes the review card; the typed text stays in the box."),
+  fig(logTop("grab 14.20") + reviewCard({ raw: "grab 14.20", amount: "14.20", category: "Transport", merchant: "Grab", date: "8 Nov 2026" }) + tabbar("Log")
+      + confirmSheet({ tag: "Possible duplicate", title: "Already logged today?", body: "You have 2 expenses of the same amount on the same date:", ref: ref("Grab", "Transport · 8 Nov · logged 8:02 am", "14.20") + ref("Grab", "Transport · 8 Nov · logged 6:45 pm", "14.20"), primary: "Save anyway", primaryClass: "btn-primary", secondary: "Don't save" }),
+      "<b>More than one match</b> lists each, up to three."),
+].join("");
+
+document.getElementById("s4").innerHTML = [
+  fig(logTop("dinner at jumbo 86 tues") + reviewCard({ raw: "dinner at jumbo 86 tues", amount: "86.00", category: "Food &amp; Dining", merchant: "Jumbo", date: "10 Nov 2026", hl: ["date"] }) + tabbar("Log")
+      + confirmSheet({ tag: "Check the date", title: "This date is in the future", body: "10 November is in 2 days. Future-dated expenses count towards that month's total and spending pace straight away.", primary: "Save anyway", primaryClass: "btn-primary", secondary: "Change the date" }),
+      "<b>Future date.</b> \"tues\" read as next Tuesday instead of last Tuesday."),
+  fig(logTop("coffee 4.50 on 3 aug") + reviewCard({ raw: "coffee 4.50 on 3 aug", amount: "4.50", category: "Food &amp; Dining", merchant: "—", date: "3 Aug 2026", hl: ["date"] }) + tabbar("Log")
+      + confirmSheet({ tag: "Check the date", title: "This date is over 2 months ago", body: "3 August 2026 is 97 days ago. It will appear in August's History, not this month's.", primary: "Save anyway", primaryClass: "btn-primary", secondary: "Change the date" }),
+      "<b>Old date.</b> Easy to miss, because the expense then doesn't appear in this month's lists."),
+  fig(logTop("lunch 1250") + reviewCard({ raw: "lunch 1250", amount: "1,250.00", category: "Food &amp; Dining", merchant: "—", date: "8 Nov 2026", hl: ["amount"] }) + tabbar("Log")
+      + confirmSheet({ tag: "Check the amount", title: "$1,250.00 is unusually high", body: "Your Food &amp; Dining expenses are usually around $9.40. Was this meant to be $12.50?", primary: "Save anyway", primaryClass: "btn-primary", secondary: "Change the amount" }),
+      "<b>Large amount.</b> Compares with your own typical spend in that category. The \"$12.50?\" hint appears only when the typed text has no decimal point and dividing by 100 gives a typical amount."),
+  fig(logTop("hotel 2400 on 14 dec") + reviewCard({ raw: "hotel 2400 on 14 dec", amount: "2,400.00", category: "Travel", merchant: "—", date: "14 Dec 2026", hl: ["amount", "date"] }) + tabbar("Log")
+      + confirmSheet({ tag: "Check the details", title: "Two things look unusual", body: "• 14 December is in 36 days.<br>• $2,400.00 is more than your usual Travel expense.", primary: "Save anyway", primaryClass: "btn-primary", secondary: "Go back and check" }),
+      "<b>More than one</b> unusual value: listed together in one sheet."),
+].join("");
+
+document.querySelectorAll(".switch button").forEach((b) => b.addEventListener("click", () => {
+  document.querySelectorAll(".switch button").forEach((x) => x.classList.toggle("on", x === b));
+  document.body.classList.toggle("dark", b.dataset.mode === "dark");
+}));
+</script>
+</body>
+</html>
