@@ -99,6 +99,12 @@ textarea::placeholder { color: var(--muted); }
 .month-switch button:disabled { opacity: .35; cursor: default; }
 .month-switch strong { font-size: 15px; }
 .empty { margin-top: 24px; }
+.retired-toggle { display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 20px 0 8px; background: none; border: none;
+                  border-bottom: 1px solid var(--line); color: var(--muted); font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; cursor: pointer; }
+.item.retired { cursor: default; }
+.item.retired .m { color: var(--muted); }
+.btn-small { height: 32px; padding: 0 12px; font-size: 13px; border-radius: 9px; background: var(--soft); color: var(--text); flex-shrink: 0; }
+.retired-note { font-size: 13px; margin-top: 10px; }
 
 /* Summary */
 .seg { display: flex; background: var(--soft); border-radius: 12px; padding: 3px; margin-top: 18px; }

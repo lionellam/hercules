@@ -1,7 +1,7 @@
 # Project Hercules — Specification Sheet: "Log an Expense" Flow
 
 ```
-Version 0.29 · Draft 
+Version 0.30 · Draft 
 Last Reviewed: 8 November 2026
 Produced with AI Assistance (Claude Code)
 ```
@@ -39,6 +39,7 @@ Produced with AI Assistance (Claude Code)
 | 0.27 | 2026-11-07 | Lionel Lam | Burn-up chart made larger: no y-axis labels and smaller side margins, runs to the edges of the open category, and its labels move to stay clear of each other (Section 4.1) |
 | 0.28 | 2026-11-07 | Lionel Lam | Corrected the v0.27 entry's wording on side margins, and stated exactly when the "Today" label aligns to the chart's edges |
 | 0.29 | 2026-11-08 | Lionel Lam | Dates must be real calendar dates in the years 2000 to 2099; a parsed date that isn't falls back to today |
+| 0.30 | 2026-11-08 | Lionel Lam | Categories can be retired and restored in the app; retired categories are kept, so past expenses still show them |
 
 ---
 
@@ -163,7 +164,9 @@ Per-user and extensible — this is a **user preference**, not a global constant
 | `is_other` | boolean | Flags the built-in "Other" catch-all; ensures only one such category exists per user. When `true`, the expense entry will prompt for an `other_sub_label` to capture specificity (*prompt not yet built in the web app*) |
 | `monthly_budget` | number (optional) | The category's current monthly budget in SGD; empty means no budget. Only the current amount is kept, so past months' budgets are not recorded |
 
-**Preset behavior:** each new user is seeded with their own copy of the starter list — Food & Dining, Transport, Groceries, Entertainment, Utilities, Health & Medical, Household, Shopping, Rent, Clothes, Education, Professional Development, Travel — plus an **"Other"** catch-all. The Categories screen adds and renames categories and sets their monthly budgets; its heading and add button stay fixed at the top while the list scrolls. Names must be unique for the user regardless of capitalisation, with a limit of 50 categories per user. "Other" cannot be renamed and stays last in the list, because the application falls back to it by name. Retiring a category is not yet available in the app and is done directly in the database.
+**Preset behavior:** each new user is seeded with their own copy of the starter list — Food & Dining, Transport, Groceries, Entertainment, Utilities, Health & Medical, Household, Shopping, Rent, Clothes, Education, Professional Development, Travel — plus an **"Other"** catch-all. The Categories screen adds and renames categories and sets their monthly budgets; its heading and add button stay fixed at the top while the list scrolls. Names must be unique for the user regardless of capitalisation, with a limit of 50 active categories per user. "Other" cannot be renamed or retired and stays last in the list, because the application falls back to it by name.
+
+**Retiring a category:** any category except "Other" can be retired from its edit sheet, after a confirmation. A retired category is never deleted from the database. It is no longer offered for new expenses or to the language model, but past expenses keep it and show its name in History, the Today list and Summary. Its budget is kept but not tracked while it is retired, so any spending in it this month shows as a plain bar without a pace note. An existing expense in a retired category can still be opened and saved; the edit sheet shows the category as "*name* (retired)" and also offers the active categories, but a retired category can't be chosen for any other expense. Retired categories are listed in a collapsed "Retired" group at the bottom of the Categories screen, each with a Restore button that brings it back with its budget. They can't be renamed until restored. Adding a category whose name matches a retired one (regardless of capitalisation) restores that category, with the budget entered, instead of creating a new one. Restoring counts towards the 50-category limit.
 
 ### 5.3 `Merchant` — no dedicated table (for now)
 
@@ -234,7 +237,7 @@ Carried forward, not yet resolved:
 - Bank/account sync or import
 - Offline expense logging (the app shows an offline message and keeps the typed text)
 - Multi-currency conversion
-- Deleting or retiring categories in the app
+- Permanently deleting categories (retired categories are kept)
 - Allow-list administration screen
 
 ---

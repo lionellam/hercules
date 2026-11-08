@@ -1,8 +1,8 @@
 # Project Hercules — Project Plan
 
 ```
-Version 0.8 · Draft 
-Last Reviewed: 7 November 2026
+Version 0.9 · Draft 
+Last Reviewed: 8 November 2026
 Produced with AI Assistance (Claude Code)
 ```
 
@@ -18,6 +18,7 @@ Produced with AI Assistance (Claude Code)
 | 0.6 | 2026-10-26 | Lionel Lam | Reframed as a hosted, invite-only web app using a cloud language model; rewrote overview, objectives, vision, features, milestones and risks; added Invited Family Member persona; moved self-hosting personas to future scope |
 | 0.7 | 2026-11-02 | Lionel Lam | Category management and per-category monthly budgets delivered ahead of Phases 3 and 4; features and milestones updated |
 | 0.8 | 2026-11-07 | Lionel Lam | Features updated for the pie chart and spending pace; allow-list storage and Hobby plan risk brought up to date |
+| 0.9 | 2026-11-08 | Lionel Lam | Retiring categories delivered ahead of Phase 4 |
 
 ---
 
@@ -68,7 +69,7 @@ A high-level look at the functional pieces of the system. These will be broken d
 - **Expense Storage** — structured, queryable storage of logged expenses, scoped per user; edits and soft deletes supported
 - **History & Summary** — month-by-month list of expenses, and category totals for the current and previous month, with a pie chart of each category's share
 - **Budget Tracking** — category-based budgets and tracking against them; an optional monthly budget per category, shown against the current month's spend in Summary, is in place, along with spending pace (an expected-by-today marker, a pace note and a burn-up chart per budgeted category)
-- **Category Taxonomy** — a per-user, extensible set of expense categories; new users are seeded with a starter list, and can add and rename categories on a Categories screen
+- **Category Taxonomy** — a per-user, extensible set of expense categories; new users are seeded with a starter list, and can add, rename, retire and restore categories on a Categories screen
 - **Export / Download** — ability to export a list of expenses (deferred beyond the first version)
 - **Hosting & Deployment** — Vercel, with a Neon Postgres database; installable as a Progressive Web App (PWA)
 
@@ -83,7 +84,7 @@ Google sign-in with allow-list; Log screen with inline confirmation card; Histor
 - **Phase 3 — Budgets & Queries**
 Budget definitions by category (a simple monthly budget per category was delivered early, in November 2026), and the ability to query/report on spending via natural language or simple views.
 - **Phase 4 — Polish**
-Export, retiring categories (adding and renaming were delivered early, in November 2026), allow-list administration, and other refinements based on use.
+Export, allow-list administration, and other refinements based on use. Category management, including retiring and restoring, was delivered early, in November 2026.
 
 ## 7. Risks, Dependencies and Open Questions
 

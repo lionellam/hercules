@@ -247,7 +247,7 @@ html { scroll-behavior: smooth; }
       <h1>How Hercules works</h1>
       <p class="lede">Hercules is a private expense tracker for family and close friends. You type an expense the way you'd say it, Claude turns it into a tidy record, and you check it before it's saved.</p>
       <div class="meta">
-        <span><b>Based on:</b> Specification v0.28 and Architecture v0.8</span>
+        <span><b>Based on:</b> Specification v0.30 and Architecture v0.9</span>
         <span><b>Status:</b> live on Vercel since 1 November 2026</span>
         <span><b>Owner:</b> Lionel Lam</span>
       </div>
@@ -399,7 +399,7 @@ html { scroll-behavior: smooth; }
             <div class="cat-row"><span>Other</span><span>No budget</span></div>
           </div>
         </div></div>
-        <figcaption><b>Categories.</b> Add or rename categories and set an optional monthly budget. "Other" can't be renamed and always stays last.</figcaption>
+        <figcaption><b>Categories.</b> Add or rename categories and set an optional monthly budget. A category you no longer use can be retired: it stops being offered, but past expenses keep it, and it can be restored from the "Retired" group at the bottom. "Other" can't be renamed or retired and always stays last.</figcaption>
       </figure>
     </div>
 
@@ -534,7 +534,7 @@ html { scroll-behavior: smooth; }
       <li>Receipt photos and bank imports</li>
       <li>Logging while offline (the app keeps what you've typed until you're back online)</li>
       <li>Currency conversion</li>
-      <li>Deleting or retiring categories in the app</li>
+      <li>Permanently deleting categories (retired ones are kept)</li>
       <li>Managing invitations in the app</li>
     </ul>
 
@@ -619,9 +619,10 @@ html { scroll-behavior: smooth; }
       <div class="decision old"><span class="n">#17</span><div><h4>Categories edited directly in the database</h4><p>Replaced by #26. The database was designed per person from the start, so adding a screen needed no restructuring.</p></div></div>
       <div class="decision"><span class="n">#18</span><div><h4>Edit and delete by reusing the review card</h4><p>No extra screen needed. Deleted records stay recoverable.</p></div></div>
       <div class="decision"><span class="n">#19</span><div><h4>Singapore dollars only</h4><p>Nearly every expense is in SGD. The currency is still recorded, but totals don't convert.</p></div></div>
-      <div class="decision"><span class="n">#26</span><div><h4>A Categories tab to add and rename</h4><p>Expenses link to categories by ID, so a rename carries through the whole history, and Claude reads the up-to-date list. Retiring categories is left for later.</p></div></div>
+      <div class="decision"><span class="n">#26</span><div><h4>A Categories tab to add and rename</h4><p>Expenses link to categories by ID, so a rename carries through the whole history, and Claude reads the up-to-date list. Retiring was added later (#29).</p></div></div>
       <div class="decision"><span class="n">#27</span><div><h4>An optional monthly budget per category</h4><p>The simplest start on budgets. Only the current amount is kept; a fuller budget record can replace it if history is ever needed.</p></div></div>
       <div class="decision"><span class="n">#28</span><div><h4>Spending pace on Summary</h4><p>Answers "am I spending too fast?" without a new screen. Worked out on your phone from data already loaded, so no server or database changes were needed. See <a href="#pace">Spending pace</a>.</p></div></div>
+      <div class="decision"><span class="n">#29</span><div><h4>Retire categories instead of deleting them</h4><p>A retired category stops being offered but is never removed, so past expenses keep it and it can be restored. No copy of the name is stored on each expense: the category is always there to look up, and renames still carry through history.</p></div></div>
     </div>
 
     <h3>How the project is run</h3>
@@ -642,13 +643,13 @@ html { scroll-behavior: smooth; }
     <h2 id="next">What's next</h2>
     <ul class="plain">
       <li><b>Budgets, phase 3:</b> budget history, alerts and fuller tracking.</li>
-      <li><b>Polish, phase 4:</b> managing invitations in the app, retiring categories, and exporting expenses.</li>
+      <li><b>Polish, phase 4:</b> managing invitations in the app and exporting expenses.</li>
       <li><b>Open questions:</b> settle the four questions under <a href="#open">Still to decide</a>.</li>
       <li><b>Review:</b> James Wong may review the architecture decisions.</li>
     </ul>
 
     <footer>
-      Source documents: <span class="mono">Project Hercules - Specification.md</span> (v0.28) and <span class="mono">Project Hercules - Architecture.md</span> (v0.8) in the hercules repository. Mockups use sample data, not anyone's real expenses.
+      Source documents: <span class="mono">Project Hercules - Specification.md</span> (v0.30) and <span class="mono">Project Hercules - Architecture.md</span> (v0.9) in the hercules repository. Mockups use sample data, not anyone's real expenses.
     </footer>
   </main>
 </div>

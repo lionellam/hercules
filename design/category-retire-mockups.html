@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Retiring Categories</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root { --page: #ececea; --page-text: #18181b; --page-muted: #5f5f66; --page-card: #fafaf9; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--page); color: var(--page-text); font-family: Inter, -apple-system, system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  main { max-width: 1260px; margin: 0 auto; padding: 36px 16px 80px; }
+  h1 { font-size: 28px; letter-spacing: -0.02em; margin: 0 0 8px; }
+  .intro p { color: var(--page-muted); max-width: 780px; line-height: 1.55; margin: 0 0 10px; font-size: 15px; }
+  .switch { margin-top: 14px; display: inline-flex; gap: 4px; background: #fff; border-radius: 10px; padding: 3px; border: 1px solid rgba(0,0,0,.08); }
+  .switch button { border: none; background: none; padding: 6px 14px; border-radius: 8px; font: inherit; font-size: 13px; cursor: pointer; color: var(--page-muted); }
+  .switch button.on { background: #18181b; color: #fff; }
+  section { margin-top: 48px; }
+  section > h2 { font-size: 20px; margin: 0 0 6px; }
+  section > p { color: var(--page-muted); max-width: 780px; line-height: 1.55; margin: 0 0 20px; font-size: 14.5px; }
+  .frames { display: flex; flex-wrap: wrap; gap: 30px 26px; align-items: flex-start; }
+  figure { margin: 0; max-width: 100%; }
+  figcaption { max-width: 340px; font-size: 13px; color: var(--page-muted); margin-top: 12px; line-height: 1.5; }
+  figcaption b { color: var(--page-text); }
+  .badge { display: inline-block; font-size: 11px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; padding: 2px 7px; border-radius: 6px; margin-right: 6px; vertical-align: 1px; }
+  .badge.new { background: #1d4ed8; color: #fff; }
+  .badge.same { background: #d4d4d8; color: #3f3f46; }
+  .phone { width: 340px; max-width: 100%; height: 640px; border-radius: 30px; overflow: hidden; border: 1px solid rgba(0,0,0,.08);
+           box-shadow: 0 1px 2px rgba(0,0,0,.06), 0 10px 28px rgba(0,0,0,.08); }
+  .notes { margin-top: 56px; background: var(--page-card); border-radius: 16px; padding: 22px 26px; max-width: 860px; }
+  .notes h2 { margin: 0 0 10px; font-size: 18px; }
+  .notes ul { padding-left: 20px; line-height: 1.6; font-size: 14.5px; }
+
+  /* App tokens and styles, from web/app/globals.css */
+  .app { --bg: #fff; --surface: #fff; --text: #18181b; --muted: #71717a; --line: #e7e7e4; --accent: #18181b; --accent-text: #fff; --soft: #f4f4f5; --bar: #18181b; --bad: #b91c1c;
+         background: var(--bg); color: var(--text); font-size: 15px; position: relative; height: 100%; display: flex; flex-direction: column; }
+  body.dark .app { --bg: #18181b; --surface: #18181b; --text: #f4f4f5; --muted: #a1a1aa; --line: #27272a; --accent: #f4f4f5; --accent-text: #18181b; --soft: #27272a; --bar: #f4f4f5; --bad: #f87171; }
+  .app .scroll { flex: 1; overflow: hidden; padding: 0 20px; }
+  .app .top { padding: 30px 20px 16px; border-bottom: 1px solid var(--line); }
+  .app h3 { font-size: 28px; font-weight: 700; letter-spacing: -0.02em; }
+  .app .sub { color: var(--muted); font-size: 14px; margin-top: 4px; }
+  .app .btn { height: 44px; padding: 0 20px; border-radius: 12px; border: none; font: inherit; font-size: 15px; font-weight: 600; }
+  .app .btn-primary { background: var(--accent); color: var(--accent-text); }
+  .app .btn-ghost { background: transparent; color: var(--muted); }
+  .app .btn-danger { background: transparent; color: var(--bad); padding: 0 4px; }
+  .app .btn-sm { height: 32px; padding: 0 12px; font-size: 13px; border-radius: 9px; background: var(--soft); color: var(--text); }
+  .app .row-start { display: flex; margin-top: 16px; }
+  .app .item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--line); gap: 12px; }
+  .app .item .m { font-weight: 500; }
+  .app .item .c { color: var(--muted); font-size: 13px; margin-top: 2px; }
+  .app .item .a { font-weight: 600; font-variant-numeric: tabular-nums; }
+  .app .item .nb { color: var(--muted); font-size: 13px; }
+  .app .item.retired .m { color: var(--muted); }
+  .app .group { display: flex; justify-content: space-between; align-items: center; padding: 18px 0 8px; color: var(--muted); font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; border-bottom: 1px solid var(--line); }
+  .app .group .chev { font-size: 14px; letter-spacing: 0; }
+  .app .hint { color: var(--muted); font-size: 13px; line-height: 1.45; padding: 10px 0 4px; }
+  .app .tabbar { display: flex; border-top: 1px solid var(--line); padding: 8px 0 18px; background: var(--bg); }
+  .app .tabbar span { flex: 1; text-align: center; font-size: 11px; color: var(--muted); }
+  .app .tabbar span i { display: block; font-style: normal; font-size: 17px; margin-bottom: 2px; }
+  .app .tabbar span.on { color: var(--text); font-weight: 600; }
+  .app .backdrop { position: absolute; inset: 0; background: rgba(0,0,0,.4); display: flex; align-items: flex-end; z-index: 5; }
+  .app .backdrop.center { align-items: center; justify-content: center; }
+  .app .sheet { width: 100%; background: var(--surface); border-radius: 20px 20px 0 0; padding: 8px 16px 24px; }
+  .app .card { padding: 8px 4px; }
+  .app .card-title { font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; margin: 8px 0 12px; }
+  .app .raw { font-size: 13px; color: var(--muted); margin-bottom: 10px; font-style: italic; }
+  .app .amount { display: flex; align-items: baseline; gap: 6px; margin-bottom: 14px; }
+  .app .amount span { color: var(--muted); font-size: 18px; }
+  .app .amount b { font-size: 34px; font-weight: 700; }
+  .app .field { display: flex; justify-content: space-between; align-items: center; padding: 11px 0; border-top: 1px solid var(--line); gap: 12px; }
+  .app .field label { color: var(--muted); }
+  .app .field .v { font-weight: 500; text-align: right; }
+  .app .field .v.dim { color: var(--muted); font-weight: 400; }
+  .app .field .v.caret::after { content: " ⌄"; color: var(--muted); }
+  .app .actions { display: flex; justify-content: space-between; align-items: center; margin-top: 14px; gap: 8px; }
+  .app .actions .right { display: flex; gap: 8px; }
+  .app .menu { position: absolute; right: 26px; bottom: 210px; width: 220px; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,.25); padding: 4px 0; z-index: 6; font-size: 14px; }
+  .app .menu div { padding: 7px 14px; }
+  .app .menu .sel { font-weight: 600; }
+  .app .menu .sel::before { content: "✓ "; }
+  .app .menu .dim { color: var(--muted); }
+  .app .menu hr { border: none; border-top: 1px solid var(--line); margin: 4px 0; }
+  .alert { width: 270px; background: rgba(242,242,247,.97); border-radius: 14px; text-align: center; color: #000; overflow: hidden; }
+  body.dark .alert { background: rgba(44,44,46,.97); color: #fff; }
+  .alert .t { font-weight: 600; font-size: 16px; padding: 18px 16px 4px; }
+  .alert .b { font-size: 13px; line-height: 1.4; padding: 0 16px 16px; }
+  .alert .btns { display: flex; border-top: 1px solid rgba(60,60,67,.3); }
+  .alert .btns div { flex: 1; padding: 11px 0; font-size: 16px; color: #0a7aff; }
+  .alert .btns div + div { border-left: 1px solid rgba(60,60,67,.3); }
+  .alert .btns .destr { color: #ff3b30; font-weight: 600; }
+  /* Summary bars */
+  .app .seg { display: flex; background: var(--soft); border-radius: 12px; padding: 3px; margin-top: 16px; }
+  .app .seg span { flex: 1; height: 34px; display: grid; place-items: center; border-radius: 10px; font-size: 14px; font-weight: 500; color: var(--muted); }
+  .app .seg span.on { background: var(--surface); color: var(--text); box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+  .app .cat { margin-top: 18px; }
+  .app .cat-top { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 6px; }
+  .app .cat-top .n { color: var(--muted); font-size: 12px; margin-left: 6px; }
+  .app .cat-top strong { font-variant-numeric: tabular-nums; }
+  .app .of { color: var(--muted); font-weight: 400; }
+  .app .meter { position: relative; }
+  .app .track { height: 6px; background: var(--soft); border-radius: 3px; overflow: hidden; }
+  .app .fill { height: 100%; background: var(--bar); border-radius: 3px; }
+  .app .tick { position: absolute; top: -3px; width: 2px; height: 12px; background: var(--text); border-radius: 1px; box-shadow: 0 0 0 1.5px var(--bg); }
+  .app .pace { margin-top: 6px; font-size: 12.5px; color: var(--muted); }
+  .app .pace b { color: var(--text); font-weight: 600; }
+  .ring { outline: 2px dashed #1d4ed8; outline-offset: 3px; border-radius: 6px; }
+</style>
+</head>
+<body>
+<main>
+  <div class="intro">
+    <h1>Retiring categories</h1>
+    <p>Mockups for retiring a category instead of deleting it. A retired category isn't offered for new expenses, but past expenses keep it, and it can be restored at any time. Nothing is removed from the database. These use the app's own styles; nothing in the app has changed.</p>
+    <p>Blue dashed outlines mark what's new. <span class="badge new">New</span> marks a new screen state; <span class="badge same">Unchanged</span> shows how an existing screen looks with a retired category.</p>
+    <div class="switch"><button class="on" data-mode="light">Light</button><button data-mode="dark">Dark</button></div>
+  </div>
+
+  <section>
+    <h2>1. Retiring a category</h2>
+    <p>The Retire button sits where Delete sits on an expense, in red on the left. It's labelled "Retire" rather than "Delete", because nothing is removed. A confirmation explains what happens, using the same kind of prompt as deleting an expense.</p>
+    <div class="frames">
+      <figure>
+        <div class="phone"><div class="app">
+          <div class="top"><h3>Categories</h3><p class="sub">Monthly budgets are optional and in SGD.</p><div class="row-start"><button class="btn btn-primary">Add category</button></div></div>
+          <div class="scroll">
+            <div class="item"><div class="m">Food &amp; Dining</div><div class="a">500.00</div></div>
+            <div class="item"><div class="m">Transport</div><div class="a">200.00</div></div>
+            <div class="item"><div class="m">Groceries</div><div class="a">300.00</div></div>
+            <div class="item"><div class="m">Entertainment</div><div class="nb">No budget</div></div>
+          </div>
+          <div class="backdrop"><div class="sheet"><div class="card">
+            <div class="card-title">Edit category</div>
+            <div class="field"><label>Name</label><span class="v">Travel</span></div>
+            <div class="field"><label>Monthly budget (SGD)</label><span class="v dim">Optional</span></div>
+            <div class="actions"><div><button class="btn btn-danger ring">Retire</button></div><div class="right"><button class="btn btn-ghost">Cancel</button><button class="btn btn-primary">Save</button></div></div>
+          </div></div></div>
+        </div></div>
+        <figcaption><span class="badge new">New</span><b>Edit category sheet</b> gains a Retire button. Everything else is unchanged.</figcaption>
+      </figure>
+
+      <figure>
+        <div class="phone"><div class="app">
+          <div class="top"><h3>Categories</h3><p class="sub">Monthly budgets are optional and in SGD.</p><div class="row-start"><button class="btn btn-primary">Add category</button></div></div>
+          <div class="scroll">
+            <div class="item"><div class="m">Food &amp; Dining</div><div class="a">500.00</div></div>
+            <div class="item"><div class="m">Transport</div><div class="a">200.00</div></div>
+            <div class="item"><div class="m">Groceries</div><div class="a">300.00</div></div>
+          </div>
+          <div class="backdrop center"><div class="alert">
+            <div class="t">Retire Travel?</div>
+            <div class="b">It won't be offered for new expenses. Past expenses keep this category, and you can restore it any time.</div>
+            <div class="btns"><div>Cancel</div><div class="destr">Retire</div></div>
+          </div></div>
+        </div></div>
+        <figcaption><span class="badge new">New</span><b>Confirmation.</b> The phone's own prompt, as for deleting an expense.</figcaption>
+      </figure>
+
+      <figure>
+        <div class="phone"><div class="app">
+          <div class="top"><h3>Categories</h3><p class="sub">Monthly budgets are optional and in SGD.</p><div class="row-start"><button class="btn btn-primary">Add category</button></div></div>
+          <div class="scroll">
+            <div class="item"><div class="m">Groceries</div><div class="a">300.00</div></div>
+            <div class="item"><div class="m">Shopping</div><div class="a">1,000.00</div></div>
+          </div>
+          <div class="backdrop center"><div class="alert">
+            <div class="t">Retire Groceries?</div>
+            <div class="b">It won't be offered for new expenses. Past expenses keep this category, and you can restore it any time. Its $300.00 budget stops being tracked; spending already logged this month stays in Summary.</div>
+            <div class="btns"><div>Cancel</div><div class="destr">Retire</div></div>
+          </div></div>
+        </div></div>
+        <figcaption><span class="badge new">New</span><b>With a budget.</b> One extra sentence when the category has a budget. The budget is kept and comes back on restore.</figcaption>
+      </figure>
+
+      <figure>
+        <div class="phone"><div class="app">
+          <div class="top"><h3>Categories</h3><p class="sub">Monthly budgets are optional and in SGD.</p><div class="row-start"><button class="btn btn-primary">Add category</button></div></div>
+          <div class="scroll">
+            <div class="item"><div class="m">Food &amp; Dining</div><div class="a">500.00</div></div>
+            <div class="item"><div class="m">Transport</div><div class="a">200.00</div></div>
+            <div class="item"><div class="m">Groceries</div><div class="a">300.00</div></div>
+          </div>
+          <div class="backdrop"><div class="sheet"><div class="card">
+            <div class="card-title">Edit category</div>
+            <div class="field"><label>Name</label><span class="v dim">Other</span></div>
+            <div class="field"><label>Monthly budget (SGD)</label><span class="v dim">Optional</span></div>
+            <p class="hint ring">The built-in "Other" category can't be renamed or retired.</p>
+            <div class="actions"><div></div><div class="right"><button class="btn btn-ghost">Cancel</button><button class="btn btn-primary">Save</button></div></div>
+          </div></div></div>
+        </div></div>
+        <figcaption><span class="badge new">New</span><b>"Other"</b> has no Retire button, and the existing note now says so. The server refuses it too.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section>
+    <h2>2. Retired categories on the Categories screen</h2>
+    <p>Retired categories move to a collapsed "Retired" group at the bottom of the list, so they're out of the way but easy to bring back.</p>
+    <div class="frames">
+      <figure>
+        <div class="phone"><div class="app">
+          <div class="top"><h3>Categories</h3><p class="sub">Monthly budgets are optional and in SGD.</p><div class="row-start"><button class="btn btn-primary">Add category</button></div></div>
+          <div class="scroll">
+            <div class="item"><div class="m">Shopping</div><div class="a">1,000.00</div></div>
+            <div class="item"><div class="m">Rent</div><div class="a">1,800.00</div></div>
+            <div class="item"><div class="m">Education</div><div class="nb">No budget</div></div>
+            <div class="item"><div class="m">Professional Development</div><div class="nb">No budget</div></div>
+            <div class="item"><div class="m">Other</div><div class="nb">No budget</div></div>
+            <div class="group ring"><span>Retired (2)</span><span class="chev">Show ›</span></div>
+          </div>
+          <div class="tabbar"><span><i>+</i>Log</span><span><i>≡</i>History</span><span><i>▮</i>Summary</span><span class="on"><i>◇</i>Categories</span></div>
+        </div></div>
+        <figcaption><span class="badge new">New</span><b>Collapsed</b> (the default). Only shown when something has been retired.</figcaption>
+      </figure>
+
+      <figure>
+        <div class="phone"><div class="app">
+          <div class="top"><h3>Categories</h3><p class="sub">Monthly budgets are optional and in SGD.</p><div class="row-start"><button class="btn btn-primary">Add category</button></div></div>
+          <div class="scroll">
+            <div class="item"><div class="m">Education</div><div class="nb">No budget</div></div>
+            <div class="item"><div class="m">Professional Development</div><div class="nb">No budget</div></div>
+            <div class="item"><div class="m">Other</div><div class="nb">No budget</div></div>
+            <div class="group"><span>Retired (2)</span><span class="chev">Hide ⌄</span></div>
+            <div class="item retired"><div><div class="m">Clothes</div><div class="c">No budget</div></div><button class="btn btn-sm ring">Restore</button></div>
+            <div class="item retired"><div><div class="m">Travel</div><div class="c">Budget 400.00</div></div><button class="btn btn-sm ring">Restore</button></div>
+            <p class="hint">Retired categories aren't offered for new expenses. Past expenses keep them.</p>
+          </div>
+          <div class="tabbar"><span><i>+</i>Log</span><span><i>≡</i>History</span><span><i>▮</i>Summary</span><span class="on"><i>◇</i>Categories</span></div>
+        </div></div>
+        <figcaption><span class="badge new">New</span><b>Expanded.</b> Names are greyed out; Restore puts the category back in the main list with its budget. Retired categories can't be renamed until restored.</figcaption>
+      </figure>
+
+      <figure>
+        <div class="phone"><div class="app">
+          <div class="top"><h3>Categories</h3><p class="sub">Monthly budgets are optional and in SGD.</p><div class="row-start"><button class="btn btn-primary">Add category</button></div></div>
+          <div class="scroll">
+            <div class="item"><div class="m">Food &amp; Dining</div><div class="a">500.00</div></div>
+            <div class="item"><div class="m">Transport</div><div class="a">200.00</div></div>
+          </div>
+          <div class="backdrop"><div class="sheet"><div class="card">
+            <div class="card-title">Add category</div>
+            <div class="field"><label>Name</label><span class="v">travel</span></div>
+            <div class="field"><label>Monthly budget (SGD)</label><span class="v dim">Optional</span></div>
+            <p class="hint ring">"Travel" was retired. Saving restores it, with its past expenses, and applies this budget.</p>
+            <div class="actions"><div></div><div class="right"><button class="btn btn-ghost">Cancel</button><button class="btn btn-primary">Restore</button></div></div>
+          </div></div></div>
+        </div></div>
+        <figcaption><span class="badge new">New</span><b>Re-adding a retired name</b> (any capitalisation) restores the old category instead of refusing with "name in use". The button reads Restore.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section>
+    <h2>3. Past expenses in a retired category</h2>
+    <p>History, the Today list and Summary keep showing the category's name. The only visible change elsewhere is in the edit sheet, so an old expense can still be opened and saved.</p>
+    <div class="frames">
+      <figure>
+        <div class="phone"><div class="app">
+          <div class="top"><h3>History</h3><div class="seg"><span class="on">October</span><span>September</span></div></div>
+          <div class="scroll">
+            <div class="item"><div><div class="m">Changi Airport</div><div class="c">Travel · 18 Oct</div></div><div class="a">42.00</div></div>
+            <div class="item"><div><div class="m">Din Tai Fung</div><div class="c">Food &amp; Dining · 17 Oct</div></div><div class="a">38.60</div></div>
+            <div class="item"><div><div class="m">Agoda</div><div class="c">Travel · 15 Oct</div></div><div class="a">356.77</div></div>
+            <div class="item"><div><div class="m">NTUC FairPrice</div><div class="c">Groceries · 15 Oct</div></div><div class="a">54.20</div></div>
+            <div class="item"><div><div class="m">MRT</div><div class="c">Transport · 15 Oct</div></div><div class="a">2.10</div></div>
+          </div>
+          <div class="tabbar"><span><i>+</i>Log</span><span class="on"><i>≡</i>History</span><span><i>▮</i>Summary</span><span><i>◇</i>Categories</span></div>
+        </div></div>
+        <figcaption><span class="badge same">Unchanged</span><b>History</b> still shows "Travel" on past expenses, with no extra marking.</figcaption>
+      </figure>
+
+      <figure>
+        <div class="phone"><div class="app">
+          <div class="top"><h3>History</h3><div class="seg"><span class="on">October</span><span>September</span></div></div>
+          <div class="scroll"><div class="item"><div><div class="m">Agoda</div><div class="c">Travel · 15 Oct</div></div><div class="a">356.77</div></div></div>
+          <div class="backdrop"><div class="sheet"><div class="card">
+            <div class="card-title">Edit expense</div>
+            <p class="raw">“agoda hotel bangkok 356.77”</p>
+            <div class="amount"><span>SGD</span><b>356.77</b></div>
+            <div class="field"><label>Category</label><span class="v caret ring">Travel (retired)</span></div>
+            <div class="field"><label>Merchant</label><span class="v">Agoda</span></div>
+            <div class="field"><label>Date</label><span class="v">15 Oct 2026</span></div>
+            <div class="field"><label>Remarks</label><span class="v dim">Optional</span></div>
+            <div class="actions"><div><button class="btn btn-danger">Delete</button></div><div class="right"><button class="btn btn-ghost">Cancel</button><button class="btn btn-primary">Save</button></div></div>
+          </div></div></div>
+        </div></div>
+        <figcaption><span class="badge new">New</span><b>Editing an old expense.</b> The category reads "Travel (retired)", and the expense saves normally, for example after fixing the amount. Today this case shows the wrong category and fails to save.</figcaption>
+      </figure>
+
+      <figure>
+        <div class="phone"><div class="app">
+          <div class="top"><h3>History</h3><div class="seg"><span class="on">October</span><span>September</span></div></div>
+          <div class="scroll"></div>
+          <div class="backdrop"><div class="sheet"><div class="card">
+            <div class="card-title">Edit expense</div>
+            <p class="raw">“agoda hotel bangkok 356.77”</p>
+            <div class="amount"><span>SGD</span><b>356.77</b></div>
+            <div class="field"><label>Category</label><span class="v caret">Travel (retired)</span></div>
+            <div class="field"><label>Merchant</label><span class="v">Agoda</span></div>
+            <div class="field"><label>Date</label><span class="v">15 Oct 2026</span></div>
+            <div class="field"><label>Remarks</label><span class="v dim">Optional</span></div>
+            <div class="actions"><div><button class="btn btn-danger">Delete</button></div><div class="right"><button class="btn btn-ghost">Cancel</button><button class="btn btn-primary">Save</button></div></div>
+          </div></div></div>
+          <div class="menu ring">
+            <div>Food &amp; Dining</div><div>Transport</div><div>Groceries</div><div>Entertainment</div><div class="dim">… other active categories …</div><div>Other</div>
+            <hr><div class="sel">Travel (retired)</div>
+          </div>
+        </div></div>
+        <figcaption><span class="badge new">New</span><b>Category list</b> in that sheet: the active categories, plus this expense's own retired category at the end. It can be moved to an active category, but other expenses never see the retired one.</figcaption>
+      </figure>
+
+      <figure>
+        <div class="phone"><div class="app">
+          <div class="top"><h3>Summary</h3><div class="seg"><span class="on">November</span><span>October</span></div></div>
+          <div class="scroll">
+            <p class="sub" style="margin-top:12px">Day 8 of 30</p>
+            <div class="cat"><div class="cat-top"><span>Rent<span class="n">1</span></span><strong>1,800.00 <span class="of">of 1,800.00</span></strong></div><div class="meter"><div class="track"><div class="fill" style="width:100%"></div></div></div><div class="pace"><b>Budget used</b> · $0.00 left</div></div>
+            <div class="cat"><div class="cat-top"><span>Food &amp; Dining<span class="n">9</span></span><strong>142.09 <span class="of">of 500.00</span></strong></div><div class="meter"><div class="track"><div class="fill" style="width:28.4%"></div></div><div class="tick" style="left:26.7%"></div></div><div class="pace"><b>$8.76 over pace</b> · $357.91 left, about $15.56/day</div></div>
+            <div class="cat ring"><div class="cat-top"><span>Travel<span class="n">2</span></span><strong>186.40</strong></div><div class="meter"><div class="track"><div class="fill" style="width:10.4%"></div></div></div></div>
+            <div class="cat"><div class="cat-top"><span>Utilities<span class="n">1</span></span><strong>118.35</strong></div><div class="meter"><div class="track"><div class="fill" style="width:6.6%"></div></div></div></div>
+          </div>
+          <div class="tabbar"><span><i>+</i>Log</span><span><i>≡</i>History</span><span class="on"><i>▮</i>Summary</span><span><i>◇</i>Categories</span></div>
+        </div></div>
+        <figcaption><span class="badge same">Behaviour</span><b>Summary</b> with Travel retired mid-month. Its spending still counts in totals and the pie chart, but it shows as a plain bar: its $400 budget isn't tracked while retired.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <div class="notes">
+    <h2>Unchanged</h2>
+    <ul>
+      <li><b>Log screen:</b> retired categories aren't offered to the parser, so new entries go to the closest active category or "Other". The review card lists active categories only.</li>
+      <li><b>Today list, History and past months on Summary</b> show the category's name as before.</li>
+      <li><b>Renames still carry through history</b>, and no text copy of the name is added to each expense.</li>
+      <li><b>No permanent delete:</b> a category is never removed from the database.</li>
+    </ul>
+  </div>
+</main>
+<script>
+  document.querySelectorAll(".switch button").forEach((b) => b.addEventListener("click", () => {
+    document.querySelectorAll(".switch button").forEach((x) => x.classList.toggle("on", x === b));
+    document.body.classList.toggle("dark", b.dataset.mode === "dark");
+  }));
+</script>
+</body>
+</html>

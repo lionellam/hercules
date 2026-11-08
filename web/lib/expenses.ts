@@ -54,18 +54,57 @@ export function getCategories(userId: string) {
   );
 }
 
-// Returns null if the name is taken (ignoring case) or the user has reached the category limit.
+// Retired categories, for the Categories screen's "Retired" group. "Other" is never retired.
+export function getRetiredCategories(userId: string) {
+  return query<Category>(
+    `SELECT id, name, is_other, monthly_budget FROM categories
+     WHERE user_id = $1 AND NOT is_active ORDER BY name`,
+    [userId],
+  );
+}
+
+const UNDER_LIMIT = `(SELECT COUNT(*) FROM categories WHERE user_id = $1::uuid AND is_active) < $4`;
+
+// Adding a name that matches a retired category (ignoring case) restores it, with the budget given.
+// Returns null if the name is taken by an active category or the user has reached the category limit.
 export async function createCategory(userId: string, input: z.infer<typeof categoryInput>) {
+  const restored = await query<{ id: number }>(
+    `UPDATE categories SET is_active = TRUE, monthly_budget = $3::numeric
+     WHERE user_id = $1::uuid AND NOT is_active AND lower(name) = lower($2::text) AND ${UNDER_LIMIT}
+     RETURNING id`,
+    [userId, input.name, input.monthly_budget, MAX_CATEGORIES],
+  );
+  if (restored.length) return { id: restored[0].id, restored: true };
   const rows = await query<{ id: number }>(
     `INSERT INTO categories (user_id, name, is_default, monthly_budget, sort_order)
      SELECT $1::uuid, $2::text, FALSE, $3::numeric,
             COALESCE((SELECT MAX(sort_order) FROM categories WHERE user_id = $1::uuid), 0) + 1
      WHERE NOT EXISTS (SELECT 1 FROM categories WHERE user_id = $1::uuid AND lower(name) = lower($2::text))
-       AND (SELECT COUNT(*) FROM categories WHERE user_id = $1::uuid AND is_active) < $4
+       AND ${UNDER_LIMIT}
      ON CONFLICT DO NOTHING RETURNING id`,
     [userId, input.name, input.monthly_budget, MAX_CATEGORIES],
   );
-  return rows[0]?.id ?? null;
+  return rows.length ? { id: rows[0].id, restored: false } : null;
+}
+
+// Retiring keeps the row, so past expenses keep their category. Returns false for "Other" or if not found.
+export async function retireCategory(userId: string, id: number) {
+  const rows = await query(
+    "UPDATE categories SET is_active = FALSE WHERE id = $1 AND user_id = $2 AND is_active AND NOT is_other RETURNING id",
+    [id, userId],
+  );
+  return rows.length > 0;
+}
+
+// Returns false if not found, not retired, or the user has reached the category limit.
+export async function restoreCategory(userId: string, id: number) {
+  const rows = await query(
+    `UPDATE categories SET is_active = TRUE
+     WHERE id = $2 AND user_id = $1::uuid AND NOT is_active AND ${UNDER_LIMIT.replace("$4", "$3")}
+     RETURNING id`,
+    [userId, id, MAX_CATEGORIES],
+  );
+  return rows.length > 0;
 }
 
 // "Other" keeps its name because the parser falls back to it by name; its budget can still change.
@@ -130,12 +169,15 @@ export async function createExpense(userId: string, rawInput: string, input: z.i
   return rows[0].id;
 }
 
+// The category must be one of the user's active categories, or the expense's own category even if retired.
 export async function updateExpense(userId: string, id: number, input: z.infer<typeof expenseInput>) {
-  if (!(await ownsCategory(userId, input.category_id))) return false;
   const rows = await query(
     `UPDATE expenses SET amount = $3, currency = $4, category_id = $5, merchant = $6, date = $7, remarks = $8,
             was_edited = was_edited OR $9, updated_at = now()
-     WHERE id = $1 AND user_id = $2 AND deleted_at IS NULL RETURNING id`,
+     WHERE id = $1 AND user_id = $2 AND deleted_at IS NULL
+       AND EXISTS (SELECT 1 FROM categories c
+                   WHERE c.id = $5 AND c.user_id = $2 AND (c.is_active OR c.id = expenses.category_id))
+     RETURNING id`,
     [id, userId, input.amount, input.currency, input.category_id, input.merchant || null, input.date, input.remarks || null, input.was_edited],
   );
   return rows.length > 0;

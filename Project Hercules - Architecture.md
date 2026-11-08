@@ -1,8 +1,8 @@
 # Project Hercules — Architecture: Web App v1
 
 ```
-Version 0.8 · Draft
-Last Reviewed: 7 November 2026
+Version 0.9 · Draft
+Last Reviewed: 8 November 2026
 Produced with AI Assistance (Claude Code)
 ```
 
@@ -18,6 +18,7 @@ Produced with AI Assistance (Claude Code)
 | 0.6 | 2026-11-07 | Lionel Lam | Corrections: system overview now lists the Categories screen; decision 8 records that the Hobby plan terms were confirmed |
 | 0.7 | 2026-11-07 | Lionel Lam | Decision 18 covers editing from the Today list; decision 16 notes the UI mockup is historical |
 | 0.8 | 2026-11-07 | Lionel Lam | Decision 24: the app widens to 920 pixels from 1,024-pixel windows and 1,000 pixels from 1,280-pixel windows |
+| 0.9 | 2026-11-08 | Lionel Lam | Retiring and restoring categories (decision 29); decision 26's deferral of retiring superseded |
 
 ---
 
@@ -106,9 +107,10 @@ The language model is called only to parse a single expense into structured fiel
 | ~~17~~ | ~~**Per-user categories**, each new user seeded with the 14 default categories; changes made directly in the database; no management screen~~ *Superseded by decision 26* | The database matches the Specification's per-user Category model from the start, so a management screen can be added later without schema changes |
 | 18 | **Edit and soft delete** from History (and, since Specification v0.8, from the Log screen's Today list), reusing the review card | No new screen needed. Soft delete (`deleted_at`) keeps records recoverable, in line with the audit-friendly principle |
 | 19 | **SGD only** | Nearly all expenses are in SGD; currency is still stored per expense, but summaries do not convert |
-| 26 | **Categories screen** to add and rename per-user categories, as a fourth tab. Retiring and deleting are left out for now; each new user is still seeded with the 14 defaults | Expenses link to categories by ID, so renames carry through history, and the parser reads the live list. Retiring needs more work: an older expense in a retired category must still open and save correctly in the edit sheet |
+| 26 | **Categories screen** to add and rename per-user categories, as a fourth tab. ~~Retiring and deleting are left out for now~~ *Retiring added by decision 29*; each new user is still seeded with the 14 defaults | Expenses link to categories by ID, so renames carry through history, and the parser reads the live list. ~~Retiring needs more work: an older expense in a retired category must still open and save correctly in the edit sheet~~ |
 | 27 | **Optional monthly budget per category**, stored as `categories.monthly_budget` rather than a separate table; Summary shows "x of budget" and a bar of the budget used for the current month only | The simplest start on Phase 3 budgets. Only the current amount is kept, so past months are not compared against budgets. A separate table can replace the column if budget history is needed |
 | 28 | **Spending pace on Summary**, current month only: an expected-by-today marker and note on each budgeted bar, and a burn-up chart on tap, worked out in the app from the month's expense list and categories | Answers "am I spending faster than my budget allows?" without a new screen. Linear pro-rata is simple and predictable; red stays reserved for over budget, since spending early (such as rent on day 1) isn't overspending. No month-end forecast, as it is badly wrong early in the month and for one-off spends. No server or database changes |
+| 29 | **Retire and restore categories** using the existing `categories.is_active` flag; no permanent delete. Retired categories are hidden from new expenses and the parser, listed in a collapsed "Retired" group with Restore, and can't be renamed while retired. Re-adding a retired name restores it. An expense already in a retired category can still be edited and saved, keeping that category. "Other" can't be retired. No text copy of the category name is stored on expenses | Past expenses keep their category, since the row is never removed, and restoring is one tap. A permanent delete would fail anyway for any category an expense refers to, including deleted expenses. A copied name on each expense was considered and rejected: categories are never removed, so the joined name always resolves, and a copy would either show old names after a rename (against decision 26) or need rewriting on every rename. No database migration was needed |
 
 ### 3.6 Process
 
@@ -126,5 +128,5 @@ With these decisions, Project Hercules is framed as a **hosted, invite-only fami
 - ~~Update the UI mockup's sign-in button from Apple to Google~~ — *Done (26 October 2026)*
 - ~~Confirm Vercel Hobby plan terms on sign-up~~ — *Done (2 November 2026): Hobby plan active with no payment method on file; terms confirmed as suitable for a private, non-commercial family app*
 - ~~Decide how the allow-list is stored (environment configuration or a database table) during implementation~~ — *Decided (26 October 2026): an `allowed_emails` database table, managed with `npm run allow`, so invitations don't require a redeploy*
-- Allow-list administration, retiring categories, and export are deferred to Phase 4
+- Allow-list administration and export are deferred to Phase 4 (retiring categories was delivered early: decision 29)
 - Budget history, alerts and fuller budget tracking remain in Phase 3

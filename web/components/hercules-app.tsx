@@ -111,7 +111,7 @@ export default function HerculesApp({ email }: { email: string }) {
       {tab === "log" && <LogScreen categories={categories} online={online} cache={cache} onSaved={cache.reloadAll} />}
       {tab === "history" && <HistoryScreen categories={categories} online={online} cache={cache} onChanged={cache.reloadAll} />}
       {tab === "summary" && <SummaryScreen email={email} cache={cache} categories={categories} />}
-      {tab === "categories" && <CategoriesScreen categories={categories} online={online} onChanged={cache.reloadAll} />}
+      {tab === "categories" && <CategoriesScreen categories={categories} online={online} cache={cache} onChanged={cache.reloadAll} />}
       <nav className="tabs">
         <TabButton id="log" tab={tab} setTab={setTab} label="Log" path="M12 5v14M5 12h14" />
         <TabButton id="history" tab={tab} setTab={setTab} label="History" path="M4 6h16M4 12h16M4 18h10" />
@@ -152,6 +152,12 @@ function ExpenseRow({ e, onClick }: { e: Expense; onClick?: () => void }) {
 }
 
 function EditSheet({ expense, categories, online, onClose, onChanged }: { expense: Expense; categories: Category[]; online: boolean; onClose: () => void; onChanged: () => void }) {
+  // An expense in a retired category can keep it; no other expense is offered a retired category
+  const options =
+    categories.length > 0 && !categories.some((c) => c.id === expense.category_id)
+      ? [...categories, { id: expense.category_id, name: `${expense.category} (retired)` }]
+      : categories;
+
   async function save(fields: Fields, edited: boolean) {
     await api(`/api/expenses/${expense.id}`, { method: "PATCH", body: JSON.stringify({ ...fields, was_edited: edited }) });
     onClose();
@@ -172,7 +178,7 @@ function EditSheet({ expense, categories, online, onClose, onChanged }: { expens
           title="Edit expense"
           rawInput={expense.raw_input}
           initial={expense}
-          categories={categories}
+          categories={options}
           onSave={save}
           onCancel={onClose}
           cancelLabel="Cancel"
@@ -747,30 +753,45 @@ function SummaryScreen({ email, cache, categories }: { email: string; cache: Api
   );
 }
 
-function CategorySheet({ category, online, onClose, onChanged }: { category: Category | null; online: boolean; onClose: () => void; onChanged: () => void }) {
+function CategorySheet({ category, retired, online, onClose, onChanged }: { category: Category | null; retired: Category[]; online: boolean; onClose: () => void; onChanged: () => void }) {
   const [name, setName] = useState(category?.name ?? "");
   const [budget, setBudget] = useState(category?.monthly_budget?.toFixed(2) ?? "");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
+  // Adding a retired category's name restores that category
+  const match = category ? undefined : retired.find((c) => c.name.toLowerCase() === name.trim().toLowerCase());
 
-  async function save() {
-    const value = Number(budget);
-    if (budget.trim() && (!Number.isFinite(value) || value <= 0)) {
-      setError("Enter a budget above zero, or leave it blank.");
-      return;
-    }
+  async function run(action: () => Promise<unknown>) {
     setBusy(true);
     setError("");
     try {
-      const body = JSON.stringify({ name, monthly_budget: budget.trim() ? Math.round(value * 100) / 100 : null });
-      if (category) await api(`/api/categories/${category.id}`, { method: "PATCH", body });
-      else await api("/api/categories", { method: "POST", body });
+      await action();
       onClose();
       onChanged();
     } catch (e) {
       setError((e as Error).message);
       setBusy(false);
     }
+  }
+
+  function save() {
+    const value = Number(budget);
+    if (budget.trim() && (!Number.isFinite(value) || value <= 0)) {
+      setError("Enter a budget above zero, or leave it blank.");
+      return;
+    }
+    const body = JSON.stringify({ name, monthly_budget: budget.trim() ? Math.round(value * 100) / 100 : null });
+    run(() => (category ? api(`/api/categories/${category.id}`, { method: "PATCH", body }) : api("/api/categories", { method: "POST", body })));
+  }
+
+  function retire() {
+    if (!category) return;
+    const budgetNote =
+      category.monthly_budget == null
+        ? ""
+        : ` Its $${fmt(category.monthly_budget)} budget stops being tracked; spending already logged this month stays in Summary.`;
+    if (!confirm(`Retire ${category.name}? It won't be offered for new expenses. Past expenses keep this category, and you can restore it any time.${budgetNote}`)) return;
+    run(() => api(`/api/categories/${category.id}`, { method: "DELETE" }));
   }
 
   return (
@@ -786,13 +807,25 @@ function CategorySheet({ category, online, onClose, onChanged }: { category: Cat
             <label htmlFor="c-budget">Monthly budget (SGD)</label>
             <input id="c-budget" inputMode="decimal" value={budget} onChange={(e) => setBudget(e.target.value)} placeholder="Optional" />
           </div>
-          {category?.is_other && <p className="sub">The built-in &quot;Other&quot; category can&apos;t be renamed.</p>}
+          {category?.is_other && <p className="sub">The built-in &quot;Other&quot; category can&apos;t be renamed or retired.</p>}
+          {match && (
+            <p className="sub">
+              &quot;{match.name}&quot; was retired. Saving restores it, with its past expenses,{" "}
+              {budget.trim() ? "and applies this budget." : "without a budget."}
+            </p>
+          )}
           {error && <p className="error">{error}</p>}
           <div className="actions">
-            <div />
+            <div>
+              {category && !category.is_other && (
+                <button className="btn btn-danger" disabled={busy || !online} onClick={retire}>Retire</button>
+              )}
+            </div>
             <div className="right">
               <button className="btn btn-ghost" disabled={busy} onClick={onClose}>Cancel</button>
-              <button className="btn btn-primary" disabled={busy || !online || !name.trim()} onClick={save}>{busy ? "Saving…" : "Save"}</button>
+              <button className="btn btn-primary" disabled={busy || !online || !name.trim()} onClick={save}>
+                {busy ? "Saving…" : match ? "Restore" : "Save"}
+              </button>
             </div>
           </div>
         </div>
@@ -801,8 +834,21 @@ function CategorySheet({ category, online, onClose, onChanged }: { category: Cat
   );
 }
 
-function CategoriesScreen({ categories, online, onChanged }: { categories: Category[]; online: boolean; onChanged: () => void }) {
+function CategoriesScreen({ categories, online, cache, onChanged }: { categories: Category[]; online: boolean; cache: ApiCache; onChanged: () => void }) {
   const [editing, setEditing] = useState<Category | "new" | null>(null);
+  const retired = useCached<Category[]>(cache, "/api/categories?retired=1") ?? [];
+  const [showRetired, setShowRetired] = useState(false);
+  const [restoreError, setRestoreError] = useState("");
+
+  async function restore(c: Category) {
+    setRestoreError("");
+    try {
+      await api(`/api/categories/${c.id}/restore`, { method: "POST" });
+      onChanged();
+    } catch (e) {
+      setRestoreError((e as Error).message);
+    }
+  }
 
   return (
     <section className="screen pinned-screen">
@@ -826,7 +872,32 @@ function CategoriesScreen({ categories, online, onChanged }: { categories: Categ
           </button>
         ))
       )}
-      {editing && <CategorySheet category={editing === "new" ? null : editing} online={online} onClose={() => setEditing(null)} onChanged={onChanged} />}
+      {retired.length > 0 && (
+        <>
+          <button className="retired-toggle" aria-expanded={showRetired} onClick={() => setShowRetired(!showRetired)}>
+            <span>Retired ({retired.length})</span>
+            <span>{showRetired ? "Hide" : "Show"}</span>
+          </button>
+          {showRetired && (
+            <>
+              {retired.map((c) => (
+                <div className="item retired" key={c.id}>
+                  <div>
+                    <div className="m">{c.name}</div>
+                    <div className="c">{c.monthly_budget == null ? "No budget" : `Budget ${fmt(c.monthly_budget)}`}</div>
+                  </div>
+                  <button className="btn btn-small" disabled={!online} onClick={() => restore(c)}>Restore</button>
+                </div>
+              ))}
+              {restoreError && <p className="error">{restoreError}</p>}
+              <p className="sub retired-note">Retired categories aren&apos;t offered for new expenses. Past expenses keep them.</p>
+            </>
+          )}
+        </>
+      )}
+      {editing && (
+        <CategorySheet category={editing === "new" ? null : editing} retired={retired} online={online} onClose={() => setEditing(null)} onChanged={onChanged} />
+      )}
     </section>
   );
 }

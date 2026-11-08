@@ -744,3 +744,19 @@ Last updated: 8 November 2026
 ### Decisions Made
 - **Years limited to 2000–2099** — wide enough for any real expense, and it rules out years the database can't store.
 - **Correction to the audit** — the audit also listed very large category numbers as causing a server error. Testing showed they were already refused cleanly, so no change was needed there.
+
+---
+
+## 08 November 2026 — Retiring Categories
+
+### What Was Done
+- The owner asked to delete categories without losing them from past expenses, and whether each expense should also store a text copy of its category name. A planning subagent reviewed the impact across the code and documents; mockups (`design/category-retire-mockups.html`) showed each screen, and the owner approved the recommended design, with History left unmarked.
+- **Retire and restore:** any category except "Other" can be retired from its edit sheet, after a confirmation that mentions its budget when it has one. Retired categories move to a collapsed "Retired" group at the bottom of the Categories screen, each with a Restore button. Adding a name that matches a retired category restores it instead of reporting "name in use"; the sheet says so beforehand, and whether a budget will apply. Retired categories can't be renamed until restored.
+- **Past expenses:** History, the Today list and Summary keep showing a retired category's name. Its budget isn't tracked while retired, so this month's spending in it shows as a plain bar. An expense already in a retired category opens with "*name* (retired)" and saves normally; previously this case showed the wrong category and failed to save. No other expense can be put in a retired category, and the parser only sees active categories.
+- Updated the Specification (v0.30), Architecture (v0.9, new decision 29, with decision 26's deferral struck through), Project Charter (v0.8), Project Plan (v0.9) and the readable guide (repository copy and artifact).
+- Tested against the local app with temporary `zz-test-` categories and `[TEST]` expenses: 15 server checks (retire, refusing "Other", refusing new expenses in a retired category, editing an old one, moving it out but not back, refusing renames, restoring by re-adding and by the Restore route) and the screens themselves, then removed the test rows. The owner's local data was unchanged afterwards (14 active categories; November's 20 expenses still totalling $2,283.02). Type-check, lint and a production build passed.
+
+### Decisions Made
+- **Retire, not delete** — the row stays, using the existing `is_active` flag, so no database migration was needed. A permanent delete would fail anyway for any category an expense refers to, including deleted expenses.
+- **No text copy of the category name on expenses** — categories are never removed, so the name can always be looked up. A copy would either keep old names after a rename, against decision 26, or need rewriting on every rename.
+- **History not marked** — the owner chose to show retired categories in History as normal; only the edit sheet says "(retired)".
