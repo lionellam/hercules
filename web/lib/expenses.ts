@@ -63,14 +63,16 @@ export function getRetiredCategories(userId: string) {
   );
 }
 
-const UNDER_LIMIT = `(SELECT COUNT(*) FROM categories WHERE user_id = $1::uuid AND is_active) < $4`;
+// SQL condition: the user (parameter $user) has fewer active categories than the limit (parameter $limit)
+const underLimit = (user: string, limit: string) =>
+  `(SELECT COUNT(*) FROM categories WHERE user_id = ${user}::uuid AND is_active) < ${limit}`;
 
 // Adding a name that matches a retired category (ignoring case) restores it, with the budget given.
 // Returns null if the name is taken by an active category or the user has reached the category limit.
 export async function createCategory(userId: string, input: z.infer<typeof categoryInput>) {
   const restored = await query<{ id: number }>(
     `UPDATE categories SET is_active = TRUE, monthly_budget = $3::numeric
-     WHERE user_id = $1::uuid AND NOT is_active AND lower(name) = lower($2::text) AND ${UNDER_LIMIT}
+     WHERE user_id = $1::uuid AND NOT is_active AND lower(name) = lower($2::text) AND ${underLimit("$1", "$4")}
      RETURNING id`,
     [userId, input.name, input.monthly_budget, MAX_CATEGORIES],
   );
@@ -80,7 +82,7 @@ export async function createCategory(userId: string, input: z.infer<typeof categ
      SELECT $1::uuid, $2::text, FALSE, $3::numeric,
             COALESCE((SELECT MAX(sort_order) FROM categories WHERE user_id = $1::uuid), 0) + 1
      WHERE NOT EXISTS (SELECT 1 FROM categories WHERE user_id = $1::uuid AND lower(name) = lower($2::text))
-       AND ${UNDER_LIMIT}
+       AND ${underLimit("$1", "$4")}
      ON CONFLICT DO NOTHING RETURNING id`,
     [userId, input.name, input.monthly_budget, MAX_CATEGORIES],
   );
@@ -100,7 +102,7 @@ export async function retireCategory(userId: string, id: number) {
 export async function restoreCategory(userId: string, id: number) {
   const rows = await query(
     `UPDATE categories SET is_active = TRUE
-     WHERE id = $2 AND user_id = $1::uuid AND NOT is_active AND ${UNDER_LIMIT.replace("$4", "$3")}
+     WHERE id = $2 AND user_id = $1::uuid AND NOT is_active AND ${underLimit("$1", "$3")}
      RETURNING id`,
     [userId, id, MAX_CATEGORIES],
   );
@@ -150,11 +152,12 @@ export function listExpenses(userId: string, month: string) {
 
 export function monthSummary(userId: string, month: string) {
   const [start, end] = monthRange(month);
-  return query<{ category: string; total: number; count: number; budget: number | null }>(
-    `SELECT c.name AS category, SUM(e.amount)::numeric(12,2) AS total, COUNT(*)::int AS count, c.monthly_budget AS budget
+  // Budgets aren't included: Summary only compares against budgets for the current month, which it works out on the device
+  return query<{ category: string; total: number; count: number }>(
+    `SELECT c.name AS category, SUM(e.amount)::numeric(12,2) AS total, COUNT(*)::int AS count
      FROM expenses e JOIN categories c ON c.id = e.category_id
      WHERE e.user_id = $1 AND e.deleted_at IS NULL AND e.date >= $2 AND e.date < $3
-     GROUP BY c.name, c.monthly_budget ORDER BY total DESC`,
+     GROUP BY c.name ORDER BY total DESC`,
     [userId, start, end],
   );
 }

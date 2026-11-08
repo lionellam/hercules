@@ -1,7 +1,7 @@
 # Project Hercules — Architecture: Web App v1
 
 ```
-Version 0.10 · Draft
+Version 0.11 · Draft
 Last Reviewed: 8 November 2026
 Produced with AI Assistance (Claude Code)
 ```
@@ -20,6 +20,7 @@ Produced with AI Assistance (Claude Code)
 | 0.8 | 2026-11-07 | Lionel Lam | Decision 24: the app widens to 920 pixels from 1,024-pixel windows and 1,000 pixels from 1,280-pixel windows |
 | 0.9 | 2026-11-08 | Lionel Lam | Retiring and restoring categories (decision 29); decision 26's deferral of retiring superseded |
 | 0.10 | 2026-11-08 | Lionel Lam | In-app confirmation sheets, Undo, and a check before discarding unsaved changes (decision 30) |
+| 0.11 | 2026-11-08 | Lionel Lam | Decision 23: the app no longer requests the current month's Summary totals, which were unused |
 
 ---
 
@@ -96,7 +97,7 @@ The language model is called only to parse a single expense into structured fiel
 | 13 | **TypeScript with Next.js** for frontend and backend | Best fit for Vercel; one language across the app. The Python parser prompt is reused and ported (mostly the prompt plus one API call) |
 | 14 | **Progressive Web App (PWA)** | Installs on the phone's home screen and opens full-screen like an app, without App Store distribution or fees |
 | 15 | **No offline logging** in v1 | Parsing needs the network. When offline, the app shows a clear message and keeps the typed text |
-| 23 | **Loaded data kept in memory, refreshed in the background** | Switching tabs is instant: screens show the last-loaded data while a fresh copy loads, and the app loads this month's expenses and Summary when it opens. Any save, edit or delete reloads everything held. Nothing is stored on the device, so data is gone when the app closes. Server-side caching was not used because the allow-list is re-checked on every request, so that removing someone takes effect immediately |
+| 23 | **Loaded data kept in memory, refreshed in the background** | Switching tabs is instant: screens show the last-loaded data while a fresh copy loads, and the app loads this month's expenses and last month's Summary totals when it opens. The current month's Summary is worked out on the device from this month's expenses (needed for spending pace anyway), so the server's totals are only requested for past months. Any save, edit or delete reloads everything held. Nothing is stored on the device, so data is gone when the app closes. Server-side caching was not used because the allow-list is re-checked on every request, so that removing someone takes effect immediately |
 | 24 | **Moderately responsive layout:** phone layout up to 767 pixels wide; from 768 pixels, the app is up to 820 pixels wide, widening to 920 pixels from 1,024-pixel windows (iPad held sideways, small laptops) and 1,000 pixels from 1,280-pixel windows, with two columns on Log and Summary and edit sheets as centred dialogs | Makes good use of a tablet or computer screen without a separate desktop design. The bottom tab bar stays at every width, so there is one way to navigate. The two wider steps (7 November 2026) leave less of a laptop window empty while keeping the burn-up chart's text a comfortable size, since it scales with the chart's width |
 | 25 | **Light and dark mode toggle**, following the device's setting until first used; the choice is saved per device in the browser | One tap on every main screen. It is a display preference, not personal data, so it does not need the database or need to follow the user between devices |
 | 30 | **In-app confirmation sheet** instead of the phone's built-in prompt, used before deleting an expense, retiring a category, and discarding unsaved changes; **Undo** for about five seconds after deleting or retiring | The built-in prompt can't be styled and is switched off in some browsers, including the test browser built into the Claude app, where it silently answered "Cancel". Undo gives deleting an in-app way back, which it didn't have; confirmation and Undo are both used because a delete is easy to tap by mistake. Undo needs only a small "restore" route for expenses, since deletes are already soft. Discarding asks only when something changed, so prompts keep their meaning. Duplicate and unusual-value warnings were mocked up at the same time and left for later |

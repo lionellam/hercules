@@ -778,3 +778,13 @@ Last updated: 8 November 2026
 - **Both confirmation and Undo** for deleting and retiring — a delete is easy to tap by mistake, and Undo also covers a confirmation tapped through too quickly.
 - **Only ask when something changed** — so the discard prompt keeps its meaning.
 - **One Undo at a time** — a new action replaces the previous bar.
+
+---
+
+## 08 November 2026 — Refactoring Review and Quick Wins
+
+### What Was Done
+- Reviewed the codebase for refactoring opportunities. The main finding was that `components/hercules-app.tsx` has grown to over 1,000 lines; others were scattered date helpers, types defined twice, repeated sign-in boilerplate in the 11 server routes, and no automated tests. The owner chose to start with two quick wins.
+- **Unused request removed:** the app requested the current month's Summary totals each time it opened and each time Summary loaded, but the current month is worked out on the device from this month's expenses, so the result was never used. It is no longer requested, saving a database query on every app open. The month summary also no longer returns budgets, which only the current month uses. Architecture decision 23 updated (v0.11).
+- **Fragile query fixed:** restoring a category built part of its SQL by text-replacing a placeholder in a shared fragment. The fragment is now a small function that takes its parameter positions explicitly.
+- Tested in the local app: on opening, only this month's expenses, the categories and last month's totals are requested; Summary shows the same figures as before for November ($2,283.02, −$1,224.48 vs October, same pace notes) and October ($3,507.50, +$348.60 vs September). Retire, restore, restore-by-re-adding and the duplicate-name check all behaved as before, using temporary `zz-test-` categories that were then removed; local data was confirmed identical to a snapshot taken beforehand. Type-check, lint and a production build passed.

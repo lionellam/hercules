@@ -86,10 +86,13 @@ function useApiCache() {
 }
 type ApiCache = ReturnType<typeof useApiCache>;
 
-// Returns the last-loaded response straight away, and fetches a fresh copy each time a screen opens
-function useCached<T>({ data, load }: ApiCache, url: string) {
-  useEffect(() => load(url), [load, url]);
-  return data[url] as T | undefined;
+// Returns the last-loaded response straight away, and fetches a fresh copy each time a screen opens.
+// Pass null to skip loading (hooks can't be called conditionally).
+function useCached<T>({ data, load }: ApiCache, url: string | null) {
+  useEffect(() => {
+    if (url) load(url);
+  }, [load, url]);
+  return url ? (data[url] as T | undefined) : undefined;
 }
 
 type ShowUndo = (message: string, undo: () => Promise<void>) => void;
@@ -174,8 +177,8 @@ export default function HerculesApp({ email }: { email: string }) {
 
   useEffect(() => {
     // Load the other tabs' default views up front so they open instantly
+    // (The current month's Summary is worked out from this month's expenses, so only last month's totals are needed)
     load(expensesUrl(monthKey(0)));
-    load(summaryUrl(monthKey(0)));
     load(summaryUrl(monthKey(-1)));
   }, [load]);
 
@@ -778,7 +781,7 @@ function SummaryScreen({ email, cache, categories }: { email: string; cache: Api
   const today = localToday();
   const day = Number(today.slice(8));
   const days = daysInMonth(monthKey(0));
-  const summaryRows = useCached<SummaryRow[]>(cache, summaryUrl(month));
+  const summaryRows = useCached<SummaryRow[]>(cache, isCurrent ? null : summaryUrl(month));
   const currentExpenses = useCached<Expense[]>(cache, expensesUrl(monthKey(0)));
   const rows: (SummaryRow | PaceRow)[] | undefined = isCurrent
     ? currentExpenses && paceRows(currentExpenses, categories, days)
