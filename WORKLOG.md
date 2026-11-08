@@ -803,3 +803,16 @@ Last updated: 8 November 2026
   - `lib/client.ts`: fetching, the in-memory cache, the online check and money formatting.
 - Architecture v0.12 records the layout as decision 31.
 - Checked that every block of the old file appears unchanged in the new files, apart from the intended changes (shared types and date helpers, two renamed parameters). Clicked through every screen in the local app: Log, History (day headings, delete confirmation), Summary ($2,283.02, −$1,224.48 vs October, the same pace notes, pie chart and burn-up chart) and Categories (14 categories, discard and retire confirmations), all matching earlier results; local data confirmed unchanged. Type-check, lint and a production build passed.
+
+---
+
+## 08 November 2026 — "How Hercules Works" Rewritten as a User Guide
+
+### What Was Done
+- At the owner's request, rewrote `Project Hercules - How Hercules Works.html` (repository copy and the private claude.ai artifact) as a guide for people using the app, instead of a plain-language edition of the Specification and Architecture.
+- New sections: getting started (signing in, adding to the home screen, light and dark mode), logging an expense, what to type (with examples), fixing and deleting (with Undo), History, Summary, spending pace in everyday terms, categories and budgets (including retiring and restoring), privacy, and quick answers to common problems.
+- Kept the existing look and the app mockups; added mockups of the delete confirmation and the Undo bar. Removed the project material (principles, data model, AI boundary table, system diagram, decision record, costs, open questions and roadmap), which remains in the Specification and Architecture.
+- Checked the guide's statements against the app: button labels, the 90-day sign-in, the 100-a-day parse limit, the pace notes, the 50-category limit, Discard keeping the typed text, and what is sent to Claude and Google.
+
+### Decisions Made
+- **Plain privacy section** — states plainly that the owner can reach the database to fix problems or recover deleted expenses, rather than implying no one can.

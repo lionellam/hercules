@@ -11,7 +11,7 @@
 <style>
 body { margin: 0; }
 [hidden] { display: none !important; }
-/* Layout: a reading column with a sticky contents rail on wide screens; app mockups sit in phone frames beside or between the text. */
+/* Layout: a user guide in a reading column with a sticky contents rail on wide screens; app mockups sit in phone frames between the steps. */
 :root {
   --bg: #f7f8f6;
   --paper: #ffffff;
@@ -216,6 +216,20 @@ footer { margin-top: 72px; padding-top: 18px; border-top: 1px solid var(--rule);
 }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 html { scroll-behavior: smooth; }
+/* Confirmation sheet, Undo bar and quick answers */
+.m .m-confirm { position: absolute; left: 0; right: 0; bottom: 0; background: var(--m-bg); border-radius: 18px 18px 0 0; padding: 16px 16px 18px; box-shadow: 0 -6px 22px rgba(0,0,0,.16); }
+.m .m-confirm-t { font-size: 15px; font-weight: 700; }
+.m .m-confirm-b { color: var(--m-muted); font-size: 11.5px; margin-top: 5px; }
+.m .m-ref { margin-top: 10px; border: 1px solid var(--m-line); border-radius: 10px; padding: 8px 10px; display: flex; justify-content: space-between; font-size: 12px; }
+.m .m-ref .c { color: var(--m-muted); font-size: 10.5px; margin-top: 1px; }
+.m .m-ref b { font-variant-numeric: tabular-nums; }
+.m .m-red { margin-top: 12px; background: var(--m-bad); color: #fff; border-radius: 10px; text-align: center; padding: 9px 0; font-weight: 600; font-size: 12.5px; }
+.m .m-cancel { text-align: center; color: var(--m-muted); font-weight: 600; font-size: 12.5px; padding: 9px 0 0; }
+.m .m-undo { margin: 18px 12px 10px; background: var(--m-bar); color: var(--m-bg); border-radius: 10px; padding: 9px 12px; display: flex; justify-content: space-between; font-size: 12px; box-shadow: 0 4px 14px rgba(0,0,0,.18); }
+.m .m-undo b { text-decoration: underline; text-underline-offset: 2px; }
+dl.faq { margin: 18px 0; display: grid; gap: 4px; max-width: 72ch; }
+dl.faq dt { font-weight: 700; margin-top: 14px; }
+dl.faq dd { margin: 2px 0 0; color: var(--ink-2); }
 </style>
 </head>
 <body>
@@ -223,72 +237,45 @@ html { scroll-behavior: smooth; }
   <nav class="toc" aria-label="Contents">
     <p>Contents</p>
     <ol>
-      <li><a href="#overview">At a glance</a></li>
-      <li class="part">The app</li>
-      <li><a href="#principles">Principles</a></li>
-      <li><a href="#roles">Who does what</a></li>
-      <li><a href="#logging">Logging an expense</a></li>
-      <li><a href="#screens">The other screens</a></li>
+      <li><a href="#start">Getting started</a></li>
+      <li><a href="#log">Logging an expense</a></li>
+      <li><a href="#writing">What to type</a></li>
+      <li><a href="#fix">Fixing and deleting</a></li>
+      <li><a href="#history">History</a></li>
+      <li><a href="#summary">Summary</a></li>
       <li><a href="#pace">Spending pace</a></li>
-      <li><a href="#data">What's stored</a></li>
-      <li><a href="#ai">What Claude does</a></li>
-      <li><a href="#open">Open questions</a></li>
-      <li class="part">How it's built</li>
-      <li><a href="#system">The system</a></li>
-      <li><a href="#decisions">Key decisions</a></li>
-      <li><a href="#costs">Costs and limits</a></li>
-      <li><a href="#next">What's next</a></li>
+      <li><a href="#categories">Categories and budgets</a></li>
+      <li><a href="#privacy">Your privacy</a></li>
+      <li><a href="#faq">Quick answers</a></li>
     </ol>
   </nav>
 
   <main>
     <header class="hero" id="overview">
-      <p class="eyebrow">PROJECT HERCULES · READABLE EDITION</p>
+      <p class="eyebrow">HERCULES · USER GUIDE</p>
       <h1>How Hercules works</h1>
-      <p class="lede">Hercules is a private expense tracker for family and close friends. You type an expense the way you'd say it, Claude turns it into a tidy record, and you check it before it's saved.</p>
+      <p class="lede">Hercules keeps track of what you spend. Type an expense the way you'd say it, like "lunch at Ya Kun 4.50", check what the app picked out, and save. Hercules adds it all up by day, month and category, and tells you how you're doing against any budgets you set.</p>
       <div class="meta">
-        <span><b>Based on:</b> Specification v0.31 and Architecture v0.10</span>
-        <span><b>Status:</b> live on Vercel since 1 November 2026</span>
-        <span><b>Owner:</b> Lionel Lam</span>
+        <span><b>Who it's for:</b> invited family and friends</span>
+        <span><b>Works on:</b> phone, tablet and computer</span>
+        <span><b>Updated:</b> 8 November 2026</span>
       </div>
     </header>
 
-    <p>This page explains the two technical documents in plain language, with mockups of the screens. The original documents remain the source of truth. Where this page simplifies, they have the full detail.</p>
-
-    <!-- ========== PART 1 ========== -->
-    <p class="part-title">Part 1 · The app (from the Specification)</p>
-
-    <h2 id="principles">The four principles</h2>
-    <p>Every feature is checked against these.</p>
-    <div class="principles">
-      <div class="principle"><h4>You always check first</h4><p>Nothing Claude reads from your text is saved until you've seen it and had the chance to fix it.</p></div>
-      <div class="principle"><h4>AI only where it helps</h4><p>Claude only reads your words and suggests the fields. Saving, checking, totals and everything else is ordinary, predictable code.</p></div>
-      <div class="principle"><h4>Your words are kept</h4><p>What you typed is stored alongside the record, so parsing mistakes can be looked into later.</p></div>
-      <div class="principle"><h4>Private by account</h4><p>Several people use one app, but nobody can see anyone else's expenses.</p></div>
-    </div>
-
-    <h2 id="roles">Who does what</h2>
-    <div class="table-wrap"><table>
-      <thead><tr><th>Who</th><th>Their part</th></tr></thead>
-      <tbody>
-        <tr><td><b>You</b></td><td>Sign in with Google, type an expense, check what Claude found, fix anything, save.</td></tr>
-        <tr><td><b>Claude</b> (Haiku 5.5)</td><td>Reads your text and suggests the amount, category, merchant and date. That's all.</td></tr>
-        <tr><td><b>The app</b></td><td>Everything else: sign-in and the invite list, checking the fields, storing, totals, budgets and the daily usage limit.</td></tr>
-      </tbody>
-    </table></div>
-    <p>An earlier version runs entirely on a home computer (a command-line tool using a local model) and is kept separately for experiments.</p>
-
-    <h2 id="logging">Logging an expense</h2>
-    <p>The main flow, start to finish. The highlighted step is the only one involving AI.</p>
+    <h2 id="start">Getting started</h2>
     <ol class="steps">
-      <li><span><b>You type it in plain words</b>, for example "Lunch at Ya Kun for $4.50". The heading, the box and today's running total stay pinned at the top of the screen, so you can log from anywhere in the list.</span></li>
-      <li><span><b>The app gathers your categories</b> and passes the list to Claude, so it can only choose from your own.</span></li>
-      <li class="ai"><span><b>Claude reads the text</b> and returns the amount, category, merchant and date in a fixed format.<span class="tag-ai">AI</span> It must pick one of your categories, or "Other" if nothing fits. It can't invent new ones.</span></li>
-      <li><span><b>The app matches the category</b> by its exact name. No guessing.</span></li>
-      <li><span><b>You see a review card</b> with every field editable.</span></li>
-      <li><span><b>You fix anything that's wrong</b> by editing the fields directly. Claude isn't asked again.</span></li>
-      <li><span><b>You save.</b> The record is stored with your original words and a note of whether you changed anything, which shows how accurate the parsing is over time.</span></li>
-      <li><span><b>It appears everywhere</b>: in Today, History and Summary. Tap any saved expense to edit or delete it. Deleting asks first, and the record can still be recovered.</span></li>
+      <li><span><b>Open the app</b> at the link you were sent, and tap <b>Sign in with Google</b>. Use the Google account whose email address was invited. If you see "This account hasn't been invited", ask Lionel to add your address.</span></li>
+      <li><span><b>Add it to your home screen</b> so it opens like an app.<br>iPhone (Safari): tap the Share button, then <b>Add to Home Screen</b>.<br>Android (Chrome): tap the ⋮ menu, then <b>Add to Home screen</b> or <b>Install app</b>.</span></li>
+      <li><span><b>Choose light or dark.</b> The app follows your phone's setting until you tap the sun or moon icon at the top right of any screen. Your choice is remembered on that device.</span></li>
+    </ol>
+    <p>You'll stay signed in on that device for up to 90 days. There are four tabs along the bottom: <b>Log</b>, <b>History</b>, <b>Summary</b> and <b>Categories</b>. On a tablet or computer the app gets wider and shows two columns.</p>
+
+    <h2 id="log">Logging an expense</h2>
+    <ol class="steps">
+      <li><span><b>Type the expense</b> in the box at the top of the Log screen, in your own words.</span></li>
+      <li class="ai"><span><b>Tap Parse.</b><span class="tag-ai">AI</span> Claude, the AI that reads your text, picks out the amount, category, merchant and date. This takes a second or two.</span></li>
+      <li><span><b>Check the review card.</b> Every field can be changed: tap the amount, pick a different category, fix the date, or add a remark.</span></li>
+      <li><span><b>Tap Save.</b> The expense appears straight away under <b>Today</b>, and in History and Summary.</span></li>
     </ol>
 
     <div class="figure-row">
@@ -316,9 +303,8 @@ html { scroll-behavior: smooth; }
             <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 5h7l9 9-6 6-9-9V5zM8 9h.01"/></svg>Categories</span>
           </div>
         </div></div>
-        <figcaption><b>Step 1 · Log.</b> The top section stays in place while Today and Today by Category scroll beneath it.</figcaption>
+        <figcaption><b>Log.</b> Type the expense and tap Parse. Spent today and the Today list update each time you save.</figcaption>
       </figure>
-
       <figure>
         <div class="phone"><div class="m">
           <div class="top flat">
@@ -338,26 +324,88 @@ html { scroll-behavior: smooth; }
             </div>
           </div>
         </div></div>
-        <figcaption><b>Steps 5–7 · Review.</b> Every field Claude filled in can be changed before saving. Nothing is stored until you press Save.</figcaption>
-      </figure>
-
-      <figure>
-        <div class="phone"><div class="m">
-          <div class="signin">
-            <div class="logo">H</div>
-            <h5>Hercules</h5>
-            <div class="sub" style="margin-top:4px">Log expenses the way you'd say them.</div>
-            <div class="gbtn"><svg width="16" height="16" viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>Sign in with Google</div>
-            <div class="fine">Invite only. Your expenses are private to your account.</div>
-          </div>
-        </div></div>
-        <figcaption><b>Sign-in.</b> Google only, and only for invited email addresses. Anyone else is turned away.</figcaption>
+        <figcaption><b>Review.</b> Check what Claude picked out and change anything before you save.</figcaption>
       </figure>
     </div>
 
-    <h2 id="screens">The other screens</h2>
-    <p>There are four tabs: Log, History, Summary and Categories. On every one, the heading and its main control stay pinned at the top while the rest scrolls. A sun or moon icon switches between light and dark mode. On a tablet or computer, the app widens to two columns, and uses more of the window on larger screens.</p>
+    <ul class="plain">
+      <li><b>Nothing is saved until you tap Save.</b> If Claude got something wrong, just fix it on the card. There's no need to type it again.</li>
+      <li><b>Changed your mind?</b> Tap <b>Discard</b>. Your typed text stays in the box so you can tweak it and parse again. If you've already changed something on the card, the app checks with you first.</li>
+      <li><b>Spent today</b>, under the box, shows your running total for the day. Below the Today list, <b>Today by category</b> breaks it down.</li>
+      <li><b>Offline?</b> The app tells you, and keeps what you've typed until you're back online.</li>
+      <li>You can parse up to <b>100 expenses a day</b>, which is plenty for normal use.</li>
+    </ul>
 
+    <h2 id="writing">What to type</h2>
+    <p>Write it the way you'd say it. Include the amount, and anything else that helps: where, what for, and when, if it wasn't today. For example:</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>You type</th><th>Amount</th><th>Category</th><th>Merchant</th><th>Date</th></tr></thead>
+      <tbody>
+        <tr><td>lunch at Ya Kun 4.50</td><td class="num">$4.50</td><td>Food &amp; Dining</td><td>Ya Kun</td><td>today</td></tr>
+        <tr><td>grab home 14.20 yesterday</td><td class="num">$14.20</td><td>Transport</td><td>Grab</td><td>yesterday</td></tr>
+        <tr><td>NTUC groceries $62.30 on 3 Nov</td><td class="num">$62.30</td><td>Groceries</td><td>NTUC</td><td>3 November</td></tr>
+        <tr><td>movie with the kids last Saturday 38</td><td class="num">$38.00</td><td>Entertainment</td><td>—</td><td>last Saturday</td></tr>
+      </tbody>
+    </table></div>
+    <ul class="plain">
+      <li><b>Dates:</b> no date means today. "Yesterday", "last Friday" and "3 Nov" all work.</li>
+      <li><b>Currency:</b> Singapore dollars unless you say otherwise. Other currencies are recorded, but totals add the numbers as they are, without converting.</li>
+      <li><b>Categories:</b> Claude can only choose from your own list. If nothing fits, it uses <b>Other</b>.</li>
+      <li><b>Remarks:</b> extra details that don't fit elsewhere, such as "with the team", go into Remarks.</li>
+    </ul>
+
+    <h2 id="fix">Fixing and deleting</h2>
+    <p>Tap any expense, in the Today list or in History, to open it. Change what you need and tap <b>Save</b>. Expenses you've changed from what Claude suggested show a small <b>edited</b> tag.</p>
+    <p>To delete, open the expense and tap <b>Delete</b>. The app shows which expense it is and asks you to confirm. After deleting, an <b>Undo</b> bar appears at the bottom for about five seconds. Tap it to bring the expense back.</p>
+    <div class="figure-row">
+      <figure>
+        <div class="phone"><div class="m" style="position:relative">
+          <div class="top flat"><h5>History</h5><div class="month"><i>‹</i><span>November 2026</span><i style="opacity:.35">›</i></div></div>
+          <div class="body" style="opacity:.35">
+            <div class="day">SAT, 7 NOV</div>
+            <div class="item"><div><div class="nm">Toast Box</div><div class="c">Food &amp; Dining</div></div><div class="a">30.00</div></div>
+            <div class="item"><div><div class="nm">MRT</div><div class="c">Transport</div></div><div class="a">9.50</div></div>
+            <div class="day">FRI, 6 NOV</div>
+            <div class="item"><div><div class="nm">Saizeriya</div><div class="c">Food &amp; Dining</div></div><div class="a">35.00</div></div>
+            <div class="item"><div><div class="nm">Golden Village</div><div class="c">Entertainment</div></div><div class="a">80.00</div></div>
+          </div>
+          <div class="m-confirm">
+            <div class="m-confirm-t">Delete this expense?</div>
+            <div class="m-confirm-b">It will be removed from History and Summary.</div>
+            <div class="m-ref"><div><div>Saizeriya</div><div class="c">Food &amp; Dining · 6 Nov</div></div><b>35.00</b></div>
+            <div class="m-red">Delete expense</div>
+            <div class="m-cancel">Cancel</div>
+          </div>
+        </div></div>
+        <figcaption><b>Deleting asks first</b>, showing the expense so you can be sure it's the right one.</figcaption>
+      </figure>
+      <figure>
+        <div class="phone"><div class="m" style="position:relative">
+          <div class="top flat"><h5>History</h5><div class="month"><i>‹</i><span>November 2026</span><i style="opacity:.35">›</i></div></div>
+          <div class="body">
+            <div class="day">SAT, 7 NOV</div>
+            <div class="item"><div><div class="nm">Toast Box</div><div class="c">Food &amp; Dining</div></div><div class="a">30.00</div></div>
+            <div class="item"><div><div class="nm">MRT</div><div class="c">Transport</div></div><div class="a">9.50</div></div>
+            <div class="day">FRI, 6 NOV</div>
+            <div class="item"><div><div class="nm">Golden Village</div><div class="c">Entertainment</div></div><div class="a">80.00</div></div>
+            <div class="day">THU, 5 NOV</div>
+            <div class="item"><div><div class="nm">Polyclinic</div><div class="c">Health &amp; Medical</div></div><div class="a">45.00</div></div>
+          </div>
+          <div class="m-undo"><span>Expense deleted</span><b>Undo</b></div>
+          <div class="tabs">
+            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Log</span>
+            <span class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg>History</span>
+            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 20V10M12 20V4M18 20v-6"/></svg>Summary</span>
+            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 5h7l9 9-6 6-9-9V5zM8 9h.01"/></svg>Categories</span>
+          </div>
+        </div></div>
+        <figcaption><b>Then offers Undo</b> for about five seconds, in case you tapped by mistake.</figcaption>
+      </figure>
+    </div>
+    <p>If you close an expense or category you've changed without saving, by tapping Cancel or tapping outside it, the app asks before throwing your changes away.</p>
+
+    <h2 id="history">History</h2>
+    <p>History lists every expense month by month, newest first, grouped by day. Use the arrows beside the month to go back to earlier months. Tap any expense to edit or delete it.</p>
     <div class="figure-row">
       <figure>
         <div class="phone"><div class="m">
@@ -377,35 +425,18 @@ html { scroll-behavior: smooth; }
             <div class="item"><div><div class="nm">Polyclinic</div><div class="c">Health &amp; Medical</div></div><div class="a">45.00</div></div>
           </div>
         </div></div>
-        <figcaption><b>History.</b> Month by month, grouped by day. "Edited" marks records where you changed what Claude suggested. Tap any row to edit or delete it. Deleting asks first, then offers Undo for a few seconds.</figcaption>
-      </figure>
-
-      <figure>
-        <div class="phone"><div class="m">
-          <div class="top">
-            <svg class="tgl" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z"/></svg>
-            <h5>Categories</h5>
-            <div class="sub" style="margin-top:3px">Monthly budgets are optional and in SGD.</div>
-            <div style="margin-top:10px"><span class="btn">Add category</span></div>
-          </div>
-          <div class="body">
-            <div class="cat-row"><span>Food &amp; Dining</span><span class="set">500.00</span></div>
-            <div class="cat-row"><span>Transport</span><span class="set">150.00</span></div>
-            <div class="cat-row"><span>Groceries</span><span class="set">400.00</span></div>
-            <div class="cat-row"><span>Entertainment</span><span class="set">100.00</span></div>
-            <div class="cat-row"><span>Utilities</span><span>No budget</span></div>
-            <div class="cat-row"><span>Health &amp; Medical</span><span>No budget</span></div>
-            <div class="cat-row"><span>Rent</span><span class="set">2,000.00</span></div>
-            <div class="cat-row"><span>Other</span><span>No budget</span></div>
-          </div>
-        </div></div>
-        <figcaption><b>Categories.</b> Add or rename categories and set an optional monthly budget. A category you no longer use can be retired: it stops being offered, but past expenses keep it, and it can be restored from the "Retired" group at the bottom. "Other" can't be renamed or retired and always stays last.</figcaption>
+        <figcaption><b>History.</b> Grouped by day. "edited" marks expenses you changed from what Claude suggested.</figcaption>
       </figure>
     </div>
 
-    <h3>Summary</h3>
-    <p>Summary shows the current month and the one before. For each category it shows the amount spent and a bar. If you've set a budget, the bar fills against that budget, turning red once you're over. A pie chart shows each category's share, with at most six slices. Categories with nothing spent that month aren't listed. For the current month only, budgeted categories also show your <a href="#pace">spending pace</a>.</p>
-
+    <h2 id="summary">Summary</h2>
+    <p>Summary shows this month and last month. Switch between them with the buttons at the top.</p>
+    <ul class="plain">
+      <li><b>The total</b> spent in the month, and how it compares with the month before.</li>
+      <li><b>A bar for each category</b> you've spent in, largest first. If the category has a budget, the bar fills up against it and reads, for example, "210.00 of 500.00". It turns red once you go over.</li>
+      <li><b>Share of spend</b>, a pie chart of where the money went. With more than six categories, the smaller ones are grouped as "Everything else".</li>
+      <li><b>Spending pace</b>, this month only, for categories with a budget. See the next section.</li>
+    </ul>
     <div class="figure-row">
       <figure>
         <div class="phone"><div class="m">
@@ -444,213 +475,101 @@ html { scroll-behavior: smooth; }
             <div class="m-pie"><svg viewBox="0 0 100 100" role="img" aria-label="Share of spend pie chart"><path d="M50 50 L50.00 0.00 A50 50 0 1 1 13.97 84.67 Z" fill="var(--m-pie-1)"/><path d="M50 50 L13.97 84.67 A50 50 0 0 1 6.04 26.18 Z" fill="var(--m-pie-2)"/><path d="M50 50 L6.04 26.18 A50 50 0 0 1 19.35 10.49 Z" fill="var(--m-pie-3)"/><path d="M50 50 L19.35 10.49 A50 50 0 0 1 30.20 4.09 Z" fill="var(--m-pie-4)"/><path d="M50 50 L30.20 4.09 A50 50 0 0 1 38.27 1.40 Z" fill="var(--m-pie-5)"/><path d="M50 50 L38.27 1.40 A50 50 0 0 1 50.00 0.00 Z" fill="var(--m-pie-rest)"/></svg><ul><li><span class="sw" style="background:var(--m-pie-1)"></span><span class="nm">Rent</span><span class="pct">63%</span></li><li><span class="sw" style="background:var(--m-pie-2)"></span><span class="nm">Shopping</span><span class="pct">20%</span></li><li><span class="sw" style="background:var(--m-pie-3)"></span><span class="nm">Food &amp; Dining</span><span class="pct">7%</span></li><li><span class="sw" style="background:var(--m-pie-4)"></span><span class="nm">Entertainment</span><span class="pct">4%</span></li><li><span class="sw" style="background:var(--m-pie-5)"></span><span class="nm">Utilities</span><span class="pct">3%</span></li><li><span class="sw" style="background:var(--m-pie-rest)"></span><span class="nm">Everything else (3)</span><span class="pct">4%</span></li></ul></div>
           </div>
         </div></div>
-        <figcaption><b>Summary, current month.</b> The small upright marker on each budgeted bar shows where spending "should" be today. Food &amp; Dining is open to show its burn-up chart. Utilities, Groceries and Health &amp; Medical are further down the list.</figcaption>
+        <figcaption><b>Summary, this month.</b> The marker on each budgeted bar shows the amount expected by today. Food &amp; Dining is open to show its burn-up chart.</figcaption>
       </figure>
     </div>
 
-    <h2 id="pace">Spending pace, explained</h2>
-    <p>Pace answers one question: <b>am I spending faster than my budget allows?</b> It only applies to the current month, and only to categories that have a budget and some spending.</p>
-    <p>First, the app works out how much of the budget you'd have used by today if you spent it evenly through the month. Today counts as a full day, so on the last day of the month the expected amount equals the whole budget.</p>
-    <p class="formula">expected by today = budget × today's day of the month ÷ days in the month</p>
-    <p>Then it picks the note under the bar. The rules are checked in order, and the <b>first</b> one that matches wins.</p>
+    <h2 id="pace">Spending pace</h2>
+    <p>Pace answers one question: <b>am I spending faster than my budget allows?</b> It assumes you spread each budget evenly over the month. With a $500 food budget in a 30-day month, that's about $16.67 a day, so by day 7 you'd expect to have spent about $116.67.</p>
+    <p>The small upright marker on each budgeted bar shows that expected amount for today. If your bar has gone past the marker, you're ahead of pace. The note under the bar tells you which of these applies:</p>
     <div class="table-wrap"><table>
-      <thead><tr><th>Check</th><th>If…</th><th>The note says</th></tr></thead>
+      <thead><tr><th>Note</th><th>What it means</th></tr></thead>
       <tbody>
-        <tr><td class="num">1st</td><td>You've spent more than the whole budget</td><td><span class="red">Over budget by $X</span>, in red with a warning icon</td></tr>
-        <tr><td class="num">2nd</td><td>You've spent exactly the whole budget</td><td>Budget used · $0.00 left</td></tr>
-        <tr><td class="num">3rd</td><td>Spent is within 5% of the <b>full monthly budget</b> either side of expected</td><td>On pace</td></tr>
-        <tr><td class="num">4th</td><td>Spent is above that range</td><td>$X over pace (spent − expected)</td></tr>
-        <tr><td class="num">5th</td><td>Spent is below that range</td><td>$X under pace (expected − spent)</td></tr>
+        <tr><td><b>On pace</b></td><td>You're close to the expected amount, within 5% of the budget either way.</td></tr>
+        <tr><td><b>$X over pace</b></td><td>You've spent $X more than expected by today. You may want to slow down, but you're still within budget.</td></tr>
+        <tr><td><b>$X under pace</b></td><td>You've spent $X less than expected. There's room to spare.</td></tr>
+        <tr><td><b>Budget used</b></td><td>You've spent exactly the budget, for example rent paid in full.</td></tr>
+        <tr><td><span class="red">Over budget by $X</span></td><td>You've gone past the whole month's budget. This is the only note shown in red.</td></tr>
       </tbody>
     </table></div>
-    <p>For the 3rd to 5th notes, the app adds what's left and roughly how much you can spend a day: "$Y left, about $Z/day". Z is what's left divided by the days remaining after today. On the last day it reads "$Y left today" instead.</p>
-    <div class="callout"><b>Why rent says "Budget used", not "over pace".</b> Paying the whole $2,000 on day 1 is early, not overspending. Because the "Budget used" check comes before the pace checks, that's what rent shows. For the same reason, red is used only for going over budget. Being over pace stays in the normal colour.</div>
+    <p>After the note you'll see what's left, and roughly how much a day you can spend for the rest of the month, for example "$290.00 left, about $12.61/day".</p>
+    <div class="callout"><b>A big payment early in the month isn't overspending.</b> If you pay all of your rent on the 1st, it shows "Budget used", not "over pace". Early in the month, a single purchase can also show as over pace, because only a few days' worth of budget is expected so far. It evens out as the month goes on.</div>
+    <p><b>The burn-up chart.</b> Tap a budgeted category to open its chart. The solid line is your running total, stepping up on each day you spent. The dashed line is the budget spread evenly across the month, and the upright line is today. If the solid line is above the dashed one, you're over pace. Touch or drag across the chart to see any day's figures, or open <b>Daily figures</b> underneath for the same numbers in a table.</p>
 
-    <h3>A worked example: 7 November, day 7 of 30</h3>
-    <div class="table-wrap"><table>
-      <thead><tr><th>Category</th><th>Budget</th><th>Expected by today</th><th>On pace if spent is</th><th>Spent</th><th>Note</th></tr></thead>
-      <tbody>
-        <tr><td>Food &amp; Dining</td><td class="num">$500</td><td class="num">$116.67</td><td class="num">$91.67 – $141.67</td><td class="num">$210.00</td><td>$93.33 over pace · $290.00 left, about $12.61/day</td></tr>
-        <tr><td>Transport</td><td class="num">$150</td><td class="num">$35.00</td><td class="num">$27.50 – $42.50</td><td class="num">$30.00</td><td>On pace · $120.00 left, about $5.22/day</td></tr>
-        <tr><td>Groceries</td><td class="num">$400</td><td class="num">$93.33</td><td class="num">$73.33 – $113.33</td><td class="num">$45.00</td><td>$48.33 under pace · $355.00 left, about $15.43/day</td></tr>
-        <tr><td>Entertainment</td><td class="num">$100</td><td class="num">$23.33</td><td class="num">—</td><td class="num">$128.00</td><td><span class="red">Over budget by $28.00</span></td></tr>
-        <tr><td>Rent</td><td class="num">$2,000</td><td class="num">$466.67</td><td class="num">—</td><td class="num">$2,000.00</td><td>Budget used · $0.00 left</td></tr>
-      </tbody>
-    </table></div>
-    <p><b>Reading the burn-up chart.</b> Tap a budgeted category to open its chart. The solid line is your running total, which steps up on each day you spent. The dashed line is the budget spread evenly over the month, and the upright line marks today. Above the dashed line means over pace. Point at or drag across the chart to see any day, and the "Daily figures" table underneath lists the same numbers.</p>
-    <p><b>Things it deliberately doesn't do.</b></p>
+    <h2 id="categories">Categories and budgets</h2>
+    <p>Everyone starts with 14 categories, from Food &amp; Dining to Travel, including <b>Other</b>. On the Categories tab you can:</p>
     <ul class="plain">
-      <li><b>No month-end forecast.</b> Projecting from spending so far is badly wrong early in the month or after a one-off purchase. A $640 purchase on day 3 would "forecast" $6,400.</li>
-      <li><b>No settling-in period.</b> Early in the month the expected amounts are small, so a single coffee can show as over pace. This was chosen to keep things simple.</li>
-      <li><b>No budget history.</b> Only the current budget is stored, so earlier months aren't compared against a budget.</li>
+      <li><b>Add a category:</b> tap <b>Add category</b>, give it a name, and optionally a monthly budget.</li>
+      <li><b>Rename it or change its budget:</b> tap the category. A new name shows on all its past expenses too.</li>
+      <li><b>Set a monthly budget</b> in Singapore dollars, or leave it blank. Budgets turn on the "x of budget" bars and spending pace on Summary.</li>
+      <li><b>Retire a category</b> you no longer use: open it and tap <b>Retire</b>. It stops being offered for new expenses, but past expenses keep it. After retiring, an Undo bar appears for a few seconds.</li>
+      <li><b>Bring one back:</b> retired categories are listed under <b>Retired</b> at the bottom. Tap <b>Restore</b>. Adding a category with the same name as a retired one also restores it.</li>
     </ul>
+    <p><b>Other</b> is the catch-all and can't be renamed or retired. You can have up to 50 categories in use.</p>
+    <div class="figure-row">
+      <figure>
+        <div class="phone"><div class="m">
+          <div class="top">
+            <svg class="tgl" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z"/></svg>
+            <h5>Categories</h5>
+            <div class="sub" style="margin-top:3px">Monthly budgets are optional and in SGD.</div>
+            <div style="margin-top:10px"><span class="btn">Add category</span></div>
+          </div>
+          <div class="body">
+            <div class="cat-row"><span>Food &amp; Dining</span><span class="set">500.00</span></div>
+            <div class="cat-row"><span>Transport</span><span class="set">150.00</span></div>
+            <div class="cat-row"><span>Groceries</span><span class="set">400.00</span></div>
+            <div class="cat-row"><span>Entertainment</span><span class="set">100.00</span></div>
+            <div class="cat-row"><span>Utilities</span><span>No budget</span></div>
+            <div class="cat-row"><span>Health &amp; Medical</span><span>No budget</span></div>
+            <div class="cat-row"><span>Rent</span><span class="set">2,000.00</span></div>
+            <div class="cat-row"><span>Other</span><span>No budget</span></div>
+          </div>
+        </div></div>
+        <figcaption><b>Categories.</b> Budgets are optional. Tap a category to rename it, change its budget or retire it.</figcaption>
+      </figure>
+    </div>
 
-    <h2 id="data">What's stored</h2>
-    <p>Three kinds of record, each belonging to one person's account.</p>
-    <div class="table-wrap"><table>
-      <thead><tr><th>Record</th><th>What it holds</th><th>Worth knowing</th></tr></thead>
-      <tbody>
-        <tr><td><b>Expense</b></td><td>Amount, currency, category, merchant, date, remarks, and the words you originally typed</td><td>Notes whether you edited Claude's suggestion. Deleting hides the record but keeps it recoverable. Imported records note where they came from, so the import is safe to run twice.</td></tr>
-        <tr><td><b>Category</b></td><td>Name, an optional monthly budget, and flags for "Other" and for retired categories</td><td>Everyone starts with 14 categories (Food &amp; Dining, Transport, Groceries, Entertainment, Utilities, Health &amp; Medical, Household, Shopping, Rent, Clothes, Education, Professional Development, Travel and Other). Names must be unique regardless of capitals, up to 50 per person.</td></tr>
-        <tr><td><b>User</b></td><td>Google account, display name, and whether the account is active</td><td>Created and given the starter categories the first time an invited person signs in.</td></tr>
-      </tbody>
-    </table></div>
-    <p>Amounts are in Singapore dollars. An expense can record another currency, but totals add the numbers as they are without converting. Each person can parse up to 100 expenses a day, which keeps model costs in check.</p>
-
-    <h2 id="ai">What Claude does, and doesn't</h2>
+    <h2 id="privacy">Your privacy</h2>
     <div class="boundary">
-      <div class="yes"><h4>Claude does</h4><ul>
-        <li>Read your text and suggest the amount, merchant and date</li>
-        <li>Pick the best category from your own list, or "Other"</li>
-      </ul></div>
-      <div><h4>The app does, never Claude</h4><ul>
-        <li>Check what Claude returned</li>
-        <li>Fetch your categories and match the chosen one</li>
-        <li>Save, find and edit records</li>
-        <li>Manage categories and budgets</li>
-        <li>Sign-in, the invite list and usage limits</li>
-      </ul></div>
+      <div class="yes">
+        <h4>Who can see your expenses</h4>
+        <ul>
+          <li>Only invited people can sign in, and each person sees only their own expenses.</li>
+          <li>Lionel runs the app and can reach the database to fix problems or recover a deleted expense.</li>
+        </ul>
+      </div>
+      <div>
+        <h4>What leaves the app</h4>
+        <ul>
+          <li>The text you type is sent to Claude (made by Anthropic) so it can read the expense, along with your list of category names. Anthropic doesn't use it to train its AI.</li>
+          <li>Signing in goes through Google, which tells the app your email address and name.</li>
+          <li>Your expenses are stored in the app's own database, not on your phone, and aren't shared with anyone else.</li>
+        </ul>
+      </div>
     </div>
-    <p>Keeping this line clear keeps the AI part small, cheap and easy to check, and stops the model creeping into jobs that ordinary code does better.</p>
+    <p>Deleting an expense removes it from everything you see. It's kept in the database so it can be recovered if needed. The only thing saved on your device is your light or dark choice.</p>
 
-    <h2 id="open">Open questions and not yet in scope</h2>
-    <h3>Still to decide</h3>
-    <ul class="plain">
-      <li><b>Several items at once.</b> Should "coffee $4 and lunch $12" become one record or two?</li>
-      <li><b>Uncertain fields.</b> Should the review card flag fields Claude had to guess, such as a date you didn't mention?</li>
-      <li><b>Storing the original words.</b> Keep them in the same record, as now, or in a separate audit table?</li>
-      <li><b>Which fields were edited.</b> Record which fields you changed, not just whether you changed any.</li>
-    </ul>
-    <h3>Described but not built yet</h3>
-    <ul class="plain">
-      <li><b>Merchant suggestions</b> from your past entries. The merchant field is plain text for now.</li>
-      <li><b>A sub-label for "Other"</b>, such as "gift" or "charity". The database has room for it, but the review card doesn't ask for it yet.</li>
-    </ul>
-    <h3>Not in this version</h3>
-    <ul class="plain">
-      <li>Budget alerts, budget history and rollover</li>
-      <li>Searching and exporting</li>
-      <li>Sharing between accounts</li>
-      <li>Receipt photos and bank imports</li>
-      <li>Logging while offline (the app keeps what you've typed until you're back online)</li>
-      <li>Currency conversion</li>
-      <li>Permanently deleting categories (retired ones are kept)</li>
-      <li>Managing invitations in the app</li>
-    </ul>
-
-    <!-- ========== PART 2 ========== -->
-    <p class="part-title">Part 2 · How it's built (from the Architecture)</p>
-
-    <h2 id="system">The system</h2>
-    <p>One web app, hosted on Vercel in Singapore, talks to three outside services. Your phone runs it like an app from the home screen.</p>
-    <div class="diagram" role="img" aria-label="System diagram: the phone app connects over HTTPS to the Hercules app on Vercel in Singapore, which connects to Google sign-in, the Anthropic API running Claude Haiku 5.5 for parsing only, and a Neon Postgres database in Singapore. A separate command-line tool runs locally.">
-      <svg viewBox="0 0 760 330">
-        <defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="var(--ink-2)"/></marker></defs>
-        <rect x="20" y="110" width="160" height="96" rx="14" fill="var(--paper)" stroke="var(--ink)" stroke-width="1.5"/>
-        <text x="100" y="146" text-anchor="middle" font-family="var(--font-display)" font-weight="700" font-size="16" fill="var(--ink)">Your phone</text>
-        <text x="100" y="168" text-anchor="middle" font-size="13" fill="var(--ink-2)">Home-screen web app</text>
-        <text x="100" y="186" text-anchor="middle" font-size="13" fill="var(--ink-2)">4 tabs · light/dark</text>
-        <line x1="182" y1="158" x2="266" y2="158" stroke="var(--ink-2)" stroke-width="1.5" marker-end="url(#arr)"/>
-        <text x="224" y="150" text-anchor="middle" font-size="12" fill="var(--ink-2)" font-family="var(--font-mono)">HTTPS</text>
-        <rect x="268" y="74" width="214" height="168" rx="14" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="1.5"/>
-        <text x="375" y="106" text-anchor="middle" font-family="var(--font-display)" font-weight="700" font-size="16" fill="var(--ink)">Hercules app</text>
-        <text x="375" y="126" text-anchor="middle" font-size="13" fill="var(--ink-2)">Next.js on Vercel · Singapore</text>
-        <text x="290" y="156" font-size="13" fill="var(--ink)">• Screens and API</text>
-        <text x="290" y="178" font-size="13" fill="var(--ink)">• Invite list and limits</text>
-        <text x="290" y="200" font-size="13" fill="var(--ink)">• Totals, budgets, pace</text>
-        <text x="290" y="222" font-size="13" fill="var(--ink)">• Keeps data in memory</text>
-        <rect x="560" y="20" width="182" height="74" rx="12" fill="var(--paper)" stroke="var(--rule)" stroke-width="1.5"/>
-        <text x="651" y="50" text-anchor="middle" font-weight="700" font-size="14.5" fill="var(--ink)">Google sign-in</text>
-        <text x="651" y="70" text-anchor="middle" font-size="12.5" fill="var(--ink-2)">Who you are</text>
-        <rect x="560" y="121" width="182" height="74" rx="12" fill="var(--paper)" stroke="var(--rule)" stroke-width="1.5"/>
-        <text x="651" y="151" text-anchor="middle" font-weight="700" font-size="14.5" fill="var(--ink)">Claude Haiku 5.5</text>
-        <text x="651" y="171" text-anchor="middle" font-size="12.5" fill="var(--ink-2)">Anthropic API · parsing only</text>
-        <rect x="560" y="222" width="182" height="74" rx="12" fill="var(--paper)" stroke="var(--rule)" stroke-width="1.5"/>
-        <text x="651" y="252" text-anchor="middle" font-weight="700" font-size="14.5" fill="var(--ink)">Neon database</text>
-        <text x="651" y="272" text-anchor="middle" font-size="12.5" fill="var(--ink-2)">Postgres · Singapore</text>
-        <line x1="484" y1="110" x2="556" y2="62" stroke="var(--ink-2)" stroke-width="1.5" marker-end="url(#arr)"/>
-        <line x1="484" y1="158" x2="556" y2="158" stroke="var(--ink-2)" stroke-width="1.5" marker-end="url(#arr)"/>
-        <line x1="484" y1="206" x2="556" y2="254" stroke="var(--ink-2)" stroke-width="1.5" marker-end="url(#arr)"/>
-        <text x="20" y="300" font-size="12.5" fill="var(--ink-2)" font-family="var(--font-mono)">Separate, on a home computer only: command-line tool → Phi-4 (local model) → SQLite</text>
-      </svg>
-    </div>
-
-    <h2 id="decisions">Key decisions</h2>
-    <p>Each decision keeps the number it has in the Architecture document. Numbers are in the order decisions were made, so they don't run in sequence within each group.</p>
-
-    <h3>Who can use it</h3>
-    <div class="decisions">
-      <div class="decision"><span class="n">#1</span><div><h4>Family and close friends only</h4><p>It meets a personal and family need. It isn't a public product.</p></div></div>
-      <div class="decision"><span class="n">#2</span><div><h4>An invite list of email addresses</h4><p>Anyone can try to sign in with Google, but only invited addresses get in. The list is re-checked on every request, so removing someone takes effect at once.</p></div></div>
-      <div class="decision"><span class="n">#3</span><div><h4>Google sign-in only</h4><p>Free, familiar, and works on iPhone and Android. Sign in with Apple would need a US$99-a-year developer membership.</p></div></div>
-    </div>
-
-    <h3>Claude and privacy</h3>
-    <div class="decisions">
-      <div class="decision"><span class="n">#4</span><div><h4>Expense text is sent to a cloud AI provider</h4><p>Only to a provider that doesn't train on API data. This allows a hosted app with no computer running at home, a trade-off against the earlier "everything local" approach.</p></div></div>
-      <div class="decision"><span class="n">#5</span><div><h4>Claude Haiku 5.5, with a fixed answer format</h4><p>Fast and cheap, and simple extraction is well within its abilities. The fixed format means replies always come back in the expected shape. Gemini's free tier was turned down because its terms allow free-tier inputs to be used to improve Google's products.</p></div></div>
-      <div class="decision"><span class="n">#6</span><div><h4>Cloud model only for the web app</h4><p>A hosted app can't reach a model running on a home computer.</p></div></div>
-      <div class="decision"><span class="n">#7</span><div><h4>Two cost guards</h4><p>A US$5 monthly spend limit on the Anthropic account, and 100 parses per person per day. Normal use costs cents a month; the limits protect against bugs or misuse.</p></div></div>
-    </div>
-
-    <h3>Hosting and data</h3>
-    <div class="decisions">
-      <div class="decision"><span class="n">#8</span><div><h4>Hosted on Vercel's free Hobby plan</h4><p>A natural fit for this kind of app. The plan's terms were checked and suit a private, non-commercial family app.</p></div></div>
-      <div class="decision"><span class="n">#9</span><div><h4>A free vercel.app web address, for now</h4><p>No cost, and Google sign-in works with it. A custom domain can be added later without code changes.</p></div></div>
-      <div class="decision"><span class="n">#10</span><div><h4>Neon for the database</h4><p>Standard Postgres built for this kind of hosting, with a free tier. A simple file database can't persist on Vercel.</p></div></div>
-      <div class="decision"><span class="n">#11</span><div><h4>A one-off import of the old data</h4><p>229 records from July 2026 onwards were brought across, so the full history is in one place.</p></div></div>
-      <div class="decision"><span class="n">#12</span><div><h4>The old command-line tool stays separate</h4><p>Kept as an offline tool for experiments. Anything logged there after the import isn't synced.</p></div></div>
-      <div class="decision"><span class="n">#22</span><div><h4>The server runs in Singapore</h4><p>Next to the database and the people using it. The default US location sent every request across the Pacific and back. Unauthenticated test requests went from 1.1–1.5 seconds to 0.06–0.88 seconds after the move.</p></div></div>
-    </div>
-
-    <h3>How the app behaves</h3>
-    <div class="decisions">
-      <div class="decision"><span class="n">#13</span><div><h4>One language, front to back</h4><p>TypeScript with Next.js for both the screens and the server. The parsing prompt was carried over from the earlier Python version.</p></div></div>
-      <div class="decision"><span class="n">#14</span><div><h4>Installs from the browser</h4><p>Add it to the home screen and it opens full-screen like an app, with no App Store needed.</p></div></div>
-      <div class="decision"><span class="n">#15</span><div><h4>No offline logging</h4><p>Parsing needs the internet. Offline, the app says so and keeps what you've typed.</p></div></div>
-      <div class="decision"><span class="n">#23</span><div><h4>Data kept in memory for instant tabs</h4><p>Screens show what was last loaded straight away and refresh quietly in the background. Any save, edit or delete reloads everything. Nothing is stored on the phone, so it's gone when the app closes.</p></div></div>
-      <div class="decision"><span class="n">#24</span><div><h4>Moderately wider on bigger screens</h4><p>Phone layout up to 767 pixels wide. From 768 pixels the app widens to 820 pixels, then to 920 pixels on an iPad held sideways or a small laptop and 1,000 pixels on a larger laptop or desktop, with two columns on Log and Summary and edit forms as centred dialogs. The bottom tab bar stays at every size.</p></div></div>
-      <div class="decision"><span class="n">#25</span><div><h4>Light and dark mode</h4><p>Follows the device until you tap the toggle, then remembers your choice on that device. It's a display preference, so it isn't stored in your account.</p></div></div>
-      <div class="decision"><span class="n">#30</span><div><h4>The app's own confirmations, with Undo</h4><p>Deleting an expense or retiring a category asks first in the app's own sheet, then offers Undo for a few seconds. Closing a sheet with unsaved changes asks before throwing them away. Routine saves never ask.</p></div></div>
-    </div>
-
-    <h3>Scope</h3>
-    <div class="decisions">
-      <div class="decision"><span class="n">#16</span><div><h4>Started with four screens</h4><p>Sign-in, Log, History and Summary, to get a working app into use quickly. Categories came later (#26).</p></div></div>
-      <div class="decision old"><span class="n">#17</span><div><h4>Categories edited directly in the database</h4><p>Replaced by #26. The database was designed per person from the start, so adding a screen needed no restructuring.</p></div></div>
-      <div class="decision"><span class="n">#18</span><div><h4>Edit and delete by reusing the review card</h4><p>No extra screen needed. Deleted records stay recoverable.</p></div></div>
-      <div class="decision"><span class="n">#19</span><div><h4>Singapore dollars only</h4><p>Nearly every expense is in SGD. The currency is still recorded, but totals don't convert.</p></div></div>
-      <div class="decision"><span class="n">#26</span><div><h4>A Categories tab to add and rename</h4><p>Expenses link to categories by ID, so a rename carries through the whole history, and Claude reads the up-to-date list. Retiring was added later (#29).</p></div></div>
-      <div class="decision"><span class="n">#27</span><div><h4>An optional monthly budget per category</h4><p>The simplest start on budgets. Only the current amount is kept; a fuller budget record can replace it if history is ever needed.</p></div></div>
-      <div class="decision"><span class="n">#28</span><div><h4>Spending pace on Summary</h4><p>Answers "am I spending too fast?" without a new screen. Worked out on your phone from data already loaded, so no server or database changes were needed. See <a href="#pace">Spending pace</a>.</p></div></div>
-      <div class="decision"><span class="n">#29</span><div><h4>Retire categories instead of deleting them</h4><p>A retired category stops being offered but is never removed, so past expenses keep it and it can be restored. No copy of the name is stored on each expense: the category is always there to look up, and renames still carry through history.</p></div></div>
-    </div>
-
-    <h3>How the project is run</h3>
-    <div class="decisions">
-      <div class="decision"><span class="n">#20</span><div><h4>Documents are updated before code</h4><p>Keeps the documents and the app in step.</p></div></div>
-      <div class="decision"><span class="n">#21</span><div><h4>Decisions made by Lionel Lam</h4><p>James Wong may review them later.</p></div></div>
-    </div>
-
-    <h2 id="costs">Costs and limits</h2>
-    <div class="costs">
-      <div class="cost"><div class="v">US$0</div><div class="k">Vercel Hobby plan, no payment method on file</div></div>
-      <div class="cost"><div class="v">US$0</div><div class="k">Neon database, free plan</div></div>
-      <div class="cost"><div class="v">≈ US$0.10</div><div class="k">Expected Claude cost a month, capped at US$5</div></div>
-      <div class="cost"><div class="v">100</div><div class="k">Parses per person per day</div></div>
-    </div>
-    <p>One cost of the free database: it sleeps after a few idle minutes, so the first open after a quiet spell is a little slower.</p>
-
-    <h2 id="next">What's next</h2>
-    <ul class="plain">
-      <li><b>Budgets, phase 3:</b> budget history, alerts and fuller tracking.</li>
-      <li><b>Polish, phase 4:</b> managing invitations in the app and exporting expenses.</li>
-      <li><b>Open questions:</b> settle the four questions under <a href="#open">Still to decide</a>.</li>
-      <li><b>Review:</b> James Wong may review the architecture decisions.</li>
-    </ul>
+    <h2 id="faq">Quick answers</h2>
+    <dl class="faq">
+      <dt>Claude picked the wrong category or date.</dt>
+      <dd>Change it on the review card before you save. If it's already saved, tap the expense to edit it.</dd>
+      <dt>I wrote "tues" and it picked next Tuesday.</dt>
+      <dd>Check the date on the review card. Writing "last Tuesday" or the date itself, like "3 Nov", avoids this.</dd>
+      <dt>I can't find an expense I logged.</dt>
+      <dd>It's filed under its own date. In History, go to the month of that date. If it's dated a different day, it won't be in Today.</dd>
+      <dt>I deleted something and missed the Undo.</dt>
+      <dd>Ask Lionel. Deleted expenses are kept and can be brought back.</dd>
+      <dt>Why does a category say "over pace" on the 2nd of the month?</dt>
+      <dd>Only two days' worth of budget is expected so far, so one purchase can be ahead. It usually settles as the month goes on.</dd>
+      <dt>It says I've reached the daily limit.</dt>
+      <dd>You can parse 100 expenses in 24 hours. Try again later; anything you've typed stays in the box.</dd>
+      <dt>The app is slow to open after a while.</dt>
+      <dd>After a quiet spell the database takes a moment to wake up. It's quick again straight after.</dd>
+    </dl>
 
     <footer>
-      Source documents: <span class="mono">Project Hercules - Specification.md</span> (v0.31) and <span class="mono">Project Hercules - Architecture.md</span> (v0.10) in the hercules repository. Mockups use sample data, not anyone's real expenses.
+      Questions or problems? Ask Lionel. Screens shown here use example figures, not anyone's real spending.
     </footer>
   </main>
 </div>
