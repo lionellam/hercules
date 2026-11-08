@@ -829,3 +829,11 @@ Last updated: 8 November 2026
 ### Decisions Made
 - **Publish only the guide** — the repository is already public, but the site shows just the guide, under a short address, without renaming or copying the file in the repository.
 - **Checked before publishing** — the guide contains no email addresses or link to the app; it names the owner by first name only.
+
+---
+
+## 08 November 2026 — README Links to the User Guide
+
+### What Was Done
+- Added a top-level `README.md`, which the repository had not had, so its GitHub front page now explains the project, links to the user guide on GitHub Pages, and lists the folders and project documents.
+- Added the user guide link to `web/README.md`, with a note on how the page is published.
