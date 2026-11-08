@@ -20,15 +20,22 @@ export type Expense = {
   was_edited: boolean;
 };
 
-export const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
-export const MONTH = /^\d{4}-\d{2}$/;
+export const MONTH = /^20\d{2}-(0[1-9]|1[0-2])$/;
+
+// A real calendar date in 2000–2099, so e.g. 2026-02-31 is refused here rather than failing in the database.
+export function isRealDate(s: string) {
+  if (!/^20\d{2}-\d{2}-\d{2}$/.test(s)) return false;
+  const d = new Date(`${s}T00:00:00Z`);
+  return !Number.isNaN(d.getTime()) && d.toISOString().slice(0, 10) === s;
+}
+export const realDate = z.string().refine(isRealDate);
 
 export const expenseInput = z.object({
   amount: z.number().positive().max(10_000_000),
   currency: z.string().regex(/^[A-Z]{3}$/),
   category_id: z.number().int(),
   merchant: z.string().trim().max(200).nullable(),
-  date: z.string().regex(ISO_DATE),
+  date: realDate,
   remarks: z.string().trim().max(1000).nullable(),
   was_edited: z.boolean(),
 });

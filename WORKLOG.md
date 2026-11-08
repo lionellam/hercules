@@ -4,7 +4,7 @@
 Maintained by: Lionel Lam Song Poh, James Wong
 Purpose: Record of work done, decisions made, challenges encountered, and assumptions held —
 to serve as a lessons learned reference for current and future contributors.
-Last updated: 7 November 2026
+Last updated: 8 November 2026
 ```
 
 ---
@@ -730,3 +730,17 @@ Last updated: 7 November 2026
 - **Tagged, not separate** — sample rows use `source_ref = 'sample:<n>'`, the same column the CLI import uses, so they can be removed exactly without touching real entries, and no schema change is needed.
 - **Local database only** — the script refuses to run unless `DATABASE_URL` points at the local machine, so sample data can't reach the live Neon database.
 - **Fixed, repeatable data** — a seeded generator produces the same expenses every time, so results are predictable when testing.
+
+---
+
+## 08 November 2026 — Security Audit: Impossible Dates Refused
+
+### What Was Done
+- Ran a basic security audit of the web app. Access control, per-user data separation, query safety, input validation, secrets handling and the live site's sign-in checks were all sound; five low-risk improvements were listed, and the owner chose to fix the date handling first.
+- Impossible dates such as 31 February, month 13 or year 0000 passed the format check and then failed in the database, giving a server error. The app now checks for a real calendar date in the years 2000 to 2099 when saving or editing an expense, when asking for a month's expenses or summary, and for the date sent with a parse request. These are refused with the usual "Please check the amount and fields." message. A parsed date that isn't real now falls back to today, as a badly formatted one already did.
+- Updated the Specification to v0.29 (process step 7 and the `date` field).
+- Tested against the local app with read-only or refused requests only: bad dates and months returned 400 on every route, and a normal month still loaded. Type-check, lint and a production build passed.
+
+### Decisions Made
+- **Years limited to 2000–2099** — wide enough for any real expense, and it rules out years the database can't store.
+- **Correction to the audit** — the audit also listed very large category numbers as causing a server error. Testing showed they were already refused cleanly, so no change was needed there.

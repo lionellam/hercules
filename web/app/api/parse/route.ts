@@ -1,11 +1,11 @@
 import { z } from "zod";
 import { currentUser, unauthorized } from "@/lib/session";
-import { claimParse, getCategories, ISO_DATE, DAILY_PARSE_LIMIT } from "@/lib/expenses";
+import { claimParse, getCategories, realDate, DAILY_PARSE_LIMIT } from "@/lib/expenses";
 import { parseExpense, ParseError } from "@/lib/parser";
 
 const body = z.object({
   text: z.string().trim().min(1).max(500),
-  today: z.string().regex(ISO_DATE),
+  today: realDate,
 });
 
 export async function POST(req: Request) {

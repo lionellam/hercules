@@ -2,6 +2,7 @@ import "server-only";
 import Anthropic from "@anthropic-ai/sdk";
 import { zodOutputFormat } from "@anthropic-ai/sdk/helpers/zod";
 import { z } from "zod";
+import { isRealDate } from "./expenses";
 
 export type ParsedExpense = {
   amount: number | null;
@@ -13,7 +14,6 @@ export type ParsedExpense = {
 };
 
 const MODEL = process.env.HERCULES_MODEL ?? "claude-haiku-5-5";
-const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
 
 function shiftDays(iso: string, days: number) {
   const d = new Date(`${iso}T00:00:00Z`);
@@ -85,7 +85,7 @@ export async function parseExpense(rawInput: string, categories: string[], today
   return {
     ...out,
     currency: /^[A-Z]{3}$/.test(currency) ? currency : "SGD",
-    date: ISO_DATE.test(out.date) ? out.date : today,
+    date: isRealDate(out.date) ? out.date : today,
   };
 }
 
