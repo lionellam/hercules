@@ -865,3 +865,26 @@ Last updated: 9 November 2026
 
 ### Decisions Made
 - **Larger text rather than turning zoom off** — telling the browser not to zoom would also stop the auto-zoom, but on some phones it blocks pinch-to-zoom too, which hurts readability for anyone who needs larger text.
+
+---
+
+## 09 November 2026 — Test Plan for the Web App
+
+### What Was Done
+- Wrote `Project Hercules - Test Plan.md` (v1.0) at the owner's request: a complete, human-readable set of manual test cases for the web app, each with steps and the expected result, using the app's exact messages.
+- Covers signing in and access, logging, the review card, fixing and deleting with Undo, unsaved changes, History and search, Summary, spending pace (with a worked example), the burn-up chart, categories and budgets, retiring and restoring, look and layout, phones, offline and limits, and database checks. Section 6 is a short check for the live app after each deploy; Section 7 is a results record to copy.
+- Sets out where to test (the local app, with sample data), how to mark test data (`[TEST]` and `zz-test-`) and how to clean it up.
+- Linked from the top-level README.
+
+### Decisions Made
+- **Local app for testing, live app only for a short smoke test** — keeps test data out of real spending, in line with how testing has been done throughout.
+
+---
+
+## 09 November 2026 — Clear Button on the Log Box
+
+### What Was Done
+- The owner asked about keeping a draft of the Log box's text between visits, and an "×" to clear it. Saving drafts was discussed (it would also keep text when switching tabs) but the owner chose to keep things simple and add only the "×". Mockups: `design/log-clear-mockups.html`.
+- An "×" now appears at the top right of the Log screen's text box once there is text, and clears it in one tap without asking, leaving the cursor in the box. Long text wraps before reaching it. It matches the "×" in History search.
+- Updated the Specification (v0.33, process step 1) and the user guide's Log section.
+- Tested in the local app at phone width and at 1,024 pixels, in light and dark mode: no "×" when empty; typing shows it at the top right inside the box; tapping it empties the box, keeps the cursor there and dims Parse; typing again brings it back. No expenses were parsed or saved. Type-check, lint and a production build passed.

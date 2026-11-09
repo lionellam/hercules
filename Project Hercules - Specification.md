@@ -1,7 +1,7 @@
 # Project Hercules — Specification Sheet: "Log an Expense" Flow
 
 ```
-Version 0.32 · Draft 
+Version 0.33 · Draft 
 Last Reviewed: 9 November 2026
 Produced with AI Assistance (Claude Code)
 ```
@@ -42,6 +42,7 @@ Produced with AI Assistance (Claude Code)
 | 0.30 | 2026-11-08 | Lionel Lam | Categories can be retired and restored in the app; retired categories are kept, so past expenses still show them |
 | 0.31 | 2026-11-08 | Lionel Lam | In-app confirmation sheets replace the phone's prompts; Undo after deleting an expense or retiring a category; a check before discarding unsaved changes (Section 4.2) |
 | 0.32 | 2026-11-09 | Lionel Lam | Search on History, for the month selected (Section 4.3) |
+| 0.33 | 2026-11-09 | Lionel Lam | An "×" button clears the Log screen's text box |
 
 ---
 
@@ -79,7 +80,7 @@ This spec exists to align the team before the process flow diagram (UPN) and fea
 
 ## 4. Process Flow (Narrative)
 
-1. **User enters expense** — free text, e.g. *"spent $12 on lunch at McDonald's yesterday"*. The heading and text input stay fixed at the top of the Log screen while the content below scrolls, so a new expense can be entered from anywhere in the list. Directly below the input, this section also shows today's total spend (amounts are added without currency conversion, as in Summary)
+1. **User enters expense** — free text, e.g. *"spent $12 on lunch at McDonald's yesterday"*. The heading and text input stay fixed at the top of the Log screen while the content below scrolls, so a new expense can be entered from anywhere in the list. Once there is text in the box, an "×" button at its top right clears it in one tap, without asking. Directly below the input, this section also shows today's total spend (amounts are added without currency conversion, as in Summary)
 2. **Application fetches active categories** — before calling the language model, the application queries the Category table for the user's active categories and injects the list into the prompt. This is an application-side step; no AI is involved.
 3. **Language model parses input** — the AI step. Produces structured fields (amount, category, merchant, date, etc.) from the raw text, returned via structured outputs so the response is always valid JSON in the expected shape. For category, the language model is instructed to return exactly one name from the injected category list, or "Other" if nothing fits. No free-text category invention.
 4. **Application resolves `category_id`** — the returned category name is matched via exact lookup against the Category table. "Other" maps to the row where `is_other = true`. No fuzzy matching required.

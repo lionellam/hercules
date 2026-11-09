@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { api, expensesUrl, fmt, useCached, type ApiCache } from "@/lib/client";
 import { localToday } from "@/lib/dates";
 import type { Category, Expense, SummaryRow } from "@/lib/types";
@@ -55,6 +55,7 @@ export default function LogScreen({ categories, online, cache, onSaved }: { cate
   const [error, setError] = useState("");
   const [toast, setToast] = useState("");
   const [editing, setEditing] = useState<Expense | null>(null);
+  const box = useRef<HTMLTextAreaElement>(null);
   const todayKey = localToday();
   const monthRows = useCached<Expense[]>(cache, expensesUrl(todayKey.slice(0, 7)));
   const todays = monthRows?.filter((r) => r.date === todayKey) ?? [];
@@ -105,11 +106,25 @@ export default function LogScreen({ categories, online, cache, onSaved }: { cate
         {!online && <p className="offline">You&apos;re offline. Your text is kept — parse it when you&apos;re back online.</p>}
         <div className="input-wrap">
           <textarea
+            ref={box}
             value={text}
             onChange={(e) => setText(e.target.value)}
             placeholder="e.g. Lunch at LJS for $4.50 yesterday"
             maxLength={500}
+            aria-label="Expense to log"
           />
+          {text && (
+            <button
+              className="text-clear"
+              onClick={() => {
+                setText("");
+                box.current?.focus();
+              }}
+              aria-label="Clear text"
+            >
+              <span aria-hidden="true">×</span>
+            </button>
+          )}
           <div className="row-end">
             <button className="btn btn-primary" disabled={!text.trim() || busy || !online || !!parsed} onClick={parse}>
               {busy ? "Parsing…" : "Parse"}

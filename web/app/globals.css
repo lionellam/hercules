@@ -55,7 +55,11 @@ h1 { font-size: 28px; font-weight: 700; letter-spacing: -0.02em; }
 .pinned-top { position: sticky; top: 0; z-index: 1; flex-shrink: 0; background: var(--bg); border-bottom: 1px solid var(--line);
            margin: 0 -20px; padding: calc(env(safe-area-inset-top) + 32px) 20px 16px; }
 .greet { margin-bottom: 24px; }
-.input-wrap { background: var(--soft); border-radius: 16px; padding: 14px; }
+.input-wrap { background: var(--soft); border-radius: 16px; padding: 14px; position: relative; }
+.input-wrap textarea { padding-right: 30px; }
+/* Clears the Log box; shown only when there's text (Specification step 1) */
+.text-clear { position: absolute; top: 6px; right: 6px; width: 36px; height: 36px; display: grid; place-items: center; background: none; border: none; cursor: pointer; }
+.text-clear span { width: 22px; height: 22px; border-radius: 50%; background: var(--muted); color: var(--bg); display: grid; place-items: center; font-size: 15px; line-height: 1; font-weight: 700; }
 textarea { width: 100%; border: none; background: transparent; resize: none; font-size: 17px; color: var(--text); outline: none; height: 56px; }
 textarea::placeholder { color: var(--muted); }
 .today-total { display: flex; justify-content: space-between; align-items: baseline; margin-top: 12px; color: var(--muted); font-size: 14px; }
