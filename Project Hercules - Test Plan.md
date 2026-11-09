@@ -1,7 +1,7 @@
 # Project Hercules — Test Plan: Web App v1
 
 ```
-Version 1.2 · Draft
+Version 1.3 · Draft
 Last Reviewed: 9 November 2026
 Produced with AI Assistance (Claude Code)
 ```
@@ -12,7 +12,8 @@ Produced with AI Assistance (Claude Code)
 |---|---|---|---|
 | 1.0 | 2026-11-09 | Lionel Lam | First complete set of manual test cases for the web app, covering Specification v0.33 and Architecture v0.14 |
 | 1.1 | 2026-11-09 | Lionel Lam | Settings tab: categories, appearance and sign-out tests updated; new Section Q for Settings (Specification v0.34) |
-| 1.2 | 2026-11-09 | Lionel Lam | Sign-out confirmation (A-05, A-09) |
+| 1.2 | 2026-11-09 | Lionel Lam | Sign-out confirmation (A-05, A-09), and nothing carrying over after sign-out (A-10) |
+| 1.3 | 2026-11-09 | Lionel Lam | Integrity check: S-02 updated for Settings; B-07 reference corrected; A-09 and A-10 in order; Q-08 and new S-07 check the version against the changelog; clean-up also clears test parses |
 
 ---
 
@@ -48,7 +49,10 @@ Run the whole plan before a large release, and the relevant sections after a sma
   ```sql
   DELETE FROM expenses     WHERE raw_input LIKE '[TEST]%';
   DELETE FROM categories   WHERE name LIKE 'zz-test-%';
+  DELETE FROM parse_events WHERE created_at > '<when testing started>';
   ```
+
+  The last line removes the records of test parses, which otherwise count towards the 100-a-day limit (O-02).
 
 ## 4. Recording Results
 
@@ -67,11 +71,11 @@ For each run, note the date, the device and browser, whether it was the local or
 | A-03 | Uninvited account is refused | Sign in with an email address that isn't on the allow-list | Back on the sign-in screen with "This account hasn't been invited. Ask the app owner to add your email address." |
 | A-04 | Removing access takes effect at once | While signed in on one device, remove that email address from the allow-list (`npm run allow -- remove <email>`), then reload the app | The sign-in screen appears; the person can't get back in. Add the address again afterwards |
 | A-05 | Signing out | Settings → **Sign out** → **Sign out** on the confirmation | "Sign out?" appears first, with a red Sign out button. After confirming, the sign-in screen appears; opening the app again asks you to sign in |
-| A-10 | Nothing carries over after sign-out | Open Settings, sign out, then sign in again on the same browser tab (or as a second test account, see A-07) | The app opens fresh on **Log**, showing only the signed-in person's data, not the tab or data from before |
-| A-09 | Cancelling sign-out | Settings → **Sign out**, then **Cancel** (or tap outside the sheet) | The sheet closes and you stay signed in on Settings |
 | A-06 | Data needs sign-in | While signed out, open `http://localhost:3000/api/expenses?month=2026-11` in the browser | The page shows `{"error":"Not signed in"}` and no expenses |
 | A-07 | Each person sees only their own expenses | Allow a second test email address. Sign in as each in turn, logging one `[TEST]` expense as each | Each account sees only its own expense in Today, History and Summary |
 | A-08 | Dev sign-in is local only | Open the live app's sign-in screen | Only "Sign in with Google" shows; there's no "Dev sign in" form |
+| A-09 | Cancelling sign-out | Settings → **Sign out**, then **Cancel** (or tap outside the sheet) | The sheet closes and you stay signed in on Settings |
+| A-10 | Nothing carries over after sign-out | Open Settings, sign out, then sign in again on the same browser tab (or as a second test account, see A-07) | The app opens fresh on **Log**, showing only the signed-in person's data, not the tab or data from before |
 
 ### B. Logging an Expense
 
@@ -83,7 +87,7 @@ For each run, note the date, the device and browser, whether it was the local or
 | B-04 | Another currency **[Claude]** | Type `[TEST] coffee USD 5` → Parse → Save | The card shows USD 5.00; in the Today list the amount shows as "USD 5.00" |
 | B-05 | No amount | Type `[TEST] lunch` → Parse | The amount on the card is empty. Tapping Save shows "Please enter an amount." and nothing is saved |
 | B-06 | Unmatched category falls back to Other **[Claude]** | Type `[TEST] mystery item 9.99` → Parse | Category is **Other** (or the closest of your own categories), never a new category name |
-| B-07 | Only your categories are offered **[Claude]** | Retire a category (see M-07), then type an expense that clearly belongs in it → Parse | The card shows one of your active categories or Other, not the retired one. Restore the category afterwards |
+| B-07 | Only your categories are offered **[Claude]** | Retire a category (see L-01), then type an expense that clearly belongs in it → Parse | The card shows one of your active categories or Other, not the retired one. Restore the category afterwards |
 | B-08 | Parse button state | Look at **Parse** with the box empty, then type something | Parse is dimmed and can't be tapped while the box is empty, and while a review card is open |
 | B-09 | Spent today total | Note **Spent today**, then save a `[TEST]` expense of 5.00 dated today | Spent today goes up by $5.00 |
 | B-10 | Today by category | Save two `[TEST]` expenses today in different categories | **Today by category** lists each category with its count and total, largest first, and a combined total |
@@ -280,7 +284,7 @@ These need a look at the local database; ask Claude to run them.
 | Q-05 | Returning to Settings | Open Categories & budgets, switch to Log, then tap Settings | The Settings list shows, not Categories & budgets |
 | Q-06 | No theme icon on screens | Look at the top of Log, History and Summary | There's no sun or moon icon |
 | Q-07 | Account | Look at the Account group | Your email address, and Sign out (see A-05). Summary no longer has a sign-out section at the bottom |
-| Q-08 | Version and last updated | Look below Account; compare with the latest deploy | The version number (with a short code for the exact version) and the date and time of the latest deploy |
+| Q-08 | Version and last updated | Look below Account; compare with `CHANGELOG.md` and the latest deploy | The version number matches the newest entry in the changelog (for example 1.0.0), followed by a short code for the exact version and the date and time of the latest deploy |
 
 ---
 
@@ -291,11 +295,12 @@ A quick check on the live app after each deploy. Use your own account, and remov
 | ID | Check | Expected result |
 |---|---|---|
 | S-01 | Sign in with Google | The Log screen opens |
-| S-02 | Each tab opens | Log, History, Summary and Categories all load with your data |
+| S-02 | Each tab opens | Log, History, Summary and Settings all load with your data, and Settings → Categories & budgets lists your categories |
 | S-03 | Log and remove a test expense | Parse `[TEST] coffee 1.00` → Save → it appears under Today → open it → Delete → confirm. The expense disappears and the totals return to what they were |
 | S-04 | Summary figures | This month's total and pace notes look right for your spending |
 | S-05 | Signed-out data check | In a private browser window, open `/api/expenses?month=` with this month (for example `2026-11`) on the live address | `{"error":"Not signed in"}` |
 | S-06 | User guide | Open https://lionellam.github.io/hercules/ | The user guide loads |
+| S-07 | Version | Settings → look below Account | After a release, the version matches the newest entry in `CHANGELOG.md`, the short code matches the latest commit, and "Last updated" is the time of this deploy |
 
 The test expense from S-03 stays in the database as a deleted record. That's harmless, but it can be removed by Lionel if wanted.
 

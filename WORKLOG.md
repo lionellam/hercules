@@ -951,3 +951,11 @@ Last updated: 9 November 2026
 - **Semantic versioning** — major for a fundamental change or an irreversible data change, minor for a new feature, patch for a fix or small tweak, and no change for documents alone.
 - **Start at 1.0.0 now** rather than counting back from go-live — simpler, and the worklog already records the history.
 - **Bump in the same commit, tag after pushing** — the number and the code never disagree, and each tag marks exactly what was released.
+
+---
+
+## 09 November 2026 — Test Plan Integrity Check
+
+### What Was Done
+- Checked the Test Plan against the code, Specification v0.35 and Architecture v0.17. Every quoted message and the spending-pace arithmetic were correct, and every feature in the Specification has at least one test.
+- Fixed six issues (Test Plan v1.3): S-02 still listed a Categories tab; B-07 referred to a non-existent M-07 (now L-01); A-09 and A-10 were out of order; the v1.2 history entry left out A-10; Q-08 now checks the version against `CHANGELOG.md`, with a new after-deploy check S-07; and the clean-up SQL now also removes test parse records, which count towards the daily limit. Documents only, so the app version stays at 1.0.0.
