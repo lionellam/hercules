@@ -889,3 +889,10 @@ Last updated: 9 November 2026
 - An "×" now appears at the top right of the Log screen's text box once there is text, and clears it in one tap without asking, leaving the cursor in the box. Long text wraps before reaching it. It matches the "×" in History search.
 - Updated the Specification (v0.33, process step 1) and the user guide's Log section.
 - Tested in the local app at phone width and at 1,024 pixels, in light and dark mode: no "×" when empty; typing shows it at the top right inside the box; tapping it empties the box, keeps the cursor there and dims Parse; typing again brings it back. No expenses were parsed or saved. Type-check, lint and a production build passed.
+
+---
+
+## 09 November 2026 — User Guide Mockups Brought Up to Date
+
+### What Was Done
+- The owner noticed the user guide's screen mockups no longer matched the app. Updated them in both copies (repository and artifact): the Log and review mockups now show the "×" in the text box, the three History mockups show the search field below the month, and a new mockup in the History section shows a search for "grab" with highlighted matches and the results-and-total line.

@@ -216,6 +216,18 @@ footer { margin-top: 72px; padding-top: 18px; border-top: 1px solid var(--rule);
 }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 html { scroll-behavior: smooth; }
+/* Log box clear button and History search */
+.m .input { position: relative; }
+.m .input .txt { padding-right: 24px; }
+.m .mx { position: absolute; top: 9px; right: 9px; width: 17px; height: 17px; border-radius: 50%; background: var(--m-muted); color: var(--m-bg); display: grid; place-items: center; font-size: 11px; font-weight: 700; line-height: 1; }
+.m .msearch { display: flex; align-items: center; gap: 7px; margin-top: 10px; background: var(--m-soft); border-radius: 10px; height: 34px; padding: 0 8px 0 10px; font-size: 13px; }
+.m .msearch svg { width: 14px; height: 14px; color: var(--m-muted); flex-shrink: 0; }
+.m .msearch .q { flex: 1; }
+.m .msearch .q.ph { color: var(--m-muted); }
+.m .msearch .mx { position: static; }
+.m .mcount { display: flex; justify-content: space-between; color: var(--m-muted); font-size: 11.5px; margin-top: 12px; }
+.m .mcount b { color: var(--m-text); font-variant-numeric: tabular-nums; }
+.m mark { background: #fde68a; color: inherit; border-radius: 3px; padding: 0 1px; }
 /* Confirmation sheet, Undo bar and quick answers */
 .m .m-confirm { position: absolute; left: 0; right: 0; bottom: 0; background: var(--m-bg); border-radius: 18px 18px 0 0; padding: 16px 16px 18px; box-shadow: 0 -6px 22px rgba(0,0,0,.16); }
 .m .m-confirm-t { font-size: 15px; font-weight: 700; }
@@ -285,7 +297,7 @@ dl.faq dd { margin: 2px 0 0; color: var(--ink-2); }
             <svg class="tgl" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z"/></svg>
             <div class="sub">Saturday, 7 November</div>
             <h5>Log an expense</h5>
-            <div class="input"><div class="txt">Lunch at Ya Kun for $4.50</div><div class="row"><span class="btn">Parse</span></div></div>
+            <div class="input"><div class="txt">Lunch at Ya Kun for $4.50</div><span class="mx">×</span><div class="row"><span class="btn">Parse</span></div></div>
             <div class="spent"><span>Spent today</span><b>$39.50</b></div>
           </div>
           <div class="body">
@@ -310,7 +322,7 @@ dl.faq dd { margin: 2px 0 0; color: var(--ink-2); }
           <div class="top flat">
             <div class="sub">Saturday, 7 November</div>
             <h5>Log an expense</h5>
-            <div class="input"><div class="txt">Lunch at Ya Kun for $4.50</div><div class="row"><span class="btn dim">Parse</span></div></div>
+            <div class="input"><div class="txt">Lunch at Ya Kun for $4.50</div><span class="mx">×</span><div class="row"><span class="btn dim">Parse</span></div></div>
           </div>
           <div class="body">
             <div class="card">
@@ -361,7 +373,7 @@ dl.faq dd { margin: 2px 0 0; color: var(--ink-2); }
     <div class="figure-row">
       <figure>
         <div class="phone"><div class="m" style="position:relative">
-          <div class="top flat"><h5>History</h5><div class="month"><i>‹</i><span>November 2026</span><i style="opacity:.35">›</i></div></div>
+          <div class="top flat"><h5>History</h5><div class="month"><i>‹</i><span>November 2026</span><i style="opacity:.35">›</i></div><div class="msearch"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><span class="q ph">Search expenses</span></div></div>
           <div class="body" style="opacity:.35">
             <div class="day">SAT, 7 NOV</div>
             <div class="item"><div><div class="nm">Toast Box</div><div class="c">Food &amp; Dining</div></div><div class="a">30.00</div></div>
@@ -382,7 +394,7 @@ dl.faq dd { margin: 2px 0 0; color: var(--ink-2); }
       </figure>
       <figure>
         <div class="phone"><div class="m" style="position:relative">
-          <div class="top flat"><h5>History</h5><div class="month"><i>‹</i><span>November 2026</span><i style="opacity:.35">›</i></div></div>
+          <div class="top flat"><h5>History</h5><div class="month"><i>‹</i><span>November 2026</span><i style="opacity:.35">›</i></div><div class="msearch"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><span class="q ph">Search expenses</span></div></div>
           <div class="body">
             <div class="day">SAT, 7 NOV</div>
             <div class="item"><div><div class="nm">Toast Box</div><div class="c">Food &amp; Dining</div></div><div class="a">30.00</div></div>
@@ -414,7 +426,7 @@ dl.faq dd { margin: 2px 0 0; color: var(--ink-2); }
           <div class="top">
             <svg class="tgl" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z"/></svg>
             <h5>History</h5>
-            <div class="month"><i>‹</i><span>November 2026</span><i style="opacity:.35">›</i></div>
+            <div class="month"><i>‹</i><span>November 2026</span><i style="opacity:.35">›</i></div><div class="msearch"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><span class="q ph">Search expenses</span></div>
           </div>
           <div class="body">
             <div class="day">SAT, 7 NOV</div>
@@ -428,6 +440,25 @@ dl.faq dd { margin: 2px 0 0; color: var(--ink-2); }
           </div>
         </div></div>
         <figcaption><b>History.</b> Grouped by day. "edited" marks expenses you changed from what Claude suggested.</figcaption>
+      </figure>
+      <figure>
+        <div class="phone"><div class="m">
+          <div class="top">
+            <h5>History</h5>
+            <div class="month"><i>‹</i><span>November 2026</span><i style="opacity:.35">›</i></div>
+            <div class="msearch"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><span class="q">grab</span><span class="mx">×</span></div>
+          </div>
+          <div class="body">
+            <div class="mcount"><span>3 results</span><b>$52.80</b></div>
+            <div class="day">SUN, 8 NOV</div>
+            <div class="item"><div><div class="nm"><mark>Grab</mark></div><div class="c">Transport</div></div><div class="a">26.40</div></div>
+            <div class="day">FRI, 6 NOV</div>
+            <div class="item"><div><div class="nm"><mark>Grab</mark></div><div class="c">Transport</div></div><div class="a">18.90</div></div>
+            <div class="day">MON, 2 NOV</div>
+            <div class="item"><div><div class="nm"><mark>Grab</mark></div><div class="c">Transport</div></div><div class="a">7.50</div></div>
+          </div>
+        </div></div>
+        <figcaption><b>Searching.</b> Typing "grab" narrows the month to matching expenses, highlights the matches, and shows how many there are and their total. Tap × to clear.</figcaption>
       </figure>
     </div>
 
