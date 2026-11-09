@@ -1005,3 +1005,14 @@ Last updated: 9 November 2026
 - Also at the owner's request, removed the privacy line about the app owner being able to reach the database.
 - The guide no longer suggests that deleted expenses can be recovered: the privacy section drops "kept in the database so it can be recovered", and the Quick answers entry now says a deleted expense can only be brought back with Undo, in the few seconds after deleting. The owner doesn't want recovery offered as a feature, since it would mean manual work for them.
 - The "No subscription" card no longer names a competitor: "Popular budgeting apps such as YNAB charge a recurring fee" became "Many budgeting apps charge a recurring fee", at the owner's request.
+
+---
+
+## 09 November 2026 — User Guide: Real Screenshots
+
+### What Was Done
+- At the owner's request, replaced the user guide's drawn mockups with real screenshots of the app (repository copy, GitHub Pages and the artifact).
+- To keep real spending out of the public guide, the screenshots come from a demo account in the local app only (`demo@example.com`, a reserved example address), filled with the sample data (`npm run sample`), three expenses dated today, budgets on five categories, one edited expense and one retired category. One demo expense was deleted and restored with Undo for the Undo screenshot.
+- Eleven screenshots at phone size in light mode, in `guide-images/`: Log, review card, delete confirmation, Undo bar, History, History search, Summary with a burn-up chart, Summary further down (a new picture showing pace notes and the pie chart), Settings, sign-out confirmation, and Categories & budgets with the Retired row. The dev server's badge was hidden before each capture, and a capture artefact at the top of the scrolled Summary image was painted out.
+- The Pages workflow now also publishes `guide-images/` and runs when it changes. Both READMEs mention the folder; `web/README.md` notes where the screenshots come from.
+- Documents only, so the app version stays at 1.1.0. The owner's local account and data were not touched; the test browser was signed back in to it afterwards.

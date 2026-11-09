@@ -13,7 +13,7 @@ The app is invite-only: sign-in is with Google, for invited email addresses only
 | [`web/`](web/) | The web app (Next.js on Vercel, Neon Postgres, Claude Haiku 5.5). See [`web/README.md`](web/README.md) for running it locally and deploying |
 | [`poc/`](poc/) | The original command-line proof of concept (Python, local model, SQLite), kept for experiments |
 | [`design/`](design/) | Design mockups made while planning changes |
-| [How Hercules Works](Project%20Hercules%20-%20How%20Hercules%20Works.html) | Source of the user guide, published to GitHub Pages by [`.github/workflows/guide-pages.yml`](.github/workflows/guide-pages.yml) |
+| [How Hercules Works](Project%20Hercules%20-%20How%20Hercules%20Works.html) | Source of the user guide, with its screenshots in [`guide-images/`](guide-images/), published to GitHub Pages by [`.github/workflows/guide-pages.yml`](.github/workflows/guide-pages.yml) |
 
 ## Project documents
 
