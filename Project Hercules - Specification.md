@@ -1,7 +1,7 @@
 # Project Hercules — Specification Sheet: "Log an Expense" Flow
 
 ```
-Version 0.34 · Draft 
+Version 0.35 · Draft 
 Last Reviewed: 9 November 2026
 Produced with AI Assistance (Claude Code)
 ```
@@ -44,6 +44,7 @@ Produced with AI Assistance (Claude Code)
 | 0.32 | 2026-11-09 | Lionel Lam | Search on History, for the month selected (Section 4.3) |
 | 0.33 | 2026-11-09 | Lionel Lam | An "×" button clears the Log screen's text box |
 | 0.34 | 2026-11-09 | Lionel Lam | Settings tab replaces the Categories tab; Categories becomes "Categories & budgets" inside Settings; Appearance and Sign out move into Settings; the app version and last update are shown (Section 4.4) |
+| 0.35 | 2026-11-09 | Lionel Lam | Signing out asks for confirmation, then reloads the page fully (Sections 4.2 and 4.4) |
 
 ---
 
@@ -132,7 +133,7 @@ Notes:
 
 ### 4.2 Confirmations, Undo and Unsaved Changes
 
-Confirmations are shown in the app's own confirmation sheet, which slides up over the open screen (a centred dialog on wider screens), rather than the phone's or browser's built-in prompt. The main action is on top and the way back underneath; tapping outside the sheet counts as the way back. Routine actions (saving, restoring, adding a category, changing a budget, signing out) don't ask.
+Confirmations are shown in the app's own confirmation sheet, which slides up over the open screen (a centred dialog on wider screens), rather than the phone's or browser's built-in prompt. The main action is on top and the way back underneath; tapping outside the sheet counts as the way back. Routine actions (saving, restoring, adding a category, changing a budget) don't ask.
 
 | Action | Confirmation | Afterwards |
 |---|---|---|
@@ -140,6 +141,7 @@ Confirmations are shown in the app's own confirmation sheet, which slides up ove
 | Retire a category | "Retire *name*?", explaining that it won't be offered for new expenses and past expenses keep it; a second paragraph when it has a budget; red "Retire category" button | "*name* retired" bar with **Undo** for about five seconds; Undo restores it |
 | Close Edit expense, Edit category or Add category with unsaved changes (Cancel, or tapping outside) | "Discard changes?", with "Discard changes" and "Keep editing" | Nothing is saved |
 | Discard on the Log screen's review card after changing any parsed detail | "Discard your edits?", with "Discard" and "Keep reviewing" | The typed text stays in the box |
+| Sign out (Settings) | "Sign out?", explaining that signing in with Google is needed again on this device and that expenses stay safe in the account; red "Sign out" button | Signed out, back at the sign-in screen. The page reloads fully, so nothing loaded for that person stays in the browser's memory |
 
 A sheet with no changes closes straight away, and Discard on an unchanged review card works straight away, since the typed text is still there to parse again. Only the most recent Undo is offered; a new one replaces it.
 
@@ -161,7 +163,7 @@ Settings is the fourth tab, with a gear icon, after Log, History and Summary. It
 
 - **Spending:** **Categories & budgets**, with the number of categories in use and how many have a budget (for example "14 categories · 5 with a budget"). Tapping it opens the Categories & budgets page, which works exactly as the Categories tab did (see the Category notes in Section 5), with "‹ Settings" at the top to go back.
 - **Appearance:** System, Light or Dark. System follows the device's setting. The choice is saved on that device only. This replaces the sun or moon icon that was at the top of every screen.
-- **Account:** the email address signed in with, and **Sign out**, which moves here from the bottom of Summary.
+- **Account:** the email address signed in with, and **Sign out**, which moves here from the bottom of Summary and asks for confirmation first (Section 4.2).
 - **Below Account:** the app's version number and the date and time it was last updated, meaning when the version running was built and deployed.
 
 Opening the Settings tab always shows the Settings list, even if Categories & budgets was open when you left it.

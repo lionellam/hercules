@@ -14,5 +14,6 @@ export default function Page() {
 async function SignedInApp() {
   const user = await currentUser();
   if (!user) redirect("/signin");
-  return <HerculesApp email={user.email} />;
+  // Keyed by person, so a different sign-in always starts with nothing held in memory
+  return <HerculesApp key={user.id} email={user.email} />;
 }

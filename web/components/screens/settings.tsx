@@ -5,6 +5,7 @@ import { useState } from "react";
 import { signOutAction } from "@/app/actions";
 import type { ApiCache } from "@/lib/client";
 import type { Category } from "@/lib/types";
+import { ConfirmSheet } from "../confirm";
 import { AppearanceChoice } from "../theme";
 import CategoriesScreen from "./categories";
 
@@ -34,6 +35,7 @@ const PersonIcon = () => (
 export default function SettingsScreen({ email, categories, online, cache, onChanged }: { email: string; categories: Category[]; online: boolean; cache: ApiCache; onChanged: () => void }) {
   // Opening the Settings tab always starts on this list
   const [page, setPage] = useState<"list" | "categories">("list");
+  const [confirmSignOut, setConfirmSignOut] = useState(false);
 
   if (page === "categories") {
     return (
@@ -88,11 +90,9 @@ export default function SettingsScreen({ email, categories, online, cache, onCha
           <span className="d">{email}</span>
         </span>
       </div>
-      <form action={signOutAction}>
-        <button type="submit" className="settings-row danger">
-          <span className="settings-text"><span className="t">Sign out</span></span>
-        </button>
-      </form>
+      <button className="settings-row danger" onClick={() => setConfirmSignOut(true)}>
+        <span className="settings-text"><span className="t">Sign out</span></span>
+      </button>
 
       <p className="settings-version">
         Version {VERSION}
@@ -104,6 +104,20 @@ export default function SettingsScreen({ email, categories, online, cache, onCha
           </>
         )}
       </p>
+
+      {confirmSignOut && (
+        <ConfirmSheet
+          title="Sign out?"
+          body="You'll need to sign in with Google again to use Hercules on this device. Your expenses stay safe in your account."
+          confirmLabel="Sign out"
+          onConfirm={async () => {
+            await signOutAction();
+            // A full reload, not an in-app navigation, so no expenses stay in memory for the next person
+            window.location.replace("/signin");
+          }}
+          onCancel={() => setConfirmSignOut(false)}
+        />
+      )}
     </section>
   );
 }

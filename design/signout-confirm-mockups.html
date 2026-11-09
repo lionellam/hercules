@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sign Out Confirmation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root { --page: #ececea; --page-text: #18181b; --page-muted: #5f5f66; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--page); color: var(--page-text); font-family: Inter, -apple-system, system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  main { max-width: 1260px; margin: 0 auto; padding: 36px 16px 80px; }
+  h1 { font-size: 28px; letter-spacing: -0.02em; margin: 0 0 8px; }
+  .intro p { color: var(--page-muted); max-width: 800px; line-height: 1.55; margin: 0 0 10px; font-size: 15px; }
+  .frames { display: flex; flex-wrap: wrap; gap: 30px 26px; align-items: flex-start; margin-top: 28px; }
+  figure { margin: 0; max-width: 100%; }
+  figcaption { max-width: 340px; font-size: 13px; color: var(--page-muted); margin-top: 12px; line-height: 1.5; }
+  figcaption b { color: var(--page-text); }
+  .badge { display: inline-block; font-size: 11px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; padding: 2px 7px; border-radius: 6px; margin-right: 6px; vertical-align: 1px; background: #1d4ed8; color: #fff; }
+  .badge.alt { background: #7c3aed; }
+  .phone { width: 340px; max-width: 100%; height: 680px; border-radius: 30px; overflow: hidden; border: 1px solid rgba(0,0,0,.08);
+           box-shadow: 0 1px 2px rgba(0,0,0,.06), 0 10px 28px rgba(0,0,0,.08); }
+
+  /* App tokens and styles, from web/app/globals.css */
+  .app { --bg: #fff; --surface: #fff; --text: #18181b; --muted: #71717a; --line: #e7e7e4; --accent: #18181b; --accent-text: #fff; --soft: #f4f4f5; --bad: #b91c1c;
+         background: var(--bg); color: var(--text); font-size: 15px; position: relative; height: 100%; display: flex; flex-direction: column; }
+  .app.dark { --bg: #18181b; --surface: #18181b; --text: #f4f4f5; --muted: #a1a1aa; --line: #27272a; --accent: #f4f4f5; --accent-text: #18181b; --soft: #27272a; --bad: #f87171; }
+  .app .top { padding: 30px 20px 16px; border-bottom: 1px solid var(--line); }
+  .app h3 { font-size: 28px; font-weight: 700; letter-spacing: -0.02em; }
+  .app .scroll { flex: 1; overflow: hidden; padding: 0 20px; }
+  .app .sh { color: var(--muted); font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; margin: 24px 0 6px; }
+  .app .row { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--line); }
+  .app .ic { width: 34px; height: 34px; border-radius: 10px; background: var(--soft); display: grid; place-items: center; flex-shrink: 0; }
+  .app .ic svg { width: 18px; height: 18px; }
+  .app .tx { flex: 1; min-width: 0; }
+  .app .t { font-weight: 500; }
+  .app .d { color: var(--muted); font-size: 13px; margin-top: 2px; }
+  .app .chev { color: var(--muted); font-size: 20px; }
+  .app .row.out .t { color: var(--bad); }
+  .app .seg { display: flex; background: var(--soft); border-radius: 12px; padding: 3px; }
+  .app .seg span { flex: 1; text-align: center; padding: 8px 0; border-radius: 10px; font-size: 14px; color: var(--muted); }
+  .app .seg span.on { background: var(--surface); color: var(--text); box-shadow: 0 1px 3px rgba(0,0,0,.1); font-weight: 500; }
+  .app .ver { text-align: center; color: var(--muted); font-size: 12.5px; margin-top: 28px; line-height: 1.6; }
+  .app .tabbar { display: flex; border-top: 1px solid var(--line); padding: 8px 0 18px; }
+  .app .tabbar span { flex: 1; text-align: center; font-size: 11px; color: var(--muted); }
+  .app .tabbar svg { display: block; width: 21px; height: 21px; margin: 0 auto 3px; }
+  .app .tabbar span.on { color: var(--text); font-weight: 600; }
+  /* The app's confirmation sheet */
+  .app .backdrop { position: absolute; inset: 0; background: rgba(0,0,0,.25); }
+  .app .confirm { position: absolute; left: 0; right: 0; bottom: 0; background: var(--surface); border-radius: 20px 20px 0 0; padding: 22px 20px 26px; box-shadow: 0 -8px 30px rgba(0,0,0,.18);
+                  outline: 2px dashed #1d4ed8; outline-offset: -6px; }
+  .app .confirm h4 { font-size: 18px; font-weight: 700; letter-spacing: -0.01em; }
+  .app .confirm p { color: var(--muted); font-size: 14px; line-height: 1.5; margin-top: 8px; }
+  .app .confirm .stack { display: flex; flex-direction: column; gap: 8px; margin-top: 18px; }
+  .app .confirm .btn { height: 44px; border-radius: 12px; border: none; font: inherit; font-size: 15px; font-weight: 600; width: 100%; }
+  .app .btn-primary { background: var(--accent); color: var(--accent-text); }
+  .app .btn-red { background: var(--bad); color: #fff; }
+  .app.dark .btn-red { color: #18181b; }
+  .app .btn-ghost { background: none; color: var(--muted); }
+</style>
+</head>
+<body>
+<main>
+  <div class="intro">
+    <h1>Sign-out confirmation</h1>
+    <p>Tapping <b>Sign out</b> in Settings opens the app's own confirmation sheet, the same one used for deleting an expense and retiring a category. Tapping outside it, or <b>Cancel</b>, keeps you signed in. The dashed blue ring marks the new sheet.</p>
+  </div>
+  <div class="frames" id="frames"></div>
+</main>
+<script>
+const gear = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>';
+const tag = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h7l9 9-6 6-9-9V5zM8 9h.01"/></svg>';
+const person = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>';
+const icon = (d) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="${d}"/></svg>`;
+const tabbar = `<div class="tabbar"><span>${icon("M12 5v14M5 12h14")}Log</span><span>${icon("M4 6h16M4 12h16M4 18h10")}History</span><span>${icon("M6 20V10M12 20V4M18 20v-6")}Summary</span><span class="on">${gear}Settings</span></div>`;
+const settings = `<div class="top"><h3>Settings</h3></div><div class="scroll">
+  <div class="sh">Spending</div>
+  <div class="row"><span class="ic">${tag}</span><span class="tx"><div class="t">Categories &amp; budgets</div><div class="d">14 categories · 5 with a budget</div></span><span class="chev">›</span></div>
+  <div class="sh">Appearance</div><div class="seg"><span class="on">System</span><span>Light</span><span>Dark</span></div>
+  <div class="sh">Account</div>
+  <div class="row"><span class="ic">${person}</span><span class="tx"><div class="t">Signed in</div><div class="d">you@gmail.com</div></span></div>
+  <div class="row out"><span class="tx"><div class="t">Sign out</div></span></div>
+  <div class="ver">Version 0.1.0 (009acdd)<br>Last updated 9 Nov 2026, 7:45 pm</div>
+</div>${tabbar}`;
+const sheet = (btn) => `<div class="backdrop"></div><div class="confirm"><h4>Sign out?</h4>
+  <p>You'll need to sign in with Google again to use Hercules on this device. Your expenses stay safe in your account.</p>
+  <div class="stack"><button class="btn ${btn}">Sign out</button><button class="btn btn-ghost">Cancel</button></div></div>`;
+const phone = (inner, dark) => `<div class="phone"><div class="app ${dark ? "dark" : ""}">${inner}</div></div>`;
+const fig = (inner, cap, badge = "New") => `<figure>${inner}<figcaption><span class="badge ${badge === "Alternative" ? "alt" : ""}">${badge}</span>${cap}</figcaption></figure>`;
+document.getElementById("frames").innerHTML = [
+  fig(phone(settings + sheet("btn-primary")), "<b>Suggested.</b> The main button in the usual dark style, since signing out doesn't delete anything; red is kept for actions that remove something."),
+  fig(phone(settings + sheet("btn-red")), "<b>Red button.</b> Matches Delete and Retire, if you'd rather sign-out look like a warning.", "Alternative"),
+  fig(phone(settings + sheet("btn-primary"), true), "<b>Dark mode.</b> The suggested version in the dark theme."),
+].join("");
+</script>
+</body>
+</html>

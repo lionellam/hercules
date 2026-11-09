@@ -914,3 +914,14 @@ Last updated: 9 November 2026
 ### Decisions Made
 - **A menu rather than one long page** — keeps Settings tidy and leaves room for more settings later.
 - **Theme choice only in Settings** — tidier screen headers, and a System option the old icon couldn't offer.
+
+---
+
+## 09 November 2026 — Sign-out Confirmation
+
+### What Was Done
+- The owner asked for a confirmation before signing out. Mockups (`design/signout-confirm-mockups.html`) showed the app's confirmation sheet with a dark or a red button; the owner chose red.
+- Tapping **Sign out** in Settings now opens "Sign out?" ("You'll need to sign in with Google again to use Hercules on this device. Your expenses stay safe in your account.") with a red **Sign out** button and **Cancel**. Tapping outside the sheet also cancels.
+- **Found while testing:** after signing out and back in on the same browser tab, the app reopened on the tab used before (Settings), because the framework keeps a page's state in memory across navigation. Expenses loaded before signing out could therefore stay in memory for whoever signed in next on the same tab, and briefly show before refreshing. Fixed: signing out now only clears the sign-in cookie and then fully reloads the page, and the app is tied to the person signed in, so a different sign-in always starts empty.
+- Updated the Specification (v0.35; Section 4.2 table and Section 4.4, and "signing out" removed from the actions that don't ask), Architecture (v0.16; decisions 23 and 30), Test Plan (v1.2; A-05, A-09, A-10) and the user guide's Settings section.
+- Tested in the local app: the sheet's text and red button; Cancel and tapping outside both keep you signed in; confirming signs out to the sign-in screen with the page's memory cleared (a marker set before signing out was gone); signing back in opened fresh on Log. Type-check passed.

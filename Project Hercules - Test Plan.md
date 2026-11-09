@@ -1,7 +1,7 @@
 # Project Hercules — Test Plan: Web App v1
 
 ```
-Version 1.1 · Draft
+Version 1.2 · Draft
 Last Reviewed: 9 November 2026
 Produced with AI Assistance (Claude Code)
 ```
@@ -12,6 +12,7 @@ Produced with AI Assistance (Claude Code)
 |---|---|---|---|
 | 1.0 | 2026-11-09 | Lionel Lam | First complete set of manual test cases for the web app, covering Specification v0.33 and Architecture v0.14 |
 | 1.1 | 2026-11-09 | Lionel Lam | Settings tab: categories, appearance and sign-out tests updated; new Section Q for Settings (Specification v0.34) |
+| 1.2 | 2026-11-09 | Lionel Lam | Sign-out confirmation (A-05, A-09) |
 
 ---
 
@@ -65,7 +66,9 @@ For each run, note the date, the device and browser, whether it was the local or
 | A-02 | Invited account signs in | Sign in with an allowed email address | The Log screen opens, showing today's date and "Log an expense" |
 | A-03 | Uninvited account is refused | Sign in with an email address that isn't on the allow-list | Back on the sign-in screen with "This account hasn't been invited. Ask the app owner to add your email address." |
 | A-04 | Removing access takes effect at once | While signed in on one device, remove that email address from the allow-list (`npm run allow -- remove <email>`), then reload the app | The sign-in screen appears; the person can't get back in. Add the address again afterwards |
-| A-05 | Signing out | Settings → **Sign out** | The sign-in screen appears. Opening the app again asks you to sign in |
+| A-05 | Signing out | Settings → **Sign out** → **Sign out** on the confirmation | "Sign out?" appears first, with a red Sign out button. After confirming, the sign-in screen appears; opening the app again asks you to sign in |
+| A-10 | Nothing carries over after sign-out | Open Settings, sign out, then sign in again on the same browser tab (or as a second test account, see A-07) | The app opens fresh on **Log**, showing only the signed-in person's data, not the tab or data from before |
+| A-09 | Cancelling sign-out | Settings → **Sign out**, then **Cancel** (or tap outside the sheet) | The sheet closes and you stay signed in on Settings |
 | A-06 | Data needs sign-in | While signed out, open `http://localhost:3000/api/expenses?month=2026-11` in the browser | The page shows `{"error":"Not signed in"}` and no expenses |
 | A-07 | Each person sees only their own expenses | Allow a second test email address. Sign in as each in turn, logging one `[TEST]` expense as each | Each account sees only its own expense in Today, History and Summary |
 | A-08 | Dev sign-in is local only | Open the live app's sign-in screen | Only "Sign in with Google" shows; there's no "Dev sign in" form |

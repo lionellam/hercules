@@ -22,6 +22,7 @@ export async function devSignIn(formData: FormData) {
   await signInWith("dev", { email: String(formData.get("email") ?? "") });
 }
 
+// Clears the sign-in cookie only; the caller then reloads the page so nothing loaded for this person stays in memory
 export async function signOutAction() {
-  await signOut({ redirectTo: "/signin" });
+  await signOut({ redirect: false });
 }
