@@ -24,6 +24,7 @@ The app is invite-only: sign-in is with Google, for invited email addresses only
 | [Specification](Project%20Hercules%20-%20Specification.md) | How the app behaves, including the "Log an Expense" flow, spending pace rules and data model |
 | [Architecture](Project%20Hercules%20-%20Architecture.md) | The system and the decision record behind it |
 | [Go-Live Checklist](Project%20Hercules%20-%20Go-Live%20Checklist.md) | Steps taken to put the web app live |
+| [Test Plan](Project%20Hercules%20-%20Test%20Plan.md) | Step-by-step manual tests for the web app, with expected results |
 | [Work Log](WORKLOG.md) | What was done, decisions made and lessons learned, by date |
 
 ## License
