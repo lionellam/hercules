@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Expense Report Download</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root { --page: #ececea; --page-text: #18181b; --page-muted: #5f5f66; --page-card: #fafaf9; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--page); color: var(--page-text); font-family: Inter, -apple-system, system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  main { max-width: 1260px; margin: 0 auto; padding: 36px 16px 80px; }
+  h1 { font-size: 28px; letter-spacing: -0.02em; margin: 0 0 8px; }
+  .intro p { color: var(--page-muted); max-width: 820px; line-height: 1.55; margin: 0 0 10px; font-size: 15px; }
+  section { margin-top: 48px; }
+  section > h2 { font-size: 20px; margin: 0 0 6px; }
+  section > p { color: var(--page-muted); max-width: 820px; line-height: 1.55; margin: 0 0 18px; font-size: 14.5px; }
+  .frames { display: flex; flex-wrap: wrap; gap: 30px 26px; align-items: flex-start; }
+  figure { margin: 0; max-width: 100%; }
+  figcaption { max-width: 340px; font-size: 13px; color: var(--page-muted); margin-top: 12px; line-height: 1.5; }
+  figcaption b { color: var(--page-text); }
+  .badge { display: inline-block; font-size: 11px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; padding: 2px 7px; border-radius: 6px; margin-right: 6px; vertical-align: 1px; background: #7c3aed; color: #fff; }
+  .badge.rec { background: #15803d; }
+  .phone { width: 340px; max-width: 100%; height: 680px; border-radius: 30px; overflow: hidden; border: 1px solid rgba(0,0,0,.08);
+           box-shadow: 0 1px 2px rgba(0,0,0,.06), 0 10px 28px rgba(0,0,0,.08); }
+  .sheet-wrap { overflow-x: auto; background: #fff; border: 1px solid rgba(0,0,0,.1); border-radius: 12px; max-width: 100%; }
+  table.xl { border-collapse: collapse; font-size: 12.5px; font-variant-numeric: tabular-nums; }
+  table.xl th, table.xl td { border: 1px solid #e3e3e0; padding: 5px 9px; white-space: nowrap; text-align: left; }
+  table.xl th { background: #f1f1ef; font-weight: 600; }
+  table.xl td.n { text-align: right; }
+  table.xl .rowh { background: #f7f7f5; color: #8a8a90; text-align: center; width: 30px; }
+  .file { display: inline-flex; gap: 8px; align-items: center; font-size: 13px; background: #fff; border: 1px solid rgba(0,0,0,.1); border-radius: 8px; padding: 6px 10px; margin-bottom: 10px; font-family: ui-monospace, Menlo, monospace; }
+  .notes { margin-top: 56px; background: var(--page-card); border-radius: 16px; padding: 22px 26px; max-width: 880px; }
+  .notes h2 { margin: 0 0 10px; font-size: 18px; }
+  .notes ul { padding-left: 20px; line-height: 1.6; font-size: 14.5px; }
+
+  /* App tokens and styles, from web/app/globals.css */
+  .app { --bg: #fff; --surface: #fff; --text: #18181b; --muted: #71717a; --line: #e7e7e4; --accent: #18181b; --accent-text: #fff; --soft: #f4f4f5; --bad: #b91c1c;
+         background: var(--bg); color: var(--text); font-size: 15px; position: relative; height: 100%; display: flex; flex-direction: column; }
+  .app .top { padding: 30px 20px 16px; border-bottom: 1px solid var(--line); }
+  .app .titlerow { display: flex; justify-content: space-between; align-items: center; }
+  .app h3 { font-size: 28px; font-weight: 700; letter-spacing: -0.02em; }
+  .app .seg { display: flex; background: var(--soft); border-radius: 12px; padding: 3px; margin-top: 14px; }
+  .app .seg span { flex: 1; text-align: center; padding: 8px 0; border-radius: 10px; font-size: 14px; color: var(--muted); }
+  .app .seg span.on { background: var(--surface); color: var(--text); box-shadow: 0 1px 3px rgba(0,0,0,.1); font-weight: 500; }
+  .app .scroll { flex: 1; overflow: hidden; padding: 0 20px; }
+  .app .total { padding: 16px 0 4px; }
+  .app .total .sub { color: var(--muted); font-size: 14px; }
+  .app .total .big { font-size: 32px; font-weight: 700; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+  .app .total .line { color: var(--muted); font-size: 13px; margin-top: 4px; }
+  .app .total .line b { color: var(--text); }
+  .app .totalrow { display: flex; justify-content: space-between; align-items: flex-end; gap: 10px; }
+  .app .cat { margin-top: 14px; }
+  .app .cat-top { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 6px; }
+  .app .cat-top .n { color: var(--muted); font-size: 12px; margin-left: 6px; }
+  .app .of { color: var(--muted); font-weight: 400; }
+  .app .track { height: 6px; background: var(--soft); border-radius: 3px; overflow: hidden; }
+  .app .fill { height: 100%; background: var(--text); border-radius: 3px; }
+  .app .pace { margin-top: 6px; font-size: 12.5px; color: var(--muted); }
+  .app .pace b { color: var(--text); }
+  .app .tabbar { display: flex; border-top: 1px solid var(--line); padding: 8px 0 18px; background: var(--bg); }
+  .app .tabbar span { flex: 1; text-align: center; font-size: 11px; color: var(--muted); }
+  .app .tabbar svg { display: block; width: 21px; height: 21px; margin: 0 auto 3px; }
+  .app .tabbar span.on { color: var(--text); font-weight: 600; }
+  /* New: download controls */
+  .app .dl-pill { display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 12px; border-radius: 10px; background: var(--soft); font-size: 13.5px; font-weight: 600; white-space: nowrap; }
+  .app .dl-pill svg { width: 16px; height: 16px; }
+  .app .dl-wide { display: flex; align-items: center; justify-content: center; gap: 8px; height: 44px; border-radius: 12px; border: 1px solid var(--line); font-size: 14.5px; font-weight: 600; margin-top: 18px; }
+  .app .dl-wide svg { width: 17px; height: 17px; }
+  .app .dl-icon { width: 38px; height: 38px; border-radius: 10px; background: var(--soft); display: grid; place-items: center; }
+  .app .dl-icon svg { width: 19px; height: 19px; }
+  .app .new { outline: 2px dashed #1d4ed8; outline-offset: 3px; }
+  .app .toast { position: absolute; left: 14px; right: 14px; bottom: 76px; background: var(--accent); color: var(--accent-text); border-radius: 12px; padding: 12px 14px; font-size: 14px; box-shadow: 0 6px 20px rgba(0,0,0,.2); }
+</style>
+</head>
+<body>
+<main>
+  <div class="intro">
+    <h1>Expense report download (CSV)</h1>
+    <p>A download on Summary saves the expenses for the month you're looking at as a CSV file, which opens in Excel, Numbers or Google Sheets. On <b>this month</b> it covers the 1st to today; on <b>last month</b>, the whole month. These mockups use the app's own styles and example figures. Dashed blue outlines mark the new control.</p>
+  </div>
+
+  <section>
+    <h2>Where the button goes</h2>
+    <p>Three placements on Summary. In each, the download follows the month selected at the top.</p>
+    <div class="frames" id="placements"></div>
+  </section>
+
+  <section>
+    <h2>The downloaded file</h2>
+    <p>One row per expense, oldest first, with plain column names. Deleted expenses aren't included. Below is how the file would look when opened in a spreadsheet.</p>
+    <div class="file">⤓ hercules-expenses-2026-11.csv</div>
+    <div class="sheet-wrap"><table class="xl" id="sheet"></table></div>
+  </section>
+
+  <div class="notes">
+    <h2>To decide</h2>
+    <ul>
+      <li><b>Placement:</b> A, B or C. I'd suggest <b>A</b>: it sits with the month it downloads, is easy to find without taking space from the figures, and works the same on a phone and a computer.</li>
+      <li><b>Columns:</b> as shown, or fewer (for example without "What you typed" and "Edited").</li>
+      <li><b>File name:</b> <code>hercules-expenses-2026-11.csv</code> for both months, or add the end date for this month (<code>hercules-expenses-2026-11-01-to-2026-11-09.csv</code>) so repeated downloads don't look identical.</li>
+      <li><b>On a phone:</b> iPhone shows its usual "Save to Files / share" options; Android saves to Downloads. The file is made by the app's server rather than in the browser, which works reliably in the home-screen app too.</li>
+    </ul>
+  </div>
+</main>
+
+<script>
+const dl = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>';
+const gear = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/></svg>';
+const icon = (d) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="${d}"/></svg>`;
+const tabbar = `<div class="tabbar"><span>${icon("M12 5v14M5 12h14")}Log</span><span>${icon("M4 6h16M4 12h16M4 18h10")}History</span><span class="on">${icon("M6 20V10M12 20V4M18 20v-6")}Summary</span><span>${gear}Settings</span></div>`;
+const cats = `
+  <div class="cat"><div class="cat-top"><span>Rent<span class="n">1</span></span><strong>1,800.00 <span class="of">of 1,800.00</span></strong></div><div class="track"><div class="fill" style="width:100%"></div></div><div class="pace"><b>Budget used</b> · $0.00 left</div></div>
+  <div class="cat"><div class="cat-top"><span>Food &amp; Dining<span class="n">9</span></span><strong>142.09 <span class="of">of 500.00</span></strong></div><div class="track"><div class="fill" style="width:28%"></div></div><div class="pace"><b>On pace</b> · $357.91 left, about $16.27/day</div></div>
+  <div class="cat"><div class="cat-top"><span>Utilities<span class="n">1</span></span><strong>118.35</strong></div><div class="track"><div class="fill" style="width:7%"></div></div></div>
+  <div class="cat"><div class="cat-top"><span>Transport<span class="n">5</span></span><strong>74.30 <span class="of">of 200.00</span></strong></div><div class="track"><div class="fill" style="width:37%"></div></div><div class="pace"><b>$20.97 over pace</b> · $125.70 left, about $5.71/day</div></div>`;
+const seg = `<div class="seg"><span class="on">November</span><span>October</span></div>`;
+const total = (extra = "") => `<div class="total"><div class="totalrow"><div><div class="sub">Spent so far this month</div><div class="big">$2,283.02</div></div>${extra}</div><div class="line"><b>Day 9 of 30</b> · Mon, 9 Nov · −$1,224.48 vs October</div></div>`;
+const phone = (inner) => `<div class="phone"><div class="app">${inner}</div></div>`;
+const fig = (inner, cap, badge) => `<figure>${phone(inner)}<figcaption><span class="badge ${badge.startsWith("A") ? "rec" : ""}">${badge}</span>${cap}</figcaption></figure>`;
+
+document.getElementById("placements").innerHTML = [
+  fig(`<div class="top"><h3>Summary</h3>${seg}</div><div class="scroll">${total(`<span class="dl-pill new">${dl}CSV</span>`)}${cats}</div>${tabbar}`,
+      "<b>Beside the month's total.</b> A small \"CSV\" button next to the amount it covers. Always visible without scrolling, and clearly tied to the month shown.", "A · Suggested"),
+  fig(`<div class="top"><div class="titlerow"><h3>Summary</h3><span class="dl-icon new">${dl}</span></div>${seg}</div><div class="scroll">${total()}${cats}</div>${tabbar}`,
+      "<b>In the heading.</b> A download icon at the top right, where the theme icon used to be. Tidy, and stays in view while scrolling, but an icon alone is less obvious.", "B"),
+  fig(`<div class="top"><h3>Summary</h3>${seg}</div><div class="scroll" style="display:flex;flex-direction:column;justify-content:flex-end;padding-bottom:16px"><div style="color:var(--muted);font-size:13px;text-align:center;margin-bottom:-6px">… categories and Share of spend above …</div><div class="dl-wide new">${dl}Download November expenses (CSV)</div><div style="text-align:center;color:var(--muted);font-size:12.5px;margin-top:8px">1 to 9 November · 20 expenses</div></div>${tabbar}`,
+      "<b>At the bottom of Summary.</b> A full-width button below the pie chart, spelling out what it downloads. Very clear, but you have to scroll past everything to reach it.", "C"),
+  fig(`<div class="top"><h3>Summary</h3>${seg}</div><div class="scroll">${total(`<span class="dl-pill">${dl}CSV</span>`)}${cats}</div>${tabbar}<div class="toast">Downloaded hercules-expenses-2026-11.csv</div>`,
+      "<b>After tapping (A).</b> The phone's own save or share prompt appears; on a computer the file goes to Downloads. A short confirmation shows in the app.", "A · After tapping"),
+].join("");
+
+const rows = [
+  ["Date","Category","Merchant","Amount","Currency","Remarks","What you typed","Edited","Logged at"],
+  ["2026-11-01","Rent","","1800.00","SGD","","rent 1800","No","2026-11-01 12:00"],
+  ["2026-11-01","Food & Dining","Hawker centre","14.60","SGD","","brunch hawker 14.60","No","2026-11-01 12:00"],
+  ["2026-11-02","Transport","Grab","24.50","SGD","to the airport","grab to airport 24.50","No","2026-11-02 08:14"],
+  ["2026-11-03","Utilities","SP Group","118.35","SGD","","SP bill 118.35","No","2026-11-03 19:02"],
+  ["2026-11-04","Food & Dining","Din Tai Fung","42.50","SGD","","dinner din tai fung 42.50","No","2026-11-04 20:31"],
+  ["2026-11-05","Shopping","Shopee","64.90","SGD","phone case and cable","shopee phone case and cable 64.90","Yes","2026-11-05 13:45"],
+  ["2026-11-06","Groceries","Sheng Siong","22.40","SGD","","sheng siong 22.40","No","2026-11-06 18:20"],
+  ["…","","","","","","","",""],
+];
+document.getElementById("sheet").innerHTML = rows.map((r, i) => `<tr><td class="rowh">${i ? i + 1 : ""}</td>${r.map((c, j) => i === 0 ? `<th>${c}</th>` : `<td class="${j === 3 && c !== "…" ? "n" : ""}">${c}</td>`).join("")}</tr>`).join("").replace('<td class="rowh"></td>', '<td class="rowh">1</td>');
+</script>
+</body>
+</html>

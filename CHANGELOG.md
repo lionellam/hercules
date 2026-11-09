@@ -6,6 +6,13 @@ Versions follow [semantic versioning](https://semver.org): **major** for a chang
 
 ---
 
+## 1.1.0 — 9 November 2026
+
+**New**
+- Download a month's expenses as a spreadsheet file (CSV) from Summary: tap **CSV** beside the total. This month gives everything logged so far; last month gives the whole month. The file opens in Excel, Numbers or Google Sheets.
+
+---
+
 ## 1.0.0 — 9 November 2026
 
 The first numbered release. The app has been in use since go-live on 1 November 2026; this version covers everything built up to now.

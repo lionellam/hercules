@@ -1,7 +1,7 @@
 **Natural Language Expense & Budget Tracker**
 
 ```
-Version 0.9 · Draft
+Version 0.10 · Draft
 Last Reviewed: 9 November 2026
 Produced with AI Assistance (Claude Code)
 ```
@@ -19,6 +19,7 @@ Produced with AI Assistance (Claude Code)
 | 0.7 | 2026-11-07 | Lionel Lam | Expense data model aligned with the Specification (date only; no time or payment method) |
 | 0.8 | 2026-11-08 | Lionel Lam | Retiring categories delivered ahead of Phase 4 |
 | 0.9 | 2026-11-09 | Lionel Lam | Categories are managed on the Categories & budgets page in Settings |
+| 0.10 | 2026-11-09 | Lionel Lam | Monthly CSV export delivered ahead of Phase 4 |
 
 ---
 
@@ -58,7 +59,7 @@ Friction of maintaining an up-to-date expense and budget log can be due to the f
 - Native mobile app / app store distribution
 - Self-hosting / on-premises deployment (possible future option)
 - Offline expense logging
-- Downloadable/exportable list of expenses (deferred beyond the first version)
+- ~~Downloadable/exportable list of expenses (deferred beyond the first version)~~ *Delivered early: a month's expenses can be downloaded as CSV (November 2026)*
 
 ## 4. Core User Flow
 
@@ -110,4 +111,4 @@ Friction of maintaining an up-to-date expense and budget log can be due to the f
 - **Phase 1 —** CLI parsing + local database (complete — proof of concept)
 - **Phase 2 —** Web App v1: sign-in, log with confirmation, history, summary, edit/delete, CLI data import
 - **Phase 3 —** Budgets & queries (category management and monthly budgets per category delivered early, November 2026)
-- **Phase 4 —** Polish (export, allow-list administration)
+- **Phase 4 —** Polish (allow-list administration)

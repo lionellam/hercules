@@ -1,7 +1,7 @@
 # Project Hercules — Project Plan
 
 ```
-Version 0.10 · Draft 
+Version 0.11 · Draft 
 Last Reviewed: 9 November 2026
 Produced with AI Assistance (Claude Code)
 ```
@@ -20,6 +20,7 @@ Produced with AI Assistance (Claude Code)
 | 0.8 | 2026-11-07 | Lionel Lam | Features updated for the pie chart and spending pace; allow-list storage and Hobby plan risk brought up to date |
 | 0.9 | 2026-11-08 | Lionel Lam | Retiring categories delivered ahead of Phase 4 |
 | 0.10 | 2026-11-09 | Lionel Lam | Categories are managed on the Categories & budgets page in Settings |
+| 0.11 | 2026-11-09 | Lionel Lam | Monthly CSV export delivered ahead of Phase 4 |
 
 ---
 
@@ -71,7 +72,7 @@ A high-level look at the functional pieces of the system. These will be broken d
 - **History & Summary** — month-by-month list of expenses, and category totals for the current and previous month, with a pie chart of each category's share
 - **Budget Tracking** — category-based budgets and tracking against them; an optional monthly budget per category, shown against the current month's spend in Summary, is in place, along with spending pace (an expected-by-today marker, a pace note and a burn-up chart per budgeted category)
 - **Category Taxonomy** — a per-user, extensible set of expense categories; new users are seeded with a starter list, and can add, rename, retire and restore categories on the Categories & budgets page in Settings
-- **Export / Download** — ability to export a list of expenses (deferred beyond the first version)
+- **Export / Download** — download a month's expenses as a CSV file from Summary (delivered early, November 2026)
 - **Hosting & Deployment** — Vercel, with a Neon Postgres database; installable as a Progressive Web App (PWA)
 
 ## 6. Milestones & Deliverables (Subject to Revision)
@@ -85,7 +86,7 @@ Google sign-in with allow-list; Log screen with inline confirmation card; Histor
 - **Phase 3 — Budgets & Queries**
 Budget definitions by category (a simple monthly budget per category was delivered early, in November 2026), and the ability to query/report on spending via natural language or simple views.
 - **Phase 4 — Polish**
-Export, allow-list administration, and other refinements based on use. Category management, including retiring and restoring, was delivered early, in November 2026.
+Allow-list administration and other refinements based on use. Category management (including retiring and restoring) and the monthly CSV export were delivered early, in November 2026.
 
 ## 7. Risks, Dependencies and Open Questions
 

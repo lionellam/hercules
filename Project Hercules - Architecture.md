@@ -1,7 +1,7 @@
 # Project Hercules — Architecture: Web App v1
 
 ```
-Version 0.17 · Draft
+Version 0.18 · Draft
 Last Reviewed: 9 November 2026
 Produced with AI Assistance (Claude Code)
 ```
@@ -27,6 +27,7 @@ Produced with AI Assistance (Claude Code)
 | 0.15 | 2026-11-09 | Lionel Lam | Decision 33: a Settings tab replaces the Categories tab; decisions 25 and 26 updated |
 | 0.16 | 2026-11-09 | Lionel Lam | Decision 30: signing out also asks for confirmation. Decision 23: signing out clears everything held in memory |
 | 0.17 | 2026-11-09 | Lionel Lam | Decision 34: semantic versioning, starting at 1.0.0, with a changelog and Git tags |
+| 0.18 | 2026-11-09 | Lionel Lam | Decision 35: monthly CSV download from Summary; export delivered ahead of Phase 4 |
 
 ---
 
@@ -111,6 +112,7 @@ The language model is called only to parse a single expense into structured fiel
 | 32 | **History search filters the selected month on the device**, with each keystroke; changing month or leaving History clears it | The month's expenses are already loaded for the list, so filtering them is instant and needs no new server route or database index. Searching all months at once was mocked up and set aside: it would need a server search and respond only after a pause in typing |
 | 33 | **Settings tab** in place of the Categories tab, as a short menu: Categories & budgets (opening as its own page with a way back), Appearance (System, Light or Dark), Account (email and Sign out), and the app's version and last-updated time. The version comes from `web/package.json` with the short commit ID, and the time is when the running version was built, both fixed at build time | Gathers set-and-forget options in one place, as people expect from other apps, and frees the tab bar for the things used daily. A menu rather than one long page leaves room to add settings later. Moving the theme choice off every screen tidies the headers and adds a System option. A user guide link was considered and left out at the owner's request |
 | 34 | **Semantic versioning** for the web app, starting at **1.0.0** on 9 November 2026: **major** for a change in how the app fundamentally works or a change to existing data that can't be undone; **minor** for a new feature people will notice; **patch** for a fix or small tweak; no change for updates to documents alone. The version in `web/package.json` is bumped in the same commit as the change, each release is tagged in Git (`v1.0.0`) after it's pushed, and `CHANGELOG.md` gets a short plain-English entry. Settings shows the version with the commit and build time | The number now says what kind of change a release was, and the tag marks exactly which code it was, which helps if a release ever needs rolling back. The app had been live since 1 November at 0.1.0, which undersold it. The commit and build time stay alongside so two deploys with the same version can still be told apart. Calendar versions and automatic build numbers were considered: less effort, but they say nothing about the size of a change |
+| 35 | **Monthly CSV download** from Summary, through a server route (`GET /api/expenses/export?month=YYYY-MM`) that returns the month's expenses as a CSV attachment; the button sits beside the month's total and follows the month selected. Text that could be read as a spreadsheet formula is prefixed with an apostrophe | A file sent by the server downloads reliably on phones, including the home-screen app, where files built in the browser can fail to save on iPhone. Building it on the server also lets the file include fields the screens don't load, such as when each expense was logged. The formula guard matters because the file contains text people typed. Placement beside the total was chosen over an icon in the heading or a button at the bottom of Summary |
 
 ### 3.5 First-version scope
 
@@ -141,5 +143,5 @@ With these decisions, Project Hercules is framed as a **hosted, invite-only fami
 - ~~Update the UI mockup's sign-in button from Apple to Google~~ — *Done (26 October 2026)*
 - ~~Confirm Vercel Hobby plan terms on sign-up~~ — *Done (2 November 2026): Hobby plan active with no payment method on file; terms confirmed as suitable for a private, non-commercial family app*
 - ~~Decide how the allow-list is stored (environment configuration or a database table) during implementation~~ — *Decided (26 October 2026): an `allowed_emails` database table, managed with `npm run allow`, so invitations don't require a redeploy*
-- Allow-list administration and export are deferred to Phase 4 (retiring categories was delivered early: decision 29)
+- Allow-list administration is deferred to Phase 4 (retiring categories and the monthly CSV export were delivered early: decisions 29 and 35)
 - Budget history, alerts and fuller budget tracking remain in Phase 3

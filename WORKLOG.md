@@ -959,3 +959,15 @@ Last updated: 9 November 2026
 ### What Was Done
 - Checked the Test Plan against the code, Specification v0.35 and Architecture v0.17. Every quoted message and the spending-pace arithmetic were correct, and every feature in the Specification has at least one test.
 - Fixed six issues (Test Plan v1.3): S-02 still listed a Categories tab; B-07 referred to a non-existent M-07 (now L-01); A-09 and A-10 were out of order; the v1.2 history entry left out A-10; Q-08 now checks the version against `CHANGELOG.md`, with a new after-deploy check S-07; and the clean-up SQL now also removes test parse records, which count towards the daily limit. Documents only, so the app version stays at 1.0.0.
+
+---
+
+## 09 November 2026 — Version 1.1.0: Download Expenses as CSV
+
+### What Was Done
+- The owner asked for a way to download an expense report as a CSV file from Summary: month to date for the current month, and the whole of the previous month. Mockups (`design/export-csv-mockups.html`) compared a button beside the month's total (A), an icon in the heading (B) and a full-width button at the bottom (C), with a preview of the file. The owner chose A, all nine columns, and file names by month only.
+- **Summary** now has a **CSV** button beside the month's total. It downloads the month selected, as `hercules-expenses-YYYY-MM.csv`, and a short message names the file.
+- **The file** comes from a new server route, `GET /api/expenses/export?month=YYYY-MM`, so it downloads reliably on phones, including the home-screen app. It has one row per expense, oldest first, with Date, Category, Merchant, Amount, Currency, Remarks, What you typed, Edited and Logged at (Singapore time). Deleted expenses are left out. It is UTF-8 with a byte-order mark for Excel, text is quoted where needed, and text starting with `=`, `+`, `-` or `@` gets a leading apostrophe so a spreadsheet can't run it as a formula.
+- Version **1.1.0** (a new feature), with a changelog entry.
+- Updated the Specification (v0.36, new Section 4.5), Architecture (v0.18, decision 35), Project Plan (v0.11) and Charter (v0.10), which now record export as delivered early, the Test Plan (v1.4, new Section R) and the user guide (Summary section; "no export yet" removed).
+- Tested in the local app: signed-out requests get 401 and no file; November's file has 20 rows totalling $2,283.02, matching the app; October's has 106 rows totalling $3,507.50, matching Summary; rows are oldest first; an empty month gives the header only; an invalid month is refused; the file starts with the byte-order mark; a temporary `[TEST]` expense with a comma, quotes, "é" and the remark `=SUM(1)` came out correctly quoted with the remark as text; once deleted it was left out. On screen, the button sits beside the total on phone and desktop, follows the month selected, and shows the message for three seconds (the actual download was blocked during testing, so nothing was saved to the computer). Settings shows "Version 1.1.0". The test expense was removed and local data confirmed identical to a snapshot. Type-check, lint and a production build passed.

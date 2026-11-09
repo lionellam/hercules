@@ -1,7 +1,7 @@
 # Project Hercules — Specification Sheet: "Log an Expense" Flow
 
 ```
-Version 0.35 · Draft 
+Version 0.36 · Draft 
 Last Reviewed: 9 November 2026
 Produced with AI Assistance (Claude Code)
 ```
@@ -45,6 +45,7 @@ Produced with AI Assistance (Claude Code)
 | 0.33 | 2026-11-09 | Lionel Lam | An "×" button clears the Log screen's text box |
 | 0.34 | 2026-11-09 | Lionel Lam | Settings tab replaces the Categories tab; Categories becomes "Categories & budgets" inside Settings; Appearance and Sign out move into Settings; the app version and last update are shown (Section 4.4) |
 | 0.35 | 2026-11-09 | Lionel Lam | Signing out asks for confirmation, then reloads the page fully (Sections 4.2 and 4.4) |
+| 0.36 | 2026-11-09 | Lionel Lam | Download a month's expenses as a CSV file from Summary (Section 4.5); export no longer deferred |
 
 ---
 
@@ -89,7 +90,7 @@ This spec exists to align the team before the process flow diagram (UPN) and fea
 5. **Confirmation screen is presented** — parsed fields shown as editable form elements (not a static summary).
 6. **User reviews and optionally edits fields directly** — this is the human-in-the-loop step. No re-prompting of the model occurs; corrections are direct field edits.
 7. **User confirms/saves** — the system checks the fields, then writes the structured record, the original raw text, and a flag indicating whether any edit occurred. The date must be a real calendar date in the years 2000 to 2099 (so not, for example, 31 February); otherwise the save is refused with a message to check the fields.
-8. **Record is available for viewing** — in History and Summary, and in the "Today" list on the Log screen for expenses dated today. A saved record can be reopened from History or from the Today list in the same editable card to be edited or deleted (soft delete, after a confirmation, with Undo; see Section 4.2). Below the Today list, the Log screen shows today's total spend broken down by category (amounts are added without currency conversion, as in Summary). For the current month, a category with a budget shows its spend as "x of budget", with its bar showing the share of the budget used (full at or above 100%, and red once spend is over the budget). Each budgeted bar also has a marker at the amount expected by today (budget × day of month ÷ days in month, counting today), and a note: "Over budget by $X" (red), "Budget used", "On pace" (within 5% of the budget either side of the expected amount), or "$X over/under pace", followed by the amount left and about how much a day remains (see Section 4.1 for the exact rules). Tapping a budgeted category opens a burn-up chart of its running total against the budget spread evenly over the month, with a "Daily figures" table. Categories with no spending in the month are not listed, whether or not they have a budget. The previous month is shown without pace. Other bars show the category's spend relative to the month's largest category. Below its category list, Summary shows a pie chart of the month's spend by category for any month with expenses: up to six slices, with any beyond the largest five grouped as "Everything else". History and Summary keep their heading and month control fixed at the top while the content below scrolls; on History, a search field sits below the month control (Section 4.3). Screens show the last-loaded data straight away and refresh it in the background; saving, editing or deleting a record reloads it. Export is deferred beyond the first version.
+8. **Record is available for viewing** — in History and Summary, and in the "Today" list on the Log screen for expenses dated today. A saved record can be reopened from History or from the Today list in the same editable card to be edited or deleted (soft delete, after a confirmation, with Undo; see Section 4.2). Below the Today list, the Log screen shows today's total spend broken down by category (amounts are added without currency conversion, as in Summary). For the current month, a category with a budget shows its spend as "x of budget", with its bar showing the share of the budget used (full at or above 100%, and red once spend is over the budget). Each budgeted bar also has a marker at the amount expected by today (budget × day of month ÷ days in month, counting today), and a note: "Over budget by $X" (red), "Budget used", "On pace" (within 5% of the budget either side of the expected amount), or "$X over/under pace", followed by the amount left and about how much a day remains (see Section 4.1 for the exact rules). Tapping a budgeted category opens a burn-up chart of its running total against the budget spread evenly over the month, with a "Daily figures" table. Categories with no spending in the month are not listed, whether or not they have a budget. The previous month is shown without pace. Other bars show the category's spend relative to the month's largest category. Below its category list, Summary shows a pie chart of the month's spend by category for any month with expenses: up to six slices, with any beyond the largest five grouped as "Everything else". History and Summary keep their heading and month control fixed at the top while the content below scrolls; on History, a search field sits below the month control (Section 4.3). Screens show the last-loaded data straight away and refresh it in the background; saving, editing or deleting a record reloads it. A month's expenses can be downloaded as a CSV file from Summary (Section 4.5).
 
 ### 4.1 Spending Pace Rules (Summary, Current Month)
 
@@ -167,6 +168,22 @@ Settings is the fourth tab, with a gear icon, after Log, History and Summary. It
 - **Below Account:** the app's version number and the date and time it was last updated, meaning when the version running was built and deployed.
 
 Opening the Settings tab always shows the Settings list, even if Categories & budgets was open when you left it.
+
+### 4.5 Downloading Expenses (CSV)
+
+Summary has a **CSV** button beside the month's total. It downloads the expenses for the month selected at the top of Summary as a CSV file, which opens in Excel, Numbers or Google Sheets:
+
+- **This month:** everything logged for the month so far (month to date). This is the same set of expenses Summary adds up, so the file's total matches Summary's, including any expense already dated later in the month.
+- **Last month:** the whole month.
+
+**The file:**
+
+- **Name:** `hercules-expenses-YYYY-MM.csv` for the month it covers, for example `hercules-expenses-2026-11.csv`.
+- **Rows:** one per expense, oldest first (by date, then by when it was logged). Deleted expenses are not included. A header row names the columns.
+- **Columns:** Date (`YYYY-MM-DD`), Category, Merchant, Amount (two decimal places, no currency symbol), Currency, Remarks, What you typed, Edited (`Yes` or `No`), Logged at (`YYYY-MM-DD HH:MM`, Singapore time).
+- **Format:** UTF-8 with a byte-order mark so Excel shows symbols correctly, comma-separated, with text quoted where needed. Any text that starts with `=`, `+`, `-` or `@` is prefixed with an apostrophe so a spreadsheet can't treat it as a formula.
+
+The file is produced by the server and sent as a download, so it saves on phones (including the app opened from the home screen) and computers alike. After tapping the button, a short message names the file being downloaded. A month with no expenses still downloads, with the header row only.
 
 ---
 
@@ -273,7 +290,7 @@ Carried forward, not yet resolved:
 ## 8. Explicitly Out of Scope (This Spec)
 
 - Budget tracking beyond showing the current month's spend against each category's budget (alerts, budget history, rollover)
-- Query/export functionality
+- Querying expenses beyond History search, and exports other than the monthly CSV download (Section 4.5)
 - Shared or collaborative visibility between user accounts
 - Receipt photo / OCR capture
 - Bank/account sync or import

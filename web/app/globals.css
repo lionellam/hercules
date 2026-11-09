@@ -142,6 +142,11 @@ textarea::placeholder { color: var(--muted); }
 .total { margin-top: 24px; }
 .total .big { font-size: 38px; font-weight: 700; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
 .total .delta { font-size: 13px; color: var(--muted); margin-top: 2px; }
+/* CSV download beside the month's total (Specification 4.5) */
+.total-row { display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; }
+.csv-button { display: inline-flex; align-items: center; gap: 6px; height: 36px; padding: 0 13px; border-radius: 10px; background: var(--soft); color: var(--text);
+              font-size: 14px; font-weight: 600; text-decoration: none; white-space: nowrap; margin-bottom: 6px; flex-shrink: 0; }
+.csv-button svg { width: 16px; height: 16px; }
 .cat { margin-top: 18px; }
 .cat-top { display: flex; justify-content: space-between; gap: 12px; font-size: 14px; margin-bottom: 6px; }
 .cat-top strong { flex-shrink: 0; }

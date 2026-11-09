@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { expensesUrl, fmt, summaryUrl, useCached, type ApiCache } from "@/lib/client";
 import { daysInMonth, localToday, monthKey, monthLabel, shortDay } from "@/lib/dates";
 import { cents, paceRows, type PaceRow } from "@/lib/pace";
@@ -11,6 +11,7 @@ import SpendPie from "../spend-pie";
 export default function SummaryScreen({ cache, categories }: { cache: ApiCache; categories: Category[] }) {
   const [offset, setOffset] = useState(0);
   const [open, setOpen] = useState<number | null>(null);
+  const [downloadNote, setDownloadNote] = useState("");
   const month = monthKey(offset);
   const prevMonth = monthKey(offset - 1);
   const isCurrent = offset === 0;
@@ -30,6 +31,13 @@ export default function SummaryScreen({ cache, categories }: { cache: ApiCache; 
   const max = Math.max(...(rows ?? []).map((r) => r.total), 0) || 1;
   const diff = total - prevTotal;
 
+  // The download message goes away after a few seconds
+  useEffect(() => {
+    if (!downloadNote) return;
+    const t = setTimeout(() => setDownloadNote(""), 3000);
+    return () => clearTimeout(t);
+  }, [downloadNote]);
+
   function showMonth(to: number) {
     setOffset(to);
     setOpen(null);
@@ -47,8 +55,25 @@ export default function SummaryScreen({ cache, categories }: { cache: ApiCache; 
         </div>
       </div>
       <div className="total">
-        <div className="sub">{offset === 0 ? "Spent so far this month" : `Spent in ${monthLabel(month)}`}</div>
-        <div className="big">${fmt(total)}</div>
+        <div className="total-row">
+          <div>
+            <div className="sub">{offset === 0 ? "Spent so far this month" : `Spent in ${monthLabel(month)}`}</div>
+            <div className="big">${fmt(total)}</div>
+          </div>
+          {/* Downloads the month shown as a CSV file (Specification 4.5) */}
+          <a
+            className="csv-button"
+            href={`/api/expenses/export?month=${month}`}
+            download={`hercules-expenses-${month}.csv`}
+            onClick={() => setDownloadNote(`Downloading hercules-expenses-${month}.csv`)}
+            aria-label={`Download ${monthLabel(month)} expenses as a CSV file`}
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M12 4v11M7 10l5 5 5-5M5 20h14" />
+            </svg>
+            CSV
+          </a>
+        </div>
         {isCurrent && (
           <div className="dayline">
             <b>Day {day} of {days}</b> · {shortDay(monthKey(0), day)}
@@ -115,6 +140,11 @@ export default function SummaryScreen({ cache, categories }: { cache: ApiCache; 
         )}
       </div>
       {rows?.length === 0 && <p className="sub empty">No expenses this month.</p>}
+      {downloadNote && (
+        <div className="undo-bar" role="status">
+          <span>{downloadNote}</span>
+        </div>
+      )}
     </section>
   );
 }

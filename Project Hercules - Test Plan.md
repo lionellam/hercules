@@ -1,7 +1,7 @@
 # Project Hercules — Test Plan: Web App v1
 
 ```
-Version 1.3 · Draft
+Version 1.4 · Draft
 Last Reviewed: 9 November 2026
 Produced with AI Assistance (Claude Code)
 ```
@@ -14,6 +14,7 @@ Produced with AI Assistance (Claude Code)
 | 1.1 | 2026-11-09 | Lionel Lam | Settings tab: categories, appearance and sign-out tests updated; new Section Q for Settings (Specification v0.34) |
 | 1.2 | 2026-11-09 | Lionel Lam | Sign-out confirmation (A-05, A-09), and nothing carrying over after sign-out (A-10) |
 | 1.3 | 2026-11-09 | Lionel Lam | Integrity check: S-02 updated for Settings; B-07 reference corrected; A-09 and A-10 in order; Q-08 and new S-07 check the version against the changelog; clean-up also clears test parses |
+| 1.4 | 2026-11-09 | Lionel Lam | CSV download: new Section R |
 
 ---
 
@@ -285,6 +286,20 @@ These need a look at the local database; ask Claude to run them.
 | Q-06 | No theme icon on screens | Look at the top of Log, History and Summary | There's no sun or moon icon |
 | Q-07 | Account | Look at the Account group | Your email address, and Sign out (see A-05). Summary no longer has a sign-out section at the bottom |
 | Q-08 | Version and last updated | Look below Account; compare with `CHANGELOG.md` and the latest deploy | The version number matches the newest entry in the changelog (for example 1.0.0), followed by a short code for the exact version and the date and time of the latest deploy |
+
+### R. Downloading Expenses (CSV)
+
+| ID | Test | Steps | Expected result |
+|---|---|---|---|
+| R-01 | Button placement | Open Summary | A **CSV** button sits beside the month's total |
+| R-02 | This month | On this month, tap **CSV**; open the file in a spreadsheet | The file `hercules-expenses-YYYY-MM.csv` downloads (a phone shows its save or share options). A message names the file. It has a header row and one row per expense logged this month, oldest first, and the Amount column adds up to Summary's total |
+| R-03 | Last month | Switch to last month, tap **CSV** | The file is named for last month and contains the whole month; its total matches last month's Summary |
+| R-04 | Columns | Look at the header row and a few rows | Date, Category, Merchant, Amount, Currency, Remarks, What you typed, Edited (Yes/No), Logged at (Singapore time); amounts have two decimal places |
+| R-05 | Deleted expenses left out | Delete a `[TEST]` expense, then download | The deleted expense isn't in the file |
+| R-06 | Commas, quotes and symbols | Save `[TEST] lunch, with "Ann" café 9.50` with remark `=SUM(1)`, then download and open | The text shows exactly as typed, including the comma, quotes and é; the remark shows as text (`'=SUM(1)`), not as a calculated result |
+| R-07 | Empty month | Download a month with no expenses (on a fresh test account, or via the API for an earlier month) | The file downloads with the header row only |
+| R-08 | Signed out | While signed out, open `/api/expenses/export?month=` with this month | `{"error":"Not signed in"}`; no file |
+| R-09 | Another person's data | As a second test account (see A-07), download the same month | Only that account's expenses are in the file |
 
 ---
 

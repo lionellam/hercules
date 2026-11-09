@@ -123,6 +123,19 @@ export function listExpenses(userId: string, month: string) {
   );
 }
 
+// Everything the CSV download needs, oldest first (Specification 4.5)
+export function exportExpenses(userId: string, month: string) {
+  const [start, end] = monthRange(month);
+  return query<Omit<Expense, "id" | "category_id"> & { logged_at: string }>(
+    `SELECT e.date, c.name AS category, e.merchant, e.amount, e.currency, e.remarks, e.raw_input, e.was_edited,
+            to_char(e.created_at AT TIME ZONE 'Asia/Singapore', 'YYYY-MM-DD HH24:MI') AS logged_at
+     FROM expenses e JOIN categories c ON c.id = e.category_id
+     WHERE e.user_id = $1 AND e.deleted_at IS NULL AND e.date >= $2 AND e.date < $3
+     ORDER BY e.date, e.created_at, e.id`,
+    [userId, start, end],
+  );
+}
+
 export function monthSummary(userId: string, month: string) {
   const [start, end] = monthRange(month);
   // Budgets aren't included: Summary only compares against budgets for the current month, which it works out on the device
