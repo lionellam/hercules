@@ -1,7 +1,7 @@
 # Project Hercules — Architecture: Web App v1
 
 ```
-Version 0.16 · Draft
+Version 0.17 · Draft
 Last Reviewed: 9 November 2026
 Produced with AI Assistance (Claude Code)
 ```
@@ -26,6 +26,7 @@ Produced with AI Assistance (Claude Code)
 | 0.14 | 2026-11-09 | Lionel Lam | Decision 24: text fields use 16-pixel text on phones, so Safari doesn't zoom in when one is tapped |
 | 0.15 | 2026-11-09 | Lionel Lam | Decision 33: a Settings tab replaces the Categories tab; decisions 25 and 26 updated |
 | 0.16 | 2026-11-09 | Lionel Lam | Decision 30: signing out also asks for confirmation. Decision 23: signing out clears everything held in memory |
+| 0.17 | 2026-11-09 | Lionel Lam | Decision 34: semantic versioning, starting at 1.0.0, with a changelog and Git tags |
 
 ---
 
@@ -109,6 +110,7 @@ The language model is called only to parse a single expense into structured fiel
 | 31 | **Code organised by role:** one file per screen in `web/components/screens/`, shared pieces (confirmation sheet, edit sheet, pace chart, pie chart) beside them in `web/components/`, and plain logic in `web/lib/`: `types.ts` (Category, Expense and Summary row shapes), `dates.ts` (date checks and formatting), `pace.ts` (spending pace maths) and `client.ts` (fetching, in-memory cache and money formatting). `types.ts`, `dates.ts` and `pace.ts` are used by both the server and the screens; database code stays server-only | The single screen file had grown past 1,000 lines. Splitting it by role makes each part easy to find, keeps one definition of each data shape and date rule, and leaves the pace and date logic in plain files that can be tested on their own. No change to behaviour |
 | 32 | **History search filters the selected month on the device**, with each keystroke; changing month or leaving History clears it | The month's expenses are already loaded for the list, so filtering them is instant and needs no new server route or database index. Searching all months at once was mocked up and set aside: it would need a server search and respond only after a pause in typing |
 | 33 | **Settings tab** in place of the Categories tab, as a short menu: Categories & budgets (opening as its own page with a way back), Appearance (System, Light or Dark), Account (email and Sign out), and the app's version and last-updated time. The version comes from `web/package.json` with the short commit ID, and the time is when the running version was built, both fixed at build time | Gathers set-and-forget options in one place, as people expect from other apps, and frees the tab bar for the things used daily. A menu rather than one long page leaves room to add settings later. Moving the theme choice off every screen tidies the headers and adds a System option. A user guide link was considered and left out at the owner's request |
+| 34 | **Semantic versioning** for the web app, starting at **1.0.0** on 9 November 2026: **major** for a change in how the app fundamentally works or a change to existing data that can't be undone; **minor** for a new feature people will notice; **patch** for a fix or small tweak; no change for updates to documents alone. The version in `web/package.json` is bumped in the same commit as the change, each release is tagged in Git (`v1.0.0`) after it's pushed, and `CHANGELOG.md` gets a short plain-English entry. Settings shows the version with the commit and build time | The number now says what kind of change a release was, and the tag marks exactly which code it was, which helps if a release ever needs rolling back. The app had been live since 1 November at 0.1.0, which undersold it. The commit and build time stay alongside so two deploys with the same version can still be told apart. Calendar versions and automatic build numbers were considered: less effort, but they say nothing about the size of a change |
 
 ### 3.5 First-version scope
 

@@ -26,6 +26,11 @@ The app is invite-only: sign-in is with Google, for invited email addresses only
 | [Go-Live Checklist](Project%20Hercules%20-%20Go-Live%20Checklist.md) | Steps taken to put the web app live |
 | [Test Plan](Project%20Hercules%20-%20Test%20Plan.md) | Step-by-step manual tests for the web app, with expected results |
 | [Work Log](WORKLOG.md) | What was done, decisions made and lessons learned, by date |
+| [Changelog](CHANGELOG.md) | What's new in each version of the app |
+
+## Versions
+
+The web app uses [semantic versioning](https://semver.org), starting at 1.0.0 (Architecture decision 34). Each release bumps the version in `web/package.json`, adds an entry to [CHANGELOG.md](CHANGELOG.md), and is tagged in Git as `vX.Y.Z`. The version running shows at the bottom of Settings in the app.
 
 ## License
 

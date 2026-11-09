@@ -935,3 +935,19 @@ Last updated: 9 November 2026
 - At the owner's request, added a "What Hercules is, and why" section at the start of the user guide, before Getting started: what the app is; why it exists (logging should take seconds, you stay in control, no subscription, private by design, budgets you can act on mid-month, and a real-world trial of CPMAI), drawn from the Project Charter's objectives and problem statement; and what it doesn't do (no bank sync or receipt reading, SGD totals, no shared budgets, no export yet).
 - Brought the mockups up to date with the app: Summary now shows the comparison with last month ("+$412.60 vs October"); Settings shows the current version line; a new mockup shows the sign-out confirmation; and Categories & budgets shows the collapsed "Retired" row.
 - Updated both copies (repository and artifact).
+
+---
+
+## 09 November 2026 — Version 1.0.0, Changelog and Tags
+
+### What Was Done
+- Discussed how to manage the app's version, which had stayed at 0.1.0 since the start although the app has been live since 1 November. The owner chose semantic versioning, starting at 1.0.0, with a changelog and Git tags.
+- Set the web app's version to 1.0.0 (`web/package.json` and `package-lock.json`); Settings now shows "Version 1.0.0" with the commit and build time.
+- Added `CHANGELOG.md` with a plain-English 1.0.0 entry covering everything built up to now, linked from the README.
+- Recorded the rules in Architecture decision 34 (v0.17), the top-level README (Versions) and `web/README.md` (Releasing a new version).
+- Tagged the release `v1.0.0`.
+
+### Decisions Made
+- **Semantic versioning** — major for a fundamental change or an irreversible data change, minor for a new feature, patch for a fix or small tweak, and no change for documents alone.
+- **Start at 1.0.0 now** rather than counting back from go-live — simpler, and the worklog already records the history.
+- **Bump in the same commit, tag after pushing** — the number and the code never disagree, and each tag marks exactly what was released.

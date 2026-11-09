@@ -34,6 +34,16 @@ Scripts read `.env.local`. To run one against production, pass the URL for that 
 
 **Schema changes:** when `db/schema.sql` changes, run the migration against Neon *before* pushing the code that relies on it. Every push to `main` deploys straight away, and migrations only add, so the live app keeps working in the meantime.
 
+## Releasing a new version
+
+Versions follow semantic versioning (Architecture decision 34): **major** for a fundamental change, **minor** for a new feature, **patch** for a fix or small tweak; document-only changes don't change the version.
+
+1. In the same commit as the change, bump the version: `npm version <major|minor|patch> --no-git-tag-version` (updates `package.json` and `package-lock.json`).
+2. Add a short entry to `../CHANGELOG.md`.
+3. After pushing, tag the release and push the tag: `git tag -a vX.Y.Z -m "Version X.Y.Z"` then `git push origin vX.Y.Z`.
+
+Settings shows the version with the commit and build time, so you can check which version is live.
+
 ## Deploying
 
 1. **Anthropic** — in the Anthropic Console, create an API key and set a **US$5 monthly spend limit** on the account.
