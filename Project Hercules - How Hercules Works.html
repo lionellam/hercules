@@ -243,6 +243,10 @@ html { scroll-behavior: smooth; }
 /* Summary comparison line and the Retired row */
 .m .mdelta { font-size: 11px; color: var(--m-muted); margin-top: 2px; }
 .m .mretired { display: flex; justify-content: space-between; padding: 14px 0 6px; border-bottom: 1px solid var(--m-line); font-size: 10px; font-weight: 600; color: var(--m-muted); letter-spacing: .06em; }
+/* CSV button beside the month's total */
+.m .mtotal { display: flex; justify-content: space-between; align-items: flex-end; gap: 8px; }
+.m .mcsv { display: inline-flex; align-items: center; gap: 4px; height: 26px; padding: 0 9px; border-radius: 8px; background: var(--m-soft); font-size: 11px; font-weight: 600; margin-bottom: 4px; white-space: nowrap; }
+.m .mcsv svg { width: 12px; height: 12px; }
 /* Confirmation sheet, Undo bar and quick answers */
 .m .m-confirm { position: absolute; left: 0; right: 0; bottom: 0; background: var(--m-bg); border-radius: 18px 18px 0 0; padding: 16px 16px 18px; box-shadow: 0 -6px 22px rgba(0,0,0,.16); }
 .m .m-confirm-t { font-size: 15px; font-weight: 700; }
@@ -514,8 +518,8 @@ dl.faq dd { margin: 2px 0 0; color: var(--ink-2); }
             <div class="seg"><span class="on">November</span><span>October</span></div>
           </div>
           <div class="body">
-            <div style="margin-top:14px" class="sub">Spent so far this month</div>
-            <div class="big">$3,184.40</div>
+            <div class="mtotal"><div><div style="margin-top:14px" class="sub">Spent so far this month</div>
+            <div class="big">$3,184.40</div></div><span class="mcsv"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>CSV</span></div>
             <div class="dayline"><b>Day 7 of 30</b> · Sat, 7 Nov</div>
             <div class="mdelta">+$412.60 vs October</div>
             <div class="cat"><div class="cat-top"><span>Rent<span class="n">1</span></span><span><strong>2,000.00</strong> <span class="of">of 2,000.00</span></span></div><div class="meter"><div class="track"><div class="fill" style="width:100%"></div></div><div class="tick" style="left:23.3%"></div></div><div class="pace"><b>Budget used</b> · $0.00 left</div></div>
@@ -544,7 +548,7 @@ dl.faq dd { margin: 2px 0 0; color: var(--ink-2); }
             <div class="m-pie"><svg viewBox="0 0 100 100" role="img" aria-label="Share of spend pie chart"><path d="M50 50 L50.00 0.00 A50 50 0 1 1 13.97 84.67 Z" fill="var(--m-pie-1)"/><path d="M50 50 L13.97 84.67 A50 50 0 0 1 6.04 26.18 Z" fill="var(--m-pie-2)"/><path d="M50 50 L6.04 26.18 A50 50 0 0 1 19.35 10.49 Z" fill="var(--m-pie-3)"/><path d="M50 50 L19.35 10.49 A50 50 0 0 1 30.20 4.09 Z" fill="var(--m-pie-4)"/><path d="M50 50 L30.20 4.09 A50 50 0 0 1 38.27 1.40 Z" fill="var(--m-pie-5)"/><path d="M50 50 L38.27 1.40 A50 50 0 0 1 50.00 0.00 Z" fill="var(--m-pie-rest)"/></svg><ul><li><span class="sw" style="background:var(--m-pie-1)"></span><span class="nm">Rent</span><span class="pct">63%</span></li><li><span class="sw" style="background:var(--m-pie-2)"></span><span class="nm">Shopping</span><span class="pct">20%</span></li><li><span class="sw" style="background:var(--m-pie-3)"></span><span class="nm">Food &amp; Dining</span><span class="pct">7%</span></li><li><span class="sw" style="background:var(--m-pie-4)"></span><span class="nm">Entertainment</span><span class="pct">4%</span></li><li><span class="sw" style="background:var(--m-pie-5)"></span><span class="nm">Utilities</span><span class="pct">3%</span></li><li><span class="sw" style="background:var(--m-pie-rest)"></span><span class="nm">Everything else (3)</span><span class="pct">4%</span></li></ul></div>
           </div>
         </div></div>
-        <figcaption><b>Summary, this month.</b> The marker on each budgeted bar shows the amount expected by today. Food &amp; Dining is open to show its burn-up chart.</figcaption>
+        <figcaption><b>Summary, this month.</b> <b>CSV</b> beside the total downloads the month's expenses. The marker on each budgeted bar shows the amount expected by today. Food &amp; Dining is open to show its burn-up chart.</figcaption>
       </figure>
     </div>
 
@@ -585,7 +589,7 @@ dl.faq dd { margin: 2px 0 0; color: var(--ink-2); }
             <div class="sh">ACCOUNT</div>
             <div class="srow"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg></span><span class="tx"><div class="t">Signed in</div><div class="d">you@gmail.com</div></span></div>
             <div class="srow out"><span class="tx"><div class="t">Sign out</div></span></div>
-            <div class="ver">Version 0.1.0 (877dba2)<br>Last updated 9 Nov 2026, 8:06 pm</div>
+            <div class="ver">Version 1.1.0 (cdfd0e7)<br>Last updated 9 Nov 2026, 9:30 pm</div>
           </div>
           <div class="tabs"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>Log</span><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg>History</span><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 20V10M12 20V4M18 20v-6"/></svg>Summary</span><span class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>Settings</span></div>
         </div></div>
