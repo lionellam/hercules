@@ -852,3 +852,16 @@ Last updated: 9 November 2026
 ### Decisions Made
 - **Search the month shown, not all months** — instant on every keystroke with no server work; all-months search can be added later if needed.
 - **Clear the search when the month changes** — the search belongs to the month selected, so each month starts with its full list.
+
+---
+
+## 09 November 2026 — No More Zooming In on Phone Fields
+
+### What Was Done
+- The owner noticed that on their phone, tapping some fields to edit them made the browser zoom in slightly, and they had to zoom back out by hand afterwards. This is Safari on iPhone zooming in on any text field whose text is smaller than 16 pixels; the fields on the review card, Edit expense and the category sheet (Category, Merchant, Date, Remarks, Name, Monthly budget) used 15 pixels.
+- Those fields now use 16-pixel text on phone-sized screens (up to 767 pixels wide). Tablets and computers keep 15 pixels. The expense box (17px), the amount (34px) and History search (16px) were already large enough.
+- Updated Architecture decision 24 (v0.14).
+- Checked at phone width that every field on Log, History search, Edit expense and Edit category is now 16 pixels or larger, that the edit sheet still lays out cleanly, and that fields at 1,024 pixels are unchanged at 15 pixels. Production build passed. Safari's zoom itself can't be reproduced in the test browser, so the owner will confirm the fix on their phone.
+
+### Decisions Made
+- **Larger text rather than turning zoom off** — telling the browser not to zoom would also stop the auto-zoom, but on some phones it blocks pinch-to-zoom too, which hurts readability for anyone who needs larger text.

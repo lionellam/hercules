@@ -217,6 +217,11 @@ textarea::placeholder { color: var(--muted); }
 .loading { color: var(--muted); font-size: 14px; padding: 40px 20px; text-align: center; }
 
 /* Tablets and computers */
+/* Phones: Safari on iPhone zooms in when a field with text under 16px is tapped, and stays zoomed (Architecture decision 24) */
+@media (max-width: 767px) {
+  .field input, .field select, .dev-form input { font-size: 16px; }
+}
+
 @media (min-width: 768px) {
   .app { max-width: 820px; }
   .screen { padding-left: 32px; padding-right: 32px; }
