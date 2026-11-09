@@ -862,6 +862,7 @@ Last updated: 9 November 2026
 - Those fields now use 16-pixel text on phone-sized screens (up to 767 pixels wide). Tablets and computers keep 15 pixels. The expense box (17px), the amount (34px) and History search (16px) were already large enough.
 - Updated Architecture decision 24 (v0.14).
 - Checked at phone width that every field on Log, History search, Edit expense and Edit category is now 16 pixels or larger, that the edit sheet still lays out cleanly, and that fields at 1,024 pixels are unchanged at 15 pixels. Production build passed. Safari's zoom itself can't be reproduced in the test browser, so the owner will confirm the fix on their phone.
+- **Confirmed (9 November 2026):** after the deploy, the owner checked on their phone that tapping the edit fields no longer zooms the page.
 
 ### Decisions Made
 - **Larger text rather than turning zoom off** — telling the browser not to zoom would also stop the auto-zoom, but on some phones it blocks pinch-to-zoom too, which hurts readability for anyone who needs larger text.
