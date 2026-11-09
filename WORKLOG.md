@@ -4,7 +4,7 @@
 Maintained by: Lionel Lam Song Poh, James Wong
 Purpose: Record of work done, decisions made, challenges encountered, and assumptions held —
 to serve as a lessons learned reference for current and future contributors.
-Last updated: 8 November 2026
+Last updated: 9 November 2026
 ```
 
 ---
@@ -837,3 +837,18 @@ Last updated: 8 November 2026
 ### What Was Done
 - Added a top-level `README.md`, which the repository had not had, so its GitHub front page now explains the project, links to the user guide on GitHub Pages, and lists the folders and project documents.
 - Added the user guide link to `web/README.md`, with a note on how the page is published.
+
+---
+
+## 09 November 2026 — Search on History
+
+### What Was Done
+- The owner asked for a search field on History that filters with each keystroke, with an "×" to clear it and "No search results" when nothing matches. Mockups (`design/history-search-mockups.html`) compared searching the month shown with searching all months; the owner chose the month shown, with the field below the month switcher, the results-and-total line kept, and the search cleared when leaving History.
+- History now has a search field below the month switcher, in the pinned top section. It filters the selected month's expenses on each keystroke, keeping the day groups and highlighting matching text. Each word must appear, in any order and regardless of capitals, in the merchant, original text, category, remarks or amount. A line above the list shows the number of results and their total; "No search results" names the month and the search text. The "×" (or Escape) clears it, and changing the month or leaving History clears it too.
+- No server change: the month's expenses are already loaded for the list.
+- Updated the Specification (v0.32, new Section 4.3), Architecture (v0.13, decision 32) and the user guide's History section.
+- Tested in the local app by typing letter by letter: "g" (16 results) narrowing to "grab" (3 results, $69.80, all highlighted); "grab sushi" showing "No search results"; the × and Escape restoring all 20 expenses; "64.90" finding the one Shopee expense; "KUN ya" finding Ya Kun regardless of order and capitals; switching to October clearing the search; and leaving and returning to History starting fresh. Checked in light and dark mode. Searching only reads data, so nothing was changed. Type-check, lint and a production build passed.
+
+### Decisions Made
+- **Search the month shown, not all months** — instant on every keystroke with no server work; all-months search can be added later if needed.
+- **Clear the search when the month changes** — the search belongs to the month selected, so each month starts with its full list.

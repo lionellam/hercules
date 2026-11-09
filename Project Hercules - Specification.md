@@ -1,8 +1,8 @@
 # Project Hercules — Specification Sheet: "Log an Expense" Flow
 
 ```
-Version 0.31 · Draft 
-Last Reviewed: 8 November 2026
+Version 0.32 · Draft 
+Last Reviewed: 9 November 2026
 Produced with AI Assistance (Claude Code)
 ```
 
@@ -41,6 +41,7 @@ Produced with AI Assistance (Claude Code)
 | 0.29 | 2026-11-08 | Lionel Lam | Dates must be real calendar dates in the years 2000 to 2099; a parsed date that isn't falls back to today |
 | 0.30 | 2026-11-08 | Lionel Lam | Categories can be retired and restored in the app; retired categories are kept, so past expenses still show them |
 | 0.31 | 2026-11-08 | Lionel Lam | In-app confirmation sheets replace the phone's prompts; Undo after deleting an expense or retiring a category; a check before discarding unsaved changes (Section 4.2) |
+| 0.32 | 2026-11-09 | Lionel Lam | Search on History, for the month selected (Section 4.3) |
 
 ---
 
@@ -85,7 +86,7 @@ This spec exists to align the team before the process flow diagram (UPN) and fea
 5. **Confirmation screen is presented** — parsed fields shown as editable form elements (not a static summary).
 6. **User reviews and optionally edits fields directly** — this is the human-in-the-loop step. No re-prompting of the model occurs; corrections are direct field edits.
 7. **User confirms/saves** — the system checks the fields, then writes the structured record, the original raw text, and a flag indicating whether any edit occurred. The date must be a real calendar date in the years 2000 to 2099 (so not, for example, 31 February); otherwise the save is refused with a message to check the fields.
-8. **Record is available for viewing** — in History and Summary, and in the "Today" list on the Log screen for expenses dated today. A saved record can be reopened from History or from the Today list in the same editable card to be edited or deleted (soft delete, after a confirmation, with Undo; see Section 4.2). Below the Today list, the Log screen shows today's total spend broken down by category (amounts are added without currency conversion, as in Summary). For the current month, a category with a budget shows its spend as "x of budget", with its bar showing the share of the budget used (full at or above 100%, and red once spend is over the budget). Each budgeted bar also has a marker at the amount expected by today (budget × day of month ÷ days in month, counting today), and a note: "Over budget by $X" (red), "Budget used", "On pace" (within 5% of the budget either side of the expected amount), or "$X over/under pace", followed by the amount left and about how much a day remains (see Section 4.1 for the exact rules). Tapping a budgeted category opens a burn-up chart of its running total against the budget spread evenly over the month, with a "Daily figures" table. Categories with no spending in the month are not listed, whether or not they have a budget. The previous month is shown without pace. Other bars show the category's spend relative to the month's largest category. Below its category list, Summary shows a pie chart of the month's spend by category for any month with expenses: up to six slices, with any beyond the largest five grouped as "Everything else". History and Summary keep their heading and month control fixed at the top while the content below scrolls. Screens show the last-loaded data straight away and refresh it in the background; saving, editing or deleting a record reloads it. Export is deferred beyond the first version.
+8. **Record is available for viewing** — in History and Summary, and in the "Today" list on the Log screen for expenses dated today. A saved record can be reopened from History or from the Today list in the same editable card to be edited or deleted (soft delete, after a confirmation, with Undo; see Section 4.2). Below the Today list, the Log screen shows today's total spend broken down by category (amounts are added without currency conversion, as in Summary). For the current month, a category with a budget shows its spend as "x of budget", with its bar showing the share of the budget used (full at or above 100%, and red once spend is over the budget). Each budgeted bar also has a marker at the amount expected by today (budget × day of month ÷ days in month, counting today), and a note: "Over budget by $X" (red), "Budget used", "On pace" (within 5% of the budget either side of the expected amount), or "$X over/under pace", followed by the amount left and about how much a day remains (see Section 4.1 for the exact rules). Tapping a budgeted category opens a burn-up chart of its running total against the budget spread evenly over the month, with a "Daily figures" table. Categories with no spending in the month are not listed, whether or not they have a budget. The previous month is shown without pace. Other bars show the category's spend relative to the month's largest category. Below its category list, Summary shows a pie chart of the month's spend by category for any month with expenses: up to six slices, with any beyond the largest five grouped as "Everything else". History and Summary keep their heading and month control fixed at the top while the content below scrolls; on History, a search field sits below the month control (Section 4.3). Screens show the last-loaded data straight away and refresh it in the background; saving, editing or deleting a record reloads it. Export is deferred beyond the first version.
 
 ### 4.1 Spending Pace Rules (Summary, Current Month)
 
@@ -139,6 +140,18 @@ Confirmations are shown in the app's own confirmation sheet, which slides up ove
 | Discard on the Log screen's review card after changing any parsed detail | "Discard your edits?", with "Discard" and "Keep reviewing" | The typed text stays in the box |
 
 A sheet with no changes closes straight away, and Discard on an unchanged review card works straight away, since the typed text is still there to parse again. Only the most recent Undo is offered; a new one replaces it.
+
+### 4.3 Searching History
+
+History has a search field below its month control, in the section fixed at the top. It searches only the month selected.
+
+- **As you type:** the list is filtered with each keystroke, keeping the grouping by day. Matching text is highlighted.
+- **What matches:** each word typed must appear, in any order and regardless of capitals, in the expense's merchant, original typed text, category, remarks or amount (for example "14.20").
+- **Results line:** above the list, the number of matching expenses and their total ("3 results", "$52.80").
+- **No matches:** "No search results", with a line naming the month and the search text.
+- **Clearing:** an "×" button at the right of the field appears once there is text, and clears it. Changing the month and leaving History also clear the search.
+
+The month's expenses are already loaded on the device, so searching needs no server request.
 
 ---
 

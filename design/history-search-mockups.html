@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>History Search</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root { --page: #ececea; --page-text: #18181b; --page-muted: #5f5f66; --page-card: #fafaf9; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--page); color: var(--page-text); font-family: Inter, -apple-system, system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  main { max-width: 1260px; margin: 0 auto; padding: 36px 16px 80px; }
+  h1 { font-size: 28px; letter-spacing: -0.02em; margin: 0 0 8px; }
+  .intro p { color: var(--page-muted); max-width: 800px; line-height: 1.55; margin: 0 0 10px; font-size: 15px; }
+  .switch { margin-top: 14px; display: inline-flex; gap: 4px; background: #fff; border-radius: 10px; padding: 3px; border: 1px solid rgba(0,0,0,.08); }
+  .switch button { border: none; background: none; padding: 6px 14px; border-radius: 8px; font: inherit; font-size: 13px; cursor: pointer; color: var(--page-muted); }
+  .switch button.on { background: #18181b; color: #fff; }
+  section { margin-top: 52px; }
+  section > h2 { font-size: 20px; margin: 0 0 6px; }
+  section > p { color: var(--page-muted); max-width: 800px; line-height: 1.55; margin: 0 0 18px; font-size: 14.5px; }
+  .rules { background: var(--page-card); border-radius: 14px; padding: 14px 18px; max-width: 800px; margin: 0 0 20px; font-size: 14px; line-height: 1.6; }
+  .rules ul { padding-left: 18px; }
+  .frames { display: flex; flex-wrap: wrap; gap: 30px 26px; align-items: flex-start; }
+  figure { margin: 0; max-width: 100%; }
+  figcaption { max-width: 340px; font-size: 13px; color: var(--page-muted); margin-top: 12px; line-height: 1.5; }
+  figcaption b { color: var(--page-text); }
+  .badge { display: inline-block; font-size: 11px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; padding: 2px 7px; border-radius: 6px; margin-right: 6px; vertical-align: 1px; background: #1d4ed8; color: #fff; }
+  .badge.alt { background: #7c3aed; }
+  .phone { width: 340px; max-width: 100%; height: 640px; border-radius: 30px; overflow: hidden; border: 1px solid rgba(0,0,0,.08);
+           box-shadow: 0 1px 2px rgba(0,0,0,.06), 0 10px 28px rgba(0,0,0,.08); }
+  .notes { margin-top: 56px; background: var(--page-card); border-radius: 16px; padding: 22px 26px; max-width: 860px; }
+  .notes h2 { margin: 0 0 10px; font-size: 18px; }
+  .notes ul { padding-left: 20px; line-height: 1.6; font-size: 14.5px; }
+
+  /* App tokens and styles, from web/app/globals.css */
+  .app { --bg: #fff; --surface: #fff; --text: #18181b; --muted: #71717a; --line: #e7e7e4; --accent: #18181b; --accent-text: #fff; --soft: #f4f4f5; --hl: #fde68a;
+         background: var(--bg); color: var(--text); font-size: 15px; position: relative; height: 100%; display: flex; flex-direction: column; }
+  body.dark .app { --bg: #18181b; --surface: #18181b; --text: #f4f4f5; --muted: #a1a1aa; --line: #27272a; --accent: #f4f4f5; --accent-text: #18181b; --soft: #27272a; --hl: #713f12; }
+  .app .top { padding: 30px 20px 16px; border-bottom: 1px solid var(--line); }
+  .app h3 { font-size: 28px; font-weight: 700; letter-spacing: -0.02em; }
+  .app .scroll { flex: 1; overflow: hidden; padding: 0 20px; }
+  .app .month-switch { display: flex; align-items: center; justify-content: space-between; margin-top: 12px; }
+  .app .month-switch i { font-style: normal; background: var(--soft); width: 34px; height: 34px; border-radius: 10px; display: grid; place-items: center; font-size: 16px; }
+  .app .month-switch i.off { opacity: .35; }
+  .app .month-switch strong { font-size: 15px; }
+  .app .day { font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; margin: 20px 0 6px; }
+  .app .monthhead { font-size: 13px; font-weight: 700; margin: 22px 0 0; }
+  .app .item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--line); gap: 12px; }
+  .app .item .m { font-weight: 500; }
+  .app .item .c { color: var(--muted); font-size: 13px; margin-top: 2px; }
+  .app .item .a { font-weight: 600; font-variant-numeric: tabular-nums; }
+  .app .edited { font-size: 11px; color: var(--muted); border: 1px solid var(--line); border-radius: 6px; padding: 1px 5px; margin-left: 6px; }
+  .app mark { background: var(--hl); color: inherit; border-radius: 3px; padding: 0 1px; }
+  .app .tabbar { display: flex; border-top: 1px solid var(--line); padding: 8px 0 18px; background: var(--bg); }
+  .app .tabbar span { flex: 1; text-align: center; font-size: 11px; color: var(--muted); }
+  .app .tabbar span i { display: block; font-style: normal; font-size: 17px; margin-bottom: 2px; }
+  .app .tabbar span.on { color: var(--text); font-weight: 600; }
+  /* New: search field */
+  .app .search { margin-top: 14px; display: flex; align-items: center; gap: 8px; background: var(--soft); border-radius: 12px; height: 42px; padding: 0 6px 0 12px; outline: 2px dashed #1d4ed8; outline-offset: 3px; }
+  .app .search svg { width: 17px; height: 17px; color: var(--muted); flex-shrink: 0; }
+  .app .search .q { flex: 1; font-size: 15px; }
+  .app .search .q.ph { color: var(--muted); }
+  .app .search .q .caret { display: inline-block; width: 1.5px; height: 17px; background: var(--text); vertical-align: -3px; margin-left: 1px; }
+  .app .search .x { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; color: var(--muted); }
+  .app .search .x span { width: 20px; height: 20px; border-radius: 50%; background: var(--muted); color: var(--bg); display: grid; place-items: center; font-size: 13px; line-height: 1; font-weight: 700; }
+  .app .count { display: flex; justify-content: space-between; color: var(--muted); font-size: 13px; margin-top: 14px; }
+  .app .count b { color: var(--text); font-variant-numeric: tabular-nums; }
+  .app .empty { text-align: center; padding: 56px 12px 0; }
+  .app .empty b { display: block; font-size: 16px; }
+  .app .empty span { display: block; color: var(--muted); font-size: 14px; margin-top: 6px; line-height: 1.45; }
+  .app .kbd { position: absolute; left: 0; right: 0; bottom: 0; height: 200px; background: #d1d3d9; display: grid; grid-template-rows: repeat(4, 1fr); gap: 8px; padding: 10px 4px 14px; }
+  body.dark .app .kbd { background: #2b2b2e; }
+  .app .kbd div { display: flex; gap: 5px; justify-content: center; }
+  .app .kbd div span { flex: 0 0 29px; background: #fff; border-radius: 5px; box-shadow: 0 1px 0 rgba(0,0,0,.3); }
+  body.dark .app .kbd div span { background: #5a5a5e; }
+</style>
+</head>
+<body>
+<main>
+  <div class="intro">
+    <h1>History search</h1>
+    <p>Mockups for a search field at the top of History. The list filters with each letter you type; an "×" on the right clears the field; and "No search results" shows when nothing matches. These use the app's own styles and example expenses; nothing in the app has changed.</p>
+    <p>Blue dashed outlines mark the new search field.</p>
+    <div class="switch"><button class="on" data-mode="light">Light</button><button data-mode="dark">Dark</button></div>
+  </div>
+
+  <section>
+    <h2>1. Searching the month on screen</h2>
+    <p>The field sits in the pinned top section, between the heading and the month switcher, so it stays in view while the list scrolls. Matching words are highlighted, and a line above the list counts the matches and adds them up.</p>
+    <div class="rules"><b>What it searches:</b>
+      <ul>
+        <li>The merchant, the words you typed, the category and the remarks, ignoring capitals: "grab" finds "Grab".</li>
+        <li>Amounts too: "14.20" finds $14.20 expenses.</li>
+        <li>Every word must match, in any order: "grab airport" finds a Grab ride with "airport" in it.</li>
+      </ul>
+      Switching months keeps the search, so you can step back month by month looking for the same thing.
+    </div>
+    <div class="frames" id="s1"></div>
+  </section>
+
+  <section>
+    <h2>2. Alternative: searching all months</h2>
+    <p>The same field, but results come from every month, newest first, under a heading for each month. The month switcher hides while searching. This needs a new search on the server, so results appear a fraction of a second after you stop typing, rather than on every letter.</p>
+    <div class="frames" id="s2"></div>
+  </section>
+
+  <div class="notes">
+    <h2>To decide</h2>
+    <ul>
+      <li><b>This month or all months.</b> Option 1 is instant and needs no server change; to look further back you switch months with the search kept. Option 2 finds anything in one go but responds just after you pause typing.</li>
+      <li><b>The total line</b> ("3 results · $52.80") is optional; it's handy for questions like "how much did I spend on Grab this month?".</li>
+      <li><b>Leaving History</b> clears the search, so the next visit starts with the full list.</li>
+    </ul>
+  </div>
+</main>
+
+<script>
+const icon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>`;
+const search = (q) => `<div class="search">${icon}<div class="q ${q ? "" : "ph"}">${q ? q + '<span class="caret"></span>' : "Search expenses"}</div>${q ? '<div class="x"><span>×</span></div>' : ""}</div>`;
+const header = (q, month = true) => `<div class="top"><h3>History</h3>${search(q)}${month ? `<div class="month-switch"><i>‹</i><strong>November 2026</strong><i class="off">›</i></div>` : ""}</div>`;
+const item = (m, c, a, edited) => `<div class="item"><div><div class="m">${m}</div><div class="c">${c}${edited ? '<span class="edited">edited</span>' : ""}</div></div><div class="a">${a}</div></div>`;
+const tabbar = `<div class="tabbar">${[["+","Log"],["≡","History"],["▮","Summary"],["◇","Categories"]].map(([i, n]) => `<span class="${n === "History" ? "on" : ""}"><i>${i}</i>${n}</span>`).join("")}</div>`;
+const kbd = `<div class="kbd">${[10, 9, 7, 5].map((n) => `<div>${"<span></span>".repeat(n)}</div>`).join("")}</div>`;
+const phone = (inner) => `<div class="phone"><div class="app">${inner}</div></div>`;
+const fig = (inner, cap, badge = "New") => `<figure>${phone(inner)}<figcaption><span class="badge ${badge === "Alternative" ? "alt" : ""}">${badge}</span>${cap}</figcaption></figure>`;
+
+document.getElementById("s1").innerHTML = [
+  fig(header("") + `<div class="scroll">
+      <div class="day">Sun, 8 Nov</div>${item("Starbucks", "Food &amp; Dining", "7.80")}${item("Grab", "Transport", "26.40")}
+      <div class="day">Sat, 7 Nov</div>${item("Ya Kun", "Food &amp; Dining", "5.20")}${item("Sheng Siong", "Groceries", "22.40")}
+      <div class="day">Fri, 6 Nov</div>${item("Netflix", "Entertainment", "15.98")}${item("Grab", "Transport", "18.90", true)}
+    </div>` + tabbar,
+    "<b>Before typing.</b> The field shows \"Search expenses\". No × until there's something to clear."),
+  fig(header("grab") + `<div class="scroll">
+      <div class="count"><span>3 results</span><b>$52.80</b></div>
+      <div class="day">Sun, 8 Nov</div>${item("<mark>Grab</mark>", "Transport", "26.40")}
+      <div class="day">Fri, 6 Nov</div>${item("<mark>Grab</mark>", "Transport", "18.90", true)}
+      <div class="day">Mon, 2 Nov</div>${item("<mark>Grab</mark>", "Transport · to the airport", "7.50")}
+    </div>` + kbd,
+    "<b>Typing \"grab\".</b> The list narrows with each letter, still grouped by day, with matches highlighted. The line above counts and totals the results. Tap × to clear and see everything again."),
+  fig(header("sushi") + `<div class="scroll"><div class="empty"><b>No search results</b><span>Nothing in November 2026 matches "sushi". Try another word, or use ‹ to search October.</span></div></div>` + kbd,
+    "<b>Nothing matches.</b> \"No search results\", with a hint that the search covers the month shown."),
+  fig(header("14.20") + `<div class="scroll">
+      <div class="count"><span>1 result</span><b>$14.20</b></div>
+      <div class="day">Wed, 4 Nov</div>${item("Grab", "Transport", "<mark>14.20</mark>")}
+    </div>` + tabbar,
+    "<b>Searching an amount.</b> Typing \"14.20\" finds expenses of exactly that amount."),
+].join("");
+
+document.getElementById("s2").innerHTML = [
+  fig(header("grab", false) + `<div class="scroll">
+      <div class="count"><span>14 results, all months</span><b>$231.60</b></div>
+      <div class="monthhead">November 2026</div>
+      <div class="day">Sun, 8 Nov</div>${item("<mark>Grab</mark>", "Transport", "26.40")}
+      <div class="day">Fri, 6 Nov</div>${item("<mark>Grab</mark>", "Transport", "18.90", true)}
+      <div class="monthhead">October 2026</div>
+      <div class="day">Thu, 29 Oct</div>${item("<mark>Grab</mark>", "Transport", "21.30")}
+      <div class="day">Tue, 20 Oct</div>${item("<mark>Grab</mark>", "Transport", "16.80")}
+    </div>` + tabbar,
+    "<b>All months.</b> Results from every month under month headings; the month switcher returns when the field is cleared.", "Alternative"),
+  fig(header("sushi", false) + `<div class="scroll"><div class="empty"><b>No search results</b><span>Nothing in any month matches "sushi".</span></div></div>` + kbd,
+    "<b>Nothing matches</b> in any month.", "Alternative"),
+].join("");
+
+document.querySelectorAll(".switch button").forEach((b) => b.addEventListener("click", () => {
+  document.querySelectorAll(".switch button").forEach((x) => x.classList.toggle("on", x === b));
+  document.body.classList.toggle("dark", b.dataset.mode === "dark");
+}));
+</script>
+</body>
+</html>

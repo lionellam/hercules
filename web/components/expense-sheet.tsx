@@ -8,19 +8,26 @@ import type { Category, Expense } from "@/lib/types";
 import { ConfirmSheet, UndoContext } from "./confirm";
 import ReviewCard, { type Fields } from "./review-card";
 
-export function ExpenseRow({ e, onClick }: { e: Expense; onClick?: () => void }) {
+// Wraps each occurrence of the search words in <mark>, ignoring capitals
+function Highlight({ text, words }: { text: string; words?: string[] }) {
+  if (!words?.length) return <>{text}</>;
+  const pattern = new RegExp(`(${words.map((w) => w.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|")})`, "gi");
+  return <>{text.split(pattern).map((part, i) => (i % 2 ? <mark key={i}>{part}</mark> : part))}</>;
+}
+
+export function ExpenseRow({ e, onClick, highlight }: { e: Expense; onClick?: () => void; highlight?: string[] }) {
   return (
     <button className="item" onClick={onClick}>
       <div>
-        <div className="m">{e.merchant || e.raw_input}</div>
+        <div className="m"><Highlight text={e.merchant || e.raw_input} words={highlight} /></div>
         <div className="c">
-          {e.category}
+          <Highlight text={e.category} words={highlight} />
           {e.was_edited && <span className="edited">edited</span>}
         </div>
       </div>
       <div className="a">
         {e.currency !== "SGD" && `${e.currency} `}
-        {fmt(e.amount)}
+        <Highlight text={fmt(e.amount)} words={highlight} />
       </div>
     </button>
   );

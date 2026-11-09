@@ -1,8 +1,8 @@
 # Project Hercules — Architecture: Web App v1
 
 ```
-Version 0.12 · Draft
-Last Reviewed: 8 November 2026
+Version 0.13 · Draft
+Last Reviewed: 9 November 2026
 Produced with AI Assistance (Claude Code)
 ```
 
@@ -22,6 +22,7 @@ Produced with AI Assistance (Claude Code)
 | 0.10 | 2026-11-08 | Lionel Lam | In-app confirmation sheets, Undo, and a check before discarding unsaved changes (decision 30) |
 | 0.11 | 2026-11-08 | Lionel Lam | Decision 23: the app no longer requests the current month's Summary totals, which were unused |
 | 0.12 | 2026-11-08 | Lionel Lam | Decision 31: how the web app's code is organised |
+| 0.13 | 2026-11-09 | Lionel Lam | Decision 32: History search filters the selected month on the device |
 
 ---
 
@@ -103,6 +104,7 @@ The language model is called only to parse a single expense into structured fiel
 | 25 | **Light and dark mode toggle**, following the device's setting until first used; the choice is saved per device in the browser | One tap on every main screen. It is a display preference, not personal data, so it does not need the database or need to follow the user between devices |
 | 30 | **In-app confirmation sheet** instead of the phone's built-in prompt, used before deleting an expense, retiring a category, and discarding unsaved changes; **Undo** for about five seconds after deleting or retiring | The built-in prompt can't be styled and is switched off in some browsers, including the test browser built into the Claude app, where it silently answered "Cancel". Undo gives deleting an in-app way back, which it didn't have; confirmation and Undo are both used because a delete is easy to tap by mistake. Undo needs only a small "restore" route for expenses, since deletes are already soft. Discarding asks only when something changed, so prompts keep their meaning. Duplicate and unusual-value warnings were mocked up at the same time and left for later |
 | 31 | **Code organised by role:** one file per screen in `web/components/screens/`, shared pieces (confirmation sheet, edit sheet, pace chart, pie chart) beside them in `web/components/`, and plain logic in `web/lib/`: `types.ts` (Category, Expense and Summary row shapes), `dates.ts` (date checks and formatting), `pace.ts` (spending pace maths) and `client.ts` (fetching, in-memory cache and money formatting). `types.ts`, `dates.ts` and `pace.ts` are used by both the server and the screens; database code stays server-only | The single screen file had grown past 1,000 lines. Splitting it by role makes each part easy to find, keeps one definition of each data shape and date rule, and leaves the pace and date logic in plain files that can be tested on their own. No change to behaviour |
+| 32 | **History search filters the selected month on the device**, with each keystroke; changing month or leaving History clears it | The month's expenses are already loaded for the list, so filtering them is instant and needs no new server route or database index. Searching all months at once was mocked up and set aside: it would need a server search and respond only after a pause in typing |
 
 ### 3.5 First-version scope
 
