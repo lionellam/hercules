@@ -5,7 +5,6 @@ import { expensesUrl, fmt, useCached, type ApiCache } from "@/lib/client";
 import { dayLabel, monthKey, monthLabel } from "@/lib/dates";
 import type { Category, Expense } from "@/lib/types";
 import { EditSheet, ExpenseRow } from "../expense-sheet";
-import ThemeToggle from "../theme-toggle";
 
 // Every word must appear somewhere in the expense, in any order, ignoring capitals (Specification 4.3)
 function matches(e: Expense, words: string[]) {
@@ -34,7 +33,6 @@ export default function HistoryScreen({ categories, online, cache, onChanged }: 
   return (
     <section className="screen pinned-screen">
       <div className="pinned-top">
-        <ThemeToggle />
         <h1>History</h1>
         <div className="month-switch">
           <button onClick={() => changeMonth(-1)} aria-label="Previous month">‹</button>

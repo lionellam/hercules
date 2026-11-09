@@ -1,7 +1,7 @@
 # Project Hercules — Specification Sheet: "Log an Expense" Flow
 
 ```
-Version 0.33 · Draft 
+Version 0.34 · Draft 
 Last Reviewed: 9 November 2026
 Produced with AI Assistance (Claude Code)
 ```
@@ -43,6 +43,7 @@ Produced with AI Assistance (Claude Code)
 | 0.31 | 2026-11-08 | Lionel Lam | In-app confirmation sheets replace the phone's prompts; Undo after deleting an expense or retiring a category; a check before discarding unsaved changes (Section 4.2) |
 | 0.32 | 2026-11-09 | Lionel Lam | Search on History, for the month selected (Section 4.3) |
 | 0.33 | 2026-11-09 | Lionel Lam | An "×" button clears the Log screen's text box |
+| 0.34 | 2026-11-09 | Lionel Lam | Settings tab replaces the Categories tab; Categories becomes "Categories & budgets" inside Settings; Appearance and Sign out move into Settings; the app version and last update are shown (Section 4.4) |
 
 ---
 
@@ -154,6 +155,17 @@ History has a search field below its month control, in the section fixed at the 
 
 The month's expenses are already loaded on the device, so searching needs no server request.
 
+### 4.4 Settings
+
+Settings is the fourth tab, with a gear icon, after Log, History and Summary. It replaces the Categories tab and lists:
+
+- **Spending:** **Categories & budgets**, with the number of categories in use and how many have a budget (for example "14 categories · 5 with a budget"). Tapping it opens the Categories & budgets page, which works exactly as the Categories tab did (see the Category notes in Section 5), with "‹ Settings" at the top to go back.
+- **Appearance:** System, Light or Dark. System follows the device's setting. The choice is saved on that device only. This replaces the sun or moon icon that was at the top of every screen.
+- **Account:** the email address signed in with, and **Sign out**, which moves here from the bottom of Summary.
+- **Below Account:** the app's version number and the date and time it was last updated, meaning when the version running was built and deployed.
+
+Opening the Settings tab always shows the Settings list, even if Categories & budgets was open when you left it.
+
 ---
 
 ## 5. Data Model (Draft)
@@ -192,9 +204,9 @@ Per-user and extensible — this is a **user preference**, not a global constant
 | `is_other` | boolean | Flags the built-in "Other" catch-all; ensures only one such category exists per user. When `true`, the expense entry will prompt for an `other_sub_label` to capture specificity (*prompt not yet built in the web app*) |
 | `monthly_budget` | number (optional) | The category's current monthly budget in SGD; empty means no budget. Only the current amount is kept, so past months' budgets are not recorded |
 
-**Preset behavior:** each new user is seeded with their own copy of the starter list — Food & Dining, Transport, Groceries, Entertainment, Utilities, Health & Medical, Household, Shopping, Rent, Clothes, Education, Professional Development, Travel — plus an **"Other"** catch-all. The Categories screen adds and renames categories and sets their monthly budgets; its heading and add button stay fixed at the top while the list scrolls. Names must be unique for the user regardless of capitalisation, with a limit of 50 active categories per user. "Other" cannot be renamed or retired and stays last in the list, because the application falls back to it by name.
+**Preset behavior:** each new user is seeded with their own copy of the starter list — Food & Dining, Transport, Groceries, Entertainment, Utilities, Health & Medical, Household, Shopping, Rent, Clothes, Education, Professional Development, Travel — plus an **"Other"** catch-all. The Categories & budgets page, opened from Settings (Section 4.4), adds and renames categories and sets their monthly budgets; its heading and add button stay fixed at the top while the list scrolls. Names must be unique for the user regardless of capitalisation, with a limit of 50 active categories per user. "Other" cannot be renamed or retired and stays last in the list, because the application falls back to it by name.
 
-**Retiring a category:** any category except "Other" can be retired from its edit sheet, after a confirmation. A retired category is never deleted from the database. It is no longer offered for new expenses or to the language model, but past expenses keep it and show its name in History, the Today list and Summary. Its budget is kept but not tracked while it is retired, so any spending in it this month shows as a plain bar without a pace note. An existing expense in a retired category can still be opened and saved; the edit sheet shows the category as "*name* (retired)" and also offers the active categories, but a retired category can't be chosen for any other expense. Retired categories are listed in a collapsed "Retired" group at the bottom of the Categories screen, each with a Restore button that brings it back with its budget. They can't be renamed until restored. Adding a category whose name matches a retired one (regardless of capitalisation) restores that category, with the budget entered, instead of creating a new one. Restoring counts towards the 50-category limit.
+**Retiring a category:** any category except "Other" can be retired from its edit sheet, after a confirmation. A retired category is never deleted from the database. It is no longer offered for new expenses or to the language model, but past expenses keep it and show its name in History, the Today list and Summary. Its budget is kept but not tracked while it is retired, so any spending in it this month shows as a plain bar without a pace note. An existing expense in a retired category can still be opened and saved; the edit sheet shows the category as "*name* (retired)" and also offers the active categories, but a retired category can't be chosen for any other expense. Retired categories are listed in a collapsed "Retired" group at the bottom of the Categories & budgets page, each with a Restore button that brings it back with its budget. They can't be renamed until restored. Adding a category whose name matches a retired one (regardless of capitalisation) restores that category, with the budget entered, instead of creating a new one. Restoring counts towards the 50-category limit.
 
 ### 5.3 `Merchant` — no dedicated table (for now)
 

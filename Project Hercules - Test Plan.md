@@ -1,7 +1,7 @@
 # Project Hercules — Test Plan: Web App v1
 
 ```
-Version 1.0 · Draft
+Version 1.1 · Draft
 Last Reviewed: 9 November 2026
 Produced with AI Assistance (Claude Code)
 ```
@@ -11,6 +11,7 @@ Produced with AI Assistance (Claude Code)
 | Version | Date | Author | Changes |
 |---|---|---|---|
 | 1.0 | 2026-11-09 | Lionel Lam | First complete set of manual test cases for the web app, covering Specification v0.33 and Architecture v0.14 |
+| 1.1 | 2026-11-09 | Lionel Lam | Settings tab: categories, appearance and sign-out tests updated; new Section Q for Settings (Specification v0.34) |
 
 ---
 
@@ -64,7 +65,7 @@ For each run, note the date, the device and browser, whether it was the local or
 | A-02 | Invited account signs in | Sign in with an allowed email address | The Log screen opens, showing today's date and "Log an expense" |
 | A-03 | Uninvited account is refused | Sign in with an email address that isn't on the allow-list | Back on the sign-in screen with "This account hasn't been invited. Ask the app owner to add your email address." |
 | A-04 | Removing access takes effect at once | While signed in on one device, remove that email address from the allow-list (`npm run allow -- remove <email>`), then reload the app | The sign-in screen appears; the person can't get back in. Add the address again afterwards |
-| A-05 | Signing out | Summary tab → **Sign out** | The sign-in screen appears. Opening the app again asks you to sign in |
+| A-05 | Signing out | Settings → **Sign out** | The sign-in screen appears. Opening the app again asks you to sign in |
 | A-06 | Data needs sign-in | While signed out, open `http://localhost:3000/api/expenses?month=2026-11` in the browser | The page shows `{"error":"Not signed in"}` and no expenses |
 | A-07 | Each person sees only their own expenses | Allow a second test email address. Sign in as each in turn, logging one `[TEST]` expense as each | Each account sees only its own expense in Today, History and Summary |
 | A-08 | Dev sign-in is local only | Open the live app's sign-in screen | Only "Sign in with Google" shows; there's no "Dev sign in" form |
@@ -120,8 +121,8 @@ For each run, note the date, the device and browser, whether it was the local or
 | E-01 | Edit expense, no changes | Open an expense → tap **Cancel**, then open it again and tap outside the sheet | Each time the sheet closes straight away |
 | E-02 | Edit expense, with a change | Open an expense, change the amount → tap **Cancel** | "Discard changes?" appears. **Keep editing** keeps the sheet open with your change |
 | E-03 | Tapping outside with a change | Open an expense, change a field → tap the dimmed area above the sheet | "Discard changes?" appears. **Discard changes** closes the sheet; the expense is unchanged |
-| E-04 | Category sheet | Categories → open a category, change its budget → tap outside | "Discard changes?" appears; discarding leaves the budget unchanged |
-| E-05 | Add category | Categories → **Add category** → type a name → **Cancel** | "Discard changes?" appears. With nothing typed, Cancel closes straight away |
+| E-04 | Category sheet | Settings → Categories & budgets → open a category, change its budget → tap outside | "Discard changes?" appears; discarding leaves the budget unchanged |
+| E-05 | Add category | Settings → Categories & budgets → **Add category** → type a name → **Cancel** | "Discard changes?" appears. With nothing typed, Cancel closes straight away |
 
 ### F. History
 
@@ -200,7 +201,7 @@ To set up I-01 to I-05: create a `zz-test-` category with a $300 budget and log 
 
 | ID | Test | Steps | Expected result |
 |---|---|---|---|
-| K-01 | List | Open **Categories** | Your categories, each with its budget or "No budget". **Other** is last |
+| K-01 | List | Settings → **Categories & budgets** | Your categories, each with its budget or "No budget". **Other** is last |
 | K-02 | Add | **Add category** → name `zz-test-pets`, budget 50 → Save | It appears in the list with 50.00, and in the review card's category list |
 | K-03 | Add without a budget | Add `zz-test-gifts` with the budget blank | It shows "No budget" |
 | K-04 | Duplicate name | Add `ZZ-TEST-PETS` | "That name is already in use, or you've reached the limit of 50 categories." |
@@ -221,7 +222,7 @@ To set up I-01 to I-05: create a `zz-test-` category with a $300 budget and log 
 | L-06 | Editing an old expense | Open that expense, change the amount → Save | The category shows "zz-test-pets (retired)"; the expense saves normally |
 | L-07 | Can't move other expenses into it | Open a different expense and look at its category list | The retired category isn't offered |
 | L-08 | Summary while retired | Look at this month's Summary | The retired category's spending still counts, as a plain bar with no budget or pace note |
-| L-09 | Restore button | Categories → Retired → **Restore** | It returns to the main list with its budget; the Retired row disappears when empty |
+| L-09 | Restore button | Categories & budgets → Retired → **Restore** | It returns to the main list with its budget; the Retired row disappears when empty |
 | L-10 | Re-adding the name restores it | Retire it, then **Add category** and type `ZZ-TEST-PETS` | A note says it was retired and saving restores it, with or without a budget depending on the budget field. The button reads **Restore**. After saving, it's back with its past expenses |
 | L-11 | Retired categories can't be renamed | Via the API, try to rename a retired category | Refused with "That name is already in use, or this category has been retired." |
 
@@ -229,8 +230,8 @@ To set up I-01 to I-05: create a `zz-test-` category with a $300 budget and log 
 
 | ID | Test | Steps | Expected result |
 |---|---|---|---|
-| M-01 | Light and dark | Tap the sun or moon icon at the top right of any screen | The app switches theme. Reload: the choice is kept on that device |
-| M-02 | Follows the device at first | On a device that's never used the toggle, switch the device between light and dark | The app follows the device |
+| M-01 | Light and dark | Settings → Appearance → **Light**, then **Dark** | The app switches theme at once. Reload: the choice is kept on that device |
+| M-02 | System follows the device | Settings → Appearance → **System**, then switch the device between light and dark | The app follows the device. A new device starts on System |
 | M-03 | Pinned tops | Scroll on each of the four tabs | Each tab's heading and main control stay at the top |
 | M-04 | Phone layout | Use a phone, or a browser window narrower than 768 pixels | One column; edit sheets slide up from the bottom |
 | M-05 | Tablet and computer | Use windows 768, 1,024 and 1,280 pixels wide or more | The app widens to about 820, 920 and 1,000 pixels; Log and Summary show two columns; edit sheets and confirmations open as centred dialogs |
@@ -264,6 +265,19 @@ These need a look at the local database; ask Claude to run them.
 | P-02 | Soft delete | A deleted expense keeps its row, with `deleted_at` set; Undo clears it again |
 | P-03 | Retire keeps the row | A retired category keeps its row and budget, with `is_active` set to false |
 | P-04 | Per-person records | Every expense and category belongs to exactly one person's account |
+
+### Q. Settings
+
+| ID | Test | Steps | Expected result |
+|---|---|---|---|
+| Q-01 | Tab bar | Look at the tabs at the bottom | Log, History, Summary and **Settings** (a gear). There's no Categories tab |
+| Q-02 | Settings list | Open **Settings** | Groups for Spending (**Categories & budgets**), Appearance and Account, then the version and last-updated time |
+| Q-03 | Category count | Look at the Categories & budgets row; then add or retire a `zz-test-` category and look again | It shows the number of categories in use and how many have a budget, and updates after the change |
+| Q-04 | Opening and going back | Tap **Categories & budgets**, then **‹ Settings** | The Categories & budgets page opens, with the same list, Add category and Retired group as before; "‹ Settings" returns to the list |
+| Q-05 | Returning to Settings | Open Categories & budgets, switch to Log, then tap Settings | The Settings list shows, not Categories & budgets |
+| Q-06 | No theme icon on screens | Look at the top of Log, History and Summary | There's no sun or moon icon |
+| Q-07 | Account | Look at the Account group | Your email address, and Sign out (see A-05). Summary no longer has a sign-out section at the bottom |
+| Q-08 | Version and last updated | Look below Account; compare with the latest deploy | The version number (with a short code for the exact version) and the date and time of the latest deploy |
 
 ---
 

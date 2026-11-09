@@ -4,7 +4,6 @@ import { useContext, useState } from "react";
 import { api, fmt, useCached, type ApiCache } from "@/lib/client";
 import type { Category } from "@/lib/types";
 import { ConfirmSheet, UndoContext } from "../confirm";
-import ThemeToggle from "../theme-toggle";
 
 function CategorySheet({ category, retired, online, onClose, onChanged }: { category: Category | null; retired: Category[]; online: boolean; onClose: () => void; onChanged: () => void }) {
   const [name, setName] = useState(category?.name ?? "");
@@ -118,7 +117,7 @@ function CategorySheet({ category, retired, online, onClose, onChanged }: { cate
   );
 }
 
-export default function CategoriesScreen({ categories, online, cache, onChanged }: { categories: Category[]; online: boolean; cache: ApiCache; onChanged: () => void }) {
+export default function CategoriesScreen({ categories, online, cache, onChanged, onBack }: { categories: Category[]; online: boolean; cache: ApiCache; onChanged: () => void; onBack: () => void }) {
   const [editing, setEditing] = useState<Category | "new" | null>(null);
   const retired = useCached<Category[]>(cache, "/api/categories?retired=1") ?? [];
   const [showRetired, setShowRetired] = useState(false);
@@ -137,8 +136,8 @@ export default function CategoriesScreen({ categories, online, cache, onChanged 
   return (
     <section className="screen pinned-screen">
       <div className="pinned-top">
-        <ThemeToggle />
-        <h1>Categories</h1>
+        <button className="back-link" onClick={onBack}>‹ Settings</button>
+        <h1>Categories &amp; budgets</h1>
         <p className="sub">Monthly budgets are optional and in SGD.</p>
         <div className="row-start">
           <button className="btn btn-primary" disabled={!online} onClick={() => setEditing("new")}>Add category</button>

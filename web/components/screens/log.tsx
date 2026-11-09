@@ -7,7 +7,6 @@ import type { Category, Expense, SummaryRow } from "@/lib/types";
 import { ConfirmSheet } from "../confirm";
 import { EditSheet, ExpenseRow } from "../expense-sheet";
 import ReviewCard, { type Fields } from "../review-card";
-import ThemeToggle from "../theme-toggle";
 
 // Totals are added without currency conversion, as in Summary
 function TodayByCategory({ expenses }: { expenses: Expense[] }) {
@@ -98,7 +97,6 @@ export default function LogScreen({ categories, online, cache, onSaved }: { cate
   return (
     <section className="screen pinned-screen">
       <div className="pinned-top">
-        <ThemeToggle />
         <div className="greet">
           <p className="sub">{today}</p>
           <h1>Log an expense</h1>

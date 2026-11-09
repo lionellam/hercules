@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Settings Page</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root { --page: #ececea; --page-text: #18181b; --page-muted: #5f5f66; --page-card: #fafaf9; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--page); color: var(--page-text); font-family: Inter, -apple-system, system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  main { max-width: 1260px; margin: 0 auto; padding: 36px 16px 80px; }
+  h1 { font-size: 28px; letter-spacing: -0.02em; margin: 0 0 8px; }
+  .intro p { color: var(--page-muted); max-width: 800px; line-height: 1.55; margin: 0 0 10px; font-size: 15px; }
+  section { margin-top: 52px; }
+  section > h2 { font-size: 20px; margin: 0 0 6px; }
+  section > p { color: var(--page-muted); max-width: 800px; line-height: 1.55; margin: 0 0 18px; font-size: 14.5px; }
+  .frames { display: flex; flex-wrap: wrap; gap: 30px 26px; align-items: flex-start; }
+  figure { margin: 0; max-width: 100%; }
+  figcaption { max-width: 340px; font-size: 13px; color: var(--page-muted); margin-top: 12px; line-height: 1.5; }
+  figcaption b { color: var(--page-text); }
+  .badge { display: inline-block; font-size: 11px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; padding: 2px 7px; border-radius: 6px; margin-right: 6px; vertical-align: 1px; background: #1d4ed8; color: #fff; }
+  .badge.alt { background: #7c3aed; }
+  .badge.same { background: #d4d4d8; color: #3f3f46; }
+  .phone { width: 340px; max-width: 100%; height: 680px; border-radius: 30px; overflow: hidden; border: 1px solid rgba(0,0,0,.08);
+           box-shadow: 0 1px 2px rgba(0,0,0,.06), 0 10px 28px rgba(0,0,0,.08); }
+  .notes { margin-top: 56px; background: var(--page-card); border-radius: 16px; padding: 22px 26px; max-width: 860px; }
+  .notes h2 { margin: 0 0 10px; font-size: 18px; }
+  .notes ul { padding-left: 20px; line-height: 1.6; font-size: 14.5px; }
+
+  /* App tokens and styles, from web/app/globals.css */
+  .app { --bg: #fff; --surface: #fff; --text: #18181b; --muted: #71717a; --line: #e7e7e4; --accent: #18181b; --accent-text: #fff; --soft: #f4f4f5; --bad: #b91c1c;
+         background: var(--bg); color: var(--text); font-size: 15px; position: relative; height: 100%; display: flex; flex-direction: column; }
+  .app .top { padding: 30px 20px 16px; border-bottom: 1px solid var(--line); position: relative; }
+  .app .back { display: inline-flex; align-items: center; gap: 4px; color: var(--muted); font-size: 14px; font-weight: 500; margin: -6px 0 8px -2px; outline: 2px dashed #1d4ed8; outline-offset: 3px; border-radius: 6px; }
+  .app h3 { font-size: 28px; font-weight: 700; letter-spacing: -0.02em; }
+  .app .sub { color: var(--muted); font-size: 14px; margin-top: 4px; }
+  .app .scroll { flex: 1; overflow: hidden; padding: 0 20px; }
+  .app .btn { height: 40px; padding: 0 18px; border-radius: 12px; border: none; font: inherit; font-size: 15px; font-weight: 600; background: var(--accent); color: var(--accent-text); margin-top: 14px; }
+  .app .item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--line); gap: 12px; }
+  .app .item .m { font-weight: 500; }
+  .app .item .a { font-weight: 600; font-variant-numeric: tabular-nums; }
+  .app .item .nb { color: var(--muted); font-size: 13px; }
+  .app .group-h { color: var(--muted); font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; margin: 22px 0 6px; }
+  .app .row { display: flex; justify-content: space-between; align-items: center; padding: 13px 0; border-bottom: 1px solid var(--line); gap: 12px; }
+  .app .row .l { display: flex; align-items: center; gap: 12px; min-width: 0; }
+  .app .row .ic { width: 32px; height: 32px; border-radius: 9px; background: var(--soft); display: grid; place-items: center; flex-shrink: 0; }
+  .app .row .ic svg { width: 17px; height: 17px; }
+  .app .row .t { font-weight: 500; }
+  .app .row .d { color: var(--muted); font-size: 13px; margin-top: 1px; }
+  .app .row .chev { color: var(--muted); font-size: 18px; }
+  .app .row.danger .t { color: var(--bad); }
+  .app .seg { display: flex; background: var(--soft); border-radius: 10px; padding: 3px; width: 100%; }
+  .app .seg span { flex: 1; text-align: center; padding: 7px 0; border-radius: 8px; font-size: 13.5px; color: var(--muted); }
+  .app .seg span.on { background: var(--surface); color: var(--text); box-shadow: 0 1px 3px rgba(0,0,0,.1); font-weight: 600; }
+  .app .new { outline: 2px dashed #1d4ed8; outline-offset: 2px; border-radius: 8px; }
+  .app .tabbar { display: flex; border-top: 1px solid var(--line); padding: 8px 0 18px; background: var(--bg); }
+  .app .tabbar span { flex: 1; text-align: center; font-size: 11px; color: var(--muted); }
+  .app .tabbar svg { display: block; width: 21px; height: 21px; margin: 0 auto 3px; }
+  .app .tabbar span.on { color: var(--text); font-weight: 600; }
+  .app .tabbar span.newtab { outline: 2px dashed #1d4ed8; outline-offset: -2px; border-radius: 10px; }
+  .app .total { padding: 14px 0 4px; }
+  .app .total .big { font-size: 32px; font-weight: 700; letter-spacing: -0.02em; }
+  .app .cat { margin-top: 14px; }
+  .app .cat-top { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 6px; }
+  .app .of { color: var(--muted); font-weight: 400; }
+  .app .track { height: 6px; background: var(--soft); border-radius: 3px; overflow: hidden; }
+  .app .fill { height: 100%; background: var(--text); border-radius: 3px; }
+  .app .backdrop { position: absolute; inset: 0; background: rgba(0,0,0,.4); display: flex; align-items: flex-end; z-index: 5; }
+  .app .sheet { width: 100%; background: var(--surface); border-radius: 20px 20px 0 0; padding: 16px 20px 26px; }
+  .app .card-title { font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 12px; }
+  .app .field { display: flex; justify-content: space-between; padding: 11px 0; border-top: 1px solid var(--line); }
+  .app .field label { color: var(--muted); }
+  .app .field .v { font-weight: 500; }
+  .app .actions { display: flex; justify-content: space-between; margin-top: 14px; align-items: center; }
+  .app .actions .r { display: flex; gap: 8px; }
+  .app .actions .ghost { background: none; color: var(--muted); margin: 0; }
+  .app .actions .danger { background: none; color: var(--bad); margin: 0; padding: 0 4px; }
+  .app .actions .btn { margin: 0; }
+</style>
+</head>
+<body>
+<main>
+  <div class="intro">
+    <h1>Settings page</h1>
+    <p>Mockups for a new Settings tab. Categories moves into Settings and is renamed "Categories &amp; budget". Settings also takes in the light/dark choice and Sign out, which today sit on other screens. Everything about adding, editing, budgets and retiring categories stays exactly as it is now. Blue dashed outlines mark what's new or moved.</p>
+  </div>
+
+  <section>
+    <h2>Option A: Settings as a menu</h2>
+    <p>Settings is a short list. Tapping "Categories &amp; budget" opens it as its own page, with "‹ Settings" at the top to go back. The tab bar keeps four tabs, with Settings (a gear) in place of Categories.</p>
+    <div class="frames" id="a"></div>
+  </section>
+
+  <section>
+    <h2>Option B: everything on one page</h2>
+    <p>No second page: Settings shows the categories list directly, between Appearance and Account. Fewer taps to reach a category, but a longer page to scroll.</p>
+    <div class="frames" id="b"></div>
+  </section>
+
+  <section>
+    <h2>Elsewhere in the app</h2>
+    <p>What changes on other screens once Settings exists.</p>
+    <div class="frames" id="c"></div>
+  </section>
+
+  <div class="notes">
+    <h2>To decide</h2>
+    <ul>
+      <li><b>Option A or B.</b> A keeps Settings tidy and leaves room to add more later; B saves a tap.</li>
+      <li><b>Light and dark mode.</b> Move it into Settings (as shown, with a "System" choice that follows the phone), or keep the sun/moon icon on every screen as well.</li>
+      <li><b>Sign out.</b> Move it from the bottom of Summary to Settings (as shown).</li>
+      <li><b>User guide link.</b> Opens the guide on GitHub Pages in a new tab.</li>
+      <li><b>The name.</b> "Categories &amp; budget" as you wrote it, or "Categories &amp; budgets", since each category has its own budget.</li>
+    </ul>
+  </div>
+</main>
+
+<script>
+const icons = {
+  log: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>',
+  history: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg>',
+  summary: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 20V10M12 20V4M18 20v-6"/></svg>',
+  settings: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>',
+  tag: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h7l9 9-6 6-9-9V5zM8 9h.01"/></svg>',
+  book: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5v14z"/><path d="M6.5 17A2.5 2.5 0 0 0 4 19.5 2.5 2.5 0 0 0 6.5 22H20v-5"/></svg>',
+  person: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>',
+};
+const tabbar = (on) => `<div class="tabbar">${[["log","Log"],["history","History"],["summary","Summary"],["settings","Settings"]].map(([k, n]) => `<span class="${n === on ? "on" : ""} ${k === "settings" ? "newtab" : ""}">${icons[k]}${n}</span>`).join("")}</div>`;
+const phone = (inner) => `<div class="phone"><div class="app">${inner}</div></div>`;
+const fig = (inner, cap, badge = "New") => `<figure>${phone(inner)}<figcaption><span class="badge ${badge === "Option B" ? "alt" : badge === "Unchanged" ? "same" : ""}">${badge}</span>${cap}</figcaption></figure>`;
+const cats = [["Food &amp; Dining","500.00"],["Transport","200.00"],["Groceries","300.00"],["Entertainment",""],["Utilities",""],["Health &amp; Medical",""],["Household",""],["Shopping","1,000.00"],["Rent","1,800.00"]];
+const catRows = (n) => cats.slice(0, n).map(([c, b]) => `<div class="item"><div class="m">${c}</div>${b ? `<div class="a">${b}</div>` : '<div class="nb">No budget</div>'}</div>`).join("");
+const appearance = `<div class="group-h">Appearance</div><div class="new" style="padding:4px 0 10px"><div class="seg"><span class="on">System</span><span>Light</span><span>Dark</span></div></div>`;
+const account = `<div class="group-h">Account</div>
+  <div class="row new"><div class="l"><div class="ic">${icons.person}</div><div><div class="t">Signed in</div><div class="d">you@gmail.com</div></div></div></div>
+  <div class="row danger new"><div class="l"><div class="t">Sign out</div></div></div>`;
+const help = `<div class="group-h">Help</div>
+  <div class="row new"><div class="l"><div class="ic">${icons.book}</div><div><div class="t">User guide</div><div class="d">How to use Hercules</div></div></div><span class="chev">↗</span></div>`;
+
+const settingsMenu = `<div class="top"><h3>Settings</h3></div>
+  <div class="scroll">
+    <div class="group-h">Spending</div>
+    <div class="row new"><div class="l"><div class="ic">${icons.tag}</div><div><div class="t">Categories &amp; budget</div><div class="d">14 categories · 5 with a budget</div></div></div><span class="chev">›</span></div>
+    ${appearance}
+    ${help}
+    ${account}
+  </div>${tabbar("Settings")}`;
+
+const catsPage = `<div class="top"><div class="back">‹ Settings</div><h3>Categories &amp; budget</h3><p class="sub">Monthly budgets are optional and in SGD.</p><button class="btn">Add category</button></div>
+  <div class="scroll">${catRows(9)}</div>${tabbar("Settings")}`;
+
+const catSheet = `<div class="top"><div class="back">‹ Settings</div><h3>Categories &amp; budget</h3><p class="sub">Monthly budgets are optional and in SGD.</p><button class="btn">Add category</button></div>
+  <div class="scroll">${catRows(6)}</div>${tabbar("Settings")}
+  <div class="backdrop"><div class="sheet"><div class="card-title">Edit category</div>
+    <div class="field"><label>Name</label><span class="v">Groceries</span></div>
+    <div class="field"><label>Monthly budget (SGD)</label><span class="v">300.00</span></div>
+    <div class="actions"><button class="btn danger">Retire</button><div class="r"><button class="btn ghost">Cancel</button><button class="btn">Save</button></div></div>
+  </div></div>`;
+
+const onePage = (scrolled) => `<div class="top"><h3>Settings</h3></div>
+  <div class="scroll">
+    ${scrolled ? "" : appearance}
+    <div class="group-h new" style="display:flex;justify-content:space-between;align-items:center;padding:2px 0"><span>Categories &amp; budget</span><span style="text-transform:none;letter-spacing:0;font-size:14px;color:var(--text)">+ Add</span></div>
+    ${scrolled ? ["Clothes","Education","Professional Development","Travel","Other"].map((c) => `<div class="item"><div class="m">${c}</div><div class="nb">No budget</div></div>`).join("") : catRows(6)}
+    ${scrolled ? help + account : ""}
+  </div>${tabbar("Settings")}`;
+
+document.getElementById("a").innerHTML = [
+  fig(settingsMenu, "<b>Settings.</b> A short list: Categories &amp; budget (with a count), Appearance, the user guide, and your account with Sign out."),
+  fig(catsPage, "<b>Categories &amp; budget.</b> The current Categories screen, renamed, with \"‹ Settings\" to go back. Add category, the list and the Retired group work as now."),
+  fig(catSheet, "<b>Editing a category.</b> The same edit sheet as today, with Retire, Cancel and Save.", "Unchanged"),
+].join("");
+
+document.getElementById("b").innerHTML = [
+  fig(onePage(false), "<b>Top of Settings.</b> Appearance, then the categories list with an \"+ Add\" link in its heading. Tapping a category opens the same edit sheet.", "Option B"),
+  fig(onePage(true), "<b>Scrolled down.</b> The end of the categories list, then Help and Account.", "Option B"),
+].join("");
+
+document.getElementById("c").innerHTML = [
+  fig(`<div class="top"><h3>Summary</h3></div><div class="scroll">
+      <div class="total"><div class="sub" style="margin:0">Spent so far this month</div><div class="big">$2,283.02</div></div>
+      <div class="cat"><div class="cat-top"><span>Rent</span><strong>1,800.00 <span class="of">of 1,800.00</span></strong></div><div class="track"><div class="fill" style="width:100%"></div></div></div>
+      <div class="cat"><div class="cat-top"><span>Food &amp; Dining</span><strong>142.09 <span class="of">of 500.00</span></strong></div><div class="track"><div class="fill" style="width:28%"></div></div></div>
+      <div class="cat"><div class="cat-top"><span>Utilities</span><strong>118.35</strong></div><div class="track"><div class="fill" style="width:7%"></div></div></div>
+      <p class="sub" style="margin-top:22px;text-align:center">Sign out has moved to Settings.</p>
+    </div>${tabbar("Summary")}`,
+    "<b>Summary.</b> No sign-out section at the bottom any more. (The note is only for this mockup.) The sun/moon icon is gone from the top of each screen if Appearance moves into Settings."),
+].join("");
+</script>
+</body>
+</html>

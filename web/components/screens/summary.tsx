@@ -1,16 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { signOutAction } from "@/app/actions";
 import { expensesUrl, fmt, summaryUrl, useCached, type ApiCache } from "@/lib/client";
 import { daysInMonth, localToday, monthKey, monthLabel, shortDay } from "@/lib/dates";
 import { cents, paceRows, type PaceRow } from "@/lib/pace";
 import type { Category, Expense, SummaryRow } from "@/lib/types";
 import { BurnUp, PaceNote } from "../pace";
 import SpendPie from "../spend-pie";
-import ThemeToggle from "../theme-toggle";
 
-export default function SummaryScreen({ email, cache, categories }: { email: string; cache: ApiCache; categories: Category[] }) {
+export default function SummaryScreen({ cache, categories }: { cache: ApiCache; categories: Category[] }) {
   const [offset, setOffset] = useState(0);
   const [open, setOpen] = useState<number | null>(null);
   const month = monthKey(offset);
@@ -42,7 +40,6 @@ export default function SummaryScreen({ email, cache, categories }: { email: str
   return (
     <section className="screen pinned-screen">
       <div className="pinned-top">
-        <ThemeToggle />
         <h1>Summary</h1>
         <div className="seg">
           <button className={offset === 0 ? "on" : ""} onClick={() => showMonth(0)}>{monthLabel(monthKey(0), { month: "long" })}</button>
@@ -118,10 +115,6 @@ export default function SummaryScreen({ email, cache, categories }: { email: str
         )}
       </div>
       {rows?.length === 0 && <p className="sub empty">No expenses this month.</p>}
-      <form className="signout" action={signOutAction}>
-        <p>Signed in as {email}</p>
-        <button type="submit">Sign out</button>
-      </form>
     </section>
   );
 }

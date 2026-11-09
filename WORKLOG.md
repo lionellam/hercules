@@ -896,3 +896,21 @@ Last updated: 9 November 2026
 
 ### What Was Done
 - The owner noticed the user guide's screen mockups no longer matched the app. Updated them in both copies (repository and artifact): the Log and review mockups now show the "×" in the text box, the three History mockups show the search field below the month, and a new mockup in the History section shows a search for "grab" with highlighted matches and the results-and-total line.
+
+---
+
+## 09 November 2026 — Settings Tab
+
+### What Was Done
+- The owner asked for a Settings page, with Categories moved into it and renamed. Mockups (`design/settings-mockups.html`) compared Settings as a short menu (Option A) with everything on one page (Option B). The owner chose Option A, named the page "Categories & budgets", and asked for no user guide link, and for the app's version and last update to be shown below the account section.
+- **Tab bar:** Log, History, Summary and **Settings** (a gear), in place of Categories.
+- **Settings:** Spending (**Categories & budgets**, with the number of categories and how many have a budget), Appearance (System, Light or Dark), Account (email address and Sign out), and the version with the date and time of the last update.
+- **Categories & budgets** opens as its own page with "‹ Settings" to go back; it works exactly as the Categories tab did. Opening the Settings tab always starts on the list.
+- **Appearance** replaces the sun or moon icon on every screen, and adds a System choice that follows the device (the saved choice is cleared). The phone's status-bar colour still follows the theme. **Sign out** moves from the bottom of Summary.
+- **Version and last update** come from `web/package.json`, the short commit ID and the build time, fixed when the app is built (`web/next.config.ts`); on Vercel the commit comes from the deployment.
+- Updated the Specification (v0.34, new Section 4.4), Architecture (v0.15, decision 33; decisions 25 and 26 updated), Project Plan (v0.10), Project Charter (v0.9), Test Plan (v1.1, new Section Q) and the user guide (new Settings section and mockup; tab bars and the categories mockup updated; theme icon removed from mockups).
+- Tested in the local app at phone width and at 1,024 pixels: the four tabs; no theme icon on Log, History or Summary and no sign-out on Summary; the Settings list with "14 categories · 5 with a budget" and "Version 0.1.0 (6b31fbc)"; Categories & budgets opening and "‹ Settings" returning; Settings reopening on the list after switching tabs; Dark, Light and System each applying at once with the status-bar colour following; System following a dark device; and Dark kept after a reload. The test browser's theme was put back to System afterwards. No data was changed. Type-check, lint and a production build passed.
+
+### Decisions Made
+- **A menu rather than one long page** — keeps Settings tidy and leaves room for more settings later.
+- **Theme choice only in Settings** — tidier screen headers, and a System option the old icon couldn't offer.

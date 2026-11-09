@@ -228,6 +228,18 @@ html { scroll-behavior: smooth; }
 .m .mcount { display: flex; justify-content: space-between; color: var(--m-muted); font-size: 11.5px; margin-top: 12px; }
 .m .mcount b { color: var(--m-text); font-variant-numeric: tabular-nums; }
 .m mark { background: #fde68a; color: inherit; border-radius: 3px; padding: 0 1px; }
+/* Settings */
+.m .back { color: var(--m-muted); font-size: 11.5px; font-weight: 500; margin-bottom: 4px; }
+.m .sh { font-size: 10px; font-weight: 600; color: var(--m-muted); letter-spacing: .06em; margin: 16px 0 4px; }
+.m .srow { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--m-line); }
+.m .srow .ic { width: 26px; height: 26px; border-radius: 8px; background: var(--m-soft); display: grid; place-items: center; flex-shrink: 0; }
+.m .srow .ic svg { width: 14px; height: 14px; }
+.m .srow .tx { flex: 1; min-width: 0; }
+.m .srow .t { font-weight: 500; font-size: 13px; }
+.m .srow .d { color: var(--m-muted); font-size: 10.5px; margin-top: 1px; }
+.m .srow .chev { color: var(--m-muted); font-size: 15px; }
+.m .srow.out .t { color: var(--m-bad); }
+.m .ver { text-align: center; color: var(--m-muted); font-size: 10px; margin-top: 18px; line-height: 1.6; }
 /* Confirmation sheet, Undo bar and quick answers */
 .m .m-confirm { position: absolute; left: 0; right: 0; bottom: 0; background: var(--m-bg); border-radius: 18px 18px 0 0; padding: 16px 16px 18px; box-shadow: 0 -6px 22px rgba(0,0,0,.16); }
 .m .m-confirm-t { font-size: 15px; font-weight: 700; }
@@ -256,7 +268,8 @@ dl.faq dd { margin: 2px 0 0; color: var(--ink-2); }
       <li><a href="#history">History</a></li>
       <li><a href="#summary">Summary</a></li>
       <li><a href="#pace">Spending pace</a></li>
-      <li><a href="#categories">Categories and budgets</a></li>
+      <li><a href="#settings">Settings</a></li>
+      <li><a href="#categories">Categories &amp; budgets</a></li>
       <li><a href="#privacy">Your privacy</a></li>
       <li><a href="#faq">Quick answers</a></li>
     </ol>
@@ -278,9 +291,9 @@ dl.faq dd { margin: 2px 0 0; color: var(--ink-2); }
     <ol class="steps">
       <li><span><b>Open the app</b> at the link you were sent, and tap <b>Sign in with Google</b>. Use the Google account whose email address was invited. If you see "This account hasn't been invited", ask Lionel to add your address.</span></li>
       <li><span><b>Add it to your home screen</b> so it opens like an app.<br>iPhone (Safari): tap the Share button, then <b>Add to Home Screen</b>.<br>Android (Chrome): tap the ⋮ menu, then <b>Add to Home screen</b> or <b>Install app</b>.</span></li>
-      <li><span><b>Choose light or dark.</b> The app follows your phone's setting until you tap the sun or moon icon at the top right of any screen. Your choice is remembered on that device.</span></li>
+      <li><span><b>Choose light or dark</b> if you like. The app follows your phone's setting; to change that, go to <b>Settings</b> → Appearance.</span></li>
     </ol>
-    <p>You'll stay signed in on that device for up to 90 days. There are four tabs along the bottom: <b>Log</b>, <b>History</b>, <b>Summary</b> and <b>Categories</b>. On a tablet or computer the app gets wider and shows two columns.</p>
+    <p>You'll stay signed in on that device for up to 90 days. There are four tabs along the bottom: <b>Log</b>, <b>History</b>, <b>Summary</b> and <b>Settings</b>. On a tablet or computer the app gets wider and shows two columns.</p>
 
     <h2 id="log">Logging an expense</h2>
     <ol class="steps">
@@ -294,7 +307,6 @@ dl.faq dd { margin: 2px 0 0; color: var(--ink-2); }
       <figure>
         <div class="phone"><div class="m">
           <div class="top">
-            <svg class="tgl" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z"/></svg>
             <div class="sub">Saturday, 7 November</div>
             <h5>Log an expense</h5>
             <div class="input"><div class="txt">Lunch at Ya Kun for $4.50</div><span class="mx">×</span><div class="row"><span class="btn">Parse</span></div></div>
@@ -312,7 +324,7 @@ dl.faq dd { margin: 2px 0 0; color: var(--ink-2); }
             <span class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Log</span>
             <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg>History</span>
             <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 20V10M12 20V4M18 20v-6"/></svg>Summary</span>
-            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 5h7l9 9-6 6-9-9V5zM8 9h.01"/></svg>Categories</span>
+            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>Settings</span>
           </div>
         </div></div>
         <figcaption><b>Log.</b> Type the expense and tap Parse. Spent today and the Today list update each time you save.</figcaption>
@@ -409,7 +421,7 @@ dl.faq dd { margin: 2px 0 0; color: var(--ink-2); }
             <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Log</span>
             <span class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg>History</span>
             <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 20V10M12 20V4M18 20v-6"/></svg>Summary</span>
-            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 5h7l9 9-6 6-9-9V5zM8 9h.01"/></svg>Categories</span>
+            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>Settings</span>
           </div>
         </div></div>
         <figcaption><b>Then offers Undo</b> for about five seconds, in case you tapped by mistake.</figcaption>
@@ -424,7 +436,6 @@ dl.faq dd { margin: 2px 0 0; color: var(--ink-2); }
       <figure>
         <div class="phone"><div class="m">
           <div class="top">
-            <svg class="tgl" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z"/></svg>
             <h5>History</h5>
             <div class="month"><i>‹</i><span>November 2026</span><i style="opacity:.35">›</i></div><div class="msearch"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><span class="q ph">Search expenses</span></div>
           </div>
@@ -474,7 +485,6 @@ dl.faq dd { margin: 2px 0 0; color: var(--ink-2); }
       <figure>
         <div class="phone"><div class="m">
           <div class="top">
-            <svg class="tgl" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z"/></svg>
             <h5>Summary</h5>
             <div class="seg"><span class="on">November</span><span>October</span></div>
           </div>
@@ -529,8 +539,36 @@ dl.faq dd { margin: 2px 0 0; color: var(--ink-2); }
     <div class="callout"><b>A big payment early in the month isn't overspending.</b> If you pay all of your rent on the 1st, it shows "Budget used", not "over pace". Early in the month, a single purchase can also show as over pace, because only a few days' worth of budget is expected so far. It evens out as the month goes on.</div>
     <p><b>The burn-up chart.</b> Tap a budgeted category to open its chart. The solid line is your running total, stepping up on each day you spent. The dashed line is the budget spread evenly across the month, and the upright line is today. If the solid line is above the dashed one, you're over pace. Touch or drag across the chart to see any day's figures, or open <b>Daily figures</b> underneath for the same numbers in a table.</p>
 
-    <h2 id="categories">Categories and budgets</h2>
-    <p>Everyone starts with 14 categories, from Food &amp; Dining to Travel, including <b>Other</b>. On the Categories tab you can:</p>
+    <h2 id="settings">Settings</h2>
+    <p>The <b>Settings</b> tab, with the gear icon, holds the things you set once and rarely change:</p>
+    <ul class="plain">
+      <li><b>Categories &amp; budgets:</b> add, rename and retire categories, and set monthly budgets. See the next section.</li>
+      <li><b>Appearance:</b> <b>System</b> follows your phone's light or dark setting; <b>Light</b> or <b>Dark</b> keeps the app that way. Your choice is remembered on that device.</li>
+      <li><b>Account:</b> the email address you're signed in with, and <b>Sign out</b>.</li>
+      <li><b>Version:</b> at the bottom, the app's version number and when it was last updated. Handy to mention if you report a problem.</li>
+    </ul>
+    <div class="figure-row">
+      <figure>
+        <div class="phone"><div class="m">
+          <div class="top"><h5>Settings</h5></div>
+          <div class="body">
+            <div class="sh">SPENDING</div>
+            <div class="srow"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h7l9 9-6 6-9-9V5zM8 9h.01"/></svg></span><span class="tx"><div class="t">Categories &amp; budgets</div><div class="d">14 categories · 5 with a budget</div></span><span class="chev">›</span></div>
+            <div class="sh">APPEARANCE</div>
+            <div class="seg"><span class="on">System</span><span>Light</span><span>Dark</span></div>
+            <div class="sh">ACCOUNT</div>
+            <div class="srow"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg></span><span class="tx"><div class="t">Signed in</div><div class="d">you@gmail.com</div></span></div>
+            <div class="srow out"><span class="tx"><div class="t">Sign out</div></span></div>
+            <div class="ver">Version 0.1.0 (6b31fbc)<br>Last updated 9 Nov 2026, 7:32 pm</div>
+          </div>
+          <div class="tabs"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>Log</span><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg>History</span><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 20V10M12 20V4M18 20v-6"/></svg>Summary</span><span class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>Settings</span></div>
+        </div></div>
+        <figcaption><b>Settings.</b> Categories &amp; budgets opens its own page; tap "‹ Settings" there to come back.</figcaption>
+      </figure>
+    </div>
+
+    <h2 id="categories">Categories &amp; budgets</h2>
+    <p>Everyone starts with 14 categories, from Food &amp; Dining to Travel, including <b>Other</b>. Go to <b>Settings</b> → <b>Categories &amp; budgets</b> to:</p>
     <ul class="plain">
       <li><b>Add a category:</b> tap <b>Add category</b>, give it a name, and optionally a monthly budget.</li>
       <li><b>Rename it or change its budget:</b> tap the category. A new name shows on all its past expenses too.</li>
@@ -543,8 +581,8 @@ dl.faq dd { margin: 2px 0 0; color: var(--ink-2); }
       <figure>
         <div class="phone"><div class="m">
           <div class="top">
-            <svg class="tgl" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z"/></svg>
-            <h5>Categories</h5>
+            <div class="back">‹ Settings</div>
+            <h5>Categories &amp; budgets</h5>
             <div class="sub" style="margin-top:3px">Monthly budgets are optional and in SGD.</div>
             <div style="margin-top:10px"><span class="btn">Add category</span></div>
           </div>
@@ -559,7 +597,7 @@ dl.faq dd { margin: 2px 0 0; color: var(--ink-2); }
             <div class="cat-row"><span>Other</span><span>No budget</span></div>
           </div>
         </div></div>
-        <figcaption><b>Categories.</b> Budgets are optional. Tap a category to rename it, change its budget or retire it.</figcaption>
+        <figcaption><b>Categories &amp; budgets.</b> Budgets are optional. Tap a category to rename it, change its budget or retire it.</figcaption>
       </figure>
     </div>
 

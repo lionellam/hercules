@@ -1,8 +1,8 @@
 **Natural Language Expense & Budget Tracker**
 
 ```
-Version 0.8 · Draft
-Last Reviewed: 8 November 2026
+Version 0.9 · Draft
+Last Reviewed: 9 November 2026
 Produced with AI Assistance (Claude Code)
 ```
 
@@ -18,6 +18,7 @@ Produced with AI Assistance (Claude Code)
 | 0.6 | 2026-11-02 | Lionel Lam | Category management and per-category monthly budgets delivered ahead of Phases 3 and 4; data model and milestones updated |
 | 0.7 | 2026-11-07 | Lionel Lam | Expense data model aligned with the Specification (date only; no time or payment method) |
 | 0.8 | 2026-11-08 | Lionel Lam | Retiring categories delivered ahead of Phase 4 |
+| 0.9 | 2026-11-09 | Lionel Lam | Categories are managed on the Categories & budgets page in Settings |
 
 ---
 
@@ -84,7 +85,7 @@ Friction of maintaining an up-to-date expense and budget log can be due to the f
 - **User —** Google account, email, allow-listed
 - **Expense —** amount, currency, category, date, merchant, remarks, and the original text as typed
 - **Budget —** an optional monthly limit stored on each category; a fuller budget record (period, history) may follow in Phase 3
-- **Category —** per-user, extensible taxonomy; new users are seeded with a starter list (e.g. Food & Dining, Transport, Groceries, Utilities, Other); users add, rename, retire and restore categories on a Categories screen
+- **Category —** per-user, extensible taxonomy; new users are seeded with a starter list (e.g. Food & Dining, Transport, Groceries, Utilities, Other); users add, rename, retire and restore categories on the Categories & budgets page in Settings
 
 *Full field-level schema maintained separately (see project repo / design doc).*
 
