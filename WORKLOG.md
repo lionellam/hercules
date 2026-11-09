@@ -995,3 +995,12 @@ Last updated: 9 November 2026
   6. Specification: the "`raw_input` storage shape" question is marked resolved (a single table, as built).
   7. Test Plan (v1.5): new after-deploy check S-08 for the CSV download.
 - Documents only, so the app version stays at 1.1.0.
+
+---
+
+## 09 November 2026 — User Guide: Owner Not Named
+
+### What Was Done
+- At the owner's request, removed their name from the user guide (repository copy and artifact). The three mentions now say "the app owner", matching the wording on the app's sign-in screen: whom to ask for an invitation, who can reach the database in the privacy section, and whom to ask about a deleted expense in Quick answers. Documents only, so the app version stays at 1.1.0.
+- Also at the owner's request, removed the privacy line about the app owner being able to reach the database.
+- The guide no longer suggests that deleted expenses can be recovered: the privacy section drops "kept in the database so it can be recovered", and the Quick answers entry now says a deleted expense can only be brought back with Undo, in the few seconds after deleting. The owner doesn't want recovery offered as a feature, since it would mean manual work for them.
