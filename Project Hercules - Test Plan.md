@@ -1,7 +1,7 @@
 # Project Hercules — Test Plan: Web App v1
 
 ```
-Version 1.4 · Draft
+Version 1.5 · Draft
 Last Reviewed: 9 November 2026
 Produced with AI Assistance (Claude Code)
 ```
@@ -15,6 +15,7 @@ Produced with AI Assistance (Claude Code)
 | 1.2 | 2026-11-09 | Lionel Lam | Sign-out confirmation (A-05, A-09), and nothing carrying over after sign-out (A-10) |
 | 1.3 | 2026-11-09 | Lionel Lam | Integrity check: S-02 updated for Settings; B-07 reference corrected; A-09 and A-10 in order; Q-08 and new S-07 check the version against the changelog; clean-up also clears test parses |
 | 1.4 | 2026-11-09 | Lionel Lam | CSV download: new Section R |
+| 1.5 | 2026-11-09 | Lionel Lam | Integrity check: after-deploy check S-08 for the CSV download |
 
 ---
 
@@ -316,6 +317,7 @@ A quick check on the live app after each deploy. Use your own account, and remov
 | S-05 | Signed-out data check | In a private browser window, open `/api/expenses?month=` with this month (for example `2026-11`) on the live address | `{"error":"Not signed in"}` |
 | S-06 | User guide | Open https://lionellam.github.io/hercules/ | The user guide loads |
 | S-07 | Version | Settings → look below Account | After a release, the version matches the newest entry in `CHANGELOG.md`, the short code matches the latest commit, and "Last updated" is the time of this deploy |
+| S-08 | CSV download | Summary → **CSV** on this month; open the file | The file downloads, and its Amount column adds up to this month's total on Summary |
 
 The test expense from S-03 stays in the database as a deleted record. That's harmless, but it can be removed by Lionel if wanted.
 

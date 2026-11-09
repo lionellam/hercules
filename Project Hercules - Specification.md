@@ -1,7 +1,7 @@
 # Project Hercules — Specification Sheet: "Log an Expense" Flow
 
 ```
-Version 0.36 · Draft 
+Version 0.37 · Draft 
 Last Reviewed: 9 November 2026
 Produced with AI Assistance (Claude Code)
 ```
@@ -46,6 +46,7 @@ Produced with AI Assistance (Claude Code)
 | 0.34 | 2026-11-09 | Lionel Lam | Settings tab replaces the Categories tab; Categories becomes "Categories & budgets" inside Settings; Appearance and Sign out move into Settings; the app version and last update are shown (Section 4.4) |
 | 0.35 | 2026-11-09 | Lionel Lam | Signing out asks for confirmation, then reloads the page fully (Sections 4.2 and 4.4) |
 | 0.36 | 2026-11-09 | Lionel Lam | Download a month's expenses as a CSV file from Summary (Section 4.5); export no longer deferred |
+| 0.37 | 2026-11-09 | Lionel Lam | Integrity check: open questions updated for the web app (user model; raw text stored in the expense row) |
 
 ---
 
@@ -280,9 +281,9 @@ Carried forward, not yet resolved:
 
 - **Multi-item entries** — how should input like *"coffee $4 and lunch $12"* be handled? Single record, or split into two?
 - **Low-confidence parsing** — should the confirmation screen indicate when the model was uncertain about a specific field (e.g. no date mentioned, so it defaulted to today)? Deferred to a later phase, or in scope now?
-- **`raw_input` storage shape** — single table (structured fields + raw text together, as currently drafted), or a separate related/audit table?
+- ~~**`raw_input` storage shape**~~ — *Resolved: a single table. The original text is stored in the expense row alongside the structured fields, as drafted.*
 - ~~**Category "Other" handling**~~ — *Resolved in v0.3: `is_other` flag added to `Category`; `other_sub_label` field added to `Expense` for specificity. `remarks` remains a general-purpose notes field.*
-- ~~**User/profile model**~~ — *Resolved in v0.3: lightweight hardcoded profiles for the prototype (profile picker, no auth); designed to scale to proper authentication in a future phase. Superseded in v0.7: Google sign-in with an allow-list. See Section 5.4.*
+- ~~**User/profile model**~~ — *Resolved: the proof of concept used hardcoded profiles (a profile picker, no sign-in). The web app replaced them with Google sign-in, restricted to an allow-list, with a `User` record per person (Section 5).*
 - **`was_edited` granularity** — currently a single boolean. A likely future refinement is tracking *which* fields were edited (e.g. `edited_fields: [category, amount]`) for richer parsing-quality signal — not required now.
 
 ---

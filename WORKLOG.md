@@ -979,3 +979,19 @@ Last updated: 9 November 2026
 
 ### What Was Done
 - Updated the user guide's mockups (repository copy and artifact) for version 1.1.0: the Summary mockup now shows the **CSV** button beside the total, with a note in its caption, and the Settings mockup shows "Version 1.1.0 (cdfd0e7)". Documents only, so the app version stays at 1.1.0.
+
+---
+
+## 09 November 2026 — Document Integrity Check (after 1.1.0)
+
+### What Was Done
+- Checked all project documents against each other and against the app at version 1.1.0. Versions, dates, history tables, the changelog, both READMEs, the user guide's text and the Go-Live Checklist were consistent.
+- Fixed seven issues:
+  1. Architecture (v0.19): the system overview still listed a Categories tab; it now lists Settings.
+  2. User guide: the "Updated" date in its header still said 8 November.
+  3. Specification (v0.37): the resolved "User/profile model" question still described the prototype's hardcoded profiles; it now records Google sign-in with an allow-list.
+  4. Charter (v0.11) and Project Plan (v0.12): Phase 2 (Web App v1) is now marked complete — live since 1 November, released as 1.0.0.
+  5. Project Plan: the feature list now includes History search, Settings, and confirmations with Undo; Phase 3 notes History search and the CSV download as delivered early.
+  6. Specification: the "`raw_input` storage shape" question is marked resolved (a single table, as built).
+  7. Test Plan (v1.5): new after-deploy check S-08 for the CSV download.
+- Documents only, so the app version stays at 1.1.0.

@@ -1,7 +1,7 @@
 # Project Hercules — Architecture: Web App v1
 
 ```
-Version 0.18 · Draft
+Version 0.19 · Draft
 Last Reviewed: 9 November 2026
 Produced with AI Assistance (Claude Code)
 ```
@@ -28,6 +28,7 @@ Produced with AI Assistance (Claude Code)
 | 0.16 | 2026-11-09 | Lionel Lam | Decision 30: signing out also asks for confirmation. Decision 23: signing out clears everything held in memory |
 | 0.17 | 2026-11-09 | Lionel Lam | Decision 34: semantic versioning, starting at 1.0.0, with a changelog and Git tags |
 | 0.18 | 2026-11-09 | Lionel Lam | Decision 35: monthly CSV download from Summary; export delivered ahead of Phase 4 |
+| 0.19 | 2026-11-09 | Lionel Lam | Integrity check: system overview lists the Settings tab |
 
 ---
 
@@ -41,7 +42,7 @@ Record the architecture of the Project Hercules web app (Phase 2 — Web App v1)
  ┌──────────────────────────┐
  │  Phone (PWA, Safari)     │
  │  Log · History ·         │
- │  Summary · Categories    │
+ │  Summary · Settings      │
  └────────────┬─────────────┘
               │ HTTPS
  ┌────────────▼─────────────┐        ┌──────────────────────────┐
