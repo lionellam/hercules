@@ -926,3 +926,12 @@ Last updated: 9 November 2026
 - Updated the Specification (v0.35; Section 4.2 table and Section 4.4, and "signing out" removed from the actions that don't ask), Architecture (v0.16; decisions 23 and 30), Test Plan (v1.2; A-05, A-09, A-10) and the user guide's Settings section.
 - Tested in the local app: the sheet's text and red button; Cancel and tapping outside both keep you signed in; confirming signs out to the sign-in screen with the page's memory cleared (a marker set before signing out was gone); signing back in opened fresh on Log. Type-check passed.
 - **Confirmed (9 November 2026):** after the deploy, the owner checked on their phone that Sign out shows the confirmation and works as expected.
+
+---
+
+## 09 November 2026 — User Guide: What and Why, and Mockups Refreshed
+
+### What Was Done
+- At the owner's request, added a "What Hercules is, and why" section at the start of the user guide, before Getting started: what the app is; why it exists (logging should take seconds, you stay in control, no subscription, private by design, budgets you can act on mid-month, and a real-world trial of CPMAI), drawn from the Project Charter's objectives and problem statement; and what it doesn't do (no bank sync or receipt reading, SGD totals, no shared budgets, no export yet).
+- Brought the mockups up to date with the app: Summary now shows the comparison with last month ("+$412.60 vs October"); Settings shows the current version line; a new mockup shows the sign-out confirmation; and Categories & budgets shows the collapsed "Retired" row.
+- Updated both copies (repository and artifact).
