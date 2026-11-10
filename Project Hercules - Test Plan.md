@@ -1,7 +1,7 @@
 # Project Hercules — Test Plan: Web App v1
 
 ```
-Version 1.6 · Draft
+Version 1.7 · Draft
 Last Reviewed: 10 November 2026
 Produced with AI Assistance (Claude Code)
 ```
@@ -17,6 +17,7 @@ Produced with AI Assistance (Claude Code)
 | 1.4 | 2026-11-09 | Lionel Lam | CSV download: new Section R |
 | 1.5 | 2026-11-09 | Lionel Lam | Integrity check: after-deploy check S-08 for the CSV download |
 | 1.6 | 2026-11-10 | Lionel Lam | R-10: CSV from the iPhone home-screen app uses the share sheet |
+| 1.7 | 2026-11-10 | Lionel Lam | Integrity check: new R-11 (the prepared CSV is refreshed after a change, 1.1.2); S-08 covers the home-screen app |
 
 ---
 
@@ -303,6 +304,7 @@ These need a look at the local database; ask Claude to run them.
 | R-08 | Signed out | While signed out, open `/api/expenses/export?month=` with this month | `{"error":"Not signed in"}`; no file |
 | R-09 | Another person's data | As a second test account (see A-07), download the same month | Only that account's expenses are in the file |
 | R-10 | iPhone home-screen app **[Phone]** | Open Hercules from the home-screen icon → Summary → **CSV**; choose **Save to Files**; then try again and close the share sheet without choosing | The share sheet opens over the app. The file saves to Files with the right name and contents. Closing the sheet returns to Summary; the app never gets stuck on a download screen |
+| R-11 | File refreshed after a change **[Phone]** | In the home-screen app: Summary → **CSV**, close the share sheet. Log `[TEST] coffee 1.00` → Save. Back to Summary → **CSV** → **Save to Files**; open the file. Then delete the test expense | The share sheet opens at once both times. The second file includes the `[TEST]` expense, and its Amount column adds up to the new total on Summary |
 
 ---
 
@@ -319,7 +321,7 @@ A quick check on the live app after each deploy. Use your own account, and remov
 | S-05 | Signed-out data check | In a private browser window, open `/api/expenses?month=` with this month (for example `2026-11`) on the live address | `{"error":"Not signed in"}` |
 | S-06 | User guide | Open https://lionellam.github.io/hercules/ | The user guide loads |
 | S-07 | Version | Settings → look below Account | After a release, the version matches the newest entry in `CHANGELOG.md`, the short code matches the latest commit, and "Last updated" is the time of this deploy |
-| S-08 | CSV download | Summary → **CSV** on this month; open the file | The file downloads, and its Amount column adds up to this month's total on Summary |
+| S-08 | CSV download | Summary → **CSV** on this month; open the file. In the iPhone home-screen app, the share sheet opens instead: choose **Save to Files**, then open the file | The file downloads (or saves to Files), and its Amount column adds up to this month's total on Summary |
 
 The test expense from S-03 stays in the database as a deleted record. That's harmless, but it can be removed by Lionel if wanted.
 

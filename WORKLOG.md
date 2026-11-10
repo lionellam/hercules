@@ -1003,6 +1003,7 @@ Last updated: 10 November 2026
 ### What Was Done
 - At the owner's request, removed their name from the user guide (repository copy and artifact). The three mentions now say "the app owner", matching the wording on the app's sign-in screen: whom to ask for an invitation, who can reach the database in the privacy section, and whom to ask about a deleted expense in Quick answers. Documents only, so the app version stays at 1.1.0.
 - Also at the owner's request, removed the privacy line about the app owner being able to reach the database.
+  *Clarified 10 November 2026: with this line removed and the Quick answers entry rewritten (below), only one mention remains: whom to ask for an invitation.*
 - The guide no longer suggests that deleted expenses can be recovered: the privacy section drops "kept in the database so it can be recovered", and the Quick answers entry now says a deleted expense can only be brought back with Undo, in the few seconds after deleting. The owner doesn't want recovery offered as a feature, since it would mean manual work for them.
 - The "No subscription" card no longer names a competitor: "Popular budgeting apps such as YNAB charge a recurring fee" became "Many budgeting apps charge a recurring fee", at the owner's request.
 
@@ -1040,3 +1041,15 @@ Last updated: 10 November 2026
 - Version **1.1.2** (an improvement to an existing feature), with a changelog entry. Updated the Specification (v0.39, Section 4.5) and Architecture (v0.21, decision 35).
 - Tested locally in simulated home-screen mode, counting file requests: first visit 1; leaving and returning twice, still 1; switching to October 2; back to November, still 2; tapping CSV shared November's file at once; after retiring a temporary category in the app, returning to Summary fetched November afresh (3); leaving and returning again, still 3. In a normal browser no file was fetched in advance. The temporary category was removed and local data confirmed identical to a snapshot. Type-check, lint and a production build passed.
 - **Confirmed (10 November 2026):** after the deploy, the owner checked on their phone that the share sheet still works with 1.1.2.
+
+---
+
+## 10 November 2026 — Document Integrity Check After 1.1.2
+
+### What Was Done
+- At the owner's request, checked the documents against versions 1.1.1 and 1.1.2. Version histories, `CHANGELOG.md`, `web/package.json`, the Git tags (v1.0.0 to v1.1.2, local and on GitHub), both READMEs and the user guide agreed. Four problems were found and fixed:
+  1. Architecture (v0.22): decision 35's original reason said a file from the server downloads reliably in the home-screen app, which 1.1.1 showed to be wrong on iPhone. That sentence is now struck through and marked as superseded.
+  2. Test Plan (v1.7): new phone test R-11 checks that the file prepared for the share sheet is refreshed after a change (the 1.1.2 behaviour), so an out-of-date file would be caught.
+  3. Test Plan: after-deploy check S-08 now covers the home-screen app, where **CSV** opens the share sheet.
+  4. Work log: the 9 November "User Guide: Owner Not Named" entry read as if three mentions of "the app owner" remained in the guide; a note now says only the invitation mention remains.
+- Documents only, so the app version stays at 1.1.2.
