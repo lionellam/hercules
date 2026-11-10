@@ -6,6 +6,13 @@ Versions follow [semantic versioning](https://semver.org): **major** for a chang
 
 ---
 
+## 1.1.2 — 10 November 2026
+
+**Improved**
+- In the iPhone home-screen app, the file behind the **CSV** button is now prepared once and kept while the app is open, instead of on every visit to Summary. It's prepared again only after you save, edit or delete an expense or change a category. Fewer background requests, with the same instant share sheet.
+
+---
+
 ## 1.1.1 — 10 November 2026
 
 **Fixed**

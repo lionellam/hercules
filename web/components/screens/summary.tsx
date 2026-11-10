@@ -21,12 +21,17 @@ function sharesFiles() {
 }
 const noSubscribe = () => () => {};
 
+// CSV files prepared for the share sheet, kept while the app is open (a sign-out reloads the page, which clears them).
+// Keyed by month and the app's change counter, so any change in the app means a fresh file next time.
+const preparedFiles = new Map<string, File>();
+const preparing = new Set<string>();
+const MAX_PREPARED = 6;
+
 export default function SummaryScreen({ cache, categories }: { cache: ApiCache; categories: Category[] }) {
   const [offset, setOffset] = useState(0);
   const [open, setOpen] = useState<number | null>(null);
   const [downloadNote, setDownloadNote] = useState("");
   const shareMode = useSyncExternalStore(noSubscribe, sharesFiles, () => false);
-  const [prepared, setPrepared] = useState<{ key: string; file: File } | null>(null);
   const month = monthKey(offset);
   const prevMonth = monthKey(offset - 1);
   const isCurrent = offset === 0;
@@ -46,22 +51,22 @@ export default function SummaryScreen({ cache, categories }: { cache: ApiCache; 
   const max = Math.max(...(rows ?? []).map((r) => r.total), 0) || 1;
   const diff = total - prevTotal;
 
-  // For the share sheet, the file must be ready the moment CSV is tapped, so it's fetched in advance
-  // whenever the month or its expenses change
-  const exportKey = `${month}:${rows?.length ?? ""}:${total}`;
+  // For the share sheet, the file must be ready the moment CSV is tapped, so it's fetched in advance:
+  // once per month shown, and again only after a change made in the app (Specification 4.5)
+  const fileKey = `${month}:${cache.version}`;
   useEffect(() => {
-    if (!shareMode) return;
-    let cancelled = false;
+    if (!shareMode || preparedFiles.has(fileKey) || preparing.has(fileKey)) return;
+    preparing.add(fileKey);
     fetch(`/api/expenses/export?month=${month}`)
       .then((res) => (res.ok ? res.blob() : Promise.reject(new Error("export failed"))))
       .then((blob) => {
-        if (!cancelled) setPrepared({ key: exportKey, file: new File([blob], `hercules-expenses-${month}.csv`, { type: "text/csv" }) });
+        preparedFiles.set(fileKey, new File([blob], `hercules-expenses-${month}.csv`, { type: "text/csv" }));
+        // Keep only the most recent few
+        while (preparedFiles.size > MAX_PREPARED) preparedFiles.delete(preparedFiles.keys().next().value!);
       })
-      .catch(() => {});
-    return () => {
-      cancelled = true;
-    };
-  }, [shareMode, exportKey, month]);
+      .catch(() => {})
+      .finally(() => preparing.delete(fileKey));
+  }, [shareMode, fileKey, month]);
 
   function downloadCsv(ev: React.MouseEvent) {
     if (!shareMode) {
@@ -69,7 +74,7 @@ export default function SummaryScreen({ cache, categories }: { cache: ApiCache; 
       return;
     }
     ev.preventDefault();
-    const file = prepared?.key === exportKey ? prepared.file : null;
+    const file = preparedFiles.get(fileKey);
     if (!file) {
       setDownloadNote("Preparing the file. Try again in a moment.");
       return;

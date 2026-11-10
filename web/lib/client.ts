@@ -56,11 +56,15 @@ export function useApiCache() {
       });
   }, []);
 
+  // Goes up with every save, edit or delete in the app, so anything prepared from the data can tell it's out of date
+  const [version, setVersion] = useState(0);
+
   const reloadAll = () => {
+    setVersion((v) => v + 1);
     for (const url of new Set([...Object.keys(data), ...pending.current.keys()])) load(url, true);
   };
 
-  return { data, load, reloadAll };
+  return { data, load, reloadAll, version };
 }
 export type ApiCache = ReturnType<typeof useApiCache>;
 
