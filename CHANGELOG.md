@@ -6,6 +6,13 @@ Versions follow [semantic versioning](https://semver.org): **major** for a chang
 
 ---
 
+## 1.1.1 — 10 November 2026
+
+**Fixed**
+- On an iPhone with Hercules opened from the home screen, tapping **CSV** could leave the app stuck on a download screen, with no way back except closing the app. There, **CSV** now opens the iPhone's share sheet instead: tap **Save to Files**, or send it by Mail or AirDrop, and you're back on Summary. Safari, Android and computers still download the file as before.
+
+---
+
 ## 1.1.0 — 9 November 2026
 
 **New**

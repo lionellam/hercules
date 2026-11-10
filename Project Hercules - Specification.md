@@ -1,8 +1,8 @@
 # Project Hercules — Specification Sheet: "Log an Expense" Flow
 
 ```
-Version 0.37 · Draft 
-Last Reviewed: 9 November 2026
+Version 0.38 · Draft 
+Last Reviewed: 10 November 2026
 Produced with AI Assistance (Claude Code)
 ```
 
@@ -47,6 +47,7 @@ Produced with AI Assistance (Claude Code)
 | 0.35 | 2026-11-09 | Lionel Lam | Signing out asks for confirmation, then reloads the page fully (Sections 4.2 and 4.4) |
 | 0.36 | 2026-11-09 | Lionel Lam | Download a month's expenses as a CSV file from Summary (Section 4.5); export no longer deferred |
 | 0.37 | 2026-11-09 | Lionel Lam | Integrity check: open questions updated for the web app (user model; raw text stored in the expense row) |
+| 0.38 | 2026-11-10 | Lionel Lam | CSV download opens the iPhone share sheet when Hercules is opened from the home screen (Section 4.5) |
 
 ---
 
@@ -184,7 +185,9 @@ Summary has a **CSV** button beside the month's total. It downloads the expenses
 - **Columns:** Date (`YYYY-MM-DD`), Category, Merchant, Amount (two decimal places, no currency symbol), Currency, Remarks, What you typed, Edited (`Yes` or `No`), Logged at (`YYYY-MM-DD HH:MM`, Singapore time).
 - **Format:** UTF-8 with a byte-order mark so Excel shows symbols correctly, comma-separated, with text quoted where needed. Any text that starts with `=`, `+`, `-` or `@` is prefixed with an apostrophe so a spreadsheet can't treat it as a formula.
 
-The file is produced by the server and sent as a download, so it saves on phones (including the app opened from the home screen) and computers alike. After tapping the button, a short message names the file being downloaded. A month with no expenses still downloads, with the header row only.
+The file is produced by the server and sent as a download. After tapping the button, a short message names the file being downloaded.
+
+**iPhone, opened from the home screen:** there, a download would replace the app's full-screen window with the file's preview and leave no way back to the app. So when Hercules is opened from the home screen and the phone can share files, **CSV** opens the iPhone's share sheet instead (Save to Files, AirDrop, Mail and so on); closing it returns to Summary. To open the share sheet the moment the button is tapped, the file for the month shown is prepared in the background when Summary opens and whenever the month or its expenses change. If it isn't ready yet, a short message asks to try again in a moment. In Safari, on Android and on computers, the normal download is used. A month with no expenses still downloads, with the header row only.
 
 ---
 

@@ -4,7 +4,7 @@
 Maintained by: Lionel Lam Song Poh, James Wong
 Purpose: Record of work done, decisions made, challenges encountered, and assumptions held —
 to serve as a lessons learned reference for current and future contributors.
-Last updated: 9 November 2026
+Last updated: 10 November 2026
 ```
 
 ---
@@ -1016,3 +1016,14 @@ Last updated: 9 November 2026
 - Eleven screenshots at phone size in light mode, in `guide-images/`: Log, review card, delete confirmation, Undo bar, History, History search, Summary with a burn-up chart, Summary further down (a new picture showing pace notes and the pie chart), Settings, sign-out confirmation, and Categories & budgets with the Retired row. The dev server's badge was hidden before each capture, and a capture artefact at the top of the scrolled Summary image was painted out.
 - The Pages workflow now also publishes `guide-images/` and runs when it changes. Both READMEs mention the folder; `web/README.md` notes where the screenshots come from.
 - Documents only, so the app version stays at 1.1.0. The owner's local account and data were not touched; the test browser was signed back in to it afterwards.
+
+---
+
+## 10 November 2026 — Version 1.1.1: CSV Through the iPhone Share Sheet
+
+### What Was Done
+- The owner found that in Hercules opened from the iPhone home screen, tapping **CSV** left the app stuck on a download screen; the only way back was to close and reopen the app. A full-screen home-screen app has no browser buttons, so the download's preview replaced the app's window with nothing to go back with. Earlier testing used a desktop browser, which doesn't behave this way.
+- Two fixes were offered: open the download in a separate window with a Done button (simpler), or use the iPhone share sheet (more native). The owner chose the share sheet.
+- When Hercules is opened from the iPhone home screen and the phone can share files, **CSV** now opens the share sheet with the month's file (Save to Files, AirDrop, Mail and so on); closing it returns to Summary. Because the share sheet must open the instant the button is tapped, the file for the month shown is fetched in advance when Summary opens and whenever the month or its expenses change; if it isn't ready yet, a message asks to try again in a moment. Safari, Android and computers keep the normal download.
+- Version **1.1.1** (a fix), with a changelog entry. Updated the Specification (v0.38, Section 4.5), Architecture (v0.20, decision 35), Test Plan (v1.6, new phone test R-10) and the user guide.
+- Tested locally by making the test browser report itself as the iPhone home-screen app, with a stand-in that records what would be shared: the normal download is unchanged elsewhere (no file fetched in advance); in home-screen mode this month's file is prepared on opening Summary and shared as `hercules-expenses-2026-11.csv` (CSV, 20 rows), last month's as `hercules-expenses-2026-10.csv` (106 rows); closing the sheet shows no error; tapping before the file is ready shows the "Preparing" message and shares nothing. The real share sheet can't be shown in the test browser, so the owner will confirm on their phone (test R-10). Type-check, lint and a production build passed; no data was changed.

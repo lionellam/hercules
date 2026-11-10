@@ -1,8 +1,8 @@
 # Project Hercules — Test Plan: Web App v1
 
 ```
-Version 1.5 · Draft
-Last Reviewed: 9 November 2026
+Version 1.6 · Draft
+Last Reviewed: 10 November 2026
 Produced with AI Assistance (Claude Code)
 ```
 
@@ -16,6 +16,7 @@ Produced with AI Assistance (Claude Code)
 | 1.3 | 2026-11-09 | Lionel Lam | Integrity check: S-02 updated for Settings; B-07 reference corrected; A-09 and A-10 in order; Q-08 and new S-07 check the version against the changelog; clean-up also clears test parses |
 | 1.4 | 2026-11-09 | Lionel Lam | CSV download: new Section R |
 | 1.5 | 2026-11-09 | Lionel Lam | Integrity check: after-deploy check S-08 for the CSV download |
+| 1.6 | 2026-11-10 | Lionel Lam | R-10: CSV from the iPhone home-screen app uses the share sheet |
 
 ---
 
@@ -301,6 +302,7 @@ These need a look at the local database; ask Claude to run them.
 | R-07 | Empty month | Download a month with no expenses (on a fresh test account, or via the API for an earlier month) | The file downloads with the header row only |
 | R-08 | Signed out | While signed out, open `/api/expenses/export?month=` with this month | `{"error":"Not signed in"}`; no file |
 | R-09 | Another person's data | As a second test account (see A-07), download the same month | Only that account's expenses are in the file |
+| R-10 | iPhone home-screen app **[Phone]** | Open Hercules from the home-screen icon → Summary → **CSV**; choose **Save to Files**; then try again and close the share sheet without choosing | The share sheet opens over the app. The file saves to Files with the right name and contents. Closing the sheet returns to Summary; the app never gets stuck on a download screen |
 
 ---
 

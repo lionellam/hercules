@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import { expensesUrl, fmt, summaryUrl, useCached, type ApiCache } from "@/lib/client";
 import { daysInMonth, localToday, monthKey, monthLabel, shortDay } from "@/lib/dates";
 import { cents, paceRows, type PaceRow } from "@/lib/pace";
@@ -8,10 +8,25 @@ import type { Category, Expense, SummaryRow } from "@/lib/types";
 import { BurnUp, PaceNote } from "../pace";
 import SpendPie from "../spend-pie";
 
+// The iPhone home-screen app (navigator.standalone) can't return from a download, so there the CSV goes
+// through the share sheet instead (Specification 4.5). Elsewhere the normal download is used.
+function sharesFiles() {
+  const standalone = (navigator as Navigator & { standalone?: boolean }).standalone === true;
+  if (!standalone || typeof navigator.canShare !== "function") return false;
+  try {
+    return navigator.canShare({ files: [new File([""], "check.csv", { type: "text/csv" })] });
+  } catch {
+    return false;
+  }
+}
+const noSubscribe = () => () => {};
+
 export default function SummaryScreen({ cache, categories }: { cache: ApiCache; categories: Category[] }) {
   const [offset, setOffset] = useState(0);
   const [open, setOpen] = useState<number | null>(null);
   const [downloadNote, setDownloadNote] = useState("");
+  const shareMode = useSyncExternalStore(noSubscribe, sharesFiles, () => false);
+  const [prepared, setPrepared] = useState<{ key: string; file: File } | null>(null);
   const month = monthKey(offset);
   const prevMonth = monthKey(offset - 1);
   const isCurrent = offset === 0;
@@ -30,6 +45,40 @@ export default function SummaryScreen({ cache, categories }: { cache: ApiCache; 
   const prevTotal = prev?.reduce((s, r) => s + r.total, 0) ?? 0;
   const max = Math.max(...(rows ?? []).map((r) => r.total), 0) || 1;
   const diff = total - prevTotal;
+
+  // For the share sheet, the file must be ready the moment CSV is tapped, so it's fetched in advance
+  // whenever the month or its expenses change
+  const exportKey = `${month}:${rows?.length ?? ""}:${total}`;
+  useEffect(() => {
+    if (!shareMode) return;
+    let cancelled = false;
+    fetch(`/api/expenses/export?month=${month}`)
+      .then((res) => (res.ok ? res.blob() : Promise.reject(new Error("export failed"))))
+      .then((blob) => {
+        if (!cancelled) setPrepared({ key: exportKey, file: new File([blob], `hercules-expenses-${month}.csv`, { type: "text/csv" }) });
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, [shareMode, exportKey, month]);
+
+  function downloadCsv(ev: React.MouseEvent) {
+    if (!shareMode) {
+      setDownloadNote(`Downloading hercules-expenses-${month}.csv`);
+      return;
+    }
+    ev.preventDefault();
+    const file = prepared?.key === exportKey ? prepared.file : null;
+    if (!file) {
+      setDownloadNote("Preparing the file. Try again in a moment.");
+      return;
+    }
+    navigator.share({ files: [file], title: `Hercules expenses, ${monthLabel(month)}` }).catch((err: unknown) => {
+      // Closing the share sheet without choosing isn't an error
+      if ((err as Error)?.name !== "AbortError") setDownloadNote("Couldn't open the share sheet. Please try again.");
+    });
+  }
 
   // The download message goes away after a few seconds
   useEffect(() => {
@@ -65,7 +114,7 @@ export default function SummaryScreen({ cache, categories }: { cache: ApiCache; 
             className="csv-button"
             href={`/api/expenses/export?month=${month}`}
             download={`hercules-expenses-${month}.csv`}
-            onClick={() => setDownloadNote(`Downloading hercules-expenses-${month}.csv`)}
+            onClick={downloadCsv}
             aria-label={`Download ${monthLabel(month)} expenses as a CSV file`}
           >
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
