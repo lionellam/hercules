@@ -1053,3 +1053,4 @@ Last updated: 10 November 2026
   3. Test Plan: after-deploy check S-08 now covers the home-screen app, where **CSV** opens the share sheet.
   4. Work log: the 9 November "User Guide: Owner Not Named" entry read as if three mentions of "the app owner" remained in the guide; a note now says only the invitation mention remains.
 - Documents only, so the app version stays at 1.1.2.
+- **Confirmed (10 November 2026):** the owner ran the new test R-11 on their phone and it passed: after logging a test expense, the file shared from Summary included it.
