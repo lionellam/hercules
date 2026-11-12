@@ -1,8 +1,8 @@
 # Project Hercules — Test Plan: Web App v1
 
 ```
-Version 1.7 · Draft
-Last Reviewed: 10 November 2026
+Version 1.8 · Draft
+Last Reviewed: 12 November 2026
 Produced with AI Assistance (Claude Code)
 ```
 
@@ -18,6 +18,7 @@ Produced with AI Assistance (Claude Code)
 | 1.5 | 2026-11-09 | Lionel Lam | Integrity check: after-deploy check S-08 for the CSV download |
 | 1.6 | 2026-11-10 | Lionel Lam | R-10: CSV from the iPhone home-screen app uses the share sheet |
 | 1.7 | 2026-11-10 | Lionel Lam | Integrity check: new R-11 (the prepared CSV is refreshed after a change, 1.1.2); S-08 covers the home-screen app |
+| 1.8 | 2026-11-12 | Lionel Lam | Summary's total stays in place while scrolling (new H-10); no comparison with the month before (H-01, H-02); M-03 covers a phone held sideways |
 
 ---
 
@@ -168,8 +169,8 @@ Use a month with several expenses, such as one filled with sample data.
 
 | ID | Test | Steps | Expected result |
 |---|---|---|---|
-| H-01 | This month | Open **Summary** | "Spent so far this month", the total, "Day X of Y" with today's date, and how it compares with last month ("+$… vs October" or "−$…") |
-| H-02 | Last month | Tap last month's name at the top | "Spent in [month]", that month's total, compared with the month before. No pace notes |
+| H-01 | This month | Open **Summary** | "Spent so far this month", the total with a **CSV** button beside it, and "Day X of Y" with today's date. There is no comparison with last month |
+| H-02 | Last month | Tap last month's name at the top | "Spent in [month]" and that month's total. No day line, no comparison with the month before and no pace notes |
 | H-03 | Totals match History | Add up a month's amounts in History (or use a search for each category) | Each category's figure on Summary matches |
 | H-04 | Only categories with spending | Have a category with a budget but no spending this month | It isn't listed on Summary |
 | H-05 | Bars without a budget | Look at a category with no budget | Its bar is relative to the month's largest category |
@@ -177,6 +178,7 @@ Use a month with several expenses, such as one filled with sample data.
 | H-07 | Over budget is red | Make a `zz-test-` category with a 10.00 budget and log `[TEST]` expenses totalling 12.00 in it | Its bar is full and red, with "Over budget by $2.00" in red and a warning icon |
 | H-08 | Pie chart | Look below the category list | "Share of spend" with up to six slices and percentages. With more than six categories, the smaller ones are grouped as "Everything else (n)" |
 | H-09 | Future-dated expense | Save a `[TEST]` expense dated later this month | It counts towards this month's total and pace straight away |
+| H-10 | Total stays in place | On a phone held upright (and on a tablet or computer), scroll Summary down to the pie chart, on this month and last month | The heading, month switcher, total, **CSV** button and (this month) day line stay at the top, with a thin line below them; the categories scroll underneath. **CSV** still works while scrolled |
 
 ### I. Spending Pace (This Month)
 
@@ -243,7 +245,7 @@ To set up I-01 to I-05: create a `zz-test-` category with a $300 budget and log 
 |---|---|---|---|
 | M-01 | Light and dark | Settings → Appearance → **Light**, then **Dark** | The app switches theme at once. Reload: the choice is kept on that device |
 | M-02 | System follows the device | Settings → Appearance → **System**, then switch the device between light and dark | The app follows the device. A new device starts on System |
-| M-03 | Pinned tops | Scroll on each of the four tabs | Each tab's heading and main control stay at the top |
+| M-03 | Pinned tops | Scroll on each of the four tabs; then hold a phone sideways and scroll again | Upright, each tab's heading and main control stay at the top (on Summary, also the total). Sideways on a phone, nothing stays at the top |
 | M-04 | Phone layout | Use a phone, or a browser window narrower than 768 pixels | One column; edit sheets slide up from the bottom |
 | M-05 | Tablet and computer | Use windows 768, 1,024 and 1,280 pixels wide or more | The app widens to about 820, 920 and 1,000 pixels; Log and Summary show two columns; edit sheets and confirmations open as centred dialogs |
 | M-06 | No sideways scrolling | Check each screen at phone width | Nothing makes the page scroll sideways |

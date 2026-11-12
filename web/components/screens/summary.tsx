@@ -33,7 +33,6 @@ export default function SummaryScreen({ cache, categories }: { cache: ApiCache; 
   const [downloadNote, setDownloadNote] = useState("");
   const shareMode = useSyncExternalStore(noSubscribe, sharesFiles, () => false);
   const month = monthKey(offset);
-  const prevMonth = monthKey(offset - 1);
   const isCurrent = offset === 0;
   const today = localToday();
   const day = Number(today.slice(8));
@@ -43,13 +42,10 @@ export default function SummaryScreen({ cache, categories }: { cache: ApiCache; 
   const rows: (SummaryRow | PaceRow)[] | undefined = isCurrent
     ? currentExpenses && paceRows(currentExpenses, categories, days)
     : summaryRows;
-  const prev = useCached<SummaryRow[]>(cache, summaryUrl(prevMonth));
   const spentRows = rows?.filter((r) => r.total > 0);
 
   const total = rows?.reduce((s, r) => s + r.total, 0) ?? 0;
-  const prevTotal = prev?.reduce((s, r) => s + r.total, 0) ?? 0;
   const max = Math.max(...(rows ?? []).map((r) => r.total), 0) || 1;
-  const diff = total - prevTotal;
 
   // For the share sheet, the file must be ready the moment CSV is tapped, so it's fetched in advance:
   // once per month shown, and again only after a change made in the app (Specification 4.5)
@@ -107,37 +103,33 @@ export default function SummaryScreen({ cache, categories }: { cache: ApiCache; 
           <button className={offset === 0 ? "on" : ""} onClick={() => showMonth(0)}>{monthLabel(monthKey(0), { month: "long" })}</button>
           <button className={offset === -1 ? "on" : ""} onClick={() => showMonth(-1)}>{monthLabel(monthKey(-1), { month: "long" })}</button>
         </div>
-      </div>
-      <div className="total">
-        <div className="total-row">
-          <div>
-            <div className="sub">{offset === 0 ? "Spent so far this month" : `Spent in ${monthLabel(month)}`}</div>
-            <div className="big">${fmt(total)}</div>
+        {/* The total stays in view with the month switcher while the categories scroll (Specification step 8) */}
+        <div className="total">
+          <div className="total-row">
+            <div>
+              <div className="sub">{offset === 0 ? "Spent so far this month" : `Spent in ${monthLabel(month)}`}</div>
+              <div className="big">${fmt(total)}</div>
+            </div>
+            {/* Downloads the month shown as a CSV file (Specification 4.5) */}
+            <a
+              className="csv-button"
+              href={`/api/expenses/export?month=${month}`}
+              download={`hercules-expenses-${month}.csv`}
+              onClick={downloadCsv}
+              aria-label={`Download ${monthLabel(month)} expenses as a CSV file`}
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M12 4v11M7 10l5 5 5-5M5 20h14" />
+              </svg>
+              CSV
+            </a>
           </div>
-          {/* Downloads the month shown as a CSV file (Specification 4.5) */}
-          <a
-            className="csv-button"
-            href={`/api/expenses/export?month=${month}`}
-            download={`hercules-expenses-${month}.csv`}
-            onClick={downloadCsv}
-            aria-label={`Download ${monthLabel(month)} expenses as a CSV file`}
-          >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-              <path d="M12 4v11M7 10l5 5 5-5M5 20h14" />
-            </svg>
-            CSV
-          </a>
+          {isCurrent && (
+            <div className="dayline">
+              <b>Day {day} of {days}</b> · {shortDay(monthKey(0), day)}
+            </div>
+          )}
         </div>
-        {isCurrent && (
-          <div className="dayline">
-            <b>Day {day} of {days}</b> · {shortDay(monthKey(0), day)}
-          </div>
-        )}
-        {!!prevTotal && (
-          <div className="delta">
-            {diff >= 0 ? "+" : "−"}${fmt(Math.abs(diff))} vs {monthLabel(prevMonth, { month: "long" })}
-          </div>
-        )}
       </div>
       <div className="columns">
         <div>

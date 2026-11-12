@@ -6,6 +6,14 @@ Versions follow [semantic versioning](https://semver.org): **major** for a chang
 
 ---
 
+## 1.1.3 — 12 November 2026
+
+**Improved**
+- On Summary, the month's total, the **CSV** button and the day of the month now stay at the top with the month switcher while you scroll through the categories. On a phone held sideways, nothing stays at the top, as before.
+- Summary no longer compares the total with the month before ("+$… vs October"), to keep the top compact.
+
+---
+
 ## 1.1.2 — 10 November 2026
 
 **Improved**

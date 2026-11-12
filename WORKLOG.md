@@ -4,7 +4,7 @@
 Maintained by: Lionel Lam Song Poh, James Wong
 Purpose: Record of work done, decisions made, challenges encountered, and assumptions held —
 to serve as a lessons learned reference for current and future contributors.
-Last updated: 10 November 2026
+Last updated: 12 November 2026
 ```
 
 ---
@@ -1054,3 +1054,18 @@ Last updated: 10 November 2026
   4. Work log: the 9 November "User Guide: Owner Not Named" entry read as if three mentions of "the app owner" remained in the guide; a note now says only the invitation mention remains.
 - Documents only, so the app version stays at 1.1.2.
 - **Confirmed (10 November 2026):** the owner ran the new test R-11 on their phone and it passed: after logging a test expense, the file shared from Summary included it.
+
+---
+
+## 12 November 2026 — Version 1.1.3: Summary Total Stays in Place
+
+### What Was Done
+- At the owner's request, Summary's total now stays at the top while scrolling. The section that already stayed in place (heading and month switcher) now also holds "Spent so far this month" (or "Spent in [month]"), the total, the **CSV** button and, for this month, the day line ("Day 12 of 30 · Thu, 12 Nov"). The thin line under it moved down accordingly.
+- Before building, mockups of the real app (local demo account) were shown at phone upright and sideways, iPad upright and sideways, and desktop sizes. The owner chose to:
+  - leave a phone held sideways as it was, with nothing staying in place (the existing rule for screens under 500 pixels tall);
+  - keep it in place on an iPad held sideways, which is tall enough;
+  - remove the "+$… vs October" comparison line everywhere, to keep the top compact.
+- With the comparison gone, Summary no longer requests the totals for the month before the one shown (for example September, when viewing October), saving one request.
+- On a phone held upright, the fixed section takes about 31% of the screen (253 of 812 points). Shrinking it while scrolling was mentioned as a later option, not built.
+- Version **1.1.3** (a small change to an existing screen), with a changelog entry. Updated the Specification (v0.40, process flow step 8), Test Plan (v1.8: H-01 and H-02 without the comparison, new H-10, M-03 covers a phone held sideways) and the user guide (the Summary text, a caption and both Summary screenshots, retaken from the demo account).
+- Tested locally at 375×812, 812×375, 768×1024, 1024×768 and 1280×800, in light and dark mode, on this month and last month: the block stays at the top when scrolled, except on a phone held sideways; the comparison line no longer appears; **CSV** still links to the month shown. Type-check, lint and a production build passed. The demo account was allowed on the local app only while the mockups and screenshots were taken, then removed; the temporary mockup page was deleted. No data was changed.
