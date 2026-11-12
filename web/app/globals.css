@@ -139,8 +139,8 @@ textarea::placeholder { color: var(--muted); }
 .seg { display: flex; background: var(--soft); border-radius: 12px; padding: 3px; margin-top: 18px; }
 .seg button { flex: 1; height: 34px; border: none; background: none; border-radius: 10px; font-size: 14px; font-weight: 500; color: var(--muted); cursor: pointer; }
 .seg button.on { background: var(--surface); color: var(--text); box-shadow: 0 1px 3px rgba(0,0,0,.08); }
-.total { margin-top: 24px; }
-.total .big { font-size: 38px; font-weight: 700; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+.total { margin-top: 16px; }
+.total .big { font-size: 32px; font-weight: 700; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
 /* CSV download beside the month's total (Specification 4.5) */
 .total-row { display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; }
 .csv-button { display: inline-flex; align-items: center; gap: 6px; height: 36px; padding: 0 13px; border-radius: 10px; background: var(--soft); color: var(--text);

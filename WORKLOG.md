@@ -1070,3 +1070,13 @@ Last updated: 12 November 2026
 - Version **1.1.3** (a small change to an existing screen), with a changelog entry. Updated the Specification (v0.40, process flow step 8), Test Plan (v1.8: H-01 and H-02 without the comparison, new H-10, M-03 covers a phone held sideways) and the user guide (the Summary text, a caption and both Summary screenshots, retaken from the demo account).
 - Tested locally at 375×812, 812×375, 768×1024, 1024×768 and 1280×800, in light and dark mode, on this month and last month: the block stays at the top when scrolled, except on a phone held sideways; the comparison line no longer appears; **CSV** still links to the month shown. Type-check, lint and a production build passed. The demo account was allowed on the local app only while the mockups and screenshots were taken, then removed; the temporary mockup page was deleted. No data was changed.
 - **Confirmed (12 November 2026):** after the deploy, the owner checked on their phone that Summary's total stays in place while scrolling.
+
+---
+
+## 12 November 2026 — Version 1.1.4: Smaller Summary Total
+
+### What Was Done
+- At the owner's request, made Summary's total smaller to save space in the section that stays at the top. Mockups on the demo account compared today's 38px total and 24px gap above it with 34px and 32px, each with a 16px gap. Measured on a phone held upright (812 points tall), the fixed section was 254, 241 and 238 points (31%, 30% and 29% of the screen). Most of the saving came from the smaller gap. The owner chose 32px.
+- The total is now 32px (the "Summary" heading is 28px), with a 16px gap above "Spent so far this month". The **CSV** button is unchanged.
+- Version **1.1.4** (a small tweak), with a changelog entry. The Specification and Test Plan don't state text sizes, so they're unchanged. The user guide's two Summary screenshots were retaken from the demo account.
+- Checked locally at phone size: the total shows at 32px and the fixed section is 238 points. Lint and a production build passed. The demo account was allowed on the local app only for the mockups and screenshots, then removed; the temporary mockup page was deleted. No data was changed.

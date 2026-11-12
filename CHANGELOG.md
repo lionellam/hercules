@@ -6,6 +6,13 @@ Versions follow [semantic versioning](https://semver.org): **major** for a chang
 
 ---
 
+## 1.1.4 — 12 November 2026
+
+**Improved**
+- On Summary, the total is slightly smaller and sits a little closer to the month switcher, so the section that stays at the top takes less of the screen.
+
+---
+
 ## 1.1.3 — 12 November 2026
 
 **Improved**
