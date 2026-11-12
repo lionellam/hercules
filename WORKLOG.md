@@ -1101,3 +1101,4 @@ Last updated: 12 November 2026
 ### What Was Done
 - A document integrity check after 1.1.5 found no problems. It noted that the guide's Settings mockup showed "Version 1.1.5", which would look out of date after the next release. At the owner's request it now shows a placeholder, "Version X.Y.Z (abc1234)" and "Last updated DD Mon YYYY, HH:MM", so it never needs updating for a release.
 - Documents only, so the app version stays at 1.1.5.
+- **Confirmed (12 November 2026):** the owner checked that the guide on GitHub Pages shows the placeholder.
