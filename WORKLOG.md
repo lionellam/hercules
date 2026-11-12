@@ -1080,3 +1080,4 @@ Last updated: 12 November 2026
 - The total is now 32px (the "Summary" heading is 28px), with a 16px gap above "Spent so far this month". The **CSV** button is unchanged.
 - Version **1.1.4** (a small tweak), with a changelog entry. The Specification and Test Plan don't state text sizes, so they're unchanged. The user guide's two Summary screenshots were retaken from the demo account.
 - Checked locally at phone size: the total shows at 32px and the fixed section is 238 points. Lint and a production build passed. The demo account was allowed on the local app only for the mockups and screenshots, then removed; the temporary mockup page was deleted. No data was changed.
+- **Confirmed (12 November 2026):** after the deploy, the owner checked on their phone that the smaller total works with 1.1.4.
