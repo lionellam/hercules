@@ -1093,3 +1093,11 @@ Last updated: 12 November 2026
 - Tested locally on the demo account with two temporary `[TEST]` expenses dated today: **Spent today** showed $15.70, and **Today by category** listed Food & Dining 12.50 and Transport 3.20 with no total in the heading. The two test expenses were then deleted from the local database (none left) and the demo account removed from the local allow-list. The guide was checked in a browser: all eleven mockups draw correctly. Type-check, lint and a production build passed.
 - **Commit slip:** the first 1.1.5 commit (`520945a`) held only the deleted `guide-images/` files, because `git add` was given the already-deleted folder and staged nothing else. It was pushed and tagged before this was noticed. The rest of the change followed in `f2f7ca8`, and with the owner's approval the `v1.1.5` tag was moved to `f2f7ca8`. The guide's publishing run for the incomplete commit failed, so the live guide was never broken. Lesson: stage deletions with `git rm` on their own, and check what's staged before committing.
 - **Confirmed (12 November 2026):** after the deploy, the owner checked on their phone that Log shows a single total with 1.1.5.
+
+---
+
+## 12 November 2026 — User Guide: Version-Free Settings Mockup
+
+### What Was Done
+- A document integrity check after 1.1.5 found no problems. It noted that the guide's Settings mockup showed "Version 1.1.5", which would look out of date after the next release. At the owner's request it now shows a placeholder, "Version X.Y.Z (abc1234)" and "Last updated DD Mon YYYY, HH:MM", so it never needs updating for a release.
+- Documents only, so the app version stays at 1.1.5.
