@@ -6,6 +6,13 @@ Versions follow [semantic versioning](https://semver.org): **major** for a chang
 
 ---
 
+## 1.1.5 — 12 November 2026
+
+**Improved**
+- On Log, the **Today by category** heading no longer shows a total, which repeated **Spent today** under the text box.
+
+---
+
 ## 1.1.4 — 12 November 2026
 
 **Improved**

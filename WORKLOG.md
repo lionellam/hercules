@@ -1081,3 +1081,13 @@ Last updated: 12 November 2026
 - Version **1.1.4** (a small tweak), with a changelog entry. The Specification and Test Plan don't state text sizes, so they're unchanged. The user guide's two Summary screenshots were retaken from the demo account.
 - Checked locally at phone size: the total shows at 32px and the fixed section is 238 points. Lint and a production build passed. The demo account was allowed on the local app only for the mockups and screenshots, then removed; the temporary mockup page was deleted. No data was changed.
 - **Confirmed (12 November 2026):** after the deploy, the owner checked on their phone that the smaller total works with 1.1.4.
+
+---
+
+## 12 November 2026 — Version 1.1.5: One Total on Log; Guide Back to Mockups
+
+### What Was Done
+- The owner noticed that on Log, the **Today by category** heading showed a total that repeated **Spent today** under the text box. Both add up the same list (today's expenses), so they always matched. The heading's total was removed; **Spent today** stays, as it's in the section fixed at the top and always visible. Each category row keeps its count, total and bar. An unused style for the old two-part heading was removed.
+- At the owner's request, the user guide no longer uses screenshots. Its eleven pictures are drawn mockups in the page itself again, so a guide change is a text edit, with no demo account, local server or screenshots needed. The mockups from before 9 November were restored and brought up to date: no total beside Today by category, Summary's total, **CSV** and day line in the fixed section with no "vs October" line, the total a little smaller in proportion, a second Summary mockup for "Further down" (pace notes and the pie chart), and the current version in Settings. The `guide-images/` folder was deleted, and the Pages workflow and both READMEs updated.
+- Version **1.1.5** (a small tweak), with a changelog entry. Test Plan v1.9 (B-10 expects no total in the heading). The Specification already described Today by category as a breakdown, so it's unchanged.
+- Tested locally on the demo account with two temporary `[TEST]` expenses dated today: **Spent today** showed $15.70, and **Today by category** listed Food & Dining 12.50 and Transport 3.20 with no total in the heading. The two test expenses were then deleted from the local database (none left) and the demo account removed from the local allow-list. The guide was checked in a browser: all eleven mockups draw correctly. Type-check, lint and a production build passed.

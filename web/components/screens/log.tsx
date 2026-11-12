@@ -18,15 +18,12 @@ function TodayByCategory({ expenses }: { expenses: Expense[] }) {
     byCategory.set(e.category, row);
   }
   const rows = [...byCategory.values()].sort((a, b) => b.total - a.total);
-  const total = rows.reduce((s, r) => s + r.total, 0);
   const max = rows[0]?.total || 1;
 
   return (
     <>
-      <p className="recent-h split">
-        <span>TODAY BY CATEGORY</span>
-        <span>${fmt(total)}</span>
-      </p>
+      {/* No total here: it would repeat "Spent today" under the text box */}
+      <p className="recent-h">TODAY BY CATEGORY</p>
       {rows.map((r) => (
         <div className="cat" key={r.category}>
           <div className="cat-top">

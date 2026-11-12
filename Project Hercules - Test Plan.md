@@ -1,7 +1,7 @@
 # Project Hercules — Test Plan: Web App v1
 
 ```
-Version 1.8 · Draft
+Version 1.9 · Draft
 Last Reviewed: 12 November 2026
 Produced with AI Assistance (Claude Code)
 ```
@@ -19,6 +19,7 @@ Produced with AI Assistance (Claude Code)
 | 1.6 | 2026-11-10 | Lionel Lam | R-10: CSV from the iPhone home-screen app uses the share sheet |
 | 1.7 | 2026-11-10 | Lionel Lam | Integrity check: new R-11 (the prepared CSV is refreshed after a change, 1.1.2); S-08 covers the home-screen app |
 | 1.8 | 2026-11-12 | Lionel Lam | Summary's total stays in place while scrolling (new H-10); no comparison with the month before (H-01, H-02); M-03 covers a phone held sideways |
+| 1.9 | 2026-11-12 | Lionel Lam | B-10: Today by category no longer shows a combined total |
 
 ---
 
@@ -95,7 +96,7 @@ For each run, note the date, the device and browser, whether it was the local or
 | B-07 | Only your categories are offered **[Claude]** | Retire a category (see L-01), then type an expense that clearly belongs in it → Parse | The card shows one of your active categories or Other, not the retired one. Restore the category afterwards |
 | B-08 | Parse button state | Look at **Parse** with the box empty, then type something | Parse is dimmed and can't be tapped while the box is empty, and while a review card is open |
 | B-09 | Spent today total | Note **Spent today**, then save a `[TEST]` expense of 5.00 dated today | Spent today goes up by $5.00 |
-| B-10 | Today by category | Save two `[TEST]` expenses today in different categories | **Today by category** lists each category with its count and total, largest first, and a combined total |
+| B-10 | Today by category | Save two `[TEST]` expenses today in different categories | **Today by category** lists each category with its count and total, largest first. The heading shows no total (that's **Spent today**) |
 | B-11 | Expense dated another day | Save `[TEST] taxi 10 yesterday` | It appears in History under yesterday's date, not under Today, and doesn't change Spent today |
 | B-12 | Typed text is kept | Save `[TEST] dinner with the team 30`, then open it from Today | The card shows the original text in italics at the top: "[TEST] dinner with the team 30" |
 | B-13 | Text length limit | Paste text longer than 500 characters into the box | The box stops accepting text at 500 characters |

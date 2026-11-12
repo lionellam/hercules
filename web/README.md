@@ -2,7 +2,7 @@
 
 Mobile-first expense logger: type an expense in plain language, review the parsed fields, save. Next.js (TypeScript) on Vercel, Neon Postgres, Google sign-in with an allow-list, Claude Haiku 5.5 for parsing. See `../Project Hercules - Architecture.md` for the decisions behind this.
 
-**User guide:** [How Hercules Works](https://lionellam.github.io/hercules/) explains how to use the app. It is published from `../Project Hercules - How Hercules Works.html` by `.github/workflows/guide-pages.yml` whenever that file or its screenshots (`../guide-images/`) change on `main`. The screenshots are taken from a local demo account (`demo@example.com`, filled with `npm run sample`), so no real spending appears in the public guide.
+**User guide:** [How Hercules Works](https://lionellam.github.io/hercules/) explains how to use the app. It is published from `../Project Hercules - How Hercules Works.html` by `.github/workflows/guide-pages.yml` whenever that file changes on `main`. Its pictures are mockups drawn in the page itself, not screenshots, so no real spending appears in the public guide and changes need no screenshots.
 
 ## Local development
 

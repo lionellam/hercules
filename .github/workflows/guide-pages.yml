@@ -1,5 +1,5 @@
 # Publishes the user guide ("Project Hercules - How Hercules Works.html") to GitHub Pages as the site's home page.
-# Only the guide and its screenshots (guide-images/) are published; nothing else in the repository goes on the site.
+# Only the guide is published; nothing else in the repository goes on the site.
 name: Publish user guide
 
 on:
@@ -7,7 +7,6 @@ on:
     branches: [main]
     paths:
       - "Project Hercules - How Hercules Works.html"
-      - "guide-images/**"
       - ".github/workflows/guide-pages.yml"
   workflow_dispatch:
 
@@ -32,7 +31,6 @@ jobs:
         run: |
           mkdir _site
           cp "Project Hercules - How Hercules Works.html" _site/index.html
-          cp -R guide-images _site/guide-images
           touch _site/.nojekyll
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
