@@ -1,12 +1,13 @@
 "use client";
 
-import { fmt } from "@/lib/client";
 import type { SummaryRow } from "@/lib/types";
+import { useMoney } from "./currency";
 
 const MAX_SLICES = 6;
 
 // Expects rows sorted largest first; beyond six slices, the smallest are grouped so each stays readable
 export default function SpendPie({ rows }: { rows: SummaryRow[] }) {
+  const money = useMoney();
   const total = rows.reduce((s, r) => s + r.total, 0);
   const shown = rows.length > MAX_SLICES ? rows.slice(0, MAX_SLICES - 1) : rows;
   const rest = rows.slice(shown.length);
@@ -32,7 +33,7 @@ export default function SpendPie({ rows }: { rows: SummaryRow[] }) {
           {slices.map((s, i) => {
             const start = slices.slice(0, i).reduce((sum, p) => sum + p.total, 0) / total;
             const fraction = s.total / total;
-            const title = <title>{`${s.name}: $${fmt(s.total)} (${percent(s.total)})`}</title>;
+            const title = <title>{`${s.name}: ${money(s.total)} (${percent(s.total)})`}</title>;
             // An arc can't start and end at the same point, so a lone category is a plain circle
             if (slices.length === 1) {
               return (

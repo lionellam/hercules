@@ -6,6 +6,17 @@ Versions follow [semantic versioning](https://semver.org): **major** for a chang
 
 ---
 
+## 1.2.0 — 13 November 2026
+
+**New**
+- **Settings → Currency:** choose your default currency from 20 common ones. When what you type doesn't name a currency, your default is used, so a plain "$12" no longer comes out as US dollars.
+- On the review card, tap the code beside the amount (for example **SGD ▾**) to change the currency of that expense.
+
+**Improved**
+- Budgets, and the amounts in History and Today, follow your default currency: amounts in your default show without a code, and others show it, like "USD 12.50". Totals show "$" for a dollar currency such as SGD, and otherwise the code, like "MYR 20.00". Amounts are never converted.
+
+---
+
 ## 1.1.5 — 12 November 2026
 
 **Improved**

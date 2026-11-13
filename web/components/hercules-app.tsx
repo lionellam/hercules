@@ -6,6 +6,7 @@ import { expensesUrl, summaryUrl, useApiCache, useCached, useOnline } from "@/li
 import { monthKey } from "@/lib/dates";
 import type { Category } from "@/lib/types";
 import { UndoContext, useUndoBar } from "./confirm";
+import { HomeCurrency, SETTINGS_URL, type Settings } from "./currency";
 import HistoryScreen from "./screens/history";
 import LogScreen from "./screens/log";
 import SettingsScreen from "./screens/settings";
@@ -14,10 +15,12 @@ import { ThemeColorSync } from "./theme";
 
 type Tab = "log" | "history" | "summary" | "settings";
 
-export default function HerculesApp({ email }: { email: string }) {
+export default function HerculesApp({ email, defaultCurrency }: { email: string; defaultCurrency: string }) {
   const [tab, setTab] = useState<Tab>("log");
   const cache = useApiCache();
   const categories = useCached<Category[]>(cache, "/api/categories") ?? [];
+  // Known from the page at sign-in, then kept up to date from the server after a change in Settings
+  const homeCurrency = useCached<Settings>(cache, SETTINGS_URL)?.default_currency ?? defaultCurrency;
   const { load } = cache;
   const online = useOnline();
   const undoBar = useUndoBar();
@@ -30,6 +33,7 @@ export default function HerculesApp({ email }: { email: string }) {
   }, [load]);
 
   return (
+    <HomeCurrency.Provider value={homeCurrency}>
     <UndoContext.Provider value={undoBar.showUndo}>
       <main className="app">
         {tab === "log" && <LogScreen categories={categories} online={online} cache={cache} onSaved={cache.reloadAll} />}
@@ -46,6 +50,7 @@ export default function HerculesApp({ email }: { email: string }) {
         <ThemeColorSync />
       </main>
     </UndoContext.Provider>
+    </HomeCurrency.Provider>
   );
 }
 

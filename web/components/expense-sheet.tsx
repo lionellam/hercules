@@ -6,6 +6,7 @@ import { api, fmt } from "@/lib/client";
 import { dayMonth } from "@/lib/dates";
 import type { Category, Expense } from "@/lib/types";
 import { ConfirmSheet, UndoContext } from "./confirm";
+import { useHomeCurrency } from "./currency";
 import ReviewCard, { type Fields } from "./review-card";
 
 // Wraps each occurrence of the search words in <mark>, ignoring capitals
@@ -16,6 +17,7 @@ function Highlight({ text, words }: { text: string; words?: string[] }) {
 }
 
 export function ExpenseRow({ e, onClick, highlight }: { e: Expense; onClick?: () => void; highlight?: string[] }) {
+  const home = useHomeCurrency();
   return (
     <button className="item" onClick={onClick}>
       <div>
@@ -26,7 +28,8 @@ export function ExpenseRow({ e, onClick, highlight }: { e: Expense; onClick?: ()
         </div>
       </div>
       <div className="a">
-        {e.currency !== "SGD" && `${e.currency} `}
+        {/* Amounts in the default currency show the number alone (Specification 4.6) */}
+        {e.currency !== home && `${e.currency} `}
         <Highlight text={fmt(e.amount)} words={highlight} />
       </div>
     </button>

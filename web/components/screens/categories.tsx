@@ -4,8 +4,12 @@ import { useContext, useState } from "react";
 import { api, fmt, useCached, type ApiCache } from "@/lib/client";
 import type { Category } from "@/lib/types";
 import { ConfirmSheet, UndoContext } from "../confirm";
+import { useHomeCurrency } from "../currency";
+import { useMoney } from "../currency";
 
 function CategorySheet({ category, retired, online, onClose, onChanged }: { category: Category | null; retired: Category[]; online: boolean; onClose: () => void; onChanged: () => void }) {
+  const home = useHomeCurrency();
+  const money = useMoney();
   const [name, setName] = useState(category?.name ?? "");
   const [budget, setBudget] = useState(category?.monthly_budget?.toFixed(2) ?? "");
   const [busy, setBusy] = useState(false);
@@ -61,7 +65,7 @@ function CategorySheet({ category, retired, online, onClose, onChanged }: { cate
             <input id="c-name" value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. Pets" maxLength={50} disabled={category?.is_other} />
           </div>
           <div className="field">
-            <label htmlFor="c-budget">Monthly budget (SGD)</label>
+            <label htmlFor="c-budget">Monthly budget ({home})</label>
             <input id="c-budget" inputMode="decimal" value={budget} onChange={(e) => setBudget(e.target.value)} placeholder="Optional" />
           </div>
           {category?.is_other && <p className="sub">The built-in &quot;Other&quot; category can&apos;t be renamed or retired.</p>}
@@ -94,7 +98,7 @@ function CategorySheet({ category, retired, online, onClose, onChanged }: { cate
             <>
               <p>It won&apos;t be offered for new expenses. Past expenses keep this category, and you can restore it any time from Categories.</p>
               {category.monthly_budget != null && (
-                <p>Its ${fmt(category.monthly_budget)} budget stops being tracked. Spending already logged this month stays in Summary.</p>
+                <p>Its {money(category.monthly_budget)} budget stops being tracked. Spending already logged this month stays in Summary.</p>
               )}
             </>
           }
@@ -118,6 +122,7 @@ function CategorySheet({ category, retired, online, onClose, onChanged }: { cate
 }
 
 export default function CategoriesScreen({ categories, online, cache, onChanged, onBack }: { categories: Category[]; online: boolean; cache: ApiCache; onChanged: () => void; onBack: () => void }) {
+  const home = useHomeCurrency();
   const [editing, setEditing] = useState<Category | "new" | null>(null);
   const retired = useCached<Category[]>(cache, "/api/categories?retired=1") ?? [];
   const [showRetired, setShowRetired] = useState(false);
@@ -138,7 +143,7 @@ export default function CategoriesScreen({ categories, online, cache, onChanged,
       <div className="pinned-top">
         <button className="back-link" onClick={onBack}>‹ Settings</button>
         <h1>Categories &amp; budgets</h1>
-        <p className="sub">Monthly budgets are optional and in SGD.</p>
+        <p className="sub">Monthly budgets are optional and in {home}.</p>
         <div className="row-start">
           <button className="btn btn-primary" disabled={!online} onClick={() => setEditing("new")}>Add category</button>
         </div>

@@ -1,11 +1,13 @@
 "use client";
 
-// Settings (Specification 4.4): Categories & budgets, Appearance, Account, and the version running
+// Settings (Specification 4.4): Categories & budgets, Currency, Appearance, Account, and the version running
 import { useState } from "react";
 import { signOutAction } from "@/app/actions";
 import type { ApiCache } from "@/lib/client";
 import type { Category } from "@/lib/types";
 import { ConfirmSheet } from "../confirm";
+import { CurrencyPage, SETTINGS_URL, useHomeCurrency } from "../currency";
+import { currencyName } from "@/lib/currencies";
 import { AppearanceChoice } from "../theme";
 import CategoriesScreen from "./categories";
 
@@ -25,6 +27,12 @@ const TagIcon = () => (
     <path d="M4 5h7l9 9-6 6-9-9V5zM8 9h.01" />
   </svg>
 );
+const CoinsIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden="true">
+    <circle cx="9" cy="9" r="6" />
+    <path d="M15.5 9.5a6 6 0 1 1-6 6" />
+  </svg>
+);
 const PersonIcon = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden="true">
     <circle cx="12" cy="8" r="4" />
@@ -34,7 +42,12 @@ const PersonIcon = () => (
 
 export default function SettingsScreen({ email, categories, online, cache, onChanged }: { email: string; categories: Category[]; online: boolean; cache: ApiCache; onChanged: () => void }) {
   // Opening the Settings tab always starts on this list
-  const [page, setPage] = useState<"list" | "categories">("list");
+  const [page, setPage] = useState<"list" | "categories" | "currency">("list");
+  const home = useHomeCurrency();
+  const backToList = () => {
+    setPage("list");
+    window.scrollTo({ top: 0 });
+  };
   const [confirmSignOut, setConfirmSignOut] = useState(false);
 
   if (page === "categories") {
@@ -50,6 +63,11 @@ export default function SettingsScreen({ email, categories, online, cache, onCha
         }}
       />
     );
+  }
+
+  if (page === "currency") {
+    // Fetching the saved setting again updates the default everywhere, so lists and budget labels follow it at once
+    return <CurrencyPage online={online} onBack={backToList} onSaved={() => cache.load(SETTINGS_URL, true)} />;
   }
 
   const budgeted = categories.filter((c) => c.monthly_budget != null).length;
@@ -75,6 +93,20 @@ export default function SettingsScreen({ email, categories, online, cache, onCha
           <span className="d">
             {categories.length ? `${categories.length} categories · ${budgeted} with a budget` : "Loading…"}
           </span>
+        </span>
+        <span className="settings-chev" aria-hidden="true">›</span>
+      </button>
+      <button
+        className="settings-row"
+        onClick={() => {
+          setPage("currency");
+          window.scrollTo({ top: 0 });
+        }}
+      >
+        <span className="settings-icon"><CoinsIcon /></span>
+        <span className="settings-text">
+          <span className="t">Currency</span>
+          <span className="d">{home} · {currencyName(home)}</span>
         </span>
         <span className="settings-chev" aria-hidden="true">›</span>
       </button>

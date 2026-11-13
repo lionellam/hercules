@@ -5,6 +5,7 @@ import { expensesUrl, fmt, useCached, type ApiCache } from "@/lib/client";
 import { dayLabel, monthKey, monthLabel } from "@/lib/dates";
 import type { Category, Expense } from "@/lib/types";
 import { EditSheet, ExpenseRow } from "../expense-sheet";
+import { useMoney } from "../currency";
 
 // Every word must appear somewhere in the expense, in any order, ignoring capitals (Specification 4.3)
 function matches(e: Expense, words: string[]) {
@@ -13,6 +14,7 @@ function matches(e: Expense, words: string[]) {
 }
 
 export default function HistoryScreen({ categories, online, cache, onChanged }: { categories: Category[]; online: boolean; cache: ApiCache; onChanged: () => void }) {
+  const money = useMoney();
   const [offset, setOffset] = useState(0);
   const [editing, setEditing] = useState<Expense | null>(null);
   // Search applies to the month shown; it's cleared when the month changes, and when History closes
@@ -77,7 +79,7 @@ export default function HistoryScreen({ categories, online, cache, onChanged }: 
           {searching && (
             <p className="search-count" role="status">
               <span>{shown.length} {shown.length === 1 ? "result" : "results"}</span>
-              <b>${fmt(shown.reduce((sum, e) => sum + e.amount, 0))}</b>
+              <b>{money(shown.reduce((sum, e) => sum + e.amount, 0))}</b>
             </p>
           )}
           {shown.map((e, i) => {

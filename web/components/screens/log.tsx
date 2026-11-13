@@ -5,6 +5,7 @@ import { api, expensesUrl, fmt, useCached, type ApiCache } from "@/lib/client";
 import { localToday } from "@/lib/dates";
 import type { Category, Expense, SummaryRow } from "@/lib/types";
 import { ConfirmSheet } from "../confirm";
+import { useMoney } from "../currency";
 import { EditSheet, ExpenseRow } from "../expense-sheet";
 import ReviewCard, { type Fields } from "../review-card";
 
@@ -43,6 +44,7 @@ function TodayByCategory({ expenses }: { expenses: Expense[] }) {
 }
 
 export default function LogScreen({ categories, online, cache, onSaved }: { categories: Category[]; online: boolean; cache: ApiCache; onSaved: () => void }) {
+  const money = useMoney();
   const [text, setText] = useState("");
   const [parsed, setParsed] = useState<{ raw: string; fields: Fields } | null>(null);
   const [reviewDirty, setReviewDirty] = useState(false);
@@ -128,7 +130,7 @@ export default function LogScreen({ categories, online, cache, onSaved }: { cate
         </div>
         <p className="today-total">
           <span>Spent today</span>
-          <strong>{monthRows ? `$${fmt(todays.reduce((sum, e) => sum + e.amount, 0))}` : "—"}</strong>
+          <strong>{monthRows ? money(todays.reduce((sum, e) => sum + e.amount, 0)) : "—"}</strong>
         </p>
         {error && <p className="error">{error}</p>}
         {toast && <p className="toast">{toast}</p>}

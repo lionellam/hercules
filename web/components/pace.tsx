@@ -5,6 +5,7 @@ import { useState } from "react";
 import { fmt } from "@/lib/client";
 import { shortDay } from "@/lib/dates";
 import { cents, expectedBy, type PaceRow } from "@/lib/pace";
+import { useMoney } from "./currency";
 
 function AlertIcon() {
   return (
@@ -18,23 +19,24 @@ function AlertIcon() {
 
 // "On pace" allows 5% of the budget either side of the amount expected by today
 export function PaceNote({ total, budget, day, days }: { total: number; budget: number; day: number; days: number }) {
+  const money = useMoney();
   const left = budget - total;
-  const leftText = day < days ? `$${fmt(left)} left, about $${fmt(left / (days - day))}/day` : `$${fmt(left)} left today`;
+  const leftText = day < days ? `${money(left)} left, about ${money(left / (days - day))}/day` : `${money(left)} left today`;
   if (cents(total) > cents(budget)) {
     return (
       <p className="pace bad">
         <AlertIcon />
-        <b>Over budget by ${fmt(total - budget)}</b>
+        <b>Over budget by {money(total - budget)}</b>
       </p>
     );
   }
-  if (cents(total) === cents(budget)) return <p className="pace"><span><b>Budget used</b> · $0.00 left</span></p>;
+  if (cents(total) === cents(budget)) return <p className="pace"><span><b>Budget used</b> · {money(0)} left</span></p>;
   const diff = total - expectedBy(budget, day, days);
   if (Math.abs(diff) <= 0.05 * budget) return <p className="pace"><span><b>On pace</b> · {leftText}</span></p>;
   return (
     <p className="pace">
       <span>
-        <b>${fmt(Math.abs(diff))} {diff > 0 ? "over" : "under"} pace</b> · {leftText}
+        <b>{money(Math.abs(diff))} {diff > 0 ? "over" : "under"} pace</b> · {leftText}
       </span>
     </p>
   );
@@ -42,6 +44,7 @@ export function PaceNote({ total, budget, day, days }: { total: number; budget: 
 
 // Running total against the budget spread evenly over the month
 export function BurnUp({ row, budget, month, day, days }: { row: PaceRow; budget: number; month: string; day: number; days: number }) {
+  const money = useMoney();
   const [hover, setHover] = useState<number | null>(null);
   // Runs to the edges of the open category, with small margins and no y-axis, so the plot uses most of the width
   const W = 359, H = 200, m = { l: 6, r: 6, t: 20, b: 24 };
@@ -57,13 +60,13 @@ export function BurnUp({ row, budget, month, day, days }: { row: PaceRow; budget
   for (let d = 1; d <= day; d++) step += ` L${x(d)} ${y(cum[d - 1])} L${x(d)} ${y(cum[d])}`;
   const whole = (n: number) => fmt(n).replace(/\.00$/, "");
   // Labels move so they stay clear of each other and of the lines (Specification 4.1)
-  const amount = `$${fmt(spent)}`;
+  const amount = money(spent);
   const amountFitsRight = x(day) + 9 + amount.length * 6.6 <= W - 2;
   const budgetText = `Budget ${whole(budget)}`;
   const lateMonth = x(day) > x(days) - (budgetText.length * 6 + 10) - 60;
   const budgetLabelLeft = lateMonth && spent >= 0.8 * budget;
   const todayAnchor = x(day) < m.l + 18 ? "start" : x(day) > W - m.r - 18 ? "end" : "middle";
-  const label = `${row.category}: $${fmt(spent)} spent by day ${day} of ${days}, $${fmt(expectedBy(budget, day, days))} expected by today against a $${fmt(budget)} monthly budget.`;
+  const label = `${row.category}: ${money(spent)} spent by day ${day} of ${days}, ${money(expectedBy(budget, day, days))} expected by today against a ${money(budget)} monthly budget.`;
 
   function pick(clientX: number, el: Element) {
     const r = el.getBoundingClientRect();
@@ -134,10 +137,10 @@ export function BurnUp({ row, budget, month, day, days }: { row: PaceRow; budget
           // Sits in the empty side of the plot so it doesn't cover the lines it describes
           <div className="tip" style={x(hover) > W / 2 ? { top: 22, left: "6%" } : { bottom: 34, right: "8%" }}>
             <div className="tip-day">{shortDay(month, hover)}</div>
-            <div><span className="tip-k">Spent </span><b>${fmt(hv.spent)}</b></div>
-            <div><span className="tip-k">Expected </span><b>${fmt(hv.expected)}</b></div>
+            <div><span className="tip-k">Spent </span><b>{money(hv.spent)}</b></div>
+            <div><span className="tip-k">Expected </span><b>{money(hv.expected)}</b></div>
             <div className="tip-k">
-              {Math.abs(hoverDiff) <= 0.05 * budget ? "On pace" : `$${fmt(Math.abs(hoverDiff))} ${hoverDiff > 0 ? "over" : "under"} pace`}
+              {Math.abs(hoverDiff) <= 0.05 * budget ? "On pace" : `${money(Math.abs(hoverDiff))} ${hoverDiff > 0 ? "over" : "under"} pace`}
             </div>
           </div>
         )}

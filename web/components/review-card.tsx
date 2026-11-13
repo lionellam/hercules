@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { CurrencySelect } from "./currency";
 
 export type Fields = {
   amount: number | null;
@@ -27,6 +28,7 @@ type Props = {
 
 export default function ReviewCard({ title, initial, categories, rawInput, onSave, onCancel, cancelLabel, onDelete, disabled, onDirtyChange }: Props) {
   const [amount, setAmount] = useState(initial.amount == null ? "" : initial.amount.toFixed(2));
+  const [currency, setCurrency] = useState(initial.currency);
   const [categoryId, setCategoryId] = useState(initial.category_id);
   const [merchant, setMerchant] = useState(initial.merchant ?? "");
   const [date, setDate] = useState(initial.date);
@@ -35,6 +37,7 @@ export default function ReviewCard({ title, initial, categories, rawInput, onSav
   const [error, setError] = useState("");
   const dirty =
     amount !== (initial.amount == null ? "" : initial.amount.toFixed(2)) ||
+    currency !== initial.currency ||
     categoryId !== initial.category_id ||
     merchant !== (initial.merchant ?? "") ||
     date !== initial.date ||
@@ -60,7 +63,7 @@ export default function ReviewCard({ title, initial, categories, rawInput, onSav
     }
     const fields = {
       amount: Math.round(value * 100) / 100,
-      currency: initial.currency,
+      currency,
       category_id: categoryId,
       merchant: merchant.trim() || null,
       date,
@@ -68,6 +71,7 @@ export default function ReviewCard({ title, initial, categories, rawInput, onSav
     };
     const edited =
       fields.amount !== initial.amount ||
+      fields.currency !== initial.currency ||
       fields.category_id !== initial.category_id ||
       fields.merchant !== (initial.merchant || null) ||
       fields.date !== initial.date ||
@@ -80,7 +84,7 @@ export default function ReviewCard({ title, initial, categories, rawInput, onSav
       <div className="card-title">{title}</div>
       {rawInput && <p className="raw">“{rawInput}”</p>}
       <div className="amount-field">
-        <span>{initial.currency}</span>
+        <CurrencySelect value={currency} onChange={setCurrency} />
         <input inputMode="decimal" value={amount} onChange={(e) => setAmount(e.target.value)} placeholder="0.00" aria-label="Amount" />
       </div>
       <div className="field">

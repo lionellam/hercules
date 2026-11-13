@@ -27,6 +27,9 @@ CREATE TABLE IF NOT EXISTS categories (
 
 ALTER TABLE categories ADD COLUMN IF NOT EXISTS monthly_budget NUMERIC(12, 2);
 
+-- The currency used when what's typed names none (Specification 4.6)
+ALTER TABLE users ADD COLUMN IF NOT EXISTS default_currency TEXT NOT NULL DEFAULT 'SGD';
+
 CREATE UNIQUE INDEX IF NOT EXISTS categories_one_other_per_user
   ON categories (user_id) WHERE is_other;
 

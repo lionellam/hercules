@@ -2,6 +2,7 @@ import "server-only";
 import Anthropic from "@anthropic-ai/sdk";
 import { zodOutputFormat } from "@anthropic-ai/sdk/helpers/zod";
 import { z } from "zod";
+import { resolveCurrency } from "./currencies";
 import { isRealDate, shiftDays } from "./dates";
 
 export type ParsedExpense = {
@@ -30,7 +31,7 @@ ${categories.map((c) => `- ${c}`).join("\n")}
 Instructions:
 - Choose the single best-matching category from the list above. If nothing fits, use "Other".
 - For "amount", return a number only (no currency symbols). Return null if no amount is given.
-- For "currency", default to "SGD" if not mentioned.
+- For "currency", return the three-letter ISO 4217 code only if the input names a currency: by its code (e.g. "USD", "MYR"), its name (e.g. "baht", "ringgit", "yen", "US dollars"), or a symbol used by only one currency (e.g. "€", "£", "₩", "₹", "RM", "S$", "US$"). A plain "$" or "¥" on its own does not name a currency. If no currency is named, return null.
 - For "date", return the date in YYYY-MM-DD format using these rules in order:
   (1) If the user states a specific date, always use it. If no year is given, assume the year from ${today}.
   (2) If the user states a relative date (e.g. "yesterday", "last Friday"), calculate the date by counting back from ${today}.
@@ -40,23 +41,27 @@ Instructions:
 
 Examples:
 Input: "Grab ride yesterday for $12"
-Output: {"amount": 12.00, "currency": "SGD", "category": "Transport", "merchant": null, "date": "${yesterday}", "remarks": null}
+Output: {"amount": 12.00, "currency": null, "category": "Transport", "merchant": null, "date": "${yesterday}", "remarks": null}
 
 Input: "Coffee at Ya Kun for $4.50"
-Output: {"amount": 4.50, "currency": "SGD", "category": "Food & Dining", "merchant": "Ya Kun", "date": "${today}", "remarks": null}`;
+Output: {"amount": 4.50, "currency": null, "category": "Food & Dining", "merchant": "Ya Kun", "date": "${today}", "remarks": null}
+
+Input: "Dinner in Bangkok 450 baht"
+Output: {"amount": 450.00, "currency": "THB", "category": "Food & Dining", "merchant": null, "date": "${today}", "remarks": null}`;
 }
 
 export class ParseError extends Error {}
 
-export async function parseExpense(rawInput: string, categories: string[], today: string): Promise<ParsedExpense> {
+// The currency comes back already decided: the one named in the text, otherwise the person's default (Specification 4.6)
+export async function parseExpense(rawInput: string, categories: string[], today: string, defaultCurrency: string): Promise<ParsedExpense> {
   if (!process.env.ANTHROPIC_API_KEY) {
     if (process.env.NODE_ENV === "production") throw new ParseError("Parser is not configured");
-    return standInParse(rawInput, categories, today);
+    return standInParse(rawInput, categories, today, defaultCurrency);
   }
 
   const schema = z.object({
     amount: z.number().nullable(),
-    currency: z.string(),
+    currency: z.string().nullable(),
     category: z.enum(categories as [string, ...string[]]),
     merchant: z.string().nullable(),
     date: z.string(),
@@ -75,16 +80,15 @@ export async function parseExpense(rawInput: string, categories: string[], today
     throw new ParseError("The model could not parse this expense");
   }
   const out = response.parsed_output;
-  const currency = out.currency.trim().toUpperCase();
   return {
     ...out,
-    currency: /^[A-Z]{3}$/.test(currency) ? currency : "SGD",
+    currency: resolveCurrency(out.currency, rawInput, defaultCurrency),
     date: isRealDate(out.date) ? out.date : today,
   };
 }
 
 // Keyword-based stand-in for local development without an API key.
-function standInParse(raw: string, categories: string[], today: string): ParsedExpense {
+function standInParse(raw: string, categories: string[], today: string, defaultCurrency: string): ParsedExpense {
   const keywords: Record<string, RegExp> = {
     "Food & Dining": /lunch|dinner|breakfast|coffee|kopi|meal|food/i,
     Transport: /grab|taxi|bus|mrt|ride|petrol/i,
@@ -97,7 +101,7 @@ function standInParse(raw: string, categories: string[], today: string): ParsedE
     Object.entries(keywords).find(([c, re]) => categories.includes(c) && re.test(raw))?.[0] ?? "Other";
   return {
     amount: amount ? parseFloat(amount[1]) : null,
-    currency: "SGD",
+    currency: resolveCurrency(raw.match(/\b(USD|MYR|THB|JPY|EUR|GBP)\b/i)?.[1] ?? null, raw, defaultCurrency),
     category,
     merchant: merchant ? merchant[1] : null,
     date: /yesterday/i.test(raw) ? shiftDays(today, -1) : today,

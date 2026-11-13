@@ -1,8 +1,8 @@
 # Project Hercules — Specification Sheet: "Log an Expense" Flow
 
 ```
-Version 0.40 · Draft 
-Last Reviewed: 12 November 2026
+Version 0.41 · Draft 
+Last Reviewed: 13 November 2026
 Produced with AI Assistance (Claude Code)
 ```
 
@@ -50,6 +50,7 @@ Produced with AI Assistance (Claude Code)
 | 0.38 | 2026-11-10 | Lionel Lam | CSV download opens the iPhone share sheet when Hercules is opened from the home screen (Section 4.5) |
 | 0.39 | 2026-11-10 | Lionel Lam | The CSV prepared for the iPhone share sheet is kept while the app is open and refreshed only after changes (Section 4.5) |
 | 0.40 | 2026-11-12 | Lionel Lam | Summary's fixed section also holds the month's total, the CSV button and the day of the month; the comparison with the month before is removed (process flow step 8) |
+| 0.41 | 2026-11-13 | Lionel Lam | Default currency chosen in Settings and applied by the application when the text names no currency; currency picker on the review card; budget labels, lists and totals follow the default (Sections 4.4 and 4.6, process flow steps 3 and 5, data model) |
 
 ---
 
@@ -89,9 +90,9 @@ This spec exists to align the team before the process flow diagram (UPN) and fea
 
 1. **User enters expense** — free text, e.g. *"spent $12 on lunch at McDonald's yesterday"*. The heading and text input stay fixed at the top of the Log screen while the content below scrolls, so a new expense can be entered from anywhere in the list. Once there is text in the box, an "×" button at its top right clears it in one tap, without asking. Directly below the input, this section also shows today's total spend (amounts are added without currency conversion, as in Summary)
 2. **Application fetches active categories** — before calling the language model, the application queries the Category table for the user's active categories and injects the list into the prompt. This is an application-side step; no AI is involved.
-3. **Language model parses input** — the AI step. Produces structured fields (amount, category, merchant, date, etc.) from the raw text, returned via structured outputs so the response is always valid JSON in the expected shape. For category, the language model is instructed to return exactly one name from the injected category list, or "Other" if nothing fits. No free-text category invention.
+3. **Language model parses input** — the AI step. Produces structured fields (amount, category, merchant, date, etc.) from the raw text, returned via structured outputs so the response is always valid JSON in the expected shape. The currency is returned only when the text names one; otherwise the application uses the default currency from Settings (Section 4.6). For category, the language model is instructed to return exactly one name from the injected category list, or "Other" if nothing fits. No free-text category invention.
 4. **Application resolves `category_id`** — the returned category name is matched via exact lookup against the Category table. "Other" maps to the row where `is_other = true`. No fuzzy matching required.
-5. **Confirmation screen is presented** — parsed fields shown as editable form elements (not a static summary).
+5. **Confirmation screen is presented** — parsed fields shown as editable form elements (not a static summary). The currency code beside the amount is a small button that opens a list of the 20 currencies in Section 4.6, to change the currency of this expense only; the same applies when editing a saved expense.
 6. **User reviews and optionally edits fields directly** — this is the human-in-the-loop step. No re-prompting of the model occurs; corrections are direct field edits.
 7. **User confirms/saves** — the system checks the fields, then writes the structured record, the original raw text, and a flag indicating whether any edit occurred. The date must be a real calendar date in the years 2000 to 2099 (so not, for example, 31 February); otherwise the save is refused with a message to check the fields.
 8. **Record is available for viewing** — in History and Summary, and in the "Today" list on the Log screen for expenses dated today. A saved record can be reopened from History or from the Today list in the same editable card to be edited or deleted (soft delete, after a confirmation, with Undo; see Section 4.2). Below the Today list, the Log screen shows today's total spend broken down by category (amounts are added without currency conversion, as in Summary). For the current month, a category with a budget shows its spend as "x of budget", with its bar showing the share of the budget used (full at or above 100%, and red once spend is over the budget). Each budgeted bar also has a marker at the amount expected by today (budget × day of month ÷ days in month, counting today), and a note: "Over budget by $X" (red), "Budget used", "On pace" (within 5% of the budget either side of the expected amount), or "$X over/under pace", followed by the amount left and about how much a day remains (see Section 4.1 for the exact rules). Tapping a budgeted category opens a burn-up chart of its running total against the budget spread evenly over the month, with a "Daily figures" table. Categories with no spending in the month are not listed, whether or not they have a budget. The previous month is shown without pace. Other bars show the category's spend relative to the month's largest category. Below its category list, Summary shows a pie chart of the month's spend by category for any month with expenses: up to six slices, with any beyond the largest five grouped as "Everything else". History and Summary keep their heading and month control fixed at the top while the content below scrolls; on History, a search field sits below the month control (Section 4.3). On Summary, the fixed section also holds the month's total with the **CSV** button and, for the current month, the day of the month ("Day 12 of 30 · Thu, 12 Nov"), so the total stays in view while scrolling through the categories. Summary doesn't compare the total with the month before. On a short screen, such as a phone held sideways (under 500 pixels tall), nothing is fixed on any screen, so there is room to scroll. Screens show the last-loaded data straight away and refresh it in the background; saving, editing or deleting a record reloads it. A month's expenses can be downloaded as a CSV file from Summary (Section 4.5).
@@ -166,12 +167,12 @@ The month's expenses are already loaded on the device, so searching needs no ser
 
 Settings is the fourth tab, with a gear icon, after Log, History and Summary. It replaces the Categories tab and lists:
 
-- **Spending:** **Categories & budgets**, with the number of categories in use and how many have a budget (for example "14 categories · 5 with a budget"). Tapping it opens the Categories & budgets page, which works exactly as the Categories tab did (see the Category notes in Section 5), with "‹ Settings" at the top to go back.
+- **Spending:** **Categories & budgets**, with the number of categories in use and how many have a budget (for example "14 categories · 5 with a budget"). Tapping it opens the Categories & budgets page, which works exactly as the Categories tab did (see the Category notes in Section 5), with "‹ Settings" at the top to go back. Below it, **Currency** shows the default currency (for example "SGD · Singapore dollar") and opens the Currency page (Section 4.6).
 - **Appearance:** System, Light or Dark. System follows the device's setting. The choice is saved on that device only. This replaces the sun or moon icon that was at the top of every screen.
 - **Account:** the email address signed in with, and **Sign out**, which moves here from the bottom of Summary and asks for confirmation first (Section 4.2).
 - **Below Account:** the app's version number and the date and time it was last updated, meaning when the version running was built and deployed.
 
-Opening the Settings tab always shows the Settings list, even if Categories & budgets was open when you left it.
+Opening the Settings tab always shows the Settings list, even if Categories & budgets or Currency was open when you left it.
 
 ### 4.5 Downloading Expenses (CSV)
 
@@ -191,6 +192,35 @@ The file is produced by the server and sent as a download. After tapping the but
 
 **iPhone, opened from the home screen:** there, a download would replace the app's full-screen window with the file's preview and leave no way back to the app. So when Hercules is opened from the home screen and the phone can share files, **CSV** opens the iPhone's share sheet instead (Save to Files, AirDrop, Mail and so on); closing it returns to Summary. To open the share sheet the moment the button is tapped, the file for the month shown is prepared in the background the first time that month is shown after the app opens. It is kept while the app is open, so returning to Summary doesn't fetch it again, and it is prepared afresh after any change made in the app (saving, editing or deleting an expense, or changing categories). Changes made on another device are included once the app is reopened. If it isn't ready yet, a short message asks to try again in a moment. In Safari, on Android and on computers, the normal download is used. A month with no expenses still downloads, with the header row only.
 
+### 4.6 Default Currency
+
+Each person chooses a **default currency** in Settings → **Currency**. It starts as SGD. It is stored with the account, so it applies on every device.
+
+**The list:** 20 currencies, shown as code and name, with SGD first and then by region:
+
+| Region | Currencies |
+|---|---|
+| Home | SGD Singapore dollar |
+| Southeast Asia | MYR Malaysian ringgit, IDR Indonesian rupiah, THB Thai baht, PHP Philippine peso, VND Vietnamese dong |
+| East Asia | CNY Chinese yuan, HKD Hong Kong dollar, TWD New Taiwan dollar, JPY Japanese yen, KRW South Korean won |
+| South Asia and Middle East | INR Indian rupee, AED UAE dirham |
+| Oceania | AUD Australian dollar, NZD New Zealand dollar |
+| Europe and Americas | USD US dollar, EUR Euro, GBP British pound, CHF Swiss franc, CAD Canadian dollar |
+
+The Currency page lists them with a ✓ beside the default; tapping one saves it straight away. A note explains that the default is used when what you type doesn't name a currency, and that changing it doesn't change past expenses.
+
+**When parsing,** the currency is decided in this order:
+
+1. If the text names a currency by its code, its name or a symbol used by only one currency (for example "USD", "US$", "baht", "RM", "€", "£", "₩", "₹"), that currency is used, even if it isn't one of the 20.
+2. A plain `$` means the default currency if the default is a dollar (SGD, HKD, TWD, AUD, NZD, USD or CAD); otherwise US dollars. A plain `¥` means the default if it is JPY or CNY; otherwise Japanese yen.
+3. Otherwise, the default currency.
+
+The language model is asked to report a currency only when the text names one; the application applies rules 2 and 3 itself. A result of USD is only accepted if the text mentions US dollars, so a plain "$12" can never come out as USD for someone whose default is SGD.
+
+**Changing it on the review card:** the code beside the amount (for example "SGD ▾") opens the list of 20, to change the currency of that expense only. An expense already in a currency outside the list keeps it as an extra option. Changing the currency marks the expense as edited.
+
+**Following the default:** budgets are in the default currency ("Monthly budgets are optional and in SGD", and "Monthly budget (SGD)" on the budget field). In History and the Today list, amounts in the default currency show the number alone, and others show their code, for example "USD 12.50". Totals and money in sentences (Spent today, the Summary total, pace notes and the burn-up chart, the History search total, the pie chart's labels and the retire confirmation) show "$" when the default is a dollar currency (SGD, HKD, TWD, AUD, NZD, USD or CAD), and otherwise the default's code, for example "MYR 20.00". Amounts are never converted: totals, Summary, pace and the CSV file add each amount as it is. Changing the default doesn't change any saved expense or budget amount.
+
 ---
 
 ## 5. Data Model (Draft)
@@ -203,7 +233,7 @@ The file is produced by the server and sent as a download. After tapping the but
 | `user_id` | identifier (FK → `User`) | Scopes the record to a user account |
 | `raw_input` | string | Original natural language text, stored verbatim |
 | `amount` | number | Parsed or user-edited |
-| `currency` | string | Defaulted to SGD; not asked of the user each time. SGD only in the first version — summaries do not convert other currencies |
+| `currency` | string | Three-letter currency code. The currency named in the text, otherwise the user's default currency (Section 4.6); can be changed on the review card. Totals and summaries do not convert between currencies |
 | `category_id` | identifier (FK → `Category`) | References a category from the user's own list, not a raw string |
 | `merchant` | string (optional) | Free text; autocomplete-suggested from the user's prior entries, not constrained to a list. *Suggestions not yet built in the web app* |
 | `date` | date | Parsed or defaulted to today. Must be a real calendar date in the years 2000 to 2099; a parsed date that isn't falls back to today |
@@ -227,7 +257,7 @@ Per-user and extensible — this is a **user preference**, not a global constant
 | `is_default` | boolean | Distinguishes preset/seeded categories from user-added ones |
 | `is_active` | boolean | Allows retiring a category without deleting historical records that reference it |
 | `is_other` | boolean | Flags the built-in "Other" catch-all; ensures only one such category exists per user. When `true`, the expense entry will prompt for an `other_sub_label` to capture specificity (*prompt not yet built in the web app*) |
-| `monthly_budget` | number (optional) | The category's current monthly budget in SGD; empty means no budget. Only the current amount is kept, so past months' budgets are not recorded |
+| `monthly_budget` | number (optional) | The category's current monthly budget in the user's default currency; empty means no budget. Only the current amount is kept, so past months' budgets are not recorded |
 
 **Preset behavior:** each new user is seeded with their own copy of the starter list — Food & Dining, Transport, Groceries, Entertainment, Utilities, Health & Medical, Household, Shopping, Rent, Clothes, Education, Professional Development, Travel — plus an **"Other"** catch-all. The Categories & budgets page, opened from Settings (Section 4.4), adds and renames categories and sets their monthly budgets; its heading and add button stay fixed at the top while the list scrolls. Names must be unique for the user regardless of capitalisation, with a limit of 50 active categories per user. "Other" cannot be renamed or retired and stays last in the list, because the application falls back to it by name.
 
@@ -248,6 +278,7 @@ Merchant is handled as autocomplete-over-free-text, not a constrained/enum list.
 | `google_id` | string | Google account identifier, used to recognise the user on later sign-ins |
 | `display_name` | string | Human-readable name taken from the Google account (e.g. "Lionel") |
 | `is_active` | boolean | Allows disabling a user without deleting their data |
+| `default_currency` | string | Three-letter code of the currency used when the text names none; one of the 20 in Section 4.6. `SGD` unless changed in Settings |
 | `created_at` | timestamp | System-generated |
 
 **Authentication and access:**

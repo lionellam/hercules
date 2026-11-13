@@ -24,7 +24,7 @@ export async function POST(req: Request) {
 
   const categories = await getCategories(user.id);
   try {
-    const parsed = await parseExpense(input.data.text, categories.map((c) => c.name), input.data.today);
+    const parsed = await parseExpense(input.data.text, categories.map((c) => c.name), input.data.today, user.default_currency);
     const category = categories.find((c) => c.name === parsed.category) ?? categories.find((c) => c.name === "Other");
     return Response.json({ ...parsed, category_id: category?.id ?? null });
   } catch (e) {

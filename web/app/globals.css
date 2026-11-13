@@ -72,6 +72,10 @@ textarea::placeholder { color: var(--muted); }
 .card-title { font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 12px; }
 .amount-field { display: flex; align-items: baseline; gap: 6px; margin-bottom: 14px; }
 .amount-field span { color: var(--muted); font-size: 18px; }
+/* The currency beside the amount: a small button over the phone's own list (Specification 4.6) */
+.currency-pick { position: relative; display: inline-flex; align-items: center; flex-shrink: 0; background: var(--soft); border-radius: 8px; padding: 4px 9px; align-self: center; }
+.amount-field .currency-pick span { color: var(--text); font-size: 16px; font-weight: 600; white-space: nowrap; }
+.currency-pick select { position: absolute; inset: 0; opacity: 0; width: 100%; height: 100%; font-size: 16px; cursor: pointer; }
 .amount-field input { font-size: 34px; font-weight: 700; border: none; background: none; color: var(--text); width: 100%; outline: none; }
 .field { display: flex; justify-content: space-between; align-items: center; padding: 11px 0; border-top: 1px solid var(--line); font-size: 15px; gap: 12px; }
 .field label { color: var(--muted); flex-shrink: 0; }
@@ -264,3 +268,13 @@ textarea::placeholder { color: var(--muted); }
 @media (max-height: 500px) {
   .pinned-top { position: static; }
 }
+
+/* The Currency page in Settings */
+.currency-list { list-style: none; padding: 0; margin: 4px 0 0; }
+.currency-list button { display: flex; align-items: center; gap: 12px; width: 100%; padding: 12px 0; background: none; border: none; border-bottom: 1px solid var(--line);
+                        font: inherit; font-size: 15px; color: var(--text); text-align: left; cursor: pointer; }
+.currency-list .code { width: 44px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.currency-list .nm { flex: 1; }
+.currency-list button.on .nm { font-weight: 600; }
+.currency-list .ck { font-weight: 700; }
+.currency-list button:disabled { cursor: default; opacity: .6; }

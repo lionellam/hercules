@@ -1,8 +1,8 @@
 # Project Hercules — Test Plan: Web App v1
 
 ```
-Version 1.9 · Draft
-Last Reviewed: 12 November 2026
+Version 1.10 · Draft
+Last Reviewed: 13 November 2026
 Produced with AI Assistance (Claude Code)
 ```
 
@@ -20,6 +20,7 @@ Produced with AI Assistance (Claude Code)
 | 1.7 | 2026-11-10 | Lionel Lam | Integrity check: new R-11 (the prepared CSV is refreshed after a change, 1.1.2); S-08 covers the home-screen app |
 | 1.8 | 2026-11-12 | Lionel Lam | Summary's total stays in place while scrolling (new H-10); no comparison with the month before (H-01, H-02); M-03 covers a phone held sideways |
 | 1.9 | 2026-11-12 | Lionel Lam | B-10: Today by category no longer shows a combined total |
+| 1.10 | 2026-11-13 | Lionel Lam | Default currency: new Section T, including totals (T-12); Q-02 lists the Currency row |
 
 ---
 
@@ -285,7 +286,7 @@ These need a look at the local database; ask Claude to run them.
 | ID | Test | Steps | Expected result |
 |---|---|---|---|
 | Q-01 | Tab bar | Look at the tabs at the bottom | Log, History, Summary and **Settings** (a gear). There's no Categories tab |
-| Q-02 | Settings list | Open **Settings** | Groups for Spending (**Categories & budgets**), Appearance and Account, then the version and last-updated time |
+| Q-02 | Settings list | Open **Settings** | Groups for Spending (**Categories & budgets** and **Currency**), Appearance and Account, then the version and last-updated time |
 | Q-03 | Category count | Look at the Categories & budgets row; then add or retire a `zz-test-` category and look again | It shows the number of categories in use and how many have a budget, and updates after the change |
 | Q-04 | Opening and going back | Tap **Categories & budgets**, then **‹ Settings** | The Categories & budgets page opens, with the same list, Add category and Retired group as before; "‹ Settings" returns to the list |
 | Q-05 | Returning to Settings | Open Categories & budgets, switch to Log, then tap Settings | The Settings list shows, not Categories & budgets |
@@ -308,6 +309,25 @@ These need a look at the local database; ask Claude to run them.
 | R-09 | Another person's data | As a second test account (see A-07), download the same month | Only that account's expenses are in the file |
 | R-10 | iPhone home-screen app **[Phone]** | Open Hercules from the home-screen icon → Summary → **CSV**; choose **Save to Files**; then try again and close the share sheet without choosing | The share sheet opens over the app. The file saves to Files with the right name and contents. Closing the sheet returns to Summary; the app never gets stuck on a download screen |
 | R-11 | File refreshed after a change **[Phone]** | In the home-screen app: Summary → **CSV**, close the share sheet. Log `[TEST] coffee 1.00` → Save. Back to Summary → **CSV** → **Save to Files**; open the file. Then delete the test expense | The share sheet opens at once both times. The second file includes the `[TEST]` expense, and its Amount column adds up to the new total on Summary |
+
+### T. Default Currency
+
+Use a test account (see A-07) for T-03 to T-06 and T-09 where the default is changed, or set your default back to SGD afterwards. Parse tests use the language model.
+
+| ID | Test | Steps | Expected result |
+|---|---|---|---|
+| T-01 | Currency row | Open **Settings** | Under Spending, **Currency** shows "SGD · Singapore dollar" |
+| T-02 | Currency page | Tap **Currency** | A page with "‹ Settings", a short note, and 20 currencies with codes and names, SGD first with a ✓ |
+| T-03 | Change the default | Tap **MYR**; go back to Settings; reload the app; open Settings on another device | The ✓ moves to MYR at once; the row shows "MYR · Malaysian ringgit" after the reload and on the other device |
+| T-04 | Plain dollar sign | With the default SGD, parse `[TEST] lunch $12` | The review card shows **SGD** (never USD) |
+| T-05 | Nothing named | With the default MYR, parse `[TEST] lunch 12` | The review card shows **MYR** |
+| T-06 | Plain dollar, non-dollar default | With the default MYR, parse `[TEST] coffee $5` | The review card shows **USD** |
+| T-07 | Named currency kept | Parse `[TEST] dinner 450 baht`, then `[TEST] hotel USD 120`, then `[TEST] taxi 30 pesos MXN` | THB, USD and MXN respectively, whatever the default |
+| T-08 | Picker on the review card | Parse `[TEST] lunch 12`; tap the code beside the amount; choose **JPY**; Save; open the expense from Today | The list shows the 20 currencies; the saved expense is in JPY and is marked "edited". In the Today list it shows "JPY 12.00" |
+| T-09 | Lists follow the default | With an SGD and an MYR `[TEST]` expense today, switch the default between SGD and MYR and look at Today and History | The amount in the default currency shows the number alone; the other shows its code |
+| T-10 | Budget labels | Change the default to MYR; open Categories & budgets and a category | "Monthly budgets are optional and in MYR" and "Monthly budget (MYR)". Budget amounts are unchanged |
+| T-11 | Not in the list | Via the API, try to set the default to `XYZ` (`PATCH /api/settings` with `{"default_currency":"XYZ"}`) | Refused with an error; the default is unchanged |
+| T-12 | Totals follow the default | With the default SGD, look at Spent today, the Summary total, a pace note and a History search total; then change the default to MYR and look again; then back to SGD | With SGD they read like "$20.00"; with MYR, like "MYR 20.00" ("MYR 115.60 under pace", "about MYR 23.09/day"). The numbers don't change |
 
 ---
 

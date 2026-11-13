@@ -62,9 +62,13 @@ export async function upsertUser(email: string, googleId: string | null, display
 }
 
 export async function getActiveUser(id: string) {
-  const rows = await query<{ id: string; email: string; display_name: string | null }>(
-    "SELECT id, email, display_name FROM users WHERE id = $1 AND is_active",
+  const rows = await query<{ id: string; email: string; display_name: string | null; default_currency: string }>(
+    "SELECT id, email, display_name, default_currency FROM users WHERE id = $1 AND is_active",
     [id],
   );
   return rows[0] ?? null;
+}
+
+export async function setDefaultCurrency(id: string, code: string) {
+  await query("UPDATE users SET default_currency = $2 WHERE id = $1", [id, code]);
 }

@@ -4,7 +4,7 @@
 Maintained by: Lionel Lam Song Poh, James Wong
 Purpose: Record of work done, decisions made, challenges encountered, and assumptions held —
 to serve as a lessons learned reference for current and future contributors.
-Last updated: 12 November 2026
+Last updated: 13 November 2026
 ```
 
 ---
@@ -1102,3 +1102,29 @@ Last updated: 12 November 2026
 - A document integrity check after 1.1.5 found no problems. It noted that the guide's Settings mockup showed "Version 1.1.5", which would look out of date after the next release. At the owner's request it now shows a placeholder, "Version X.Y.Z (abc1234)" and "Last updated DD Mon YYYY, HH:MM", so it never needs updating for a release.
 - Documents only, so the app version stays at 1.1.5.
 - **Confirmed (12 November 2026):** the owner checked that the guide on GitHub Pages shows the placeholder.
+
+---
+
+## 13 November 2026 — Version 1.2.0: Default Currency
+
+### What Was Done
+- The owner found that Haiku sometimes returned USD instead of SGD, most likely for a plain "$". The prompt said "default to SGD", but nothing in the code checked it, and the review card showed the currency as plain text, so it couldn't be corrected before saving.
+- After discussion and mockups (`design/currency-mockups.html`), the owner chose:
+  - a **Currency** row in Settings, opening a page of 20 currencies (SGD first, then by region), saved with the account;
+  - the code beside the amount on the review card as a small button opening the phone's own list (option A, over a separate row);
+  - budget labels and the code shown in lists following the default.
+- The language model now returns a currency only when the text names one. The server decides the rest (`web/lib/currencies.ts`): a plain `$` means the default if it's a dollar currency, otherwise USD; a plain `¥` means the default if it's JPY or CNY, otherwise JPY; anything else unnamed is the default; and USD is only accepted when the text mentions US dollars. New column `users.default_currency` (default `SGD`), new route `/api/settings`. Amounts are still never converted.
+- Version **1.2.0** (a new feature), with a changelog entry. Updated the Specification (v0.41, new Section 4.6), Architecture (v0.23, decision 36; decision 19 updated), Project Charter (v0.12), Test Plan (v1.10, new Section T) and the user guide (What to type, Settings, and the review and Settings mockups).
+- Tested locally:
+  - The currency rules on their own: 14 of 14 cases.
+  - Real parses with the default SGD: "$12" and "$18.50" gave SGD, "4.50" SGD, "450 baht" THB, "USD 120" USD, "30 pesos MXN" MXN, "¥900" JPY, "25 euros" EUR.
+  - With the default MYR on the demo account: "12" gave MYR, "$5" USD, "RM8" MYR, "S$3" SGD.
+  - Settings showed the Currency row and page; choosing MYR saved straight away. An invalid code was refused.
+  - On the review card, changing MYR to JPY saved a JPY expense marked "edited", shown as "JPY 12.00", while an MYR expense showed "8.00". Categories & budgets read "in MYR".
+  - Type-check, lint and a production build passed.
+  - At the owner's request, the edit sheet too, on the demo account: a saved SGD test expense opened from Today showed "SGD ▾" with the 20 currencies. Changed to EUR and saved, it was stored as EUR, marked "edited" and shown as "EUR 15.00". The CSV row read `15.00,EUR` with Edited `Yes`. The test expense was then deleted.
+- **Totals follow the default too.** After the live database change, the owner chose to switch the dollar sign on totals now rather than later. Totals and money in sentences use a shared helper (`useMoney` in `web/components/currency.tsx`): "$" when the default is a dollar currency (SGD, HKD, TWD, AUD, NZD, USD or CAD), otherwise the code. It covers Spent today, the Summary total, pace notes, the burn-up chart's labels and tooltip, the History search total, the pie chart's labels and the retire confirmation. Specification, Architecture decision 36, Test Plan (new T-12), changelog and guide updated to match.
+  - Tested on the demo account with a `[TEST]` SGD expense of 20.00. With SGD as the default, the Summary total read "$2,202.73", the pace note "Budget used · $0.00 left", the pie label "Rent: $1,800.00 (82%)" and the search total "$20.00", as before. With MYR they read "MYR 2,202.73", "MYR 112.27 under pace · MYR 395.60 left, about MYR 23.27/day", "Rent: MYR 1,800.00 (82%)" and "MYR 20.00", Spent today "MYR 20.00", and the SGD expense showed as "SGD 20.00" in History. Longer pace notes wrap onto a second line on a phone. The test expense was deleted, the demo default set back to SGD and the demo account removed from the local allow-list; the test browser was signed back in to the owner's account.
+- **Test slip:** the first eight test parses ran on the owner's local account, because the test browser had been signed in to it since the last session. They saved nothing and changed no settings, but added eight entries to that account's local daily parse count; exactly those eight were deleted. Testing then moved to the demo account. Lesson: check which account the test browser is signed in to before every test run.
+- Clean-up: the two test expenses and the demo account's test parses were deleted, its default set back to SGD, and the demo account removed from the local allow-list. The test browser was signed back in to the owner's local account. No `[TEST]` rows remain.
+- **Live database:** `db/schema.sql` adds a column, so it was added to Neon before pushing. The owner signed in to Vercel and opened the database through the project's Storage tab. Neon first asked them to verify the email on the Neon account that the Vercel integration had created. In Neon's SQL Editor (project hercules-db, branch main, database neondb), the owner ran the same `ALTER TABLE users ADD COLUMN IF NOT EXISTS default_currency ...` statement as the migration: "Statement executed successfully". A read-only check then showed both live accounts with `default_currency` SGD. No other data was touched, and no connection string was copied anywhere.

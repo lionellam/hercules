@@ -175,6 +175,7 @@ footer { margin-top: 72px; padding-top: 18px; border-top: 1px solid var(--rule);
 .m .raw { font-size: 11.5px; color: var(--m-muted); font-style: italic; margin-bottom: 6px; }
 .m .amt { display: flex; align-items: baseline; gap: 5px; margin-bottom: 8px; }
 .m .amt span { color: var(--m-muted); font-size: 14px; }
+.m .amt .pick { color: var(--m-text); font-weight: 600; background: var(--m-soft); border-radius: 6px; padding: 2px 6px; font-size: 13px; align-self: center; }
 .m .amt b { font-size: 26px; font-weight: 700; }
 .m .field { display: flex; justify-content: space-between; padding: 8px 0; border-top: 1px solid var(--m-line); font-size: 12.5px; }
 .m .field span:first-child { color: var(--m-muted); }
@@ -290,7 +291,7 @@ dl.faq dd { margin: 2px 0 0; color: var(--ink-2); }
       <div class="meta">
         <span><b>Who it's for:</b> invited family and friends</span>
         <span><b>Works on:</b> phone, tablet and computer</span>
-        <span><b>Updated:</b> 12 November 2026</span>
+        <span><b>Updated:</b> 13 November 2026</span>
       </div>
     </header>
 
@@ -366,7 +367,7 @@ dl.faq dd { margin: 2px 0 0; color: var(--ink-2); }
           <div class="body">
             <div class="card">
               <div class="card-t">REVIEW BEFORE SAVING</div>
-              <div class="amt"><span>SGD</span><b>4.50</b></div>
+              <div class="amt"><span class="pick">SGD ▾</span><b>4.50</b></div>
               <div class="field"><span>Category</span><span>Food &amp; Dining</span></div>
               <div class="field"><span>Merchant</span><span>Ya Kun</span></div>
               <div class="field"><span>Date</span><span>07/11/2026</span></div>
@@ -401,7 +402,7 @@ dl.faq dd { margin: 2px 0 0; color: var(--ink-2); }
     </table></div>
     <ul class="plain">
       <li><b>Dates:</b> no date means today. "Yesterday", "last Friday" and "3 Nov" all work.</li>
-      <li><b>Currency:</b> Singapore dollars unless you say otherwise. Other currencies are recorded, but totals add the numbers as they are, without converting.</li>
+      <li><b>Currency:</b> your default currency (Singapore dollars unless you change it in <b>Settings</b> → <b>Currency</b>) unless you name another, such as "450 baht" or "USD 120". A plain "$" means your default. To change the currency before saving, tap the code beside the amount, such as <b>SGD ▾</b>. Totals add the numbers as they are, without converting.</li>
       <li><b>Categories:</b> Claude can only choose from your own list. If nothing fits, it uses <b>Other</b>.</li>
       <li><b>Remarks:</b> extra details that don't fit elsewhere, such as "with the team", go into Remarks.</li>
     </ul>
@@ -584,6 +585,7 @@ dl.faq dd { margin: 2px 0 0; color: var(--ink-2); }
     <p>The <b>Settings</b> tab, with the gear icon, holds the things you set once and rarely change:</p>
     <ul class="plain">
       <li><b>Categories &amp; budgets:</b> add, rename and retire categories, and set monthly budgets. See the next section.</li>
+      <li><b>Currency:</b> your default currency, used whenever what you type doesn't name one. Choose from 20 common currencies; tap one and it's saved. Budgets and totals are in your default currency, and amounts in other currencies show their code, like "USD 12.50". Totals show "$" for a dollar currency such as SGD, and the code for others, like "MYR 20.00". Changing it doesn't change past expenses.</li>
       <li><b>Appearance:</b> <b>System</b> follows your phone's light or dark setting; <b>Light</b> or <b>Dark</b> keeps the app that way. Your choice is remembered on that device.</li>
       <li><b>Account:</b> the email address you're signed in with, and <b>Sign out</b>, which asks you to confirm first.</li>
       <li><b>Version:</b> at the bottom, the app's version number and when it was last updated. Handy to mention if you report a problem.</li>
@@ -595,6 +597,7 @@ dl.faq dd { margin: 2px 0 0; color: var(--ink-2); }
           <div class="body">
             <div class="sh">SPENDING</div>
             <div class="srow"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h7l9 9-6 6-9-9V5zM8 9h.01"/></svg></span><span class="tx"><div class="t">Categories &amp; budgets</div><div class="d">14 categories · 5 with a budget</div></span><span class="chev">›</span></div>
+            <div class="srow"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="9" cy="9" r="6"/><path d="M15.5 9.5a6 6 0 1 1-6 6"/></svg></span><span class="tx"><div class="t">Currency</div><div class="d">SGD · Singapore dollar</div></span><span class="chev">›</span></div>
             <div class="sh">APPEARANCE</div>
             <div class="seg"><span class="on">System</span><span>Light</span><span>Dark</span></div>
             <div class="sh">ACCOUNT</div>
@@ -612,6 +615,7 @@ dl.faq dd { margin: 2px 0 0; color: var(--ink-2); }
           <div class="body" style="opacity:.35">
             <div class="sh">SPENDING</div>
             <div class="srow"><span class="tx"><div class="t">Categories &amp; budgets</div><div class="d">14 categories · 5 with a budget</div></span><span class="chev">›</span></div>
+            <div class="srow"><span class="tx"><div class="t">Currency</div><div class="d">SGD · Singapore dollar</div></span><span class="chev">›</span></div>
             <div class="sh">APPEARANCE</div>
             <div class="seg"><span class="on">System</span><span>Light</span><span>Dark</span></div>
             <div class="sh">ACCOUNT</div>

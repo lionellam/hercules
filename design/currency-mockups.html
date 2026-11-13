@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Default Currency</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root { --page: #ececea; --page-text: #18181b; --page-muted: #5f5f66; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--page); color: var(--page-text); font-family: Inter, -apple-system, system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  main { max-width: 1260px; margin: 0 auto; padding: 36px 16px 80px; }
+  h1 { font-size: 28px; letter-spacing: -0.02em; margin: 0 0 8px; }
+  h2 { font-size: 20px; letter-spacing: -0.01em; margin: 44px 0 6px; }
+  .intro p, .lead { color: var(--page-muted); max-width: 800px; line-height: 1.55; margin: 0 0 10px; font-size: 15px; }
+  .frames { display: flex; flex-wrap: wrap; gap: 30px 26px; align-items: flex-start; margin-top: 20px; }
+  figure { margin: 0; max-width: 100%; }
+  figcaption { max-width: 340px; font-size: 13px; color: var(--page-muted); margin-top: 12px; line-height: 1.5; }
+  figcaption b { color: var(--page-text); }
+  .badge { display: inline-block; font-size: 11px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; padding: 2px 7px; border-radius: 6px; margin-right: 6px; vertical-align: 1px; background: #1d4ed8; color: #fff; }
+  .badge.alt { background: #7c3aed; }
+  .badge.ex { background: #b45309; }
+  .phone { width: 340px; max-width: 100%; height: 680px; border-radius: 30px; overflow: hidden; border: 1px solid rgba(0,0,0,.08);
+           box-shadow: 0 1px 2px rgba(0,0,0,.06), 0 10px 28px rgba(0,0,0,.08); }
+
+  /* App tokens and styles, from web/app/globals.css */
+  .app { --bg: #fff; --surface: #fff; --text: #18181b; --muted: #71717a; --line: #e7e7e4; --accent: #18181b; --accent-text: #fff; --soft: #f4f4f5; --bad: #b91c1c;
+         background: var(--bg); color: var(--text); font-size: 15px; position: relative; height: 100%; display: flex; flex-direction: column; }
+  .app .top { padding: 30px 20px 16px; border-bottom: 1px solid var(--line); }
+  .app .top.flat { border-bottom: none; }
+  .app h3 { font-size: 28px; font-weight: 700; letter-spacing: -0.02em; }
+  .app .date { color: var(--muted); font-size: 14px; }
+  .app .back { color: var(--muted); font-size: 15px; margin-bottom: 8px; }
+  .app .note { color: var(--muted); font-size: 14px; margin-top: 4px; line-height: 1.45; }
+  .app .scroll { flex: 1; overflow: hidden; padding: 0 20px; }
+  .app .sh { color: var(--muted); font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; margin: 24px 0 6px; }
+  .app .row { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--line); }
+  .app .ic { width: 34px; height: 34px; border-radius: 10px; background: var(--soft); display: grid; place-items: center; flex-shrink: 0; font-weight: 700; font-size: 14px; }
+  .app .ic svg { width: 18px; height: 18px; }
+  .app .tx { flex: 1; min-width: 0; }
+  .app .t { font-weight: 500; }
+  .app .d { color: var(--muted); font-size: 13px; margin-top: 2px; }
+  .app .chev { color: var(--muted); font-size: 20px; }
+  .app .row.out .t { color: var(--bad); }
+  .app .seg { display: flex; background: var(--soft); border-radius: 12px; padding: 3px; }
+  .app .seg span { flex: 1; text-align: center; padding: 8px 0; border-radius: 10px; font-size: 14px; color: var(--muted); }
+  .app .seg span.on { background: var(--surface); color: var(--text); box-shadow: 0 1px 3px rgba(0,0,0,.1); font-weight: 500; }
+  .app .tabbar { display: flex; border-top: 1px solid var(--line); padding: 8px 0 18px; }
+  .app .tabbar span { flex: 1; text-align: center; font-size: 11px; color: var(--muted); }
+  .app .tabbar svg { display: block; width: 21px; height: 21px; margin: 0 auto 3px; }
+  .app .tabbar span.on { color: var(--text); font-weight: 600; }
+  .new { outline: 2px dashed #1d4ed8; outline-offset: 3px; border-radius: 8px; }
+  /* Currency list */
+  .app .cur { display: flex; align-items: center; gap: 12px; padding: 11px 0; border-bottom: 1px solid var(--line); }
+  .app .cur .code { width: 42px; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .app .cur .nm { flex: 1; color: var(--text); }
+  .app .cur .ck { font-weight: 700; }
+  .app .cur.on { font-weight: 600; }
+  /* Log and review card */
+  .app .input { background: var(--soft); border-radius: 16px; padding: 14px; margin-top: 14px; }
+  .app .input .txt { font-size: 17px; min-height: 44px; }
+  .app .input .r { display: flex; justify-content: flex-end; }
+  .app .btn { height: 40px; padding: 0 16px; border-radius: 12px; border: none; font: inherit; font-size: 15px; font-weight: 600; display: inline-flex; align-items: center; }
+  .app .btn-primary { background: var(--accent); color: var(--accent-text); }
+  .app .btn-ghost { background: none; color: var(--muted); }
+  .app .btn.dim { opacity: .4; }
+  .app .card { margin-top: 18px; border: 1px solid var(--line); border-radius: 16px; padding: 16px; }
+  .app .card-title { font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 12px; }
+  .app .raw { color: var(--muted); font-size: 14px; font-style: italic; margin: -4px 0 10px; }
+  .app .amount { display: flex; align-items: baseline; gap: 6px; margin-bottom: 14px; }
+  .app .amount span { color: var(--muted); font-size: 18px; }
+  .app .amount b { font-size: 34px; font-weight: 700; }
+  .app .amount .pick { color: var(--text); font-weight: 600; background: var(--soft); border-radius: 8px; padding: 3px 8px; font-size: 16px; }
+  .app .field { display: flex; justify-content: space-between; align-items: center; padding: 11px 0; border-top: 1px solid var(--line); font-size: 15px; gap: 12px; }
+  .app .field span:first-child { color: var(--muted); }
+  .app .field span:last-child { font-weight: 500; }
+  .app .acts { display: flex; justify-content: flex-end; gap: 8px; margin-top: 14px; }
+  /* Native picker over the page */
+  .app .backdrop { position: absolute; inset: 0; background: rgba(0,0,0,.25); }
+  .app .wheel { position: absolute; left: 0; right: 0; bottom: 0; background: #f2f2f4; border-radius: 14px 14px 0 0; padding: 10px 0 24px; text-align: center; }
+  .app .wheel .done { text-align: right; color: #1d4ed8; font-weight: 600; padding: 2px 18px 8px; border-bottom: 1px solid #ddd; }
+  .app .wheel div.o { padding: 7px; color: #9a9aa0; font-size: 16px; }
+  .app .wheel div.o.sel { color: #000; font-size: 18px; background: #e3e3e7; margin: 0 12px; border-radius: 8px; }
+  /* Lists */
+  .app .h { margin-top: 22px; font-size: 13px; color: var(--muted); font-weight: 600; letter-spacing: .04em; }
+  .app .day { margin-top: 18px; font-size: 12px; color: var(--muted); font-weight: 600; letter-spacing: .04em; }
+  .app .item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--line); }
+  .app .item .c { color: var(--muted); font-size: 13px; }
+  .app .item .a { font-weight: 500; font-variant-numeric: tabular-nums; }
+  .app .item .a i { font-style: normal; color: var(--muted); font-size: 13px; font-weight: 400; margin-right: 3px; }
+  .app .catrow { display: flex; justify-content: space-between; padding: 13px 0; border-bottom: 1px solid var(--line); }
+  .app .catrow .set { font-weight: 500; }
+  .app .catrow span:last-child:not(.set) { color: var(--muted); }
+  .app .addbtn { margin-top: 12px; }
+</style>
+</head>
+<body>
+<main>
+  <div class="intro">
+    <h1>Default currency</h1>
+    <p>A <b>Currency</b> row in Settings sets the currency used whenever what you type doesn't name one. The server applies it, so Claude can no longer turn a plain "$12" into USD. The review card gets a currency picker with the same 20 currencies, and budget labels and lists follow your default. Dashed blue rings mark what's new.</p>
+  </div>
+
+  <h2>Settings</h2>
+  <div class="frames" id="settings"></div>
+
+  <h2>Review card: two ways to pick the currency</h2>
+  <p class="lead">Both use the phone's own list, like the Category field does now. Changing the currency here applies to this expense only.</p>
+  <div class="frames" id="review"></div>
+
+  <h2>Following your default</h2>
+  <p class="lead">With SGD as your default, nothing below looks different from today. These show someone whose default is MYR.</p>
+  <div class="frames" id="follow"></div>
+</main>
+<script>
+const svg = (d, w = 1.8) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round">${d}</svg>`;
+const gear = svg('<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/>');
+const tag = svg('<path d="M4 5h7l9 9-6 6-9-9V5zM8 9h.01"/>');
+const coins = svg('<circle cx="9" cy="9" r="6"/><path d="M15.5 9.5a6 6 0 1 1-6 6"/>');
+const person = svg('<circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/>');
+const tabbar = (on) => `<div class="tabbar">${[["M12 5v14M5 12h14","Log"],["M4 6h16M4 12h16M4 18h10","History"],["M6 20V10M12 20V4M18 20v-6","Summary"]].map(([d,n]) => `<span class="${on===n?"on":""}">${svg(`<path d="${d}"/>`)}${n}</span>`).join("")}<span class="${on==="Settings"?"on":""}">${gear}Settings</span></div>`;
+const phone = (inner) => `<div class="phone"><div class="app">${inner}</div></div>`;
+const fig = (id, html, cap) => document.getElementById(id).insertAdjacentHTML("beforeend", `<figure>${phone(html)}<figcaption>${cap}</figcaption></figure>`);
+
+const currencies = [
+  ["SGD","Singapore dollar"],["MYR","Malaysian ringgit"],["IDR","Indonesian rupiah"],["THB","Thai baht"],["PHP","Philippine peso"],["VND","Vietnamese dong"],
+  ["CNY","Chinese yuan"],["HKD","Hong Kong dollar"],["TWD","New Taiwan dollar"],["JPY","Japanese yen"],["KRW","South Korean won"],
+  ["INR","Indian rupee"],["AED","UAE dirham"],["AUD","Australian dollar"],["NZD","New Zealand dollar"],
+  ["USD","US dollar"],["EUR","Euro"],["GBP","British pound"],["CHF","Swiss franc"],["CAD","Canadian dollar"],
+];
+
+// 1. Settings with the Currency row
+fig("settings", `<div class="top"><h3>Settings</h3></div><div class="scroll">
+  <div class="sh">Spending</div>
+  <div class="row"><span class="ic">${tag}</span><span class="tx"><div class="t">Categories &amp; budgets</div><div class="d">14 categories · 5 with a budget</div></span><span class="chev">›</span></div>
+  <div class="row new"><span class="ic">${coins}</span><span class="tx"><div class="t">Currency</div><div class="d">SGD · Singapore dollar</div></span><span class="chev">›</span></div>
+  <div class="sh">Appearance</div><div class="seg"><span class="on">System</span><span>Light</span><span>Dark</span></div>
+  <div class="sh">Account</div>
+  <div class="row"><span class="ic">${person}</span><span class="tx"><div class="t">Signed in</div><div class="d">you@gmail.com</div></span></div>
+  <div class="row out"><span class="tx"><div class="t">Sign out</div></span></div>
+</div>${tabbar("Settings")}`,
+`<span class="badge">New</span><b>Settings.</b> A <b>Currency</b> row under Spending, beside Categories &amp; budgets, showing the default chosen.`);
+
+// 2. The currency page
+fig("settings", `<div class="top"><div class="back">‹ Settings</div><h3>Currency</h3>
+  <div class="note">Used when what you type doesn't name a currency. Changing it doesn't change past expenses.</div></div>
+  <div class="scroll">${currencies.slice(0, 12).map(([c, n], i) => `<div class="cur ${i===0?"on":""}"><span class="code">${c}</span><span class="nm">${n}</span>${i===0?'<span class="ck">✓</span>':""}</div>`).join("")}</div>${tabbar("Settings")}`,
+`<span class="badge">New</span><b>Currency page.</b> The 20 currencies, SGD first, then by region (Southeast Asia, East Asia, and so on; the rest scroll below). Tap one to make it the default; it saves straight away and the ✓ moves.`);
+
+// 3. Review card, option A: tap the code beside the amount
+const logTop = (txt) => `<div class="top flat"><div class="date">Friday, 13 November</div><h3>Log an expense</h3>
+  <div class="input"><div class="txt">${txt}</div><div class="r"><span class="btn btn-primary dim">Parse</span></div></div></div>`;
+const fieldsFor = (merchant) => `<div class="field"><span>Category</span><span>Food &amp; Dining</span></div>
+  <div class="field"><span>Merchant</span><span>${merchant}</span></div>
+  <div class="field"><span>Date</span><span>13/11/2026</span></div>
+  <div class="field"><span>Remarks</span><span style="color:var(--muted);font-weight:400">Optional</span></div>
+  <div class="acts"><span class="btn btn-ghost">Discard</span><span class="btn btn-primary">Save</span></div>`;
+const fields = fieldsFor("Ya Kun");
+fig("review", `${logTop("Lunch at Ya Kun $4.50")}<div class="scroll"><div class="card"><div class="card-title">Review before saving</div>
+  <p class="raw">“Lunch at Ya Kun $4.50”</p>
+  <div class="amount"><span class="pick new">SGD ▾</span><b>4.50</b></div>${fields}</div></div>${tabbar("Log")}`,
+`<span class="badge">Option A</span><b>Tap the code beside the amount.</b> "SGD" becomes a small button; tapping it opens the list. Keeps the card the same height as today. A plain "$" now comes out as your default, SGD.`);
+
+// 4. Review card, option B: its own row
+fig("review", `${logTop("Lunch at Ya Kun $4.50")}<div class="scroll"><div class="card"><div class="card-title">Review before saving</div>
+  <p class="raw">“Lunch at Ya Kun $4.50”</p>
+  <div class="amount"><span>SGD</span><b>4.50</b></div>
+  <div class="field new"><span>Currency</span><span>SGD · Singapore dollar</span></div>${fields}</div></div>${tabbar("Log")}`,
+`<span class="badge alt">Option B</span><b>A Currency row</b> like Category, under the amount. Easier to notice and tap, but makes the card one row taller.`);
+
+// 5. The phone's own list, open
+fig("review", `${logTop("Dinner in Bangkok 450 baht")}<div class="scroll"><div class="card"><div class="card-title">Review before saving</div>
+  <p class="raw">“Dinner in Bangkok 450 baht”</p>
+  <div class="amount"><span class="pick">THB ▾</span><b>450.00</b></div>${fieldsFor("—")}</div></div>
+  <div class="backdrop"></div><div class="wheel"><div class="done">Done</div>
+  <div class="o">IDR · Indonesian rupiah</div><div class="o sel">THB · Thai baht</div><div class="o">PHP · Philippine peso</div><div class="o">VND · Vietnamese dong</div></div>`,
+`<span class="badge ex">Example</span><b>A named currency is kept.</b> "450 baht" comes out as THB. Tapping the code opens the phone's own list (an iPhone shows this wheel) to change it.`);
+
+// 6. History with MYR as default
+fig("follow", `<div class="top"><h3>History</h3><div class="seg" style="margin-top:12px"><span>‹</span><span class="on" style="flex:4">November 2026</span><span>›</span></div></div>
+  <div class="scroll"><div class="day">FRI, 13 NOV</div>
+  <div class="item"><div><div>Mamak stall</div><div class="c">Food &amp; Dining</div></div><div class="a">18.50</div></div>
+  <div class="item"><div><div>Grab</div><div class="c">Transport</div></div><div class="a">24.00</div></div>
+  <div class="day">THU, 12 NOV</div>
+  <div class="item"><div><div>Changi Airport</div><div class="c">Food &amp; Dining</div></div><div class="a"><i>SGD</i>12.80</div></div>
+  <div class="item"><div><div>Petronas</div><div class="c">Transport</div></div><div class="a">60.00</div></div></div>${tabbar("History")}`,
+`<span class="badge ex">Default MYR</span><b>Lists.</b> Expenses in your default (MYR) show the amount alone; others are marked, like "SGD 12.80". Today SGD is the one left unmarked.`);
+
+// 7. Categories & budgets with MYR as default
+fig("follow", `<div class="top"><div class="back">‹ Settings</div><h3>Categories &amp; budgets</h3>
+  <div class="note">Monthly budgets are optional and in <b class="new" style="color:var(--text)">MYR</b>.</div><div class="addbtn"><span class="btn btn-primary">Add category</span></div></div>
+  <div class="scroll">
+  <div class="catrow"><span>Food &amp; Dining</span><span class="set">800.00</span></div>
+  <div class="catrow"><span>Transport</span><span class="set">400.00</span></div>
+  <div class="catrow"><span>Groceries</span><span class="set">600.00</span></div>
+  <div class="catrow"><span>Entertainment</span><span>No budget</span></div>
+  <div class="catrow"><span>Utilities</span><span>No budget</span></div>
+  <div class="catrow"><span>Rent</span><span class="set">1,500.00</span></div></div>${tabbar("Settings")}`,
+`<span class="badge ex">Default MYR</span><b>Budgets</b> read "in MYR", and the budget field says "Monthly budget (MYR)". Amounts are never converted: an SGD expense still counts at its face value.`);
+</script>
+</body>
+</html>

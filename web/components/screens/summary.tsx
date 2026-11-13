@@ -7,6 +7,7 @@ import { cents, paceRows, type PaceRow } from "@/lib/pace";
 import type { Category, Expense, SummaryRow } from "@/lib/types";
 import { BurnUp, PaceNote } from "../pace";
 import SpendPie from "../spend-pie";
+import { useMoney } from "../currency";
 
 // The iPhone home-screen app (navigator.standalone) can't return from a download, so there the CSV goes
 // through the share sheet instead (Specification 4.5). Elsewhere the normal download is used.
@@ -28,6 +29,7 @@ const preparing = new Set<string>();
 const MAX_PREPARED = 6;
 
 export default function SummaryScreen({ cache, categories }: { cache: ApiCache; categories: Category[] }) {
+  const money = useMoney();
   const [offset, setOffset] = useState(0);
   const [open, setOpen] = useState<number | null>(null);
   const [downloadNote, setDownloadNote] = useState("");
@@ -108,7 +110,7 @@ export default function SummaryScreen({ cache, categories }: { cache: ApiCache; 
           <div className="total-row">
             <div>
               <div className="sub">{offset === 0 ? "Spent so far this month" : `Spent in ${monthLabel(month)}`}</div>
-              <div className="big">${fmt(total)}</div>
+              <div className="big">{money(total)}</div>
             </div>
             {/* Downloads the month shown as a CSV file (Specification 4.5) */}
             <a
