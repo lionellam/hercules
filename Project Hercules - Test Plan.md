@@ -1,7 +1,7 @@
 # Project Hercules — Test Plan: Web App v1
 
 ```
-Version 1.12 · Draft
+Version 1.13 · Draft
 Last Reviewed: 13 November 2026
 Produced with AI Assistance (Claude Code)
 ```
@@ -23,6 +23,7 @@ Produced with AI Assistance (Claude Code)
 | 1.10 | 2026-11-13 | Lionel Lam | Default currency: new Section T, including totals (T-12); Q-02 lists the Currency row |
 | 1.11 | 2026-11-13 | Lionel Lam | Totals count only the default currency: T-03 confirms the switch; T-12 rewritten; new T-13 and T-14 |
 | 1.12 | 2026-11-13 | Lionel Lam | T-15: the "?" explanation beside "Not included" |
+| 1.13 | 2026-11-13 | Lionel Lam | Integrity check: Section T's note lists every test that changes the default |
 
 ---
 
@@ -314,7 +315,7 @@ These need a look at the local database; ask Claude to run them.
 
 ### T. Default Currency
 
-Use a test account (see A-07) for T-03 to T-06 and T-09 where the default is changed, or set your default back to SGD afterwards. Parse tests use the language model.
+Use a test account (see A-07) for the tests that change the default (T-03, T-05, T-06, T-09, T-10 and T-13), or set your default back to SGD afterwards. Parse tests use the language model.
 
 | ID | Test | Steps | Expected result |
 |---|---|---|---|

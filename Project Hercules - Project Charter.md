@@ -1,7 +1,7 @@
 **Natural Language Expense & Budget Tracker**
 
 ```
-Version 0.12 · Draft
+Version 0.13 · Draft
 Last Reviewed: 13 November 2026
 Produced with AI Assistance (Claude Code)
 ```
@@ -22,6 +22,7 @@ Produced with AI Assistance (Claude Code)
 | 0.10 | 2026-11-09 | Lionel Lam | Monthly CSV export delivered ahead of Phase 4 |
 | 0.11 | 2026-11-09 | Lionel Lam | Integrity check: Phase 2 marked complete |
 | 0.12 | 2026-11-13 | Lionel Lam | A default currency per person is delivered; converting between currencies stays out of scope |
+| 0.13 | 2026-11-13 | Lionel Lam | Integrity check: the currency non-goal reflects that other currencies are shown separately, not added in |
 
 ---
 
@@ -54,7 +55,7 @@ Friction of maintaining an up-to-date expense and budget log can be due to the f
 **Non-Goals (Not in current scope)**
 
 - Shared or collaborative budgets between users
-- Converting between currencies (each person chooses a default currency, delivered November 2026, but amounts in different currencies are added as they are)
+- Converting between currencies (each person chooses a default currency, delivered November 2026; totals count only that currency, and spending in others is shown separately, not added in)
 - Bank/account sync or import
 - Receipt photo / OCR capture
 - Dashboard for expenses and budget visualization beyond the monthly summary

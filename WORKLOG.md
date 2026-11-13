@@ -1162,3 +1162,15 @@ Last updated: 13 November 2026
 - Version **1.2.2** (a small improvement), with a changelog entry. Updated the Specification (v0.43, Section 4.6), Test Plan (v1.12, new T-15) and the user guide's currency text.
 - Tested locally on the demo account (confirmed first) with a `[TEST]` USD 120.00 expense today. On Log, the bubble opened with the SGD text, closed when the **?** was tapped again, and closed when an empty area was tapped. On Summary it opened over the categories without changing the fixed section's height (256 points before and after). In a History search it showed the same text. Type-check, lint and a production build passed. The test expense was deleted, the demo account removed from the local allow-list, and the test browser signed back in to the owner's local account.
 - **Confirmed (13 November 2026):** after the deploy, the owner checked on their phone that the "?" tooltip beside "Not included" works with 1.2.2.
+
+---
+
+## 13 November 2026 — Document Integrity Check After 1.2.2
+
+### What Was Done
+- At the owner's request, checked the documents against versions 1.2.0 to 1.2.2. Version histories, `CHANGELOG.md`, `web/package.json` and the Git tags agreed, Specification Section 4.6 and Test Plan Section T matched the app, and Architecture decisions 19 and 36 were current. Four places still described 1.2.0's adding of every currency into the totals, and were fixed:
+  1. Specification (v0.44): process step 1 (Spent today), process step 8 (Today by category), Section 4.1's pace rules and the `currency` field now say totals count only the default currency (Section 4.6), instead of "added without currency conversion".
+  2. Project Charter (v0.13): the currency non-goal said amounts in different currencies "are added as they are"; it now says other currencies are shown separately, not added in.
+  3. User guide: "What it doesn't do" said "Totals are in Singapore dollars"; it now says totals are in your default currency and other currencies are shown separately.
+  4. Test Plan (v1.13): Section T's note listed only some of the tests that change the default; it now lists T-03, T-05, T-06, T-09, T-10 and T-13.
+- Documents only, so the app version stays at 1.2.2.
