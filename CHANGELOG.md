@@ -6,6 +6,14 @@ Versions follow [semantic versioning](https://semver.org): **major** for a chang
 
 ---
 
+## 1.2.1 — 13 November 2026
+
+**Fixed**
+- Totals, budgets, pace and the pie chart now count only expenses in your default currency, so every figure is a real sum in one currency. Spending in other currencies is still saved and listed, and shown under the total as "Not included: USD 120.00". In 1.2.0, all currencies were added together, and switching the default relabelled that sum instead of converting it.
+- Switching the default currency now asks first and explains what changes. Switching back restores the earlier totals exactly.
+
+---
+
 ## 1.2.0 — 13 November 2026
 
 **New**

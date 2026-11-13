@@ -5,7 +5,7 @@ import { api, expensesUrl, fmt, useCached, type ApiCache } from "@/lib/client";
 import { localToday } from "@/lib/dates";
 import type { Category, Expense, SummaryRow } from "@/lib/types";
 import { ConfirmSheet } from "../confirm";
-import { useMoney } from "../currency";
+import { NotIncluded, useHomeCurrency, useMoney } from "../currency";
 import { EditSheet, ExpenseRow } from "../expense-sheet";
 import ReviewCard, { type Fields } from "../review-card";
 
@@ -57,6 +57,9 @@ export default function LogScreen({ categories, online, cache, onSaved }: { cate
   const todayKey = localToday();
   const monthRows = useCached<Expense[]>(cache, expensesUrl(todayKey.slice(0, 7)));
   const todays = monthRows?.filter((r) => r.date === todayKey) ?? [];
+  // Spent today and Today by category count the default currency only (Specification 4.6)
+  const home = useHomeCurrency();
+  const todaysHome = todays.filter((e) => e.currency === home);
 
   async function parse() {
     setBusy(true);
@@ -130,8 +133,9 @@ export default function LogScreen({ categories, online, cache, onSaved }: { cate
         </div>
         <p className="today-total">
           <span>Spent today</span>
-          <strong>{monthRows ? money(todays.reduce((sum, e) => sum + e.amount, 0)) : "—"}</strong>
+          <strong>{monthRows ? money(todaysHome.reduce((sum, e) => sum + e.amount, 0)) : "—"}</strong>
         </p>
+        <NotIncluded items={todays} />
         {error && <p className="error">{error}</p>}
         {toast && <p className="toast">{toast}</p>}
       </div>
@@ -165,9 +169,10 @@ export default function LogScreen({ categories, online, cache, onSaved }: { cate
           <p className="recent-h">TODAY</p>
           {todays.length ? todays.map((e) => <ExpenseRow key={e.id} e={e} onClick={() => setEditing(e)} />) : <p className="sub">Nothing logged yet today.</p>}
         </div>
-        {todays.length > 0 && (
+        {/* Shown only when today has spending in the default currency, which is all it counts */}
+        {todaysHome.length > 0 && (
           <div>
-            <TodayByCategory expenses={todays} />
+            <TodayByCategory expenses={todaysHome} />
           </div>
         )}
       </div>

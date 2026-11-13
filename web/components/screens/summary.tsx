@@ -7,7 +7,7 @@ import { cents, paceRows, type PaceRow } from "@/lib/pace";
 import type { Category, Expense, SummaryRow } from "@/lib/types";
 import { BurnUp, PaceNote } from "../pace";
 import SpendPie from "../spend-pie";
-import { useMoney } from "../currency";
+import { NotIncluded, useHomeCurrency, useMoney } from "../currency";
 
 // The iPhone home-screen app (navigator.standalone) can't return from a download, so there the CSV goes
 // through the share sheet instead (Specification 4.5). Elsewhere the normal download is used.
@@ -41,9 +41,13 @@ export default function SummaryScreen({ cache, categories }: { cache: ApiCache; 
   const days = daysInMonth(monthKey(0));
   const summaryRows = useCached<SummaryRow[]>(cache, isCurrent ? null : summaryUrl(month));
   const currentExpenses = useCached<Expense[]>(cache, expensesUrl(monthKey(0)));
+  // Totals, bars, pace and the pie count the default currency only; the rest is listed as not included (Specification 4.6)
+  const home = useHomeCurrency();
+  const homeExpenses = currentExpenses?.filter((e) => e.currency === home);
   const rows: (SummaryRow | PaceRow)[] | undefined = isCurrent
-    ? currentExpenses && paceRows(currentExpenses, categories, days)
-    : summaryRows;
+    ? homeExpenses && paceRows(homeExpenses, categories, days)
+    : summaryRows?.filter((r) => (r.currency ?? home) === home);
+  const notIncluded = (isCurrent ? currentExpenses : summaryRows) ?? [];
   const spentRows = rows?.filter((r) => r.total > 0);
 
   const total = rows?.reduce((s, r) => s + r.total, 0) ?? 0;
@@ -131,6 +135,7 @@ export default function SummaryScreen({ cache, categories }: { cache: ApiCache; 
               <b>Day {day} of {days}</b> · {shortDay(monthKey(0), day)}
             </div>
           )}
+          <NotIncluded items={notIncluded} />
         </div>
       </div>
       <div className="columns">

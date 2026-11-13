@@ -48,3 +48,14 @@ export function resolveCurrency(fromModel: string | null, rawText: string, defau
   if (rawText.includes("¥")) return defaultCurrency === "JPY" || defaultCurrency === "CNY" ? defaultCurrency : "JPY";
   return defaultCurrency;
 }
+
+// Totals for every currency other than the default, largest first (Specification 4.6: shown as "Not included")
+export function otherCurrencies(items: { currency?: string; amount?: number; total?: number }[], home: string) {
+  const sums = new Map<string, number>();
+  for (const i of items) {
+    const code = i.currency ?? home;
+    if (code === home) continue;
+    sums.set(code, (sums.get(code) ?? 0) + (i.amount ?? i.total ?? 0));
+  }
+  return [...sums].map(([code, total]) => ({ code, total })).sort((a, b) => b.total - a.total);
+}

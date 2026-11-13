@@ -1,7 +1,7 @@
 # Project Hercules — Specification Sheet: "Log an Expense" Flow
 
 ```
-Version 0.41 · Draft 
+Version 0.42 · Draft 
 Last Reviewed: 13 November 2026
 Produced with AI Assistance (Claude Code)
 ```
@@ -51,6 +51,7 @@ Produced with AI Assistance (Claude Code)
 | 0.39 | 2026-11-10 | Lionel Lam | The CSV prepared for the iPhone share sheet is kept while the app is open and refreshed only after changes (Section 4.5) |
 | 0.40 | 2026-11-12 | Lionel Lam | Summary's fixed section also holds the month's total, the CSV button and the day of the month; the comparison with the month before is removed (process flow step 8) |
 | 0.41 | 2026-11-13 | Lionel Lam | Default currency chosen in Settings and applied by the application when the text names no currency; currency picker on the review card; budget labels, lists and totals follow the default (Sections 4.4 and 4.6, process flow steps 3 and 5, data model) |
+| 0.42 | 2026-11-13 | Lionel Lam | Totals, budgets, pace and the pie chart count only the default currency; other currencies are shown as "Not included"; switching the default asks first (Section 4.6). Replaces 0.41's relabelling of mixed totals |
 
 ---
 
@@ -219,7 +220,11 @@ The language model is asked to report a currency only when the text names one; t
 
 **Changing it on the review card:** the code beside the amount (for example "SGD ▾") opens the list of 20, to change the currency of that expense only. An expense already in a currency outside the list keeps it as an extra option. Changing the currency marks the expense as edited.
 
-**Following the default:** budgets are in the default currency ("Monthly budgets are optional and in SGD", and "Monthly budget (SGD)" on the budget field). In History and the Today list, amounts in the default currency show the number alone, and others show their code, for example "USD 12.50". Totals and money in sentences (Spent today, the Summary total, pace notes and the burn-up chart, the History search total, the pie chart's labels and the retire confirmation) show "$" when the default is a dollar currency (SGD, HKD, TWD, AUD, NZD, USD or CAD), and otherwise the default's code, for example "MYR 20.00". Amounts are never converted: totals, Summary, pace and the CSV file add each amount as it is. Changing the default doesn't change any saved expense or budget amount.
+**Following the default:** budgets are in the default currency ("Monthly budgets are optional and in SGD", and "Monthly budget (SGD)" on the budget field). In History and the Today list, every expense is listed; amounts in the default currency show the number alone, and others show their code, for example "USD 12.50".
+
+**Totals count only the default currency.** Spent today, Today by category, the Summary total, the category bars, pace notes and the burn-up chart, the pie chart and the History search total add up only expenses in the default currency, so every figure is a real sum in one currency. Nothing is converted. Where the period has spending in other currencies, a line under the total lists it, largest first, for example "Not included: USD 120.00 · THB 450.00": under Spent today on Log, under the day line in Summary's fixed section, and under the result count in a History search. Totals show "$" when the default is a dollar currency (SGD, HKD, TWD, AUD, NZD, USD or CAD), and otherwise its code, for example "MYR 20.00". The CSV file is unchanged and lists every expense with its currency.
+
+**Switching the default** asks first, with a confirmation sheet: "Switch to MYR?" explains that totals, budgets and pace will count only MYR, that expenses in other currencies, including SGD ones, aren't converted and will show as not included, and that budgets keep their amounts. Switching changes no saved expense or budget, so switching back restores the earlier totals exactly. The Currency page's note reads: "Used when what you type doesn't name a currency. Totals and budgets count only this currency."
 
 ---
 

@@ -1128,3 +1128,26 @@ Last updated: 13 November 2026
 - **Test slip:** the first eight test parses ran on the owner's local account, because the test browser had been signed in to it since the last session. They saved nothing and changed no settings, but added eight entries to that account's local daily parse count; exactly those eight were deleted. Testing then moved to the demo account. Lesson: check which account the test browser is signed in to before every test run.
 - Clean-up: the two test expenses and the demo account's test parses were deleted, its default set back to SGD, and the demo account removed from the local allow-list. The test browser was signed back in to the owner's local account. No `[TEST]` rows remain.
 - **Live database:** `db/schema.sql` adds a column, so it was added to Neon before pushing. The owner signed in to Vercel and opened the database through the project's Storage tab. Neon first asked them to verify the email on the Neon account that the Vercel integration had created. In Neon's SQL Editor (project hercules-db, branch main, database neondb), the owner ran the same `ALTER TABLE users ADD COLUMN IF NOT EXISTS default_currency ...` statement as the migration: "Statement executed successfully". A read-only check then showed both live accounts with `default_currency` SGD. No other data was touched, and no connection string was copied anywhere.
+
+---
+
+## 13 November 2026 — Version 1.2.1: Totals Count the Default Currency Only
+
+### What Was Done
+- Right after 1.2.0, the owner raised that the effect of changing the default currency on totals hadn't been thought through. On review:
+  - switching the default relabelled the existing totals (for example "$2,202.73" became "MYR 2,202.73") without converting anything;
+  - every currency was added together at face value, so "SGD 20 + USD 120" counted as 140 in totals, budgets and pace;
+  - budget amounts were simply read as the new currency;
+  - after a switch, an expense could show "SGD 20.00" while the total containing it said MYR.
+- Four options were set out: count only the default currency (A), convert at the exchange rate when saving (B), separate a fixed home currency from the parsing default (C), or just warn before switching (D). The owner chose A with D's warning, and, after mockups (`design/currency-totals-mockups.html`), the "Not included" line in Summary's fixed section (option 1) over a separate section lower down.
+- Totals, Today by category, category bars, pace notes, the burn-up chart, the pie chart and the History search total now count only expenses in the default currency. Spending in other currencies is still saved and listed, and shown under the total, largest first: "Not included: USD 120.00 · THB 450.00". This appears under Spent today on Log, under the day line in Summary's fixed section, and under a History search's result count, only when there is such spending. Last month's Summary is now grouped by currency on the server (`monthSummary` returns one row per category and currency). Today by category is hidden on days with no spending in the default currency.
+- Switching the default now asks first, with a confirmation sheet ("Switch to MYR?") explaining what changes. The Currency page's note now reads "Totals and budgets count only this currency."
+- Version **1.2.1** (a fix to 1.2.0), with a changelog entry. Updated the Specification (v0.42, Section 4.6), Architecture (v0.24, decision 36), Test Plan (v1.11: T-03 confirms the switch, T-12 rewritten, new T-13 and T-14) and the user guide's currency text.
+- Tested locally on the demo account (confirmed as the signed-in account first), with `[TEST]` expenses of SGD 10.00 and USD 120.00 today and USD 50.00 in October:
+  - **Default SGD:** Spent today $10.00 with "Not included: USD 120.00"; Today by category listed only Food & Dining. The November total was $2,192.73 (the sample data's $2,182.73 plus the SGD 10.00) with "Not included: USD 120.00", and no Travel bar. October was $1,702.30 with "Not included: USD 50.00". A History search for "[TEST]" gave 2 results, $10.00, with "Not included: USD 120.00".
+  - **Switching:** tapping MYR opened "Switch to MYR?" and saved nothing. Cancel kept SGD; confirming switched to MYR.
+  - **Default MYR:** every total was MYR 0.00, with "Not included: SGD 2,192.73 · USD 120.00" (November), "SGD 1,702.30 · USD 50.00" (October) and "USD 120.00 · SGD 10.00" (today). Nothing was relabelled. This test found that the Today by category heading showed with nothing under it; it is now hidden in that case.
+  - **Back to SGD:** through the same sheet, every figure returned exactly ($10.00, $2,192.73, $1,702.30).
+  - Type-check, lint and a production build passed.
+- Clean-up: the three test expenses were deleted (no `[TEST]` rows remain), the demo default is SGD, the demo account was removed from the local allow-list, and the test browser was signed back in to the owner's local account.
+- No database change is needed for 1.2.1.

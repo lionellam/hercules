@@ -1,7 +1,7 @@
 # Project Hercules — Test Plan: Web App v1
 
 ```
-Version 1.10 · Draft
+Version 1.11 · Draft
 Last Reviewed: 13 November 2026
 Produced with AI Assistance (Claude Code)
 ```
@@ -21,6 +21,7 @@ Produced with AI Assistance (Claude Code)
 | 1.8 | 2026-11-12 | Lionel Lam | Summary's total stays in place while scrolling (new H-10); no comparison with the month before (H-01, H-02); M-03 covers a phone held sideways |
 | 1.9 | 2026-11-12 | Lionel Lam | B-10: Today by category no longer shows a combined total |
 | 1.10 | 2026-11-13 | Lionel Lam | Default currency: new Section T, including totals (T-12); Q-02 lists the Currency row |
+| 1.11 | 2026-11-13 | Lionel Lam | Totals count only the default currency: T-03 confirms the switch; T-12 rewritten; new T-13 and T-14 |
 
 ---
 
@@ -318,7 +319,7 @@ Use a test account (see A-07) for T-03 to T-06 and T-09 where the default is cha
 |---|---|---|---|
 | T-01 | Currency row | Open **Settings** | Under Spending, **Currency** shows "SGD · Singapore dollar" |
 | T-02 | Currency page | Tap **Currency** | A page with "‹ Settings", a short note, and 20 currencies with codes and names, SGD first with a ✓ |
-| T-03 | Change the default | Tap **MYR**; go back to Settings; reload the app; open Settings on another device | The ✓ moves to MYR at once; the row shows "MYR · Malaysian ringgit" after the reload and on the other device |
+| T-03 | Change the default | Tap **MYR**; read the sheet; tap **Switch to MYR**; go back to Settings; reload the app; open Settings on another device | A sheet asks "Switch to MYR?" first (Cancel keeps SGD). After confirming, the ✓ moves to MYR; the row shows "MYR · Malaysian ringgit" after the reload and on the other device |
 | T-04 | Plain dollar sign | With the default SGD, parse `[TEST] lunch $12` | The review card shows **SGD** (never USD) |
 | T-05 | Nothing named | With the default MYR, parse `[TEST] lunch 12` | The review card shows **MYR** |
 | T-06 | Plain dollar, non-dollar default | With the default MYR, parse `[TEST] coffee $5` | The review card shows **USD** |
@@ -327,7 +328,9 @@ Use a test account (see A-07) for T-03 to T-06 and T-09 where the default is cha
 | T-09 | Lists follow the default | With an SGD and an MYR `[TEST]` expense today, switch the default between SGD and MYR and look at Today and History | The amount in the default currency shows the number alone; the other shows its code |
 | T-10 | Budget labels | Change the default to MYR; open Categories & budgets and a category | "Monthly budgets are optional and in MYR" and "Monthly budget (MYR)". Budget amounts are unchanged |
 | T-11 | Not in the list | Via the API, try to set the default to `XYZ` (`PATCH /api/settings` with `{"default_currency":"XYZ"}`) | Refused with an error; the default is unchanged |
-| T-12 | Totals follow the default | With the default SGD, look at Spent today, the Summary total, a pace note and a History search total; then change the default to MYR and look again; then back to SGD | With SGD they read like "$20.00"; with MYR, like "MYR 20.00" ("MYR 115.60 under pace", "about MYR 23.09/day"). The numbers don't change |
+| T-12 | Totals count the default only | With the default SGD, save a `[TEST]` SGD 10.00 and a `[TEST]` USD 120.00 expense today. Look at Log, Summary (this month) and a History search for `[TEST]` | Spent today, Today by category, the Summary total, bars and pace, the pie and the search total include the SGD 10.00 only. Under each total: "Not included: USD 120.00". Both expenses are listed in Today and History |
+| T-13 | Switching keeps totals honest | Then switch the default to MYR and look again; then switch back to SGD | With MYR, totals count no SGD or USD ("MYR 0.00" if there's no MYR spending) and the line lists "Not included: SGD … · USD 120.00"; nothing is relabelled. Back on SGD, every figure is exactly as before |
+| T-14 | Last month | Switch Summary to last month with expenses in two currencies | The total and bars count the default currency only, with the others under the total |
 
 ---
 

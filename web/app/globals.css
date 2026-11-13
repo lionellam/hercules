@@ -158,6 +158,9 @@ textarea::placeholder { color: var(--muted); }
 .fill.over { background: var(--bad); }
 .dayline { font-size: 13px; color: var(--muted); margin-top: 6px; }
 .dayline b { color: var(--text); font-weight: 600; }
+/* Spending in other currencies, left out of the total above it (Specification 4.6) */
+.not-included { font-size: 13px; color: var(--muted); margin-top: 4px; }
+.today-total + .not-included { margin-top: 2px; }
 .cat.open { background: var(--soft); margin-left: -12px; margin-right: -12px; padding: 12px 12px 10px; border-radius: 14px; }
 .cat.open .track { background: var(--line); }
 .cat-toggle { display: block; width: 100%; padding: 0; border: none; background: none; color: inherit; font: inherit; text-align: left; cursor: pointer; }

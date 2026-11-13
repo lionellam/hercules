@@ -16,4 +16,4 @@ export type Expense = {
 };
 
 // One category's spending in a month
-export type SummaryRow = { category: string; total: number; count: number; budget?: number | null };
+export type SummaryRow = { category: string; total: number; count: number; budget?: number | null; currency?: string };

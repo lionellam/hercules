@@ -140,10 +140,11 @@ export function monthSummary(userId: string, month: string) {
   const [start, end] = monthRange(month);
   // Budgets aren't included: Summary only compares against budgets for the current month, which it works out on the device
   return query<SummaryRow>(
-    `SELECT c.name AS category, SUM(e.amount)::numeric(12,2) AS total, COUNT(*)::int AS count
+    // One row per category and currency, so the screen can count the default currency only (Specification 4.6)
+    `SELECT c.name AS category, e.currency, SUM(e.amount)::numeric(12,2) AS total, COUNT(*)::int AS count
      FROM expenses e JOIN categories c ON c.id = e.category_id
      WHERE e.user_id = $1 AND e.deleted_at IS NULL AND e.date >= $2 AND e.date < $3
-     GROUP BY c.name ORDER BY total DESC`,
+     GROUP BY c.name, e.currency ORDER BY total DESC`,
     [userId, start, end],
   );
 }
