@@ -1151,3 +1151,13 @@ Last updated: 13 November 2026
   - Type-check, lint and a production build passed.
 - Clean-up: the three test expenses were deleted (no `[TEST]` rows remain), the demo default is SGD, the demo account was removed from the local allow-list, and the test browser was signed back in to the owner's local account.
 - No database change is needed for 1.2.1.
+
+---
+
+## 13 November 2026 — Version 1.2.2: Explaining "Not Included"
+
+### What Was Done
+- At the owner's request, a small circled **?** now sits at the end of every "Not included" line (Log, Summary and History search). Tapping it opens a dark bubble just below the line, with an arrow pointing at the **?**, reading "Your default currency is SGD. Expenses in other currencies are not included." (with the person's default currency). Tapping the **?** again, or anywhere else, closes it; it doesn't close on its own. The **?** is drawn 16 pixels across but has a 28-pixel tap area, and is announced as "Why aren't these included?".
+- The wording went through three rounds of mockups (`design/not-included-tooltip-mockups.html`): "Expenses in other currencies are not included.", then "Default currency selected is [default currency]. …", then the owner's final, shorter "Your default currency is [SGD]. Expenses in other currencies are not included." An earlier idea of a longer explanation was set aside.
+- Version **1.2.2** (a small improvement), with a changelog entry. Updated the Specification (v0.43, Section 4.6), Test Plan (v1.12, new T-15) and the user guide's currency text.
+- Tested locally on the demo account (confirmed first) with a `[TEST]` USD 120.00 expense today. On Log, the bubble opened with the SGD text, closed when the **?** was tapped again, and closed when an empty area was tapped. On Summary it opened over the categories without changing the fixed section's height (256 points before and after). In a History search it showed the same text. Type-check, lint and a production build passed. The test expense was deleted, the demo account removed from the local allow-list, and the test browser signed back in to the owner's local account.

@@ -159,8 +159,16 @@ textarea::placeholder { color: var(--muted); }
 .dayline { font-size: 13px; color: var(--muted); margin-top: 6px; }
 .dayline b { color: var(--text); font-weight: 600; }
 /* Spending in other currencies, left out of the total above it (Specification 4.6) */
-.not-included { font-size: 13px; color: var(--muted); margin-top: 4px; }
-.today-total + .not-included { margin-top: 2px; }
+.not-included { position: relative; display: flex; align-items: center; gap: 2px; font-size: 13px; color: var(--muted); margin-top: 2px; }
+.today-total + .not-included { margin-top: 0; }
+/* The "?" is drawn small but keeps a finger-sized tap area */
+.ni-help { flex-shrink: 0; width: 28px; height: 28px; margin: -6px 0; padding: 0; display: grid; place-items: center; background: none; border: none; cursor: pointer; }
+.ni-help span { display: grid; place-items: center; width: 16px; height: 16px; border-radius: 50%; border: 1.3px solid var(--muted); box-sizing: border-box;
+                color: var(--muted); font-size: 10.5px; font-weight: 700; line-height: 1; }
+.ni-help.on span { background: var(--text); border-color: var(--text); color: var(--bg); }
+.ni-tip { position: absolute; left: 0; top: calc(100% + 8px); z-index: 5; max-width: 250px; margin: 0; padding: 9px 12px; border-radius: 10px;
+          background: var(--text); color: var(--bg); font-size: 13px; line-height: 1.4; box-shadow: 0 6px 18px rgba(0,0,0,.18); }
+.ni-tip::before { content: ""; position: absolute; top: -5px; left: min(var(--arrow, 20px), calc(100% - 20px)); width: 10px; height: 10px; background: var(--text); transform: rotate(45deg); }
 .cat.open { background: var(--soft); margin-left: -12px; margin-right: -12px; padding: 12px 12px 10px; border-radius: 14px; }
 .cat.open .track { background: var(--line); }
 .cat-toggle { display: block; width: 100%; padding: 0; border: none; background: none; color: inherit; font: inherit; text-align: left; cursor: pointer; }

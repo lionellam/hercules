@@ -6,6 +6,13 @@ Versions follow [semantic versioning](https://semver.org): **major** for a chang
 
 ---
 
+## 1.2.2 — 13 November 2026
+
+**Improved**
+- A small **?** beside "Not included" explains it: "Your default currency is SGD. Expenses in other currencies are not included." Tap it again, or anywhere else, to close.
+
+---
+
 ## 1.2.1 — 13 November 2026
 
 **Fixed**

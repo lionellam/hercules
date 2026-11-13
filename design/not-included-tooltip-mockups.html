@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Not Included Tooltip</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root { --page: #ececea; --page-text: #18181b; --page-muted: #5f5f66; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--page); color: var(--page-text); font-family: Inter, -apple-system, system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  main { max-width: 1260px; margin: 0 auto; padding: 36px 16px 80px; }
+  h1 { font-size: 28px; letter-spacing: -0.02em; margin: 0 0 8px; }
+  h2 { font-size: 20px; letter-spacing: -0.01em; margin: 44px 0 6px; }
+  .intro p, .lead { color: var(--page-muted); max-width: 800px; line-height: 1.55; margin: 0 0 10px; font-size: 15px; }
+  .frames { display: flex; flex-wrap: wrap; gap: 30px 26px; align-items: flex-start; margin-top: 20px; }
+  figure { margin: 0; max-width: 100%; }
+  figcaption { max-width: 340px; font-size: 13px; color: var(--page-muted); margin-top: 12px; line-height: 1.5; }
+  figcaption b { color: var(--page-text); }
+  .badge { display: inline-block; font-size: 11px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; padding: 2px 7px; border-radius: 6px; margin-right: 6px; vertical-align: 1px; background: #1d4ed8; color: #fff; }
+  .badge.alt { background: #7c3aed; }
+  .badge.ex { background: #b45309; }
+  .phone { width: 340px; max-width: 100%; height: 680px; border-radius: 30px; overflow: hidden; border: 1px solid rgba(0,0,0,.08);
+           box-shadow: 0 1px 2px rgba(0,0,0,.06), 0 10px 28px rgba(0,0,0,.08); }
+
+  /* App tokens and styles, from web/app/globals.css */
+  .app { --bg: #fff; --surface: #fff; --text: #18181b; --muted: #71717a; --line: #e7e7e4; --accent: #18181b; --accent-text: #fff; --soft: #f4f4f5; --bad: #b91c1c;
+         background: var(--bg); color: var(--text); font-size: 15px; position: relative; height: 100%; display: flex; flex-direction: column; }
+  .app .top { padding: 30px 20px 16px; border-bottom: 1px solid var(--line); }
+  .app .top.flat { border-bottom: none; }
+  .app h3 { font-size: 28px; font-weight: 700; letter-spacing: -0.02em; }
+  .app .date { color: var(--muted); font-size: 14px; }
+  .app .back { color: var(--muted); font-size: 15px; margin-bottom: 8px; }
+  .app .note { color: var(--muted); font-size: 14px; margin-top: 4px; line-height: 1.45; }
+  .app .scroll { flex: 1; overflow: hidden; padding: 0 20px; }
+  .app .sh { color: var(--muted); font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; margin: 24px 0 6px; }
+  .app .row { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--line); }
+  .app .ic { width: 34px; height: 34px; border-radius: 10px; background: var(--soft); display: grid; place-items: center; flex-shrink: 0; font-weight: 700; font-size: 14px; }
+  .app .ic svg { width: 18px; height: 18px; }
+  .app .tx { flex: 1; min-width: 0; }
+  .app .t { font-weight: 500; }
+  .app .d { color: var(--muted); font-size: 13px; margin-top: 2px; }
+  .app .chev { color: var(--muted); font-size: 20px; }
+  .app .row.out .t { color: var(--bad); }
+  .app .seg { display: flex; background: var(--soft); border-radius: 12px; padding: 3px; }
+  .app .seg span { flex: 1; text-align: center; padding: 8px 0; border-radius: 10px; font-size: 14px; color: var(--muted); }
+  .app .seg span.on { background: var(--surface); color: var(--text); box-shadow: 0 1px 3px rgba(0,0,0,.1); font-weight: 500; }
+  .app .tabbar { display: flex; border-top: 1px solid var(--line); padding: 8px 0 18px; }
+  .app .tabbar span { flex: 1; text-align: center; font-size: 11px; color: var(--muted); }
+  .app .tabbar svg { display: block; width: 21px; height: 21px; margin: 0 auto 3px; }
+  .app .tabbar span.on { color: var(--text); font-weight: 600; }
+  .new { outline: 2px dashed #1d4ed8; outline-offset: 3px; border-radius: 8px; }
+  /* Currency list */
+  .app .cur { display: flex; align-items: center; gap: 12px; padding: 11px 0; border-bottom: 1px solid var(--line); }
+  .app .cur .code { width: 42px; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .app .cur .nm { flex: 1; color: var(--text); }
+  .app .cur .ck { font-weight: 700; }
+  .app .cur.on { font-weight: 600; }
+  /* Log and review card */
+  .app .input { background: var(--soft); border-radius: 16px; padding: 14px; margin-top: 14px; }
+  .app .input .txt { font-size: 17px; min-height: 44px; }
+  .app .input .r { display: flex; justify-content: flex-end; }
+  .app .btn { height: 40px; padding: 0 16px; border-radius: 12px; border: none; font: inherit; font-size: 15px; font-weight: 600; display: inline-flex; align-items: center; }
+  .app .btn-primary { background: var(--accent); color: var(--accent-text); }
+  .app .btn-ghost { background: none; color: var(--muted); }
+  .app .btn.dim { opacity: .4; }
+  .app .card { margin-top: 18px; border: 1px solid var(--line); border-radius: 16px; padding: 16px; }
+  .app .card-title { font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 12px; }
+  .app .raw { color: var(--muted); font-size: 14px; font-style: italic; margin: -4px 0 10px; }
+  .app .amount { display: flex; align-items: baseline; gap: 6px; margin-bottom: 14px; }
+  .app .amount span { color: var(--muted); font-size: 18px; }
+  .app .amount b { font-size: 34px; font-weight: 700; }
+  .app .amount .pick { color: var(--text); font-weight: 600; background: var(--soft); border-radius: 8px; padding: 3px 8px; font-size: 16px; }
+  .app .field { display: flex; justify-content: space-between; align-items: center; padding: 11px 0; border-top: 1px solid var(--line); font-size: 15px; gap: 12px; }
+  .app .field span:first-child { color: var(--muted); }
+  .app .field span:last-child { font-weight: 500; }
+  .app .acts { display: flex; justify-content: flex-end; gap: 8px; margin-top: 14px; }
+  /* Native picker over the page */
+  .app .backdrop { position: absolute; inset: 0; background: rgba(0,0,0,.25); }
+  .app .wheel { position: absolute; left: 0; right: 0; bottom: 0; background: #f2f2f4; border-radius: 14px 14px 0 0; padding: 10px 0 24px; text-align: center; }
+  .app .wheel .done { text-align: right; color: #1d4ed8; font-weight: 600; padding: 2px 18px 8px; border-bottom: 1px solid #ddd; }
+  .app .wheel div.o { padding: 7px; color: #9a9aa0; font-size: 16px; }
+  .app .wheel div.o.sel { color: #000; font-size: 18px; background: #e3e3e7; margin: 0 12px; border-radius: 8px; }
+  /* Lists */
+  .app .h { margin-top: 22px; font-size: 13px; color: var(--muted); font-weight: 600; letter-spacing: .04em; }
+  .app .day { margin-top: 18px; font-size: 12px; color: var(--muted); font-weight: 600; letter-spacing: .04em; }
+  .app .item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--line); }
+  .app .item .c { color: var(--muted); font-size: 13px; }
+  .app .item .a { font-weight: 500; font-variant-numeric: tabular-nums; }
+  .app .item .a i { font-style: normal; color: var(--muted); font-size: 13px; font-weight: 400; margin-right: 3px; }
+  .app .catrow { display: flex; justify-content: space-between; padding: 13px 0; border-bottom: 1px solid var(--line); }
+  .app .catrow .set { font-weight: 500; }
+  .app .catrow span:last-child:not(.set) { color: var(--muted); }
+  .app .addbtn { margin-top: 12px; }
+
+  /* Totals mockups */
+  .app .spent { display: flex; justify-content: space-between; margin-top: 12px; color: var(--muted); font-size: 14px; }
+  .app .spent b { color: var(--text); font-size: 16px; }
+  .app .ni { color: var(--muted); font-size: 12.5px; margin-top: 6px; }
+  .app .tot { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 14px; }
+  .app .tot .sub { color: var(--muted); font-size: 13px; }
+  .app .big { font-size: 30px; font-weight: 700; letter-spacing: -0.02em; }
+  .app .csvb { background: var(--soft); border-radius: 10px; padding: 7px 11px; font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+  .app .dayline { font-size: 12.5px; color: var(--muted); margin-top: 5px; }
+  .app .dayline b { color: var(--text); }
+  .app .cat { margin-top: 14px; }
+  .app .cat-top { display: flex; justify-content: space-between; font-size: 14.5px; }
+  .app .cat-top .n { color: var(--muted); font-size: 12px; margin-left: 5px; }
+  .app .cat-top .of { color: var(--muted); }
+  .app .track { position: relative; height: 6px; background: var(--soft); border-radius: 3px; margin-top: 6px; }
+  .app .fill { height: 100%; background: var(--text); border-radius: 3px; }
+  .app .tick { position: absolute; top: -3px; width: 2px; height: 12px; background: var(--text); }
+  .app .pacel { font-size: 12px; color: var(--muted); margin-top: 5px; }
+  .app .pacel b { color: var(--text); }
+  .app .oc { border: 1px solid var(--line); border-radius: 12px; padding: 4px 12px; margin-top: 8px; }
+  .app .ocrow { display: flex; justify-content: space-between; padding: 7px 0; font-size: 14px; }
+  .app .ocrow + .ocrow { border-top: 1px solid var(--line); }
+  .app .search { margin-top: 12px; background: var(--soft); border-radius: 12px; padding: 9px 12px; display: flex; gap: 8px; color: var(--muted); }
+  .app .search span:first-of-type { color: var(--text); flex: 1; }
+  .app .count { display: flex; justify-content: space-between; margin-top: 14px; color: var(--muted); font-size: 13.5px; }
+  .app .count b { color: var(--text); }
+  .app mark { background: #fde68a; color: inherit; border-radius: 3px; padding: 0 1px; }
+  .app .confirm { position: absolute; left: 0; right: 0; bottom: 0; background: var(--surface); border-radius: 20px 20px 0 0; padding: 22px 20px 26px; box-shadow: 0 -8px 30px rgba(0,0,0,.18); }
+  .app .confirm h4 { font-size: 18px; font-weight: 700; }
+  .app .confirm p { color: var(--muted); font-size: 14px; line-height: 1.5; margin-top: 8px; }
+  .app .confirm .stack { display: flex; flex-direction: column; gap: 8px; margin-top: 16px; }
+  .app .cbtn { height: 44px; border-radius: 12px; display: grid; place-items: center; font-weight: 600; }
+
+  /* Tooltip mockups */
+  .app .niwrap { position: relative; }
+  .app .ni { display: flex; align-items: center; gap: 6px; }
+  .app .qm { display: inline-grid; place-items: center; width: 16px; height: 16px; border-radius: 50%; border: 1.3px solid var(--muted); color: var(--muted); font-size: 10.5px; font-weight: 700; line-height: 1; }
+  .app .qm.on { background: var(--text); border-color: var(--text); color: var(--bg); }
+  .app .tipb { position: absolute; left: 0; top: calc(100% + 8px); z-index: 5; max-width: 240px; background: var(--text); color: var(--bg); font-size: 13px; line-height: 1.4; padding: 9px 12px; border-radius: 10px; box-shadow: 0 6px 18px rgba(0,0,0,.18); }
+  .app .tipb::before { content: ""; position: absolute; top: -5px; left: var(--arrow, 150px); width: 10px; height: 10px; background: var(--text); transform: rotate(45deg); }
+  .app .top { position: relative; z-index: 2; }
+</style>
+</head>
+<body>
+<main>
+  <div class="intro">
+    <h1>"Not included" tooltip</h1>
+    <p>A small <b>?</b> at the end of the "Not included" line. Tapping it opens a bubble just below the line: <i>"Your default currency is [default currency]. Expenses in other currencies are not included."</i>, with your default currency filled in Tapping the <b>?</b> again, or anywhere else, closes it. The bubble floats over the content, so the fixed section doesn't grow. Dashed blue rings mark what's new.</p>
+  </div>
+  <div class="frames" id="frames"></div>
+</main>
+<script>
+const svg = (d) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${d}</svg>`;
+const gear = svg('<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/>');
+const tabbar = (on) => `<div class="tabbar">${[["M12 5v14M5 12h14","Log"],["M4 6h16M4 12h16M4 18h10","History"],["M6 20V10M12 20V4M18 20v-6","Summary"]].map(([d,n]) => `<span class="${on===n?"on":""}">${svg(`<path d="${d}"/>`)}${n}</span>`).join("")}<span class="${on==="Settings"?"on":""}">${gear}Settings</span></div>`;
+const fig = (html, cap) => document.getElementById("frames").insertAdjacentHTML("beforeend", `<figure><div class="phone"><div class="app">${html}</div></div><figcaption>${cap}</figcaption></figure>`);
+const cat = (name, n, amt, of, w, tick, pace) => `<div class="cat"><div class="cat-top"><span>${name}<span class="n">${n}</span></span><span><strong>${amt}</strong>${of ? ` <span class="of">of ${of}</span>` : ""}</span></div><div class="track"><div class="fill" style="width:${w}%"></div>${tick != null ? `<div class="tick" style="left:${tick}%"></div>` : ""}</div>${pace ? `<div class="pacel">${pace}</div>` : ""}</div>`;
+const q = (open) => `<span class="qm ${open ? "on" : ""} new">?</span>`;
+const tip = (cur = "SGD") => `<div class="tipb new">Your default currency is ${cur}. Expenses in other currencies are not included.</div>`;
+const ni = (text, open, cur) => `<div class="niwrap"><div class="ni">${text} ${q(open)}</div>${open ? tip(cur) : ""}</div>`;
+const summaryTop = (open) => `<div class="top"><h3>Summary</h3><div class="seg" style="margin-top:12px"><span class="on">November</span><span>October</span></div>
+  <div class="tot"><div><div class="sub">Spent so far this month</div><div class="big">$2,192.73</div></div><span class="csvb">⤓ CSV</span></div>
+  <div class="dayline"><b>Day 13 of 30</b> · Fri, 13 Nov</div>${ni("Not included: USD 120.00 · THB 450.00", open)}</div>`;
+const summaryBody = `<div class="scroll">
+  ${cat("Rent", 1, "1,800.00", "1,800.00", 100, 43, "<b>Budget used</b> · $0.00 left")}
+  ${cat("Utilities", 1, "118.35", null, 7)}
+  ${cat("Food &amp; Dining", 7, "94.40", "500.00", 19, 43, "<b>$122.27 under pace</b> · $405.60 left, about $23.86/day")}
+  ${cat("Transport", 6, "76.70", "200.00", 38, 43, "<b>On pace</b> · $123.30 left, about $7.25/day")}</div>`;
+
+fig(summaryTop(false) + summaryBody + tabbar("Summary"),
+  `<span class="badge">Closed</span><b>Summary.</b> The <b>?</b> sits at the end of the line, in the same grey. Only shown when the line is.`);
+fig(summaryTop(true) + summaryBody + tabbar("Summary"),
+  `<span class="badge">Open</span><b>Summary, after tapping ?.</b> The bubble opens below the line, over the categories. Tap anywhere to close.`);
+fig(`<div class="top"><div class="date">Friday, 13 November</div><h3>Log an expense</h3>
+  <div class="input"><div class="txt" style="color:var(--muted)">e.g. Lunch at LJS for $4.50 yesterday</div><div class="r"><span class="btn btn-primary dim">Parse</span></div></div>
+  <div class="spent"><span>Spent today</span><b>$10.00</b></div>${ni("Not included: USD 120.00", true)}</div>
+  <div class="scroll"><div class="h">TODAY</div>
+  <div class="item"><div><div>Marriott</div><div class="c">Travel</div></div><div class="a"><i>USD</i>120.00</div></div>
+  <div class="item"><div><div>Ya Kun</div><div class="c">Food &amp; Dining</div></div><div class="a">10.00</div></div></div>${tabbar("Log")}`,
+  `<span class="badge">Log</span><b>Under Spent today</b>, the same <b>?</b> and bubble.`);
+fig(`<div class="top"><h3>History</h3><div class="seg" style="margin-top:12px"><span>‹</span><span class="on" style="flex:4">November 2026</span><span>›</span></div>
+  <div class="search">⌕ <span>hotel</span><span class="x">×</span></div></div>
+  <div class="scroll"><div class="count"><span>3 results</span><b>$310.00</b></div>${ni("Not included: USD 120.00", true)}
+  <div class="day">FRI, 13 NOV</div>
+  <div class="item"><div><div><mark>Hotel</mark> Marriott</div><div class="c">Travel</div></div><div class="a"><i>USD</i>120.00</div></div>
+  <div class="day">SAT, 7 NOV</div>
+  <div class="item"><div><div>Fairmont <mark>hotel</mark> deposit</div><div class="c">Travel</div></div><div class="a">200.00</div></div></div>${tabbar("History")}`,
+  `<span class="badge">History</span><b>Under a search's result count</b>, the same again.`);
+fig(`<div class="top"><h3>Summary</h3><div class="seg" style="margin-top:12px"><span class="on">November</span><span>October</span></div>
+  <div class="tot"><div><div class="sub">Spent so far this month</div><div class="big">MYR 46.00</div></div><span class="csvb">⤓ CSV</span></div>
+  <div class="dayline"><b>Day 13 of 30</b> · Fri, 13 Nov</div>${ni("Not included: SGD 2,192.73 · USD 120.00", true, "MYR")}</div>
+  <div class="scroll">${cat("Food &amp; Dining", 2, "38.00", "500.00", 8, 43, "<b>MYR 179.67 under pace</b> · MYR 462.00 left, about MYR 27.18/day")}
+  ${cat("Transport", 1, "8.00", "200.00", 4, 43, "<b>MYR 78.67 under pace</b> · MYR 192.00 left, about MYR 11.29/day")}</div>${tabbar("Summary")}`,
+  `<span class="badge ex">Default MYR</span><b>The placeholder filled in</b> for someone whose default is MYR.`);
+
+// Point each bubble's arrow at its "?"
+requestAnimationFrame(() => document.querySelectorAll(".tipb").forEach((b) => {
+  const q = b.parentElement.querySelector(".qm"), w = b.parentElement.getBoundingClientRect(), r = q.getBoundingClientRect();
+  b.style.setProperty("--arrow", `${Math.max(10, Math.min(r.left - w.left + r.width / 2 - 5, b.offsetWidth - 20))}px`);
+}));
+</script>
+</body>
+</html>

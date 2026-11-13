@@ -1,7 +1,7 @@
 "use client";
 
 // The default currency on the screens (Specification 4.6): who uses it, the Currency page and the review card's picker
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useId, useRef, useState } from "react";
 import { api, fmt } from "@/lib/client";
 import { CURRENCIES, DEFAULT_CURRENCY, DOLLARS, otherCurrencies } from "@/lib/currencies";
 import { ConfirmSheet } from "./confirm";
@@ -16,11 +16,48 @@ export function moneyIn(home: string) {
 }
 export const useMoney = () => moneyIn(useHomeCurrency());
 
-// The line under a total listing spending in other currencies, which the total leaves out; nothing when there is none
+// The line under a total listing spending in other currencies, which the total leaves out; nothing when there is none.
+// Its "?" opens a short explanation, closed by tapping the "?" again or anywhere else (Specification 4.6)
 export function NotIncluded({ items }: { items: { currency?: string; amount?: number; total?: number }[] }) {
-  const others = otherCurrencies(items, useHomeCurrency());
+  const home = useHomeCurrency();
+  const others = otherCurrencies(items, home);
+  // Where the bubble's arrow sits, measured from the "?" when it is tapped; null while closed
+  const [arrowAt, setArrowAt] = useState<number | null>(null);
+  const open = arrowAt != null;
+  const tipId = useId();
+  const wrap = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const close = (ev: PointerEvent) => {
+      if (!wrap.current?.contains(ev.target as Node)) setArrowAt(null);
+    };
+    document.addEventListener("pointerdown", close);
+    return () => document.removeEventListener("pointerdown", close);
+  }, [open]);
+
   if (!others.length) return null;
-  return <p className="not-included">Not included: {others.map((o) => `${o.code} ${fmt(o.total)}`).join(" · ")}</p>;
+  return (
+    <div className="not-included" ref={wrap}>
+      <span>Not included: {others.map((o) => `${o.code} ${fmt(o.total)}`).join(" · ")}</span>
+      <button
+        type="button"
+        className={`ni-help${open ? " on" : ""}`}
+        aria-label="Why aren't these included?"
+        aria-expanded={open}
+        aria-controls={tipId}
+        onClick={(ev) => setArrowAt(open ? null : ev.currentTarget.offsetLeft + 9)}
+      >
+        <span aria-hidden="true">?</span>
+      </button>
+      {open && (
+        // The arrow points at the "?", wherever the line ends
+        <p className="ni-tip" id={tipId} role="tooltip" style={{ "--arrow": `${arrowAt}px` } as React.CSSProperties}>
+          Your default currency is {home}. Expenses in other currencies are not included.
+        </p>
+      )}
+    </div>
+  );
 }
 
 export const SETTINGS_URL = "/api/settings";
