@@ -1174,4 +1174,5 @@ Last updated: 13 November 2026
   3. User guide: "What it doesn't do" said "Totals are in Singapore dollars"; it now says totals are in your default currency and other currencies are shown separately.
   4. Test Plan (v1.13): Section T's note listed only some of the tests that change the default; it now lists T-03, T-05, T-06, T-09, T-10 and T-13.
 - Documents only, so the app version stays at 1.2.2.
-- **Confirmed (13 November 2026):** the owner checked that the guide on GitHub Pages shows the new "What it doesn't do" wording. (The guide change was pushed before the owner asked to preview it; the preview was shown afterwards.)
+- **Publishing:** the guide change was pushed before the owner asked to preview it; the preview was shown afterwards. The first Pages run for this change then failed on a temporary GitHub error ("No artifacts named github-pages were found"), so the guide wasn't updated at first, although an earlier line here wrongly recorded it as confirmed. The owner noticed; the run was re-run on 13 November 2026 and succeeded, and the live page was checked to contain the new wording.
+- **Confirmed (13 November 2026):** the owner checked that the guide on GitHub Pages shows the new "What it doesn't do" wording.
