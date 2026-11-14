@@ -1,7 +1,7 @@
 # Project Hercules — Architecture: Web App v1
 
 ```
-Version 0.25 · Draft
+Version 0.26 · Draft
 Last Reviewed: 14 November 2026
 Produced with AI Assistance (Claude Code)
 ```
@@ -35,6 +35,7 @@ Produced with AI Assistance (Claude Code)
 | 0.23 | 2026-11-13 | Lionel Lam | Decision 36: default currency per person, applied by the server when parsing; decision 19 updated |
 | 0.24 | 2026-11-13 | Lionel Lam | Decision 36: totals count only the default currency; others shown as not included; switching asks first |
 | 0.25 | 2026-11-14 | Lionel Lam | Decision 37: each parse records how long its steps took, to find what slows parsing down |
+| 0.26 | 2026-11-14 | Lionel Lam | Known Gaps: change the live database address to `sslmode=verify-full` before upgrading to pg 9 |
 
 ---
 
@@ -155,3 +156,4 @@ With these decisions, Project Hercules is framed as a **hosted, invite-only fami
 - Allow-list administration is deferred to Phase 4 (retiring categories and the monthly CSV export were delivered early: decisions 29 and 35)
 - Budget history, alerts and fuller budget tracking remain in Phase 3
 - Choose how to speed up parsing once the live app has recorded timings for 10–15 everyday parses (decision 37)
+- Change `sslmode=require` to `sslmode=verify-full` in the live `DATABASE_URL` (Vercel's environment settings; done by Lionel). Each time a server starts, the database driver warns that `require` is treated as `verify-full` for now, which checks the database's certificate, but that pg 9 will make `require` weaker, so it no longer checks the certificate. `web/package.json` allows only pg 8, so nothing changes until then, but the address should be updated before any upgrade to pg 9 (seen in Vercel's logs, 14 November 2026)

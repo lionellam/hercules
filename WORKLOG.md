@@ -1243,3 +1243,13 @@ Last updated: 14 November 2026
 
 ### Next
 - After the deploy, the owner parses 10–15 everyday expenses on their phone, then reads the `parse timing` lines in Vercel's logs to choose what to speed up.
+
+---
+
+## 14 November 2026 — Follow-up: Database SSL Mode
+
+### What Was Done
+- After 1.2.4 went live, the owner shared Vercel's logs. Alongside the first live `parse timing` line (`auth=99 limit=22 categories=3 model=1499 total=1622` ms, so the Claude call was about 92% of the parse), each server start logs a red warning from `pg-connection-string`: SSL modes `prefer`, `require` and `verify-ca` are treated as `verify-full` for now, but pg 9 will make them weaker, so `require` will no longer check the database's certificate.
+- The connection is fully secure today, and `web/package.json` allows only pg 8, so nothing is urgent. Added a follow-up to the Architecture's Known Gaps (v0.26): change `sslmode=require` to `sslmode=verify-full` in the live `DATABASE_URL`, before any upgrade to pg 9. That is a change to Vercel's settings, so it is for Lionel to make.
+- The logs also show `[tls-profile] applied 'commercial/2025' …` lines. That text is not in the app's code or any installed package, so they most likely come from Vercel's own system; not confirmed. No action taken.
+- Documents only, so the app version is unchanged.
