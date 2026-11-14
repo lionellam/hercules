@@ -1224,6 +1224,7 @@ Last updated: 14 November 2026
 - The owner finds parsing slow. Rather than guess at a fix, each parse now measures how long its steps take: the sign-in check, the daily-limit check, loading categories, the Claude call, and the total (Architecture decision 37). The timings go in a `Server-Timing` header on the parse response, visible in a browser's developer tools, and in one `parse timing` line in the server log, with the model used and the input and output tokens. The log line never includes the expense text, the parsed details, an email address or a user ID. Nothing in the app looks different.
 - Options discussed with the owner first: whether "performance" meant speed or accuracy (the owner chose speed), and measuring before changing anything. A timing table in the database was set aside, as the logs and header are enough for a short investigation and keep no new data about people.
 - Version **1.2.4** (a small tweak), with a changelog entry. Updated the Architecture (v0.25, decision 37 and a follow-up in Known Gaps) and the Test Plan (v1.15, new O-05). The Specification is unchanged, as nothing visible changed.
+- **Confirmed (14 November 2026):** after the deploy, the owner checked on their phone that Settings shows Version 1.2.4.
 
 ### Testing
 - Locally, on the demo account (confirmed before each run), with an Anthropic key in `.env.local` so parses reached Claude Haiku. Three `[TEST]` parses, none saved:
