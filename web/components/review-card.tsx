@@ -24,9 +24,11 @@ type Props = {
   disabled?: boolean;
   // Called whenever the fields start or stop differing from `initial`
   onDirtyChange?: (dirty: boolean) => void;
+  // The review sheet after Parse (Architecture decision 38): "›" on each line and full-width buttons
+  afterParse?: boolean;
 };
 
-export default function ReviewCard({ title, initial, categories, rawInput, onSave, onCancel, cancelLabel, onDelete, disabled, onDirtyChange }: Props) {
+export default function ReviewCard({ title, initial, categories, rawInput, onSave, onCancel, cancelLabel, onDelete, disabled, onDirtyChange, afterParse }: Props) {
   const [amount, setAmount] = useState(initial.amount == null ? "" : initial.amount.toFixed(2));
   const [currency, setCurrency] = useState(initial.currency);
   const [categoryId, setCategoryId] = useState(initial.category_id);
@@ -79,6 +81,8 @@ export default function ReviewCard({ title, initial, categories, rawInput, onSav
     run(() => onSave(fields, edited));
   }
 
+  const chev = afterParse && <span className="field-chev" aria-hidden="true">›</span>;
+
   return (
     <div className="card">
       <div className="card-title">{title}</div>
@@ -94,20 +98,30 @@ export default function ReviewCard({ title, initial, categories, rawInput, onSav
             <option key={c.id} value={c.id}>{c.name}</option>
           ))}
         </select>
+        {chev}
       </div>
       <div className="field">
         <label htmlFor="f-merchant">Merchant</label>
         <input id="f-merchant" value={merchant} onChange={(e) => setMerchant(e.target.value)} placeholder="—" maxLength={200} />
+        {chev}
       </div>
       <div className="field">
         <label htmlFor="f-date">Date</label>
         <input id="f-date" type="date" value={date} onChange={(e) => setDate(e.target.value)} required />
+        {chev}
       </div>
       <div className="field">
         <label htmlFor="f-remarks">Remarks</label>
         <input id="f-remarks" value={remarks} onChange={(e) => setRemarks(e.target.value)} placeholder="Optional" maxLength={1000} />
+        {chev}
       </div>
       {error && <p className="error">{error}</p>}
+      {afterParse ? (
+        <div className="actions stacked">
+          <button className="btn btn-primary btn-wide" disabled={busy || disabled || !date} onClick={save}>{busy ? "Saving…" : "Save expense"}</button>
+          <button className="btn btn-ghost btn-wide" disabled={busy} onClick={onCancel}>{cancelLabel}</button>
+        </div>
+      ) : (
       <div className="actions">
         <div>
           {onDelete && (
@@ -119,6 +133,7 @@ export default function ReviewCard({ title, initial, categories, rawInput, onSav
           <button className="btn btn-primary" disabled={busy || disabled || !date} onClick={save}>{busy ? "Saving…" : "Save"}</button>
         </div>
       </div>
+      )}
     </div>
   );
 }

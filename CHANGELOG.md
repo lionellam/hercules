@@ -6,6 +6,14 @@ Versions follow [semantic versioning](https://semver.org): **major** for a chang
 
 ---
 
+## 1.3.0 — 14 November 2026
+
+**Changed**
+- After you tap **Parse**, the review card now opens over the Log screen, so it's clear it needs an answer. Each line has a **›** to show it can be changed, and the buttons are now **Save expense** and **Discard**.
+- Tapping outside the review card does the same as **Discard**: it closes, and your typed text stays in the box to change and parse again. If you've changed anything on the card, it checks with you first.
+
+---
+
 ## 1.2.4 — 14 November 2026
 
 **Behind the scenes**

@@ -255,6 +255,9 @@ html { scroll-behavior: smooth; }
 .m .m-ref .c { color: var(--m-muted); font-size: 10.5px; margin-top: 1px; }
 .m .m-ref b { font-variant-numeric: tabular-nums; }
 .m .m-red { margin-top: 12px; background: var(--m-bad); color: #fff; border-radius: 10px; text-align: center; padding: 9px 0; font-weight: 600; font-size: 12.5px; }
+.m .m-raw { color: var(--m-muted); font-size: 11px; font-style: italic; margin-bottom: 6px; }
+.m .chev { color: var(--m-muted); margin-left: 5px; }
+.m .m-save { margin-top: 12px; background: var(--m-bar); color: var(--m-bg); border-radius: 10px; text-align: center; padding: 9px 0; font-weight: 600; font-size: 12.5px; }
 .m .m-cancel { text-align: center; color: var(--m-muted); font-weight: 600; font-size: 12.5px; padding: 9px 0 0; }
 .m .m-undo { margin: 18px 12px 10px; background: var(--m-bar); color: var(--m-bg); border-radius: 10px; padding: 9px 12px; display: flex; justify-content: space-between; font-size: 12px; box-shadow: 0 4px 14px rgba(0,0,0,.18); }
 .m .m-undo b { text-decoration: underline; text-underline-offset: 2px; }
@@ -291,7 +294,7 @@ dl.faq dd { margin: 2px 0 0; color: var(--ink-2); }
       <div class="meta">
         <span><b>Who it's for:</b> invited family and friends</span>
         <span><b>Works on:</b> phone, tablet and computer</span>
-        <span><b>Updated:</b> 13 November 2026</span>
+        <span><b>Updated:</b> 14 November 2026</span>
       </div>
     </header>
 
@@ -327,8 +330,8 @@ dl.faq dd { margin: 2px 0 0; color: var(--ink-2); }
     <ol class="steps">
       <li><span><b>Type the expense</b> in the box at the top of the Log screen, in your own words.</span></li>
       <li class="ai"><span><b>Tap Parse.</b><span class="tag-ai">AI</span> Claude, the AI that reads your text, picks out the amount, category, merchant and date. This takes a second or two.</span></li>
-      <li><span><b>Check the review card.</b> Every field can be changed: tap the amount, pick a different category, fix the date, or add a remark.</span></li>
-      <li><span><b>Tap Save.</b> The expense appears straight away under <b>Today</b>, and in History and Summary.</span></li>
+      <li><span><b>Check the review card.</b> It opens over the Log screen. Every line can be changed: tap the amount, pick a different category, fix the date, or add a remark.</span></li>
+      <li><span><b>Tap Save expense.</b> The expense appears straight away under <b>Today</b>, and in History and Summary.</span></li>
     </ol>
 
     <div class="figure-row">
@@ -358,22 +361,29 @@ dl.faq dd { margin: 2px 0 0; color: var(--ink-2); }
         <figcaption><b>Log.</b> Type the expense and tap Parse. Spent today and the Today list update each time you save.</figcaption>
       </figure>
       <figure>
-        <div class="phone"><div class="m">
-          <div class="top flat">
+        <div class="phone"><div class="m" style="position:relative;min-height:540px">
+          <div style="opacity:.35">
+          <div class="top">
             <div class="sub">Saturday, 7 November</div>
             <h5>Log an expense</h5>
             <div class="input"><div class="txt">Lunch at Ya Kun for $4.50</div><span class="mx">×</span><div class="row"><span class="btn dim">Parse</span></div></div>
+            <div class="spent"><span>Spent today</span><b>$39.50</b></div>
           </div>
           <div class="body">
-            <div class="card">
-              <div class="card-t">REVIEW BEFORE SAVING</div>
-              <div class="amt"><span class="pick">SGD ▾</span><b>4.50</b></div>
-              <div class="field"><span>Category</span><span>Food &amp; Dining</span></div>
-              <div class="field"><span>Merchant</span><span>Ya Kun</span></div>
-              <div class="field"><span>Date</span><span>07/11/2026</span></div>
-              <div class="field"><span>Remarks</span><span style="color:var(--m-muted);font-weight:400">Optional</span></div>
-              <div class="acts"><span class="btn ghost">Discard</span><span class="btn">Save</span></div>
-            </div>
+            <div class="h"><span>TODAY</span></div>
+            <div class="item"><div><div class="nm">Toast Box</div><div class="c">Food &amp; Dining</div></div><div class="a">30.00</div></div>
+          </div>
+          </div>
+          <div class="m-confirm">
+            <div class="card-t">REVIEW BEFORE SAVING</div>
+            <div class="m-raw">“Lunch at Ya Kun for $4.50”</div>
+            <div class="amt"><span class="pick">SGD ▾</span><b>4.50</b></div>
+            <div class="field"><span>Category</span><span>Food &amp; Dining<span class="chev">›</span></span></div>
+            <div class="field"><span>Merchant</span><span>Ya Kun<span class="chev">›</span></span></div>
+            <div class="field"><span>Date</span><span>07/11/2026<span class="chev">›</span></span></div>
+            <div class="field"><span>Remarks</span><span><span style="color:var(--m-muted);font-weight:400">Optional</span><span class="chev">›</span></span></div>
+            <div class="m-save">Save expense</div>
+            <div class="m-cancel">Discard</div>
           </div>
         </div></div>
         <figcaption><b>Review.</b> Check what Claude picked out and change anything before you save.</figcaption>
@@ -381,8 +391,8 @@ dl.faq dd { margin: 2px 0 0; color: var(--ink-2); }
     </div>
 
     <ul class="plain">
-      <li><b>Nothing is saved until you tap Save.</b> If Claude got something wrong, just fix it on the card. There's no need to type it again.</li>
-      <li><b>Changed your mind?</b> Tap <b>Discard</b>. Your typed text stays in the box so you can tweak it and parse again. If you've already changed something on the card, the app checks with you first.</li>
+      <li><b>Nothing is saved until you tap Save expense.</b> If Claude got something wrong, just fix it on the card. There's no need to type it again.</li>
+      <li><b>Changed your mind?</b> Tap <b>Discard</b>, or tap outside the card. Your typed text stays in the box so you can tweak it and parse again. If you've already changed something on the card, the app checks with you first.</li>
       <li><b>Start again</b> by tapping the <b>×</b> at the top right of the box, which clears what you've typed.</li>
       <li><b>Spent today</b>, under the box, shows your running total for the day. Below the Today list, <b>Today by category</b> breaks it down.</li>
       <li><b>Offline?</b> The app tells you, and keeps what you've typed until you're back online.</li>

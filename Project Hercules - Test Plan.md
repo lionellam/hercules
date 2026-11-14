@@ -1,7 +1,7 @@
 # Project Hercules — Test Plan: Web App v1
 
 ```
-Version 1.15 · Draft
+Version 1.16 · Draft
 Last Reviewed: 14 November 2026
 Produced with AI Assistance (Claude Code)
 ```
@@ -26,6 +26,7 @@ Produced with AI Assistance (Claude Code)
 | 1.13 | 2026-11-13 | Lionel Lam | Integrity check: Section T's note lists every test that changes the default |
 | 1.14 | 2026-11-14 | Lionel Lam | Integrity check: Q-08 and S-07 find the version line at the bottom of Settings (1.2.3) |
 | 1.15 | 2026-11-14 | Lionel Lam | O-05: each parse reports how long its steps took, without recording the expense text or who parsed it (1.2.4) |
+| 1.16 | 2026-11-14 | Lionel Lam | Review card in a sheet: B-01, C-03 and C-04 updated; new C-07 to C-11; S-03 uses **Save expense** |
 
 ---
 
@@ -93,7 +94,7 @@ For each run, note the date, the device and browser, whether it was the local or
 
 | ID | Test | Steps | Expected result |
 |---|---|---|---|
-| B-01 | Parse and save | Type `[TEST] lunch at Ya Kun 4.50`, tap **Parse**, then **Save** | A review card appears with SGD 4.50, Food & Dining and today's date. After saving, "Saved" shows briefly, the box empties, and the expense appears under **Today** |
+| B-01 | Parse and save | Type `[TEST] lunch at Ya Kun 4.50`, tap **Parse**, then **Save expense** | The review sheet opens with SGD 4.50, Food & Dining and today's date. After saving, "Saved" shows briefly, the box empties, and the expense appears under **Today** |
 | B-02 | Relative date | Type `[TEST] grab home 14.20 yesterday` → Parse | The review card's date is yesterday |
 | B-03 | Specific date **[Claude]** | Type `[TEST] NTUC groceries 62.30 on 3 Nov` → Parse | Date is 3 November of this year; category Groceries; merchant NTUC |
 | B-04 | Another currency **[Claude]** | Type `[TEST] coffee USD 5` → Parse → Save | The card shows USD 5.00; in the Today list the amount shows as "USD 5.00" |
@@ -110,14 +111,21 @@ For each run, note the date, the device and browser, whether it was the local or
 
 ### C. The Review Card
 
+After Parse, the review card opens in a sheet over the Log screen. Its save button is labelled **Save expense**; where a test says **Save** after Parse, it means this button.
+
 | ID | Test | Steps | Expected result |
 |---|---|---|---|
 | C-01 | Every field can be changed | Parse `[TEST] lunch 5.50`. Change the amount to 6.00, the category, the merchant, the date and add a remark → Save | The saved expense shows all the changed values, and an **edited** tag in the list |
 | C-02 | Unchanged expense isn't marked edited | Parse and save without changing anything | No **edited** tag on the expense |
-| C-03 | Discard without changes | Parse `[TEST] lunch 5.50` → tap **Discard** | The card closes straight away, with no question. The typed text stays in the box. Nothing is saved |
-| C-04 | Discard after a change asks first | Parse, change the amount → tap **Discard** | "Discard your edits?" appears. **Keep reviewing** returns to the card with your change. **Discard** closes the card; the typed text stays; nothing is saved |
+| C-03 | Discard without changes | Parse `[TEST] lunch 5.50` → tap **Discard** | The sheet closes straight away, with no question. The typed text stays in the box. Nothing is saved |
+| C-04 | Discard after a change asks first | Parse, change the amount → tap **Discard** | "Discard your edits?" appears, with no explanation text and a red **Discard**. **Keep reviewing** returns to the card with your change. **Discard** closes the card; the typed text stays; nothing is saved |
 | C-05 | Amount must be above zero | On a card, set the amount to 0 or text such as "abc" → Save | "Please enter an amount." Nothing is saved |
 | C-06 | Impossible date is refused | Using the browser's developer tools or the API, try to save an expense dated 2026-02-31 | The save is refused with "Please check the amount and fields." |
+| C-07 | The review sheet | On a phone, parse `[TEST] lunch 5.50` | A sheet opens at the bottom over the darkened Log screen, with no handle and no animation. It shows "REVIEW BEFORE SAVING", the typed text in quotes, the amount with its currency, and Category, Merchant, Date and Remarks, each with a "›". Below are full-width **Save expense** and **Discard** buttons. The Today list can't be tapped while the sheet is open |
+| C-08 | Tapping outside without changes | Parse `[TEST] lunch 5.50` → tap the darkened area above the sheet | The sheet closes straight away, as with Discard. The typed text stays in the box and Parse can be tapped again. Nothing is saved |
+| C-09 | Tapping outside after a change | Parse, change the merchant → tap the darkened area | "Discard your edits?" appears. **Keep reviewing** returns to the sheet with the change; **Discard** closes it, the typed text stays, nothing is saved |
+| C-10 | Wider screens | In a window at least 768 pixels wide, parse `[TEST] lunch 5.50` | The review appears as a centred dialog over the darkened screen; tapping outside works as in C-08 |
+| C-11 | Edit sheet unchanged | Open a saved `[TEST]` expense from Today | The edit sheet's button still says **Save**, and Cancel and Delete work as before |
 
 ### D. Fixing, Deleting and Undo
 
@@ -348,7 +356,7 @@ A quick check on the live app after each deploy. Use your own account, and remov
 |---|---|---|
 | S-01 | Sign in with Google | The Log screen opens |
 | S-02 | Each tab opens | Log, History, Summary and Settings all load with your data, and Settings → Categories & budgets lists your categories |
-| S-03 | Log and remove a test expense | Parse `[TEST] coffee 1.00` → Save → it appears under Today → open it → Delete → confirm. The expense disappears and the totals return to what they were |
+| S-03 | Log and remove a test expense | Parse `[TEST] coffee 1.00` → **Save expense** → it appears under Today → open it → Delete → confirm. The expense disappears and the totals return to what they were |
 | S-04 | Summary figures | This month's total and pace notes look right for your spending |
 | S-05 | Signed-out data check | In a private browser window, open `/api/expenses?month=` with this month (for example `2026-11`) on the live address | `{"error":"Not signed in"}` |
 | S-06 | User guide | Open https://lionellam.github.io/hercules/ | The user guide loads |

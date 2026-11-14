@@ -72,8 +72,6 @@ export default function LogScreen({ categories, online, cache, onSaved }: { cate
       });
       setReviewDirty(false);
       setParsed({ raw, fields: { ...r, category_id: r.category_id ?? categories.at(-1)?.id ?? 0 } });
-      // The review card sits at the top of the scrolling content, so it could otherwise open out of view
-      window.scrollTo({ top: 0 });
     } catch (e) {
       setError((e as Error).message);
     } finally {
@@ -93,6 +91,9 @@ export default function LogScreen({ categories, online, cache, onSaved }: { cate
     setTimeout(() => setToast(""), 1600);
     onSaved();
   }
+
+  // Discard and tapping outside the review sheet do the same, asking first if a detail was changed
+  const requestDiscard = () => (reviewDirty ? setAskDiscard(true) : setParsed(null));
 
   const today = new Date().toLocaleDateString("en-SG", { weekday: "long", day: "numeric", month: "long" });
 
@@ -140,21 +141,26 @@ export default function LogScreen({ categories, online, cache, onSaved }: { cate
         {toast && <p className="toast">{toast}</p>}
       </div>
       {parsed && (
-        <ReviewCard
-          title="Review before saving"
-          initial={parsed.fields}
-          categories={categories}
-          onSave={save}
-          onCancel={() => (reviewDirty ? setAskDiscard(true) : setParsed(null))}
-          cancelLabel="Discard"
-          disabled={!online}
-          onDirtyChange={setReviewDirty}
-        />
+        <div className="sheet-backdrop" onClick={requestDiscard}>
+          <div className="sheet" onClick={(ev) => ev.stopPropagation()}>
+            <ReviewCard
+              title="Review before saving"
+              rawInput={parsed.raw}
+              initial={parsed.fields}
+              categories={categories}
+              onSave={save}
+              onCancel={requestDiscard}
+              cancelLabel="Discard"
+              disabled={!online}
+              onDirtyChange={setReviewDirty}
+              afterParse
+            />
+          </div>
+        </div>
       )}
       {askDiscard && (
         <ConfirmSheet
           title="Discard your edits?"
-          body="The changes you made to the parsed details will be lost. Your typed text stays in the box, so you can parse it again."
           confirmLabel="Discard"
           cancelLabel="Keep reviewing"
           onConfirm={() => {

@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Review Card Call to Action</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root { --page: #ececea; --page-text: #18181b; --page-muted: #5f5f66; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--page); color: var(--page-text); font-family: Inter, -apple-system, system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  main { max-width: 1460px; margin: 0 auto; padding: 36px 16px 80px; }
+  h1 { font-size: 28px; letter-spacing: -0.02em; margin: 0 0 8px; }
+  h2 { font-size: 18px; margin: 40px 0 4px; }
+  .intro p, .lead { color: var(--page-muted); max-width: 860px; line-height: 1.55; margin: 0 0 10px; font-size: 15px; }
+  .intro ol { color: var(--page-muted); max-width: 860px; line-height: 1.55; font-size: 15px; margin: 6px 0 10px 22px; }
+  .intro ol b { color: var(--page-text); }
+  .frames { display: flex; flex-wrap: wrap; gap: 30px 26px; align-items: flex-start; margin-top: 18px; }
+  figure { margin: 0; max-width: 100%; }
+  figcaption { max-width: 340px; font-size: 13px; color: var(--page-muted); margin-top: 12px; line-height: 1.5; }
+  figcaption b { color: var(--page-text); }
+  .phone { width: 340px; max-width: 100%; height: 780px; border-radius: 30px; overflow: hidden; border: 1px solid rgba(0,0,0,.08);
+           box-shadow: 0 1px 2px rgba(0,0,0,.06), 0 10px 28px rgba(0,0,0,.08); }
+
+  /* App tokens and styles, from web/app/globals.css */
+  .app { --bg: #fff; --surface: #fff; --text: #18181b; --muted: #71717a; --line: #e7e7e4; --accent: #18181b; --accent-text: #fff; --soft: #f4f4f5;
+         background: var(--bg); color: var(--text); font-size: 15px; position: relative; height: 100%; display: flex; flex-direction: column; overflow: hidden; }
+  .app.dark { --bg: #18181b; --surface: #18181b; --text: #f4f4f5; --muted: #a1a1aa; --line: #27272a; --accent: #f4f4f5; --accent-text: #18181b; --soft: #27272a; }
+  .app .top { padding: 30px 20px 14px; border-bottom: 1px solid var(--line); }
+  .app .greet { color: var(--muted); font-size: 14px; }
+  .app h3 { font-size: 28px; font-weight: 700; letter-spacing: -0.02em; }
+  .app .input-wrap { background: var(--soft); border-radius: 16px; padding: 14px; margin-top: 14px; position: relative; }
+  .app .txt { font-size: 17px; min-height: 40px; line-height: 1.35; padding-right: 34px; }
+  .app .row { display: flex; justify-content: flex-end; }
+  .app .btn { height: 38px; padding: 0 18px; border-radius: 12px; border: none; font: inherit; font-size: 15px; font-weight: 600; background: var(--accent); color: var(--accent-text); }
+  .app .btn.dim { opacity: .35; }
+  .app .btn.ghost { background: transparent; color: var(--muted); }
+  .app .btn.wide { width: 100%; height: 48px; font-size: 16px; }
+  .app .clear { position: absolute; top: 8px; right: 8px; width: 36px; height: 36px; display: grid; place-items: center; }
+  .app .clear span { width: 22px; height: 22px; border-radius: 50%; background: var(--muted); color: var(--bg); display: grid; place-items: center; font-size: 15px; font-weight: 700; line-height: 1; }
+  .app .today-total { display: flex; justify-content: space-between; margin-top: 12px; color: var(--muted); font-size: 14px; }
+  .app .today-total strong { color: var(--text); font-size: 16px; }
+  .app .body { padding: 0 20px; flex: 1; overflow: hidden; position: relative; }
+  .app .label { color: var(--muted); font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; margin-top: 18px; }
+  .app .item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--line); }
+  .app .item .m { font-weight: 500; }
+  .app .item .c { color: var(--muted); font-size: 13px; margin-top: 2px; }
+  .app .item .a { font-weight: 600; font-variant-numeric: tabular-nums; }
+  .app .tabbar { display: flex; border-top: 1px solid var(--line); padding: 8px 0 18px; background: var(--bg); position: relative; z-index: 3; }
+  .app .tabbar span { flex: 1; text-align: center; font-size: 11px; color: var(--muted); }
+  .app .tabbar span i { display: block; font-style: normal; font-size: 17px; margin-bottom: 2px; }
+  .app .tabbar span.on { color: var(--text); font-weight: 600; }
+
+  /* Review card: current */
+  .app .card { margin-top: 18px; border: 1px solid var(--line); border-radius: 16px; padding: 14px 16px; background: var(--surface); }
+  .app .card-title { font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 10px; }
+  .app .amount { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+  .app .cur { background: var(--soft); border-radius: 8px; padding: 5px 9px; font-weight: 600; font-size: 14px; }
+  .app .amt { font-size: 32px; font-weight: 700; }
+  .app .field { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-top: 1px solid var(--line); gap: 12px; }
+  .app .field label { color: var(--muted); }
+  .app .field span { font-weight: 500; }
+  .app .actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 12px; }
+
+  /* Review card: proposed pieces */
+  .app .card.cta { border: 2px solid var(--text); box-shadow: 0 8px 24px rgba(0,0,0,.18); }
+  .app .status { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: #b45309; background: rgba(245,158,11,.14);
+                 border-radius: 999px; padding: 3px 9px; }
+  .app.dark .status { color: #fbbf24; background: rgba(251,191,36,.14); }
+  .app .status::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+  .app .cta-h { font-size: 18px; font-weight: 700; margin: 10px 0 4px; letter-spacing: -0.01em; }
+  .app .cta-sub { color: var(--muted); font-size: 13px; margin-bottom: 12px; }
+  .app .raw { color: var(--muted); font-size: 13px; font-style: italic; margin-bottom: 8px; }
+  .app .field.edit span { display: inline-flex; align-items: center; gap: 6px; }
+  .app .field.edit span::after { content: "›"; color: var(--muted); font-size: 18px; line-height: 1; }
+  .app .stack { display: flex; flex-direction: column; gap: 2px; margin-top: 14px; }
+  .app .dimmed { opacity: .3; filter: saturate(.6); pointer-events: none; }
+  .app .typed { display: flex; justify-content: space-between; align-items: center; gap: 10px; background: var(--soft); border-radius: 12px; padding: 10px 12px; margin-top: 14px; font-size: 14px; color: var(--muted); }
+  .app .typed b { color: var(--text); font-weight: 500; font-style: italic; }
+  .app .typed u { text-decoration: none; color: var(--text); font-weight: 600; white-space: nowrap; }
+
+  /* Bottom sheet */
+  .app .scrim { position: absolute; inset: 0; background: rgba(0,0,0,.5); z-index: 4; }
+  .app .sheet { position: absolute; left: 0; right: 0; bottom: 0; z-index: 5; background: var(--bg); border-radius: 20px 20px 0 0; padding: 10px 20px 26px;
+                box-shadow: 0 -8px 30px rgba(0,0,0,.25); }
+  .app .grab { width: 38px; height: 5px; border-radius: 3px; background: var(--line); margin: 0 auto 12px; }
+  .new { outline: 2px dashed #1d4ed8; outline-offset: 3px; border-radius: 12px; }
+
+  /* Round 2 */
+  .app .sheet .card-title { margin: 6px 0 6px; }
+  .app .tap { position: absolute; z-index: 6; width: 44px; height: 44px; border-radius: 50%; border: 2px solid #60a5fa; background: rgba(96,165,250,.25);
+              display: grid; place-items: center; color: #fff; font-size: 11px; font-weight: 700; }
+  .app .confirm { position: absolute; left: 0; right: 0; bottom: 0; z-index: 7; background: var(--bg); border-radius: 20px 20px 0 0; padding: 12px 20px 26px; box-shadow: 0 -8px 30px rgba(0,0,0,.3); }
+  .app .confirm h4 { font-size: 18px; font-weight: 700; margin: 6px 0 16px; }
+  .app .confirm p { color: var(--muted); font-size: 14px; line-height: 1.45; margin-bottom: 16px; }
+  .app .scrim.deep { z-index: 6; background: rgba(0,0,0,.35); }
+  .app .txt .caret { display: inline-block; width: 1.5px; height: 19px; background: var(--text); vertical-align: -3px; margin-left: 1px; }
+  .tablet { width: 760px; max-width: 100%; height: 560px; border-radius: 22px; overflow: hidden; border: 1px solid rgba(0,0,0,.08);
+            box-shadow: 0 1px 2px rgba(0,0,0,.06), 0 10px 28px rgba(0,0,0,.08); }
+  .tablet .top { padding: 24px 40px 12px; }
+  .tablet .body { padding: 0 40px; }
+  .tablet .sheet.dialog { left: 50%; right: auto; bottom: auto; top: 50%; transform: translate(-50%, -50%); width: 400px; border-radius: 20px; padding: 18px 22px 18px; }
+  figure.wide figcaption { max-width: 760px; }
+</style>
+</head>
+<body>
+<main>
+  <div class="intro">
+    <h1>Review card: making the next step obvious</h1>
+    <p>After Parse, the review card should read as a step you need to finish, not as one more section of the screen. These mockups show three levels of change, from light to strong. All are on the Log screen only; the same card when editing from History or the Today list is unchanged. Dashed blue outlines mark what's new.</p>
+    <p><b>Recommendations</b>, roughly in order of impact:</p>
+    <ol>
+      <li><b>Say it isn't saved yet.</b> A small amber "Not saved yet" tag and a clear heading, "Check the details, then save", in place of the small grey label.</li>
+      <li><b>Make the card stand out.</b> A stronger border and a shadow, so it sits above the screen instead of in line with it.</li>
+      <li><b>A bigger Save.</b> A full-width "Save expense" button, with Discard as a quieter button beneath it.</li>
+      <li><b>Show the fields can be changed.</b> A small "›" beside each value, as in Settings.</li>
+      <li><b>Quiet the rest of the screen.</b> Fade the Today list while you review, so the card is the only thing asking for attention.</li>
+      <li><b>One place to look.</b> While reviewing, fold the typed box into a single line ("You typed … Edit"), so the dimmed Parse button no longer competes.</li>
+      <li><b>Bring it into view.</b> Scroll the card into view when it appears, with a brief fade-in (motion isn't shown here).</li>
+    </ol>
+  </div>
+
+  <h2>Round 2 — Bottom sheet, with the existing wording (owner's direction, 14 November 2026)</h2>
+  <p class="lead">Option C, reworked: after Parse, the review card appears at the bottom of the screen over a darkened Log screen, like the existing edit sheet (no handle, no animation). It keeps today's wording ("Review before saving", the typed text in quotes, "Discard") and adds no new text. Changes from today: the "›" on each line, and two full-width buttons, <b>Save expense</b> and <b>Discard</b>. Tapping outside the sheet does the same as Discard: the sheet closes and the typed text stays in the box, so it can be edited and parsed again. As today, if any detail was changed, Discard (or tapping outside) first asks "Discard your edits?", with no explanation text. <b>Save expense</b> is only for this review sheet; the edit sheet keeps <b>Save</b>.</p>
+  <div class="frames" id="frames-r2"></div>
+
+  <h2 style="margin-top:56px">Round 1</h2>
+  <p class="lead">The first three options, kept for reference.</p>
+
+  <h2>Option A — Light touch</h2>
+  <p class="lead">Recommendations 1–4. The layout stays as it is; only the card changes. Smallest change.</p>
+  <div class="frames" id="frames-a"></div>
+
+  <h2>Option B — Focus mode (recommended)</h2>
+  <p class="lead">Option A plus recommendations 5–7. The typed box folds into one line and the Today list fades, so the card is the only thing asking for attention. Discard or Save brings everything back.</p>
+  <div class="frames" id="frames-b"></div>
+
+  <h2>Option C — Bottom sheet</h2>
+  <p class="lead">The card slides up over a darkened screen, like the confirmation sheet. Strongest signal, but it hides the screen, and a long card can need scrolling on short phones.</p>
+  <div class="frames" id="frames-c"></div>
+</main>
+<script>
+const TEXT = "Lunch at mcdonald's for 4.5";
+const header = `<div class="greet">Saturday, 14 November</div><h3>Log an expense</h3>`;
+const fullInput = `<div class="input-wrap"><div class="txt">${TEXT}</div><div class="clear"><span>×</span></div>
+  <div class="row"><button class="btn dim">Parse</button></div></div>`;
+const total = `<div class="today-total"><span>Spent today</span><strong>$52.84</strong></div>`;
+const today = `<div class="label">Today</div>
+  <div class="item"><div><div class="m">NTUC FairPrice</div><div class="c">Groceries</div></div><div class="a">7.20</div></div>
+  <div class="item"><div><div class="m">NTUC Unity</div><div class="c">Health &amp; Medical</div></div><div class="a">24.22</div></div>
+  <div class="item"><div><div class="m">Coffee Bean</div><div class="c">Food &amp; Dining</div></div><div class="a">6.20</div></div>
+  <div class="item"><div><div class="m">LJS</div><div class="c">Food &amp; Dining</div></div><div class="a">9.00</div></div>`;
+const tabbar = `<div class="tabbar"><span class="on"><i>+</i>Log</span><span><i>≡</i>History</span><span><i>▮</i>Summary</span><span><i>⚙</i>Settings</span></div>`;
+
+const fields = (edit) => {
+  const f = (l, v) => `<div class="field${edit ? " edit" : ""}"><label>${l}</label><span>${v}</span></div>`;
+  return f("Category", "Food &amp; Dining") + f("Merchant", "McDonald's") + f("Date", "14/11/2026") + f("Remarks", "Lunch");
+};
+const amount = `<div class="amount"><span class="cur">SGD ▾</span><span class="amt">4.50</span></div>`;
+
+const currentCard = `<div class="card"><div class="card-title">Review before saving</div>${amount}${fields(false)}
+  <div class="actions"><button class="btn ghost">Discard</button><button class="btn">Save</button></div></div>`;
+
+const ctaTop = (raw) => `<span class="status new">Not saved yet</span>
+  <div class="cta-h new">Check the details, then save</div>
+  <div class="cta-sub">Tap any line to change it.</div>${raw ? `<div class="raw">“${TEXT}”</div>` : ""}`;
+const ctaActions = `<div class="stack new"><button class="btn wide">Save expense</button><button class="btn ghost wide">Discard</button></div>`;
+const ctaCard = (raw) => `<div class="card cta new">${ctaTop(raw)}${amount}${fields(true)}${ctaActions}</div>`;
+
+const phone = (inner, dark = true) => `<div class="phone"><div class="app ${dark ? "dark" : ""}">${inner}</div></div>`;
+const fig = (inner, cap) => `<figure>${inner}<figcaption>${cap}</figcaption></figure>`;
+
+const screenCurrent = (dark) => phone(`<div class="top">${header}${fullInput}${total}</div>
+  <div class="body">${currentCard}${today}</div>${tabbar}`, dark);
+
+const screenA = (dark) => phone(`<div class="top">${header}${fullInput}${total}</div>
+  <div class="body">${ctaCard(false)}${today}</div>${tabbar}`, dark);
+
+const typedLine = `<div class="typed new"><span>You typed <b>“${TEXT}”</b></span><u>Edit</u></div>`;
+const screenB = (dark) => phone(`<div class="top">${header}${typedLine}${total}</div>
+  <div class="body">${ctaCard(false)}<div class="dimmed new">${today}</div></div>${tabbar}`, dark);
+
+const screenC = (dark) => phone(`<div class="top">${header}${fullInput}${total}</div>
+  <div class="body">${today}</div>${tabbar}
+  <div class="scrim new"></div>
+  <div class="sheet"><div class="grab"></div>${ctaTop(true)}${amount}${fields(true)}${ctaActions}</div>`, dark);
+
+// Round 2: today's wording, sheet from the bottom, tap outside = Discard
+const r2Sheet = (cls = "sheet") => `<div class="${cls}"><div class="card-title">Review before saving</div>
+  <div class="raw">“${TEXT}”</div>${amount}${fields(true)}
+  <div class="stack"><button class="btn wide">Save expense</button><button class="btn ghost wide">Discard</button></div></div>`;
+const logBehind = `<div class="top">${header}${fullInput}${total}</div><div class="body">${today}</div>${tabbar}`;
+const r2Open = (dark) => phone(`${logBehind}<div class="scrim"></div>${r2Sheet()}`, dark);
+const r2Tap = (dark) => phone(`${logBehind}<div class="scrim"></div><div class="tap" style="left:150px;top:120px">Tap</div>${r2Sheet()}`, dark);
+const editableInput = `<div class="input-wrap"><div class="txt">${TEXT}<span class="caret"></span></div><div class="clear"><span>×</span></div>
+  <div class="row"><button class="btn">Parse</button></div></div>`;
+const r2Back = (dark) => phone(`<div class="top">${header}${editableInput}${total}</div><div class="body">${today}</div>${tabbar}`, dark);
+const r2Confirm = (dark) => phone(`${logBehind}<div class="scrim"></div>${r2Sheet()}<div class="scrim deep"></div>
+  <div class="confirm"><h4>Discard your edits?</h4>
+  <div class="stack"><button class="btn wide">Discard</button><button class="btn ghost wide">Keep reviewing</button></div></div>`, dark);
+const r2Tablet = (dark) => `<div class="tablet"><div class="app ${dark ? "dark" : ""}">${logBehind}<div class="scrim"></div>${r2Sheet("sheet dialog")}</div></div>`;
+
+document.getElementById("frames-r2").innerHTML = [
+  fig(r2Open(true), "<b>1. After Parse (dark).</b> The sheet appears at the bottom, over the darkened Log screen. Same wording as today: “Review before saving” and the typed text in quotes for reference. Each line has a “›” and can be changed in place, as today."),
+  fig(r2Open(false), "<b>2. After Parse (light).</b> The same in the light theme."),
+  fig(r2Tap(true), "<b>3. Tapping outside.</b> Tapping anywhere on the darkened area (the blue circle) does the same as Discard."),
+  fig(r2Back(true), "<b>4. Back on the Log screen.</b> The sheet has closed. The typed text is still in the box, ready to edit and parse again. Nothing was saved."),
+  fig(r2Confirm(true), "<b>5. If a detail was changed.</b> Discard, or tapping outside, first asks, with today's heading and buttons and no explanation text. “Keep reviewing” returns to the sheet with the changes kept."),
+  `<figure class="wide">${r2Tablet(true)}<figcaption><b>6. Wider screens (tablet or computer).</b> As with the confirmation sheet, the review appears as a centred dialog instead of rising from the bottom. Tapping outside it does the same as Discard.</figcaption></figure>`,
+].join("");
+
+document.getElementById("frames-a").innerHTML = [
+  fig(screenCurrent(true), "<b>Today, for comparison.</b> A small grey label in the same style as “Today”, a thin border, and a small Save at the bottom right."),
+  fig(screenA(true), "<b>A, dark.</b> “Not saved yet” tag, a clear heading, a stronger border with a shadow, “›” on each line, and a full-width Save expense."),
+  fig(screenA(false), "<b>A, light.</b> The same in the light theme."),
+].join("");
+document.getElementById("frames-b").innerHTML = [
+  fig(screenB(true), "<b>B, dark.</b> The typed box folds into one line with Edit, which puts the text back in the box and closes the card. The Today list fades and can't be tapped until you Save or Discard."),
+  fig(screenB(false), "<b>B, light.</b> The same in the light theme. Spent today stays visible, and updates once you save."),
+].join("");
+document.getElementById("frames-c").innerHTML = [
+  fig(screenC(true), "<b>C, dark.</b> The card slides up from the bottom over a darkened screen. Tapping outside would ask before discarding, as today."),
+  fig(screenC(false), "<b>C, light.</b> The same in the light theme."),
+].join("");
+</script>
+</body>
+</html>

@@ -1253,3 +1253,33 @@ Last updated: 14 November 2026
 - The connection is fully secure today, and `web/package.json` allows only pg 8, so nothing is urgent. Added a follow-up to the Architecture's Known Gaps (v0.26): change `sslmode=require` to `sslmode=verify-full` in the live `DATABASE_URL`, before any upgrade to pg 9. That is a change to Vercel's settings, so it is for Lionel to make.
 - The logs also show `[tls-profile] applied 'commercial/2025' …` lines. That text is not in the app's code or any installed package, so they most likely come from Vercel's own system; not confirmed. No action taken.
 - Documents only, so the app version is unchanged.
+
+---
+
+## 14 November 2026 — Version 1.3.0: Review Card in a Sheet
+
+### What Was Done
+- The owner found that the review card after Parse didn't always look like it needed an answer: it sat in the page below the text box, looking like one more section. It now opens in the same bottom sheet used to edit a saved expense, over the darkened Log screen (a centred dialog on wider screens) (Architecture decision 38).
+- Options and the owner's choices (mockups in `design/review-card-mockups.html`):
+  - Round 1 offered a stronger card in place (A), the same with the rest of the screen faded (B, recommended), and a bottom sheet (C). The owner chose C.
+  - Round 2 followed the owner's direction: keep today's wording ("Review before saving", the typed text in quotes, "Discard"); no new heading, hint or "Not saved yet" tag; keep the "›" on each line; two full-width buttons, **Save expense** and **Discard**; tapping outside does the same as Discard; "Discard your edits?" without its explanation text, keeping its red Discard.
+  - The owner asked whether the drag handle in the mockups worked. It didn't (the app's sheets can't be dragged), so it was removed rather than suggest a gesture that does nothing. No animation for now; a slide-up for sheets is a follow-up in the Architecture's Known Gaps.
+  - "Save expense" and the "›" are on the review sheet only; the edit sheet keeps **Save** and is unchanged.
+- Version **1.3.0** (a change people will notice), with a changelog entry. Updated the Specification (v0.46, step 5 and Section 4.2), Architecture (v0.27, decision 38 and a Known Gaps follow-up), Test Plan (v1.16: B-01, C-03, C-04 and S-03 updated; new C-07 to C-11) and the user guide (review drawing, steps and the "Changed your mind?" note).
+- Code: `ReviewCard` gains an `afterParse` option for the "›" and the stacked buttons; the Log screen puts it in the existing `sheet-backdrop` and `sheet`, with Discard and tapping outside sharing one handler.
+
+### Testing
+- Locally on the demo account (confirmed before testing), three `[TEST]` parses:
+  - C-07: on a 390 × 760 window, the sheet opened over the darkened Log screen with "REVIEW BEFORE SAVING", the typed text in quotes, "›" on each line, and full-width **Save expense** and **Discard**.
+  - C-09: changed the merchant, tapped outside: "Discard your edits?" appeared with no explanation and a red Discard. **Keep reviewing** returned to the sheet with the change kept.
+  - B-01: **Save expense** saved it, closed the sheet and emptied the box; it appeared under Today with an **edited** tag.
+  - C-11: opening it from Today showed the edit sheet unchanged (**Save**, Cancel and Delete in one row, no "›").
+  - C-08: a new parse, then tapping outside closed the sheet straight away, kept the text in the box, and saved nothing.
+  - C-10: on a 1,024 × 760 window the review was a centred dialog (272 pixels either side); tapping outside closed it.
+- Type-check, lint (the one known warning in `web/lib/client.ts`) and a production build passed.
+
+### Slips and Lessons
+- The first type-check failed on 308 duplicate files named like `routes.d 2.ts`, all inside `web/.next` (the build cache). The Documents folder is synced to iCloud, which appears to make these "… 2" copies while a build rewrites files quickly. None were found in the code, `node_modules` or `.pglite`. The cache was deleted and rebuilt cleanly. It happened again before the final build, this time inside Next.js's own build cache (`.next/cache/turbopack`), where the copies' names broke the production build ("Failed to open database … invalid digit found in string"). Deleting `.next` again fixed it. Keeping the build cache out of iCloud would stop this for good; that is for the owner to decide.
+
+### Clean-up
+- Deleted the `[TEST]` expense and the demo account's three parse records; no `[TEST]` rows remain. Removed the demo account from the local allow-list and signed the test browser back in to the owner's local account.
