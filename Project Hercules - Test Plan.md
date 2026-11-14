@@ -1,7 +1,7 @@
 # Project Hercules — Test Plan: Web App v1
 
 ```
-Version 1.16 · Draft
+Version 1.17 · Draft
 Last Reviewed: 14 November 2026
 Produced with AI Assistance (Claude Code)
 ```
@@ -27,6 +27,7 @@ Produced with AI Assistance (Claude Code)
 | 1.14 | 2026-11-14 | Lionel Lam | Integrity check: Q-08 and S-07 find the version line at the bottom of Settings (1.2.3) |
 | 1.15 | 2026-11-14 | Lionel Lam | O-05: each parse reports how long its steps took, without recording the expense text or who parsed it (1.2.4) |
 | 1.16 | 2026-11-14 | Lionel Lam | Review card in a sheet: B-01, C-03 and C-04 updated; new C-07 to C-11; S-03 uses **Save expense** |
+| 1.17 | 2026-11-14 | Lionel Lam | Pencil and calendar icons: C-07 and C-11 updated; new C-12 (the date sits flush right on iPhone) |
 
 ---
 
@@ -121,11 +122,12 @@ After Parse, the review card opens in a sheet over the Log screen. Its save butt
 | C-04 | Discard after a change asks first | Parse, change the amount → tap **Discard** | "Discard your edits?" appears, with no explanation text and a red **Discard**. **Keep reviewing** returns to the card with your change. **Discard** closes the card; the typed text stays; nothing is saved |
 | C-05 | Amount must be above zero | On a card, set the amount to 0 or text such as "abc" → Save | "Please enter an amount." Nothing is saved |
 | C-06 | Impossible date is refused | Using the browser's developer tools or the API, try to save an expense dated 2026-02-31 | The save is refused with "Please check the amount and fields." |
-| C-07 | The review sheet | On a phone, parse `[TEST] lunch 5.50` | A sheet opens at the bottom over the darkened Log screen, with no handle and no animation. It shows "REVIEW BEFORE SAVING", the typed text in quotes, the amount with its currency, and Category, Merchant, Date and Remarks, each with a "›". Below are full-width **Save expense** and **Discard** buttons. The Today list can't be tapped while the sheet is open |
+| C-07 | The review sheet | On a phone, parse `[TEST] lunch 5.50` | A sheet opens at the bottom over the darkened Log screen, with no handle and no animation. It shows "REVIEW BEFORE SAVING", the typed text in quotes, the amount with its currency, and Category, Merchant, Date and Remarks. Category, Merchant and Remarks each have a pencil, Date has a calendar, and the amount has no icon. Below are full-width **Save expense** and **Discard** buttons. The Today list can't be tapped while the sheet is open |
 | C-08 | Tapping outside without changes | Parse `[TEST] lunch 5.50` → tap the darkened area above the sheet | The sheet closes straight away, as with Discard. The typed text stays in the box and Parse can be tapped again. Nothing is saved |
 | C-09 | Tapping outside after a change | Parse, change the merchant → tap the darkened area | "Discard your edits?" appears. **Keep reviewing** returns to the sheet with the change; **Discard** closes it, the typed text stays, nothing is saved |
 | C-10 | Wider screens | In a window at least 768 pixels wide, parse `[TEST] lunch 5.50` | The review appears as a centred dialog over the darkened screen; tapping outside works as in C-08 |
-| C-11 | Edit sheet unchanged | Open a saved `[TEST]` expense from Today | The edit sheet's button still says **Save**, and Cancel and Delete work as before |
+| C-11 | Edit sheet | Open a saved `[TEST]` expense from Today | The edit sheet has the same pencil and calendar icons as the review sheet. Its button still says **Save**, and Delete, Cancel and Save work as before |
+| C-12 | Date on iPhone | On an iPhone, in Safari or the home-screen app, parse `[TEST] lunch 5.50`, then open a saved expense; tap the date on each | On both sheets the date sits flush right, lined up with the values above and below, with the calendar icon beside it. Tapping the date opens the date picker |
 
 ### D. Fixing, Deleting and Undo
 

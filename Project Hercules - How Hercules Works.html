@@ -256,7 +256,7 @@ html { scroll-behavior: smooth; }
 .m .m-ref b { font-variant-numeric: tabular-nums; }
 .m .m-red { margin-top: 12px; background: var(--m-bad); color: #fff; border-radius: 10px; text-align: center; padding: 9px 0; font-weight: 600; font-size: 12.5px; }
 .m .m-raw { color: var(--m-muted); font-size: 11px; font-style: italic; margin-bottom: 6px; }
-.m .chev { color: var(--m-muted); margin-left: 5px; }
+.m .ico { width: 13px; height: 13px; color: var(--m-muted); margin-left: 6px; vertical-align: -2px; }
 .m .m-save { margin-top: 12px; background: var(--m-bar); color: var(--m-bg); border-radius: 10px; text-align: center; padding: 9px 0; font-weight: 600; font-size: 12.5px; }
 .m .m-cancel { text-align: center; color: var(--m-muted); font-weight: 600; font-size: 12.5px; padding: 9px 0 0; }
 .m .m-undo { margin: 18px 12px 10px; background: var(--m-bar); color: var(--m-bg); border-radius: 10px; padding: 9px 12px; display: flex; justify-content: space-between; font-size: 12px; box-shadow: 0 4px 14px rgba(0,0,0,.18); }
@@ -330,7 +330,7 @@ dl.faq dd { margin: 2px 0 0; color: var(--ink-2); }
     <ol class="steps">
       <li><span><b>Type the expense</b> in the box at the top of the Log screen, in your own words.</span></li>
       <li class="ai"><span><b>Tap Parse.</b><span class="tag-ai">AI</span> Claude, the AI that reads your text, picks out the amount, category, merchant and date. This takes a second or two.</span></li>
-      <li><span><b>Check the review card.</b> It opens over the Log screen. Every line can be changed: tap the amount, pick a different category, fix the date, or add a remark.</span></li>
+      <li><span><b>Check the review card.</b> It opens over the Log screen. Every field can be changed: tap the amount, pick a different category, fix the date, or add a remark. A pencil or a calendar beside a line shows where to tap.</span></li>
       <li><span><b>Tap Save expense.</b> The expense appears straight away under <b>Today</b>, and in History and Summary.</span></li>
     </ol>
 
@@ -378,10 +378,10 @@ dl.faq dd { margin: 2px 0 0; color: var(--ink-2); }
             <div class="card-t">REVIEW BEFORE SAVING</div>
             <div class="m-raw">“Lunch at Ya Kun for $4.50”</div>
             <div class="amt"><span class="pick">SGD ▾</span><b>4.50</b></div>
-            <div class="field"><span>Category</span><span>Food &amp; Dining<span class="chev">›</span></span></div>
-            <div class="field"><span>Merchant</span><span>Ya Kun<span class="chev">›</span></span></div>
-            <div class="field"><span>Date</span><span>07/11/2026<span class="chev">›</span></span></div>
-            <div class="field"><span>Remarks</span><span><span style="color:var(--m-muted);font-weight:400">Optional</span><span class="chev">›</span></span></div>
+            <div class="field"><span>Category</span><span>Food &amp; Dining<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></span></div>
+            <div class="field"><span>Merchant</span><span>Ya Kun<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></span></div>
+            <div class="field"><span>Date</span><span>07/11/2026<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="16" rx="2.5"/><path d="M3 9.5h18M8 2.5v4M16 2.5v4"/></svg></span></div>
+            <div class="field"><span>Remarks</span><span><span style="color:var(--m-muted);font-weight:400">Optional</span><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></span></div>
             <div class="m-save">Save expense</div>
             <div class="m-cancel">Discard</div>
           </div>

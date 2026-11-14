@@ -6,6 +6,16 @@ Versions follow [semantic versioning](https://semver.org): **major** for a chang
 
 ---
 
+## 1.3.1 — 14 November 2026
+
+**Improved**
+- A pencil beside Category, Merchant and Remarks shows what you can change, and a calendar beside the date shows it opens a date picker. This applies both when reviewing a new expense and when editing a saved one.
+
+**Fixed**
+- On iPhone, the date now lines up on the right with the other details.
+
+---
+
 ## 1.3.0 — 14 November 2026
 
 **Changed**

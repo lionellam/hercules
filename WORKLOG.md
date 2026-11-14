@@ -1267,6 +1267,7 @@ Last updated: 14 November 2026
   - "Save expense" and the "›" are on the review sheet only; the edit sheet keeps **Save** and is unchanged.
 - Version **1.3.0** (a change people will notice), with a changelog entry. Updated the Specification (v0.46, step 5 and Section 4.2), Architecture (v0.27, decision 38 and a Known Gaps follow-up), Test Plan (v1.16: B-01, C-03, C-04 and S-03 updated; new C-07 to C-11) and the user guide (review drawing, steps and the "Changed your mind?" note).
 - Code: `ReviewCard` gains an `afterParse` option for the "›" and the stacked buttons; the Log screen puts it in the existing `sheet-backdrop` and `sheet`, with Discard and tapping outside sharing one handler.
+- **Confirmed (14 November 2026):** after the deploy, the owner checked on their phone that Settings shows Version 1.3.0, and that after Parse the review card opens as a sheet and tapping outside closes it.
 
 ### Testing
 - Locally on the demo account (confirmed before testing), three `[TEST]` parses:
@@ -1283,3 +1284,26 @@ Last updated: 14 November 2026
 
 ### Clean-up
 - Deleted the `[TEST]` expense and the demo account's three parse records; no `[TEST]` rows remain. Removed the demo account from the local allow-list and signed the test browser back in to the owner's local account.
+
+---
+
+## 14 November 2026 — Version 1.3.1: Pencil and Calendar Icons
+
+### What Was Done
+- At the owner's request, the review sheet's "›" is replaced by a pencil beside Category, Merchant and Remarks and a calendar beside Date, and the edit sheet gets the same icons, so both sheets match (Architecture decision 38, updated). The owner also reported that on iPhone the date didn't sit flush right.
+- Options and the owner's choices (mockups in `design/field-icons-mockups.html`): no pencil on the amount; a pencil on Category rather than a ▾ like the currency's.
+- The cause of the iPhone date: the date box was set to align right, but Safari ignores that for date boxes. A Safari-specific rule now aligns the date right. The browser's own date icon showed on computers but not in Safari on iPhone, so it is hidden and the app draws its own calendar; tapping the date or the calendar opens the date picker, and tapping a pencil puts the cursor in that field.
+- Version **1.3.1** (an improvement and a fix), with a changelog entry. Updated the Specification (v0.47, step 5), Architecture (v0.28, decision 38), Test Plan (v1.17: C-07 and C-11 updated; new C-12, the date on iPhone) and the user guide (review drawing and step 3).
+
+### Testing
+- Locally on the demo account (confirmed before testing), on a 390 × 760 window, one `[TEST]` parse:
+  - C-07: pencils on Category, Merchant and Remarks, a calendar on Date, none on the amount; all four icons 20 pixels from the sheet's right edge; the browser's own date icon gone.
+  - Tapping the Merchant and Remarks pencils put the cursor in those fields. Tapping the calendar raised no errors, but whether the picker opened couldn't be seen, as screenshots don't show the browser's picker.
+  - C-11: after **Save expense**, opening it from Today showed the edit sheet with the same icons, aligned the same way, and its Delete, Cancel and Save row.
+  - Changing the date by typing couldn't be tested: the test tool's typing didn't change a plain, unstyled date box either, so this is a limit of the tool rather than of the change.
+- **Not tested here:** C-12 (the date on iPhone), as the browser pane isn't Safari. To be checked by the owner on their phone.
+- Type-check, lint (the one known warning in `web/lib/client.ts`) and a production build passed.
+
+### Slips and Lessons
+- In 1.3.0, the style rule added for the guide's review drawing ("›" with a 5-pixel margin) used the class name `chev`, which the guide's Settings drawing already used, so its two "›" marks moved 5 pixels on the published guide. Found while making this change; the rule is removed and the Settings drawing is as it was before 1.3.0. Lesson: check a new class name isn't already used in the page.
+- iCloud's "… 2" copies in `web/.next` came back a third time (42 files) and broke type-checking; `.next` was deleted again.

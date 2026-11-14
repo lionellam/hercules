@@ -1,7 +1,21 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { CurrencySelect } from "./currency";
+
+// Drawn by the app so every device shows the same icons (Architecture decision 38)
+const PencilIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M12 20h9" />
+    <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z" />
+  </svg>
+);
+const CalendarIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <rect x="3" y="4.5" width="18" height="16" rx="2.5" />
+    <path d="M3 9.5h18M8 2.5v4M16 2.5v4" />
+  </svg>
+);
 
 export type Fields = {
   amount: number | null;
@@ -24,7 +38,7 @@ type Props = {
   disabled?: boolean;
   // Called whenever the fields start or stop differing from `initial`
   onDirtyChange?: (dirty: boolean) => void;
-  // The review sheet after Parse (Architecture decision 38): "›" on each line and full-width buttons
+  // The review sheet after Parse (Architecture decision 38): full-width Save expense and Discard
   afterParse?: boolean;
 };
 
@@ -37,6 +51,15 @@ export default function ReviewCard({ title, initial, categories, rawInput, onSav
   const [remarks, setRemarks] = useState(initial.remarks ?? "");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
+  const dateInput = useRef<HTMLInputElement>(null);
+  // The browser's own date icon is hidden, so tapping the date or its icon opens the picker
+  const openDatePicker = () => {
+    try {
+      dateInput.current?.showPicker();
+    } catch {
+      dateInput.current?.focus();
+    }
+  };
   const dirty =
     amount !== (initial.amount == null ? "" : initial.amount.toFixed(2)) ||
     currency !== initial.currency ||
@@ -81,8 +104,6 @@ export default function ReviewCard({ title, initial, categories, rawInput, onSav
     run(() => onSave(fields, edited));
   }
 
-  const chev = afterParse && <span className="field-chev" aria-hidden="true">›</span>;
-
   return (
     <div className="card">
       <div className="card-title">{title}</div>
@@ -98,22 +119,22 @@ export default function ReviewCard({ title, initial, categories, rawInput, onSav
             <option key={c.id} value={c.id}>{c.name}</option>
           ))}
         </select>
-        {chev}
+        <label htmlFor="f-cat" className="field-icon"><PencilIcon /></label>
       </div>
       <div className="field">
         <label htmlFor="f-merchant">Merchant</label>
         <input id="f-merchant" value={merchant} onChange={(e) => setMerchant(e.target.value)} placeholder="—" maxLength={200} />
-        {chev}
+        <label htmlFor="f-merchant" className="field-icon"><PencilIcon /></label>
       </div>
       <div className="field">
         <label htmlFor="f-date">Date</label>
-        <input id="f-date" type="date" value={date} onChange={(e) => setDate(e.target.value)} required />
-        {chev}
+        <input ref={dateInput} id="f-date" type="date" value={date} onChange={(e) => setDate(e.target.value)} onClick={openDatePicker} required />
+        <span className="field-icon" onClick={openDatePicker}><CalendarIcon /></span>
       </div>
       <div className="field">
         <label htmlFor="f-remarks">Remarks</label>
         <input id="f-remarks" value={remarks} onChange={(e) => setRemarks(e.target.value)} placeholder="Optional" maxLength={1000} />
-        {chev}
+        <label htmlFor="f-remarks" className="field-icon"><PencilIcon /></label>
       </div>
       {error && <p className="error">{error}</p>}
       {afterParse ? (
