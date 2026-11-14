@@ -1374,3 +1374,16 @@ Last updated: 14 November 2026
 - Noted for the Project Charter's review: its Phase 3 line says category management was delivered early, while the Project Plan and Architecture place it under Phase 4.
 - Checked and found correct: the features (sign-in and allow-list, parsing with the default currency, edits, soft delete with Undo, History search, totals in the default currency only, budgets and pace, retiring categories, the CSV, the PWA, Vercel and Neon), the cost limits, the risks, Phase 2's dates and the CLI personas.
 - Documents only, so the app version is unchanged.
+
+---
+
+## 14 November 2026 — Project Charter Accuracy Review
+
+### What Was Done
+- At the owner's request, the Project Charter was reviewed for accuracy, the last of the project documents after the Architecture, Specification, Test Plan and Project Plan.
+- Three fixes, applied at the owner's request (Project Charter v0.14):
+  1. Milestones: Phase 3 had said category management was delivered early, though the Charter's own v0.6 row, the Project Plan and the Architecture place it under Phase 4. Phase 3 now lists monthly budgets, spending pace and History search as delivered early; Phase 4 lists category management (including retiring and restoring) and the monthly CSV download, matching the Charter's v0.8 and v0.10 rows.
+  2. Data model: the User entry includes the default currency, delivered in 1.2.0 (the Charter's v0.12 row) but not added there.
+  3. The header's Last Reviewed date updated to 14 November 2026.
+- Checked and found correct: the overview and objectives, the goals and non-goals (including the currency wording and the CSV marked delivered early), the core user flow, the architecture summary, the Expense, Budget and Category entries, the success criteria, the risks, and Phases 1 and 2.
+- Documents only, so the app version is unchanged.

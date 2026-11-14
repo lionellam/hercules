@@ -1,8 +1,8 @@
 **Natural Language Expense & Budget Tracker**
 
 ```
-Version 0.13 · Draft
-Last Reviewed: 13 November 2026
+Version 0.14 · Draft
+Last Reviewed: 14 November 2026
 Produced with AI Assistance (Claude Code)
 ```
 
@@ -23,6 +23,7 @@ Produced with AI Assistance (Claude Code)
 | 0.11 | 2026-11-09 | Lionel Lam | Integrity check: Phase 2 marked complete |
 | 0.12 | 2026-11-13 | Lionel Lam | A default currency per person is delivered; converting between currencies stays out of scope |
 | 0.13 | 2026-11-13 | Lionel Lam | Integrity check: the currency non-goal reflects that other currencies are shown separately, not added in |
+| 0.14 | 2026-11-14 | Lionel Lam | Accuracy review: milestones place category management and the CSV download under Phase 4, and budgets, spending pace and History search under Phase 3; the User data model includes the default currency |
 
 ---
 
@@ -86,7 +87,7 @@ Friction of maintaining an up-to-date expense and budget log can be due to the f
 
 ## 6. Data Model (High-Level, Proposed)
 
-- **User —** Google account, email, allow-listed
+- **User —** Google account, email, allow-listed, default currency
 - **Expense —** amount, currency, category, date, merchant, remarks, and the original text as typed
 - **Budget —** an optional monthly limit stored on each category; a fuller budget record (period, history) may follow in Phase 3
 - **Category —** per-user, extensible taxonomy; new users are seeded with a starter list (e.g. Food & Dining, Transport, Groceries, Utilities, Other); users add, rename, retire and restore categories on the Categories & budgets page in Settings
@@ -113,5 +114,5 @@ Friction of maintaining an up-to-date expense and budget log can be due to the f
 
 - **Phase 1 —** CLI parsing + local database (complete — proof of concept)
 - **Phase 2 —** Web App v1: sign-in, log with confirmation, history, summary, edit/delete, CLI data import (complete — live since 1 November 2026; version 1.0.0)
-- **Phase 3 —** Budgets & queries (category management and monthly budgets per category delivered early, November 2026)
-- **Phase 4 —** Polish (allow-list administration)
+- **Phase 3 —** Budgets & queries (monthly budgets per category, with spending pace, and History search delivered early, November 2026)
+- **Phase 4 —** Polish (allow-list administration; category management, including retiring and restoring, and the monthly CSV download delivered early, November 2026)
