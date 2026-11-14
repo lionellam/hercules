@@ -1,8 +1,8 @@
 # Project Hercules — Project Plan
 
 ```
-Version 0.12 · Draft 
-Last Reviewed: 9 November 2026
+Version 0.13 · Draft 
+Last Reviewed: 14 November 2026
 Produced with AI Assistance (Claude Code)
 ```
 
@@ -22,6 +22,7 @@ Produced with AI Assistance (Claude Code)
 | 0.10 | 2026-11-09 | Lionel Lam | Categories are managed on the Categories & budgets page in Settings |
 | 0.11 | 2026-11-09 | Lionel Lam | Monthly CSV export delivered ahead of Phase 4 |
 | 0.12 | 2026-11-09 | Lionel Lam | Integrity check: Phase 2 marked complete; features updated for History search, Settings and confirmations with Undo |
+| 0.13 | 2026-11-14 | Lionel Lam | Integrity check: features updated for the default currency (parsing, totals and Settings), delivered in 1.2.0 to 1.2.2 |
 
 ---
 
@@ -67,14 +68,14 @@ A high-level look at the functional pieces of the system. These will be broken d
 
 - **Authentication** — Google sign-in, restricted to an allow-list of invited users
 - **Natural Language Input** — free-form text entry for logging an expense
-- **NL Parsing Engine** — cloud language model (Claude Haiku 5.5 via the Anthropic API) that parses input into structured fields and suggests the best-matching expense category from the user's active category list
+- **NL Parsing Engine** — cloud language model (Claude Haiku 5.5 via the Anthropic API) that parses input into structured fields and suggests the best-matching expense category from the user's active category list; when the text names no currency, the user's default currency is used
 - **Confirmation Screen** — editable review step before data is committed to the database
 - **Expense Storage** — structured, queryable storage of logged expenses, scoped per user; edits and soft deletes supported, with a confirmation before deleting and Undo afterwards
-- **History & Summary** — month-by-month list of expenses with a search for the month shown, and category totals for the current and previous month, with a pie chart of each category's share
+- **History & Summary** — month-by-month list of expenses with a search for the month shown, and category totals for the current and previous month, with a pie chart of each category's share. Totals count only the user's default currency; spending in other currencies is shown separately as not included, never converted
 - **Budget Tracking** — category-based budgets and tracking against them; an optional monthly budget per category, shown against the current month's spend in Summary, is in place, along with spending pace (an expected-by-today marker, a pace note and a burn-up chart per budgeted category)
 - **Category Taxonomy** — a per-user, extensible set of expense categories; new users are seeded with a starter list, and can add, rename, retire and restore categories on the Categories & budgets page in Settings
 - **Export / Download** — download a month's expenses as a CSV file from Summary (delivered early, November 2026)
-- **Settings** — Categories & budgets, light or dark appearance, the signed-in account with sign-out, and the app's version
+- **Settings** — Categories & budgets, the default currency (one of 20), light or dark appearance, the signed-in account with sign-out, and the app's version
 - **Hosting & Deployment** — Vercel, with a Neon Postgres database; installable as a Progressive Web App (PWA)
 
 ## 6. Milestones & Deliverables (Subject to Revision)

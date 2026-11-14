@@ -27,6 +27,7 @@ The app is invite-only: sign-in is with Google, for invited email addresses only
 | [Test Plan](Project%20Hercules%20-%20Test%20Plan.md) | Step-by-step manual tests for the web app, with expected results |
 | [Work Log](WORKLOG.md) | What was done, decisions made and lessons learned, by date |
 | [Changelog](CHANGELOG.md) | What's new in each version of the app |
+| [CLAUDE.md](CLAUDE.md) | How Claude sessions work on this project: the routine for changes, testing, the user guide and integrity checks (read automatically by Claude Code) |
 
 ## Versions
 

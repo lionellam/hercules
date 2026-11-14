@@ -1203,3 +1203,15 @@ Last updated: 14 November 2026
 - The owner reviewed the draft before it was committed. It contains no email addresses other than the placeholders `demo@example.com` and `you@gmail.com`.
 - Claude's memory notes on the first computer were trimmed so they point to `CLAUDE.md` instead of repeating it, to stop the two drifting apart.
 - Documents only, so the app version stays at 1.2.3.
+
+---
+
+## 14 November 2026 — Document Integrity Check After 1.2.3
+
+### What Was Done
+- At the owner's request, checked the documents after 1.2.3 (made from the owner's second computer) and the new `CLAUDE.md`. Version histories, `CHANGELOG.md`, `web/package.json` and the Git tags (to v1.2.3) agreed, the live guide matched the repository, and `CLAUDE.md` was tracked and free of email addresses. Four gaps were found and fixed:
+  1. Specification (v0.45): Section 4.4 still placed the version line simply "below Account"; it now sits at the bottom of Settings, just above the tab bar, as built in 1.2.3. (1.2.3 had updated the code, changelog and worklog, but not the Specification or Test Plan.)
+  2. Test Plan (v1.14): Q-08 and S-07 now look for the version line at the bottom of Settings, and Q-08 also checks a short window.
+  3. Project Plan (v0.13): the features now include the default currency, in parsing, totals and Settings; this was found in the previous check and left open.
+  4. README: the "Project documents" table now lists `CLAUDE.md`.
+- Documents only, so the app version stays at 1.2.3.

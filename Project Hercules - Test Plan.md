@@ -1,8 +1,8 @@
 # Project Hercules — Test Plan: Web App v1
 
 ```
-Version 1.13 · Draft
-Last Reviewed: 13 November 2026
+Version 1.14 · Draft
+Last Reviewed: 14 November 2026
 Produced with AI Assistance (Claude Code)
 ```
 
@@ -24,6 +24,7 @@ Produced with AI Assistance (Claude Code)
 | 1.11 | 2026-11-13 | Lionel Lam | Totals count only the default currency: T-03 confirms the switch; T-12 rewritten; new T-13 and T-14 |
 | 1.12 | 2026-11-13 | Lionel Lam | T-15: the "?" explanation beside "Not included" |
 | 1.13 | 2026-11-13 | Lionel Lam | Integrity check: Section T's note lists every test that changes the default |
+| 1.14 | 2026-11-14 | Lionel Lam | Integrity check: Q-08 and S-07 find the version line at the bottom of Settings (1.2.3) |
 
 ---
 
@@ -295,7 +296,7 @@ These need a look at the local database; ask Claude to run them.
 | Q-05 | Returning to Settings | Open Categories & budgets, switch to Log, then tap Settings | The Settings list shows, not Categories & budgets |
 | Q-06 | No theme icon on screens | Look at the top of Log, History and Summary | There's no sun or moon icon |
 | Q-07 | Account | Look at the Account group | Your email address, and Sign out (see A-05). Summary no longer has a sign-out section at the bottom |
-| Q-08 | Version and last updated | Look below Account; compare with `CHANGELOG.md` and the latest deploy | The version number matches the newest entry in the changelog (for example 1.0.0), followed by a short code for the exact version and the date and time of the latest deploy |
+| Q-08 | Version and last updated | Look at the bottom of Settings; compare with `CHANGELOG.md` and the latest deploy; then try a short window (for example a phone held sideways) | The line sits at the bottom of the screen, just above the tab bar (on a short window, after Sign out once scrolled). The version number matches the newest entry in the changelog (for example 1.0.0), followed by a short code for the exact version and the date and time of the latest deploy |
 
 ### R. Downloading Expenses (CSV)
 
@@ -349,7 +350,7 @@ A quick check on the live app after each deploy. Use your own account, and remov
 | S-04 | Summary figures | This month's total and pace notes look right for your spending |
 | S-05 | Signed-out data check | In a private browser window, open `/api/expenses?month=` with this month (for example `2026-11`) on the live address | `{"error":"Not signed in"}` |
 | S-06 | User guide | Open https://lionellam.github.io/hercules/ | The user guide loads |
-| S-07 | Version | Settings → look below Account | After a release, the version matches the newest entry in `CHANGELOG.md`, the short code matches the latest commit, and "Last updated" is the time of this deploy |
+| S-07 | Version | Settings → look at the bottom, above the tab bar | After a release, the version matches the newest entry in `CHANGELOG.md`, the short code matches the latest commit, and "Last updated" is the time of this deploy |
 | S-08 | CSV download | Summary → **CSV** on this month; open the file. In the iPhone home-screen app, the share sheet opens instead: choose **Save to Files**, then open the file | The file downloads (or saves to Files), and its Amount column adds up to this month's total on Summary |
 
 The test expense from S-03 stays in the database as a deleted record. That's harmless, but it can be removed by Lionel if wanted.

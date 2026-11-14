@@ -1,8 +1,8 @@
 # Project Hercules — Specification Sheet: "Log an Expense" Flow
 
 ```
-Version 0.44 · Draft 
-Last Reviewed: 13 November 2026
+Version 0.45 · Draft 
+Last Reviewed: 14 November 2026
 Produced with AI Assistance (Claude Code)
 ```
 
@@ -54,6 +54,7 @@ Produced with AI Assistance (Claude Code)
 | 0.42 | 2026-11-13 | Lionel Lam | Totals, budgets, pace and the pie chart count only the default currency; other currencies are shown as "Not included"; switching the default asks first (Section 4.6). Replaces 0.41's relabelling of mixed totals |
 | 0.43 | 2026-11-13 | Lionel Lam | A "?" beside the "Not included" line explains it (Section 4.6) |
 | 0.44 | 2026-11-13 | Lionel Lam | Integrity check: process steps 1 and 8, Section 4.1 and the `currency` field now say totals count only the default currency |
+| 0.45 | 2026-11-14 | Lionel Lam | Integrity check: the version line sits at the bottom of Settings, just above the tab bar (Section 4.4), as built in 1.2.3 |
 
 ---
 
@@ -173,7 +174,7 @@ Settings is the fourth tab, with a gear icon, after Log, History and Summary. It
 - **Spending:** **Categories & budgets**, with the number of categories in use and how many have a budget (for example "14 categories · 5 with a budget"). Tapping it opens the Categories & budgets page, which works exactly as the Categories tab did (see the Category notes in Section 5), with "‹ Settings" at the top to go back. Below it, **Currency** shows the default currency (for example "SGD · Singapore dollar") and opens the Currency page (Section 4.6).
 - **Appearance:** System, Light or Dark. System follows the device's setting. The choice is saved on that device only. This replaces the sun or moon icon that was at the top of every screen.
 - **Account:** the email address signed in with, and **Sign out**, which moves here from the bottom of Summary and asks for confirmation first (Section 4.2).
-- **Below Account:** the app's version number and the date and time it was last updated, meaning when the version running was built and deployed.
+- **At the bottom of the screen,** just above the tab bar: the app's version number and the date and time it was last updated, meaning when the version running was built and deployed. On a screen too short to show everything, it follows Sign out and is reached by scrolling.
 
 Opening the Settings tab always shows the Settings list, even if Categories & budgets or Currency was open when you left it.
 
