@@ -1330,3 +1330,19 @@ Last updated: 14 November 2026
 
 ### Slips and Lessons
 - The decision 38 wording was left in place when 1.3.1 added its update note at the end, so the decision contradicted itself. Lesson: when a later update changes part of a decision, strike through the old part in the same edit, as the document's purpose asks.
+
+---
+
+## 14 November 2026 — Specification Accuracy Review
+
+### What Was Done
+- After the Architecture review, the owner asked for the same review of the Specification. Each claim was checked against the code and the database schema.
+- Six fixes, applied at the owner's request (Specification v0.48):
+  1. Section 4.2: confirmation sheets appear at the bottom of the screen; they don't slide up, as the app has no animations.
+  2. Section 4.2: switching the default currency added to the table of confirmations.
+  3. Step 4: when the name doesn't match, the application falls back to the category named "Other", not the `is_other` flag, matching Section 5.2 and the code.
+  4. Section 6: the AI boundary lists remarks and the currency (only when the text names one) among the model's output.
+  5. Step 8: the pie chart's "Everything else" slice shows a count, for example "Everything else (3)".
+  6. Section 5.2: the `sort_order` column added to Category.
+- Checked and found correct: the review and edit sheets (step 5), History search (4.3), Settings (4.4), the default-currency rules (4.6), the CSV file and its message (4.5), the date range, the 50-category limit with names compared regardless of capitals, the 100-parses-a-day limit, the 14 starter categories, the wording of the Delete, Retire, Discard changes and Sign out confirmations, the ±5% "On pace" band, and the User and Expense fields.
+- Documents only, so the app version is unchanged.
