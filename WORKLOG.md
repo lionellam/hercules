@@ -1185,3 +1185,21 @@ Last updated: 14 November 2026
 - At the owner's request, the version and last-updated line in Settings now sits at the bottom of the screen, just above the tab bar, instead of directly under Sign out. A one-line style change: the line takes up the remaining space above it, and keeps its 28-pixel gap from Sign out on short screens, where the page scrolls.
 - Version **1.2.3** (a small tweak), with a changelog entry.
 - Checked locally on a full-height window and a 375 × 600 phone-sized one. No database change is needed.
+
+---
+
+## 14 November 2026 — CLAUDE.md: The Working Routine in the Repository
+
+### What Was Done
+- The owner started working on Hercules from a second computer and asked where Claude kept its routine (document integrity checks, testing and so on), so the same care is taken there.
+- Until now, the routine lived only in Claude's memory notes on the first computer and in the working conversation; neither carries over to another machine. A few rules were already written down (Architecture decision 34 on versioning, the schema rule in `web/README.md`), but nothing told a new session to follow them.
+- Added `CLAUDE.md` at the repository root, which Claude Code reads at the start of every session in this folder, on any machine. It covers:
+  - the ground rules (commit and push only when asked, fetch first, stage deletions separately, no secrets, the owner does production database changes, honest reporting);
+  - the order of a change (discuss, mockups, documents before code, code, version and changelog, tests, worklog, screenshot, ask to commit, tag, phone confirmation);
+  - database changes, including the Neon SQL Editor route;
+  - testing on the demo account only, after checking which account is signed in, with full clean-up;
+  - the user guide's content rules, preview before committing, and checking the Pages run;
+  - what a document integrity check covers.
+- The owner reviewed the draft before it was committed. It contains no email addresses other than the placeholders `demo@example.com` and `you@gmail.com`.
+- Claude's memory notes on the first computer were trimmed so they point to `CLAUDE.md` instead of repeating it, to stop the two drifting apart.
+- Documents only, so the app version stays at 1.2.3.
