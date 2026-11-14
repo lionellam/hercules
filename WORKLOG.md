@@ -4,7 +4,7 @@
 Maintained by: Lionel Lam Song Poh, James Wong
 Purpose: Record of work done, decisions made, challenges encountered, and assumptions held —
 to serve as a lessons learned reference for current and future contributors.
-Last updated: 13 November 2026
+Last updated: 14 November 2026
 ```
 
 ---
@@ -1176,3 +1176,12 @@ Last updated: 13 November 2026
 - Documents only, so the app version stays at 1.2.2.
 - **Publishing:** the guide change was pushed before the owner asked to preview it; the preview was shown afterwards. The first Pages run for this change then failed on a temporary GitHub error ("No artifacts named github-pages were found"), so the guide wasn't updated at first, although an earlier line here wrongly recorded it as confirmed. The owner noticed; the run was re-run on 13 November 2026 and succeeded, and the live page was checked to contain the new wording.
 - **Confirmed (13 November 2026):** the owner checked that the guide on GitHub Pages shows the new "What it doesn't do" wording.
+
+---
+
+## 14 November 2026 — Version 1.2.3: Version Line at the Bottom of Settings
+
+### What Was Done
+- At the owner's request, the version and last-updated line in Settings now sits at the bottom of the screen, just above the tab bar, instead of directly under Sign out. A one-line style change: the line takes up the remaining space above it, and keeps its 28-pixel gap from Sign out on short screens, where the page scrolls.
+- Version **1.2.3** (a small tweak), with a changelog entry.
+- Checked locally on a full-height window and a 375 × 600 phone-sized one. No database change is needed.

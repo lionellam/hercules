@@ -6,6 +6,13 @@ Versions follow [semantic versioning](https://semver.org): **major** for a chang
 
 ---
 
+## 1.2.3 — 14 November 2026
+
+**Improved**
+- The version and last-updated line in **Settings** now sits at the bottom of the screen, just above the tab bar, instead of directly under Sign out.
+
+---
+
 ## 1.2.2 — 13 November 2026
 
 **Improved**

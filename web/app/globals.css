@@ -128,7 +128,7 @@ textarea::placeholder { color: var(--muted); }
 .settings-text .t { font-weight: 500; font-size: 15px; }
 .settings-text .d { color: var(--muted); font-size: 13px; margin-top: 2px; overflow-wrap: anywhere; }
 .settings-chev { color: var(--muted); font-size: 20px; }
-.settings-version { margin-top: 28px; color: var(--muted); font-size: 12.5px; text-align: center; line-height: 1.6; font-variant-numeric: tabular-nums; }
+.settings-version { margin-top: auto; padding-top: 28px; color: var(--muted); font-size: 12.5px; text-align: center; line-height: 1.6; font-variant-numeric: tabular-nums; }
 .back-link { background: none; border: none; color: var(--muted); font: inherit; font-size: 14px; font-weight: 500; padding: 4px 0; margin: -6px 0 6px; cursor: pointer; }
 .retired-toggle { display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 20px 0 8px; background: none; border: none;
                   border-bottom: 1px solid var(--line); color: var(--muted); font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; cursor: pointer; }
