@@ -1,7 +1,7 @@
 # Project Hercules — Project Plan
 
 ```
-Version 0.13 · Draft 
+Version 0.14 · Draft 
 Last Reviewed: 14 November 2026
 Produced with AI Assistance (Claude Code)
 ```
@@ -23,6 +23,7 @@ Produced with AI Assistance (Claude Code)
 | 0.11 | 2026-11-09 | Lionel Lam | Monthly CSV export delivered ahead of Phase 4 |
 | 0.12 | 2026-11-09 | Lionel Lam | Integrity check: Phase 2 marked complete; features updated for History search, Settings and confirmations with Undo |
 | 0.13 | 2026-11-14 | Lionel Lam | Integrity check: features updated for the default currency (parsing, totals and Settings), delivered in 1.2.0 to 1.2.2 |
+| 0.14 | 2026-11-14 | Lionel Lam | Accuracy review: the CSV download is listed as delivered early under Phase 4 only; Phase 2 notes the review card is a sheet since 1.3.0; Settings lists the System appearance option |
 
 ---
 
@@ -75,7 +76,7 @@ A high-level look at the functional pieces of the system. These will be broken d
 - **Budget Tracking** — category-based budgets and tracking against them; an optional monthly budget per category, shown against the current month's spend in Summary, is in place, along with spending pace (an expected-by-today marker, a pace note and a burn-up chart per budgeted category)
 - **Category Taxonomy** — a per-user, extensible set of expense categories; new users are seeded with a starter list, and can add, rename, retire and restore categories on the Categories & budgets page in Settings
 - **Export / Download** — download a month's expenses as a CSV file from Summary (delivered early, November 2026)
-- **Settings** — Categories & budgets, the default currency (one of 20), light or dark appearance, the signed-in account with sign-out, and the app's version
+- **Settings** — Categories & budgets, the default currency (one of 20), appearance (System, Light or Dark), the signed-in account with sign-out, and the app's version
 - **Hosting & Deployment** — Vercel, with a Neon Postgres database; installable as a Progressive Web App (PWA)
 
 ## 6. Milestones & Deliverables (Subject to Revision)
@@ -85,9 +86,9 @@ Phased and iterative, as follows:
 - **Phase 1 — Foundation (complete)**
 Python CLI with natural language parsing working end-to-end via a local model (Phi-4 via Ollama), with a confirmation step, local SQLite storage, history and summary views. Proved out the core parsing approach.
 - **Phase 2 — Web App v1 (complete — live since 1 November 2026; released as version 1.0.0 on 9 November)**
-Google sign-in with allow-list; Log screen with inline confirmation card; History (month-by-month, with edit and soft delete); Summary (current and previous month). Installable as a PWA. One-off import of existing CLI data.
+Google sign-in with allow-list; Log screen with inline confirmation card (*since 1.3.0, a sheet over the Log screen*); History (month-by-month, with edit and soft delete); Summary (current and previous month). Installable as a PWA. One-off import of existing CLI data.
 - **Phase 3 — Budgets & Queries**
-Budget definitions by category (a simple monthly budget per category was delivered early, in November 2026), and the ability to query/report on spending via natural language or simple views. Searching History by month and the monthly CSV download were delivered early, in November 2026.
+Budget definitions by category (a simple monthly budget per category was delivered early, in November 2026), and the ability to query/report on spending via natural language or simple views. Searching History by month was delivered early, in November 2026.
 - **Phase 4 — Polish**
 Allow-list administration and other refinements based on use. Category management (including retiring and restoring) and the monthly CSV export were delivered early, in November 2026.
 

@@ -1359,3 +1359,18 @@ Last updated: 14 November 2026
   3. C-12: tagged **[Phone]**, as it needs a real iPhone.
 - Checked and found correct: every quoted message (sign-in, uninvited account, amount and date errors, empty month, search, budgets, category limits and names, retiring, offline, daily limit, stale screen, "Not signed in", Undo, Daily figures and the currency switch), Settings and the version line, the spending-pace worked example, the 90-day sign-in, the Retired group's Show/Hide, the note on Other, the month arrows, the CSV columns, and that `poc/TEST_PLAN.md` exists.
 - Documents only, so the app version is unchanged.
+
+---
+
+## 14 November 2026 — Project Plan Accuracy Review
+
+### What Was Done
+- At the owner's request, the Project Plan was reviewed for accuracy, as the Architecture, Specification and Test Plan had been.
+- Three fixes, applied at the owner's request (Project Plan v0.14):
+  1. Phase 3 no longer says the monthly CSV download was delivered early. It is listed under Phase 4 only, matching the Architecture (v0.18 and Known Gaps) and the Project Charter (v0.10). The Phase 3 mention came in with the integrity check after 1.1.0.
+  2. Phase 2's "inline confirmation card" keeps its wording, with a note that since 1.3.0 it is a sheet over the Log screen.
+  3. The Settings feature lists appearance as System, Light or Dark, not just light or dark.
+- The Invited Family Member persona's goal to "see at a glance how this month compares to last" was raised, as Summary doesn't compare the two months' totals (it shows each month on its own). The owner chose to leave it as it is: it describes a need, not a promise.
+- Noted for the Project Charter's review: its Phase 3 line says category management was delivered early, while the Project Plan and Architecture place it under Phase 4.
+- Checked and found correct: the features (sign-in and allow-list, parsing with the default currency, edits, soft delete with Undo, History search, totals in the default currency only, budgets and pace, retiring categories, the CSV, the PWA, Vercel and Neon), the cost limits, the risks, Phase 2's dates and the CLI personas.
+- Documents only, so the app version is unchanged.
