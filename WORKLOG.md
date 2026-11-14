@@ -1309,3 +1309,24 @@ Last updated: 14 November 2026
 ### Slips and Lessons
 - In 1.3.0, the style rule added for the guide's review drawing ("›" with a 5-pixel margin) used the class name `chev`, which the guide's Settings drawing already used, so its two "›" marks moved 5 pixels on the published guide. Found while making this change; the rule is removed and the Settings drawing is as it was before 1.3.0. Lesson: check a new class name isn't already used in the page.
 - iCloud's "… 2" copies in `web/.next` came back a third time (42 files) and broke type-checking; `.next` was deleted again.
+
+---
+
+## 14 November 2026 — Architecture Accuracy Review
+
+### What Was Done
+- The owner spotted that decision 38 still said the review sheet "adds a '›' to each line", which 1.3.1 replaced, and asked for the Architecture document to be reviewed for accuracy. Each claim was checked against the code, the database schema and `web/vercel.json`.
+- Eight fixes, applied at the owner's request (Architecture v0.29):
+  1. Decision 38: the "›" wording struck through and marked superseded by the 1.3.1 update; the edit sheet keeps **Save** and has the same icons.
+  2. Decision 33: notes that Settings has a Currency row (since 1.2.0) and the version line sits at the bottom (since 1.2.3).
+  3. Decision 30: the confirmation sheet is also used before switching the default currency.
+  4. Decision 31: `pace.ts` is used by the screens only (it was listed as shared); `currencies.ts` and `csv.ts` added; the review card and currency picker added to the shared pieces.
+  5. Decision 16: Categories now sits inside the Settings tab, rather than being its own tab.
+  6. Decision 25: the reason "One tap on every main screen" struck through and marked superseded by decision 33.
+  7. System overview: the database box lists every table, adding `allowed_emails` and `parse_events`.
+  8. Decision 24: centred dialogs on wider screens apply to both sheets, not only editing.
+- Checked and found correct: the Singapore region, the 100-parses-a-day limit, the 20 currencies and the US-dollar rule, the screen-width steps, the five-second Undo, the CSV route, what the app loads and reloads (decision 23), the model name and the parse-timing details. Not checkable from the code: the Haiku prices in decision 5, as recorded when that decision was made.
+- Documents only, so the app version is unchanged.
+
+### Slips and Lessons
+- The decision 38 wording was left in place when 1.3.1 added its update note at the end, so the decision contradicted itself. Lesson: when a later update changes part of a decision, strike through the old part in the same edit, as the document's purpose asks.
