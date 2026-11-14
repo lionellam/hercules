@@ -1,7 +1,7 @@
 # Project Hercules — Test Plan: Web App v1
 
 ```
-Version 1.14 · Draft
+Version 1.15 · Draft
 Last Reviewed: 14 November 2026
 Produced with AI Assistance (Claude Code)
 ```
@@ -25,6 +25,7 @@ Produced with AI Assistance (Claude Code)
 | 1.12 | 2026-11-13 | Lionel Lam | T-15: the "?" explanation beside "Not included" |
 | 1.13 | 2026-11-13 | Lionel Lam | Integrity check: Section T's note lists every test that changes the default |
 | 1.14 | 2026-11-14 | Lionel Lam | Integrity check: Q-08 and S-07 find the version line at the bottom of Settings (1.2.3) |
+| 1.15 | 2026-11-14 | Lionel Lam | O-05: each parse reports how long its steps took, without recording the expense text or who parsed it (1.2.4) |
 
 ---
 
@@ -273,6 +274,7 @@ To set up I-01 to I-05: create a `zz-test-` category with a $300 budget and log 
 | O-02 | Daily parse limit | Locally, parse 100 `[TEST]` expenses within 24 hours (or ask Claude to set up the limit), then parse once more | "Daily limit of 100 entries reached. Please try again tomorrow." The typed text stays in the box |
 | O-03 | Category limit | Locally, with 50 active categories, add another | "That name is already in use, or you've reached the limit of 50 categories." |
 | O-04 | Stale screen | Delete an expense on one device, then try to save an edit to it on another device that still shows it | "This expense or its category is no longer available. Please refresh and try again." |
+| O-05 | Parse timing | Locally, open the browser's developer tools on the Network tab, parse a `[TEST]` expense, and select the `parse` request. Then look at the dev server's output | The request's timing shows `auth`, `limit`, `categories`, `model` and `total`. The server output has one `parse timing` line with the same steps in milliseconds, the model and the input and output tokens, and no expense text, parsed details, email address or user ID |
 
 ### P. Data Safety Checks (Database)
 

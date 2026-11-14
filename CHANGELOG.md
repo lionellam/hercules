@@ -6,6 +6,13 @@ Versions follow [semantic versioning](https://semver.org): **major** for a chang
 
 ---
 
+## 1.2.4 — 14 November 2026
+
+**Behind the scenes**
+- Each parse now records how long its steps took, so we can see what makes parsing slow before changing anything. Nothing looks different in the app, and the records never include what you typed or who you are.
+
+---
+
 ## 1.2.3 — 14 November 2026
 
 **Improved**

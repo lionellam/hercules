@@ -1215,3 +1215,30 @@ Last updated: 14 November 2026
   3. Project Plan (v0.13): the features now include the default currency, in parsing, totals and Settings; this was found in the previous check and left open.
   4. README: the "Project documents" table now lists `CLAUDE.md`.
 - Documents only, so the app version stays at 1.2.3.
+
+---
+
+## 14 November 2026 — Version 1.2.4: Timing Each Parse
+
+### What Was Done
+- The owner finds parsing slow. Rather than guess at a fix, each parse now measures how long its steps take: the sign-in check, the daily-limit check, loading categories, the Claude call, and the total (Architecture decision 37). The timings go in a `Server-Timing` header on the parse response, visible in a browser's developer tools, and in one `parse timing` line in the server log, with the model used and the input and output tokens. The log line never includes the expense text, the parsed details, an email address or a user ID. Nothing in the app looks different.
+- Options discussed with the owner first: whether "performance" meant speed or accuracy (the owner chose speed), and measuring before changing anything. A timing table in the database was set aside, as the logs and header are enough for a short investigation and keep no new data about people.
+- Version **1.2.4** (a small tweak), with a changelog entry. Updated the Architecture (v0.25, decision 37 and a follow-up in Known Gaps) and the Test Plan (v1.15, new O-05). The Specification is unchanged, as nothing visible changed.
+
+### Testing
+- Locally, on the demo account (confirmed before each run), with an Anthropic key in `.env.local` so parses reached Claude Haiku. Three `[TEST]` parses, none saved:
+  - `auth=8 limit=7 categories=2 model=1466 total=1483` ms (first after a restart), 1,349 tokens in, 70 out
+  - `auth=6 limit=1 categories=0 model=1019 total=1026` ms, 1,344 in, 63 out
+  - `auth=17 limit=9 categories=1 model=1161 total=1188` ms, 1,341 in, 60 out
+- Early sign: the Claude call is about 97% of each parse, and each prompt is about 1,340 tokens for a reply of about 65. These are local timings over the owner's home connection, not the live app's, so they only point the way.
+- Checked that no log line contains the expense text, an email address or a user ID. Type-check, lint (the one known warning in `web/lib/client.ts`) and a production build passed.
+
+### Slips and Lessons
+- The first version of the log line used `model=` twice, once for the step's time and once for the model's name, and the header and log worked out the total separately, 1 ms apart. Both were caught in testing and fixed before committing: the name is now `using=`, and the total is worked out once.
+- An earlier, separate local test (one parse, also before this change) took 2.8 seconds, most likely including the dev server compiling the parse route for the first time.
+
+### Clean-up
+- Deleted the demo account's three parse records; no `[TEST]` expenses exist. Removed the demo account from the local allow-list and signed the test browser back in to the owner's local account.
+
+### Next
+- After the deploy, the owner parses 10–15 everyday expenses on their phone, then reads the `parse timing` lines in Vercel's logs to choose what to speed up.

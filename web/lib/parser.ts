@@ -14,6 +14,12 @@ export type ParsedExpense = {
   remarks: string | null;
 };
 
+export type ParseResult = {
+  expense: ParsedExpense;
+  model: string;
+  usage: { input: number; output: number } | null;
+};
+
 const MODEL = process.env.HERCULES_MODEL ?? "claude-haiku-5-5";
 
 function buildPrompt(rawInput: string, categories: string[], today: string) {
@@ -53,10 +59,10 @@ Output: {"amount": 450.00, "currency": "THB", "category": "Food & Dining", "merc
 export class ParseError extends Error {}
 
 // The currency comes back already decided: the one named in the text, otherwise the person's default (Specification 4.6)
-export async function parseExpense(rawInput: string, categories: string[], today: string, defaultCurrency: string): Promise<ParsedExpense> {
+export async function parseExpense(rawInput: string, categories: string[], today: string, defaultCurrency: string): Promise<ParseResult> {
   if (!process.env.ANTHROPIC_API_KEY) {
     if (process.env.NODE_ENV === "production") throw new ParseError("Parser is not configured");
-    return standInParse(rawInput, categories, today, defaultCurrency);
+    return { expense: standInParse(rawInput, categories, today, defaultCurrency), model: "stand-in", usage: null };
   }
 
   const schema = z.object({
@@ -81,9 +87,13 @@ export async function parseExpense(rawInput: string, categories: string[], today
   }
   const out = response.parsed_output;
   return {
-    ...out,
-    currency: resolveCurrency(out.currency, rawInput, defaultCurrency),
-    date: isRealDate(out.date) ? out.date : today,
+    expense: {
+      ...out,
+      currency: resolveCurrency(out.currency, rawInput, defaultCurrency),
+      date: isRealDate(out.date) ? out.date : today,
+    },
+    model: MODEL,
+    usage: { input: response.usage.input_tokens, output: response.usage.output_tokens },
   };
 }
 
