@@ -412,7 +412,7 @@ dl.faq dd { margin: 2px 0 0; color: var(--ink-2); }
     </table></div>
     <ul class="plain">
       <li><b>Dates:</b> no date means today. "Yesterday", "last Friday" and "3 Nov" all work.</li>
-      <li><b>Currency:</b> your default currency (Singapore dollars unless you change it in <b>Settings</b> → <b>Currency</b>) unless you name another, such as "450 baht" or "USD 120". A plain "$" means your default. To change the currency before saving, tap the code beside the amount, such as <b>SGD ▾</b>. Totals count only your default currency; others are shown beside them as "Not included", without converting.</li>
+      <li><b>Currency:</b> your default currency (Singapore dollars unless you change it in <b>Settings</b> → <b>Currency</b>) unless you name another, such as "450 baht" or "USD 120". A plain "$" means your default if it's a dollar currency (such as SGD or AUD), otherwise US dollars. To change the currency before saving, tap the code beside the amount, such as <b>SGD ▾</b>. Totals count only your default currency; others are shown beside them as "Not included", without converting.</li>
       <li><b>Categories:</b> Claude can only choose from your own list. If nothing fits, it uses <b>Other</b>.</li>
       <li><b>Remarks:</b> extra details that don't fit elsewhere, such as "with the team", go into Remarks.</li>
     </ul>
@@ -516,7 +516,7 @@ dl.faq dd { margin: 2px 0 0; color: var(--ink-2); }
     <ul class="plain">
       <li><b>The total</b> spent in the month. It stays at the top while you scroll, with the month buttons and <b>CSV</b>.</li>
       <li><b>A bar for each category</b> you've spent in, largest first. If the category has a budget, the bar fills up against it and reads, for example, "210.00 of 500.00". It turns red once you go over.</li>
-      <li><b>Share of spend</b>, a pie chart of where the money went. With more than six categories, the smaller ones are grouped as "Everything else".</li>
+      <li><b>Share of spend</b>, a pie chart of where the money went. With more than six categories, the smaller ones are grouped as "Everything else", with how many there are, such as "Everything else (3)".</li>
       <li><b>Spending pace</b>, this month only, for categories with a budget. See the next section.</li>
       <li><b>Download as a spreadsheet:</b> tap <b>CSV</b> beside the total to save that month's expenses as a CSV file, which opens in Excel, Numbers or Google Sheets. This month gives everything so far; last month gives the whole month. On an iPhone with Hercules on the home screen, the share sheet opens: tap <b>Save to Files</b>, or send it by Mail or AirDrop.</li>
     </ul>
@@ -648,7 +648,7 @@ dl.faq dd { margin: 2px 0 0; color: var(--ink-2); }
     <ul class="plain">
       <li><b>Add a category:</b> tap <b>Add category</b>, give it a name, and optionally a monthly budget.</li>
       <li><b>Rename it or change its budget:</b> tap the category. A new name shows on all its past expenses too.</li>
-      <li><b>Set a monthly budget</b> in Singapore dollars, or leave it blank. Budgets turn on the "x of budget" bars and spending pace on Summary.</li>
+      <li><b>Set a monthly budget</b> in your default currency (Singapore dollars unless you change it), or leave it blank. Budgets turn on the "x of budget" bars and spending pace on Summary.</li>
       <li><b>Retire a category</b> you no longer use: open it and tap <b>Retire</b>. It stops being offered for new expenses, but past expenses keep it. After retiring, an Undo bar appears for a few seconds.</li>
       <li><b>Bring one back:</b> retired categories are listed under <b>Retired</b> at the bottom. Tap <b>Restore</b>. Adding a category with the same name as a retired one also restores it.</li>
     </ul>
@@ -695,7 +695,7 @@ dl.faq dd { margin: 2px 0 0; color: var(--ink-2); }
         </ul>
       </div>
     </div>
-    <p>Deleting an expense removes it from everything you see. The only thing saved on your device is your light or dark choice.</p>
+    <p>Deleting an expense removes it from everything you see. Apart from keeping you signed in, the only thing saved on your device is your light or dark choice.</p>
 
     <h2 id="faq">Quick answers</h2>
     <dl class="faq">

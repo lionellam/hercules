@@ -1387,3 +1387,18 @@ Last updated: 14 November 2026
   3. The header's Last Reviewed date updated to 14 November 2026.
 - Checked and found correct: the overview and objectives, the goals and non-goals (including the currency wording and the CSV marked delivered early), the core user flow, the architecture summary, the Expense, Budget and Category entries, the success criteria, the risks, and Phases 1 and 2.
 - Documents only, so the app version is unchanged.
+
+---
+
+## 14 November 2026 — User Guide Accuracy Review
+
+### What Was Done
+- At the owner's request, the user guide was reviewed for accuracy against the app, its text and all 11 drawings, and against its content rules.
+- Four fixes, applied at the owner's request:
+  1. Categories & budgets: budgets are set in the default currency (Singapore dollars unless changed), not always Singapore dollars.
+  2. What to type: a plain "$" means the default only if it is a dollar currency (such as SGD or AUD), otherwise US dollars.
+  3. Summary: the pie's smaller slices are grouped as "Everything else" with a count, such as "Everything else (3)", matching the app and the guide's own drawing.
+  4. Your privacy: apart from keeping you signed in, the only thing saved on the device is the light or dark choice.
+- The quick answer that the app is slow after a quiet spell because the database wakes up couldn't be confirmed from the code (it fits Neon's free tier pausing when idle, while parse timings so far point to the Claude call). The owner chose to keep it as it is.
+- Checked and found correct: the content rules (the owner isn't named, no competitor apps, no hint of recovering deleted expenses beyond Undo, the Updated date), that the live page matched the repository before these fixes, and the text and drawings for sign-in, logging and the review sheet, the currency rules, editing and deleting, History search, Summary, spending pace, Settings, categories and privacy.
+- The guide's Updated date was already 14 November 2026. Documents only, so the app version is unchanged.
