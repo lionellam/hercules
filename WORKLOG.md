@@ -1294,6 +1294,7 @@ Last updated: 14 November 2026
 - Options and the owner's choices (mockups in `design/field-icons-mockups.html`): no pencil on the amount; a pencil on Category rather than a ▾ like the currency's.
 - The cause of the iPhone date: the date box was set to align right, but Safari ignores that for date boxes. A Safari-specific rule now aligns the date right. The browser's own date icon showed on computers but not in Safari on iPhone, so it is hidden and the app draws its own calendar; tapping the date or the calendar opens the date picker, and tapping a pencil puts the cursor in that field.
 - Version **1.3.1** (an improvement and a fix), with a changelog entry. Updated the Specification (v0.47, step 5), Architecture (v0.28, decision 38), Test Plan (v1.17: C-07 and C-11 updated; new C-12, the date on iPhone) and the user guide (review drawing and step 3).
+- **Confirmed (14 November 2026):** after the deploy, the owner checked on their phone that Settings shows Version 1.3.1; that after Parse the review sheet shows pencils beside Category, Merchant and Remarks and a calendar beside the date; that the date sits flush right and tapping it opens the date picker; and that a saved expense's edit sheet shows the same icons.
 
 ### Testing
 - Locally on the demo account (confirmed before testing), on a 390 × 760 window, one `[TEST]` parse:
