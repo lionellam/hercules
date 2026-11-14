@@ -1,7 +1,7 @@
 # Project Hercules — Test Plan: Web App v1
 
 ```
-Version 1.17 · Draft
+Version 1.18 · Draft
 Last Reviewed: 14 November 2026
 Produced with AI Assistance (Claude Code)
 ```
@@ -28,6 +28,7 @@ Produced with AI Assistance (Claude Code)
 | 1.15 | 2026-11-14 | Lionel Lam | O-05: each parse reports how long its steps took, without recording the expense text or who parsed it (1.2.4) |
 | 1.16 | 2026-11-14 | Lionel Lam | Review card in a sheet: B-01, C-03 and C-04 updated; new C-07 to C-11; S-03 uses **Save expense** |
 | 1.17 | 2026-11-14 | Lionel Lam | Pencil and calendar icons: C-07 and C-11 updated; new C-12 (the date sits flush right on iPhone) |
+| 1.18 | 2026-11-14 | Lionel Lam | Accuracy review: M-04 says sheets appear at the bottom (no sliding) and includes the review sheet; M-05 includes the review sheet as a centred dialog; C-12 tagged **[Phone]** |
 
 ---
 
@@ -127,7 +128,7 @@ After Parse, the review card opens in a sheet over the Log screen. Its save butt
 | C-09 | Tapping outside after a change | Parse, change the merchant → tap the darkened area | "Discard your edits?" appears. **Keep reviewing** returns to the sheet with the change; **Discard** closes it, the typed text stays, nothing is saved |
 | C-10 | Wider screens | In a window at least 768 pixels wide, parse `[TEST] lunch 5.50` | The review appears as a centred dialog over the darkened screen; tapping outside works as in C-08 |
 | C-11 | Edit sheet | Open a saved `[TEST]` expense from Today | The edit sheet has the same pencil and calendar icons as the review sheet. Its button still says **Save**, and Delete, Cancel and Save work as before |
-| C-12 | Date on iPhone | On an iPhone, in Safari or the home-screen app, parse `[TEST] lunch 5.50`, then open a saved expense; tap the date on each | On both sheets the date sits flush right, lined up with the values above and below, with the calendar icon beside it. Tapping the date opens the date picker |
+| C-12 | Date on iPhone **[Phone]** | On an iPhone, in Safari or the home-screen app, parse `[TEST] lunch 5.50`, then open a saved expense; tap the date on each | On both sheets the date sits flush right, lined up with the values above and below, with the calendar icon beside it. Tapping the date opens the date picker |
 
 ### D. Fixing, Deleting and Undo
 
@@ -263,8 +264,8 @@ To set up I-01 to I-05: create a `zz-test-` category with a $300 budget and log 
 | M-01 | Light and dark | Settings → Appearance → **Light**, then **Dark** | The app switches theme at once. Reload: the choice is kept on that device |
 | M-02 | System follows the device | Settings → Appearance → **System**, then switch the device between light and dark | The app follows the device. A new device starts on System |
 | M-03 | Pinned tops | Scroll on each of the four tabs; then hold a phone sideways and scroll again | Upright, each tab's heading and main control stay at the top (on Summary, also the total). Sideways on a phone, nothing stays at the top |
-| M-04 | Phone layout | Use a phone, or a browser window narrower than 768 pixels | One column; edit sheets slide up from the bottom |
-| M-05 | Tablet and computer | Use windows 768, 1,024 and 1,280 pixels wide or more | The app widens to about 820, 920 and 1,000 pixels; Log and Summary show two columns; edit sheets and confirmations open as centred dialogs |
+| M-04 | Phone layout | Use a phone, or a browser window narrower than 768 pixels | One column; the review and edit sheets, and confirmations, appear at the bottom of the screen |
+| M-05 | Tablet and computer | Use windows 768, 1,024 and 1,280 pixels wide or more | The app widens to about 820, 920 and 1,000 pixels; Log and Summary show two columns; the review and edit sheets, and confirmations, open as centred dialogs |
 | M-06 | No sideways scrolling | Check each screen at phone width | Nothing makes the page scroll sideways |
 
 ### N. Phones

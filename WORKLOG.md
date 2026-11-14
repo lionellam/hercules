@@ -1346,3 +1346,16 @@ Last updated: 14 November 2026
   6. Section 5.2: the `sort_order` column added to Category.
 - Checked and found correct: the review and edit sheets (step 5), History search (4.3), Settings (4.4), the default-currency rules (4.6), the CSV file and its message (4.5), the date range, the 50-category limit with names compared regardless of capitals, the 100-parses-a-day limit, the 14 starter categories, the wording of the Delete, Retire, Discard changes and Sign out confirmations, the ±5% "On pace" band, and the User and Expense fields.
 - Documents only, so the app version is unchanged.
+
+---
+
+## 14 November 2026 — Test Plan Accuracy Review
+
+### What Was Done
+- At the owner's request, the Test Plan was reviewed for accuracy, as the Architecture and Specification had been. Every on-screen message it quotes was checked against the code, along with its steps and figures.
+- Three fixes, applied at the owner's request (Test Plan v1.18):
+  1. M-04: sheets appear at the bottom of the screen (the app has no animations, so they don't slide up), and the review sheet is included.
+  2. M-05: the review sheet is included among the centred dialogs on wider screens.
+  3. C-12: tagged **[Phone]**, as it needs a real iPhone.
+- Checked and found correct: every quoted message (sign-in, uninvited account, amount and date errors, empty month, search, budgets, category limits and names, retiring, offline, daily limit, stale screen, "Not signed in", Undo, Daily figures and the currency switch), Settings and the version line, the spending-pace worked example, the 90-day sign-in, the Retired group's Show/Hide, the note on Other, the month arrows, the CSV columns, and that `poc/TEST_PLAN.md` exists.
+- Documents only, so the app version is unchanged.
