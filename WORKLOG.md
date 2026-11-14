@@ -1185,6 +1185,7 @@ Last updated: 14 November 2026
 - At the owner's request, the version and last-updated line in Settings now sits at the bottom of the screen, just above the tab bar, instead of directly under Sign out. A one-line style change: the line takes up the remaining space above it, and keeps its 28-pixel gap from Sign out on short screens, where the page scrolls.
 - Version **1.2.3** (a small tweak), with a changelog entry.
 - Checked locally on a full-height window and a 375 × 600 phone-sized one. No database change is needed.
+- **Confirmed (14 November 2026):** after the deploy, the owner checked on their phone that the version line sits at the bottom of Settings with 1.2.3.
 
 ---
 
