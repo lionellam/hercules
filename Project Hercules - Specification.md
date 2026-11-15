@@ -1,7 +1,7 @@
 # Project Hercules — Specification Sheet: "Log an Expense" Flow
 
 ```
-Version 0.49 · Draft 
+Version 0.50 · Draft 
 Last Reviewed: 15 November 2026
 Produced with AI Assistance (Claude Code)
 ```
@@ -59,6 +59,7 @@ Produced with AI Assistance (Claude Code)
 | 0.47 | 2026-11-14 | Lionel Lam | A pencil beside Category, Merchant and Remarks and a calendar beside Date, on both the review sheet and the edit sheet, replacing the "›"; the date sits flush right on every device (step 5) |
 | 0.48 | 2026-11-14 | Lionel Lam | Accuracy review: confirmation sheets appear without sliding, and switching the default currency is listed (Section 4.2); "Other" is found by name (step 4); the AI boundary lists currency and remarks (Section 6); the pie chart's "Everything else" shows a count (step 8); `sort_order` added to Category (Section 5.2) |
 | 0.49 | 2026-11-15 | Lionel Lam | Sheets slide up and down on phones, and fade and grow on wider screens; fade only with Reduce Motion (step 5, Section 4.2) |
+| 0.50 | 2026-11-15 | Lionel Lam | The CSV button is outlined, for an edge contrast of at least 3:1 in light and dark (Section 4.5) |
 
 ---
 
@@ -187,7 +188,7 @@ Opening the Settings tab always shows the Settings list, even if Categories & bu
 
 ### 4.5 Downloading Expenses (CSV)
 
-Summary has a **CSV** button beside the month's total. It downloads the expenses for the month selected at the top of Summary as a CSV file, which opens in Excel, Numbers or Google Sheets:
+Summary has a **CSV** button beside the month's total. It has no fill and a mid-grey outline, so its edge stands out from the page by at least 3:1 in both light and dark appearance, while staying quieter than the dark main buttons (Parse, Save expense). It downloads the expenses for the month selected at the top of Summary as a CSV file, which opens in Excel, Numbers or Google Sheets:
 
 - **This month:** everything logged for the month so far (month to date). This is the same set of expenses Summary adds up, so the file's total matches Summary's, including any expense already dated later in the month.
 - **Last month:** the whole month.

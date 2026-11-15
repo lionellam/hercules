@@ -6,6 +6,13 @@ Versions follow [semantic versioning](https://semver.org): **major** for a chang
 
 ---
 
+## 1.3.3 — 15 November 2026
+
+**Improved**
+- The **CSV** button on Summary now has an outline, so it's easier to spot in both light and dark appearance.
+
+---
+
 ## 1.3.2 — 15 November 2026
 
 **Improved**

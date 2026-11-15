@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CSV Button Contrast</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root { --page: #ececea; --page-text: #18181b; --page-muted: #5f5f66; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--page); color: var(--page-text); font-family: Inter, -apple-system, system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  main { max-width: 1260px; margin: 0 auto; padding: 36px 16px 80px; }
+  h1 { font-size: 28px; letter-spacing: -0.02em; margin: 0 0 8px; }
+  h2 { font-size: 20px; letter-spacing: -0.01em; margin: 44px 0 6px; }
+  .lead { color: var(--page-muted); max-width: 800px; line-height: 1.55; margin: 0 0 10px; font-size: 15px; }
+  .frames { display: flex; flex-wrap: wrap; gap: 26px; align-items: flex-start; margin-top: 18px; }
+  figure { margin: 0; max-width: 100%; }
+  figcaption { max-width: 340px; font-size: 13px; color: var(--page-muted); margin-top: 10px; line-height: 1.5; }
+  figcaption b { color: var(--page-text); }
+  .badge { display: inline-block; font-size: 11px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; padding: 2px 7px; border-radius: 6px; margin-right: 6px; vertical-align: 1px; background: #52525b; color: #fff; }
+  .badge.rec { background: #1d4ed8; }
+  table.ratios { border-collapse: collapse; margin-top: 14px; font-size: 14px; background: #fff; border-radius: 12px; overflow: hidden; }
+  table.ratios th, table.ratios td { padding: 9px 14px; text-align: left; border-bottom: 1px solid #e7e7e4; }
+  table.ratios th { font-size: 12px; text-transform: uppercase; letter-spacing: .05em; color: var(--page-muted); font-weight: 600; }
+  .ok { color: #15803d; font-weight: 600; }
+  .low { color: #b91c1c; font-weight: 600; }
+  .wrapt { max-width: 100%; overflow-x: auto; }
+
+  .phone { width: 340px; max-width: 100%; height: 420px; border-radius: 30px; overflow: hidden; border: 1px solid rgba(0,0,0,.08);
+           box-shadow: 0 1px 2px rgba(0,0,0,.06), 0 10px 28px rgba(0,0,0,.08); }
+
+  /* App tokens, from web/app/globals.css */
+  .app { --bg: #fff; --surface: #fff; --text: #18181b; --muted: #71717a; --line: #e7e7e4; --accent: #18181b; --accent-text: #fff; --soft: #f4f4f5;
+         --edge: #8e8e96; --tint: #e4e4e7;
+         background: var(--bg); color: var(--text); font-size: 15px; height: 100%; display: flex; flex-direction: column; }
+  .app.dark { --bg: #18181b; --surface: #18181b; --text: #f4f4f5; --muted: #a1a1aa; --line: #27272a; --accent: #f4f4f5; --accent-text: #18181b; --soft: #27272a;
+              --edge: #71717a; --tint: #3f3f46; }
+  .app .top { padding: 30px 20px 16px; border-bottom: 1px solid var(--line); }
+  .app h3 { font-size: 28px; font-weight: 700; letter-spacing: -0.02em; }
+  .app .seg { display: flex; background: var(--soft); border-radius: 12px; padding: 3px; margin-top: 18px; }
+  .app .seg span { flex: 1; text-align: center; padding: 8px 0; border-radius: 10px; font-size: 14px; color: var(--muted); }
+  .app .seg span.on { background: var(--surface); color: var(--text); box-shadow: 0 1px 3px rgba(0,0,0,.1); font-weight: 500; }
+  .app.dark .seg span.on { background: #3f3f46; }
+  .app .total { margin-top: 16px; }
+  .app .total-row { display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; }
+  .app .sub { color: var(--muted); font-size: 14px; }
+  .app .big { font-size: 32px; font-weight: 700; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+  .app .dayline { font-size: 13px; color: var(--muted); margin-top: 6px; }
+  .app .scroll { flex: 1; overflow: hidden; padding: 0 20px; }
+  .app .cat { margin-top: 18px; }
+  .app .cat-top { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 6px; }
+  .app .cat-top .of { color: var(--muted); font-weight: 400; }
+  .app .track { height: 6px; border-radius: 3px; background: var(--soft); overflow: hidden; }
+  .app .fill { height: 100%; background: var(--text); border-radius: 3px; }
+
+  /* The CSV button and its options */
+  .app .csv { display: inline-flex; align-items: center; gap: 6px; height: 36px; padding: 0 13px; border-radius: 10px; font-size: 14px; font-weight: 600;
+              white-space: nowrap; margin-bottom: 6px; flex-shrink: 0; color: var(--text); background: var(--soft); }
+  .app .csv svg { width: 16px; height: 16px; }
+  .app .csv.outline { background: transparent; box-shadow: inset 0 0 0 1.5px var(--edge); }
+  .app .csv.tint { background: var(--tint); }
+  .app .csv.solid { background: var(--accent); color: var(--accent-text); }
+</style>
+</head>
+<body>
+<main>
+  <h1>CSV Button Contrast</h1>
+  <p class="lead">The CSV button on Summary. Its label is already easy to read (16:1). What's hard to see is the button itself: its pale grey fill barely stands out from the page, at 1.1:1 in light mode and 1.19:1 in dark. Accessibility guidance asks for 3:1 for the edge of a control. Each option below is shown in light and dark, with the rest of the screen unchanged.</p>
+
+  <div class="wrapt">
+  <table class="ratios">
+    <tr><th>Option</th><th>Button edge vs page, light</th><th>Button edge vs page, dark</th><th>Label</th></tr>
+    <tr><td>A · Current (pale fill)</td><td class="low">1.1 : 1</td><td class="low">1.19 : 1</td><td>16 : 1</td></tr>
+    <tr><td>B · Outline</td><td class="ok">3.25 : 1</td><td class="ok">3.67 : 1</td><td>17.7 : 1</td></tr>
+    <tr><td>C · Darker fill</td><td class="low">1.27 : 1</td><td class="low">1.7 : 1</td><td>14 : 1</td></tr>
+    <tr><td>D · Solid</td><td class="ok">17.7 : 1</td><td class="ok">16.1 : 1</td><td>17.7 : 1</td></tr>
+  </table>
+  </div>
+
+  <h2>A · Current</h2>
+  <p class="lead">For comparison. In light mode the button is close to invisible; it reads as the word "CSV" with an icon.</p>
+  <div class="frames">
+<figure><div class="phone"><div class="app">
+    <div class="top">
+      <h3>Summary</h3>
+      <div class="seg"><span class="on">November</span><span>October</span></div>
+      <div class="total">
+        <div class="total-row">
+          <div><div class="sub">Spent so far this month</div><div class="big">$1,284.60</div></div>
+          <span class="csv"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>CSV</span>
+        </div>
+        <div class="dayline"><b>Day 15 of 30</b> · Sun 15 Nov</div>
+      </div>
+    </div>
+    <div class="scroll">
+      <div class="cat"><div class="cat-top"><span>Food</span><strong>$512.40 <span class="of">of $600</span></strong></div><div class="track"><div class="fill" style="width:85%"></div></div></div>
+      <div class="cat"><div class="cat-top"><span>Transport</span><strong>$218.00 <span class="of">of $300</span></strong></div><div class="track"><div class="fill" style="width:73%"></div></div></div>
+      <div class="cat"><div class="cat-top"><span>Groceries</span><strong>$186.20</strong></div><div class="track"><div class="fill" style="width:36%"></div></div></div>
+    </div>
+  </div></div><figcaption><b>Light</b></figcaption></figure>
+<figure><div class="phone"><div class="app dark">
+    <div class="top">
+      <h3>Summary</h3>
+      <div class="seg"><span class="on">November</span><span>October</span></div>
+      <div class="total">
+        <div class="total-row">
+          <div><div class="sub">Spent so far this month</div><div class="big">$1,284.60</div></div>
+          <span class="csv"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>CSV</span>
+        </div>
+        <div class="dayline"><b>Day 15 of 30</b> · Sun 15 Nov</div>
+      </div>
+    </div>
+    <div class="scroll">
+      <div class="cat"><div class="cat-top"><span>Food</span><strong>$512.40 <span class="of">of $600</span></strong></div><div class="track"><div class="fill" style="width:85%"></div></div></div>
+      <div class="cat"><div class="cat-top"><span>Transport</span><strong>$218.00 <span class="of">of $300</span></strong></div><div class="track"><div class="fill" style="width:73%"></div></div></div>
+      <div class="cat"><div class="cat-top"><span>Groceries</span><strong>$186.20</strong></div><div class="track"><div class="fill" style="width:36%"></div></div></div>
+    </div>
+  </div></div><figcaption><b>Dark</b></figcaption></figure>
+</div>
+
+  <h2><span class="badge rec">Recommended</span>B · Outline</h2>
+  <p class="lead">No fill, with a mid-grey outline 1.5 pixels wide. The edge passes 3:1 in both themes, and the button stays quieter than the total and lighter than the dark Parse and Save buttons, so it still reads as a secondary action.</p>
+  <div class="frames">
+<figure><div class="phone"><div class="app">
+    <div class="top">
+      <h3>Summary</h3>
+      <div class="seg"><span class="on">November</span><span>October</span></div>
+      <div class="total">
+        <div class="total-row">
+          <div><div class="sub">Spent so far this month</div><div class="big">$1,284.60</div></div>
+          <span class="csv outline"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>CSV</span>
+        </div>
+        <div class="dayline"><b>Day 15 of 30</b> · Sun 15 Nov</div>
+      </div>
+    </div>
+    <div class="scroll">
+      <div class="cat"><div class="cat-top"><span>Food</span><strong>$512.40 <span class="of">of $600</span></strong></div><div class="track"><div class="fill" style="width:85%"></div></div></div>
+      <div class="cat"><div class="cat-top"><span>Transport</span><strong>$218.00 <span class="of">of $300</span></strong></div><div class="track"><div class="fill" style="width:73%"></div></div></div>
+      <div class="cat"><div class="cat-top"><span>Groceries</span><strong>$186.20</strong></div><div class="track"><div class="fill" style="width:36%"></div></div></div>
+    </div>
+  </div></div><figcaption><b>Light</b></figcaption></figure>
+<figure><div class="phone"><div class="app dark">
+    <div class="top">
+      <h3>Summary</h3>
+      <div class="seg"><span class="on">November</span><span>October</span></div>
+      <div class="total">
+        <div class="total-row">
+          <div><div class="sub">Spent so far this month</div><div class="big">$1,284.60</div></div>
+          <span class="csv outline"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>CSV</span>
+        </div>
+        <div class="dayline"><b>Day 15 of 30</b> · Sun 15 Nov</div>
+      </div>
+    </div>
+    <div class="scroll">
+      <div class="cat"><div class="cat-top"><span>Food</span><strong>$512.40 <span class="of">of $600</span></strong></div><div class="track"><div class="fill" style="width:85%"></div></div></div>
+      <div class="cat"><div class="cat-top"><span>Transport</span><strong>$218.00 <span class="of">of $300</span></strong></div><div class="track"><div class="fill" style="width:73%"></div></div></div>
+      <div class="cat"><div class="cat-top"><span>Groceries</span><strong>$186.20</strong></div><div class="track"><div class="fill" style="width:36%"></div></div></div>
+    </div>
+  </div></div><figcaption><b>Dark</b></figcaption></figure>
+</div>
+
+  <h2>C · Darker fill</h2>
+  <p class="lead">The same filled style one shade darker. It's more noticeable than today, especially in dark mode, but still well short of 3:1 against the page.</p>
+  <div class="frames">
+<figure><div class="phone"><div class="app">
+    <div class="top">
+      <h3>Summary</h3>
+      <div class="seg"><span class="on">November</span><span>October</span></div>
+      <div class="total">
+        <div class="total-row">
+          <div><div class="sub">Spent so far this month</div><div class="big">$1,284.60</div></div>
+          <span class="csv tint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>CSV</span>
+        </div>
+        <div class="dayline"><b>Day 15 of 30</b> · Sun 15 Nov</div>
+      </div>
+    </div>
+    <div class="scroll">
+      <div class="cat"><div class="cat-top"><span>Food</span><strong>$512.40 <span class="of">of $600</span></strong></div><div class="track"><div class="fill" style="width:85%"></div></div></div>
+      <div class="cat"><div class="cat-top"><span>Transport</span><strong>$218.00 <span class="of">of $300</span></strong></div><div class="track"><div class="fill" style="width:73%"></div></div></div>
+      <div class="cat"><div class="cat-top"><span>Groceries</span><strong>$186.20</strong></div><div class="track"><div class="fill" style="width:36%"></div></div></div>
+    </div>
+  </div></div><figcaption><b>Light</b></figcaption></figure>
+<figure><div class="phone"><div class="app dark">
+    <div class="top">
+      <h3>Summary</h3>
+      <div class="seg"><span class="on">November</span><span>October</span></div>
+      <div class="total">
+        <div class="total-row">
+          <div><div class="sub">Spent so far this month</div><div class="big">$1,284.60</div></div>
+          <span class="csv tint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>CSV</span>
+        </div>
+        <div class="dayline"><b>Day 15 of 30</b> · Sun 15 Nov</div>
+      </div>
+    </div>
+    <div class="scroll">
+      <div class="cat"><div class="cat-top"><span>Food</span><strong>$512.40 <span class="of">of $600</span></strong></div><div class="track"><div class="fill" style="width:85%"></div></div></div>
+      <div class="cat"><div class="cat-top"><span>Transport</span><strong>$218.00 <span class="of">of $300</span></strong></div><div class="track"><div class="fill" style="width:73%"></div></div></div>
+      <div class="cat"><div class="cat-top"><span>Groceries</span><strong>$186.20</strong></div><div class="track"><div class="fill" style="width:36%"></div></div></div>
+    </div>
+  </div></div><figcaption><b>Dark</b></figcaption></figure>
+</div>
+
+  <h2>D · Solid</h2>
+  <p class="lead">Styled like the app's main buttons (Parse, Save expense). The strongest contrast, but it pulls the eye away from the total and makes downloading look like the main thing to do on Summary.</p>
+  <div class="frames">
+<figure><div class="phone"><div class="app">
+    <div class="top">
+      <h3>Summary</h3>
+      <div class="seg"><span class="on">November</span><span>October</span></div>
+      <div class="total">
+        <div class="total-row">
+          <div><div class="sub">Spent so far this month</div><div class="big">$1,284.60</div></div>
+          <span class="csv solid"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>CSV</span>
+        </div>
+        <div class="dayline"><b>Day 15 of 30</b> · Sun 15 Nov</div>
+      </div>
+    </div>
+    <div class="scroll">
+      <div class="cat"><div class="cat-top"><span>Food</span><strong>$512.40 <span class="of">of $600</span></strong></div><div class="track"><div class="fill" style="width:85%"></div></div></div>
+      <div class="cat"><div class="cat-top"><span>Transport</span><strong>$218.00 <span class="of">of $300</span></strong></div><div class="track"><div class="fill" style="width:73%"></div></div></div>
+      <div class="cat"><div class="cat-top"><span>Groceries</span><strong>$186.20</strong></div><div class="track"><div class="fill" style="width:36%"></div></div></div>
+    </div>
+  </div></div><figcaption><b>Light</b></figcaption></figure>
+<figure><div class="phone"><div class="app dark">
+    <div class="top">
+      <h3>Summary</h3>
+      <div class="seg"><span class="on">November</span><span>October</span></div>
+      <div class="total">
+        <div class="total-row">
+          <div><div class="sub">Spent so far this month</div><div class="big">$1,284.60</div></div>
+          <span class="csv solid"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>CSV</span>
+        </div>
+        <div class="dayline"><b>Day 15 of 30</b> · Sun 15 Nov</div>
+      </div>
+    </div>
+    <div class="scroll">
+      <div class="cat"><div class="cat-top"><span>Food</span><strong>$512.40 <span class="of">of $600</span></strong></div><div class="track"><div class="fill" style="width:85%"></div></div></div>
+      <div class="cat"><div class="cat-top"><span>Transport</span><strong>$218.00 <span class="of">of $300</span></strong></div><div class="track"><div class="fill" style="width:73%"></div></div></div>
+      <div class="cat"><div class="cat-top"><span>Groceries</span><strong>$186.20</strong></div><div class="track"><div class="fill" style="width:36%"></div></div></div>
+    </div>
+  </div></div><figcaption><b>Dark</b></figcaption></figure>
+</div>
+</main>
+</body>
+</html>

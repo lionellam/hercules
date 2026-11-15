@@ -1426,3 +1426,16 @@ Last updated: 15 November 2026
   - Type-check, lint and a production build passed.
 - Clean-up: the test expense and the test parse were deleted (no `[TEST]` rows remain), the demo account was removed from the local allow-list, and the test browser was signed back in to the owner's local account.
 - **Confirmed (15 November 2026):** after the deploy, the owner checked on their phone that the sheets slide up and down with 1.3.2, and that with Reduce Motion on they only fade (test C-16).
+
+---
+
+## 15 November 2026 — Version 1.3.3: CSV Button Outlined
+
+### What Was Done
+- The owner asked for better contrast on Summary's **CSV** button. Its label was already easy to read (about 16:1); the weak part was the button itself, whose pale grey fill stood out from the page by only 1.1:1 in light appearance and 1.19:1 in dark, against the 3:1 guideline for a control's edge.
+- Options were shown in a mockup (`design/csv-contrast-mockups.html`), each in light and dark: A, the current pale fill; B, an outline with no fill (3.25:1 light, 3.67:1 dark); C, a darker fill (1.27:1 and 1.7:1, still under 3:1); D, a solid dark button like Parse and Save (17.7:1, but it competed with the total and made downloading look like the main action). The owner chose **B**.
+- Slip: the first version of the mockup drew its phone frames with a script, which the preview doesn't run, so the owner saw an empty page. It was rewritten as plain HTML. Lesson: write mockups as static HTML.
+- Built with a new `--edge` colour token (`#8e8e96` light, `#71717a` dark) and a 1.5-pixel inset outline on `.csv-button`; nothing else on the screen moves. The user guide's Summary drawing now shows the outlined button too (its Updated date is now 15 November 2026).
+- Version **1.3.3** (a small tweak), with a changelog entry. Updated the Specification (v0.50, Section 4.5), Architecture (v0.31, decision 35 update) and Test Plan (v1.20, R-01 checks the outline in light and dark).
+- Tested locally on the demo account (confirmed first): on Summary the button had no fill and its outline was `#71717a` in dark and `#8e8e96` in light, with the label in the text colour; **CSV** still returned the month's file (CSV, 18 lines); Settings showed Version 1.3.3. The guide's Summary drawing was checked in a local preview. Type-check, lint (the one known warning) and a production build passed.
+- Clean-up: no test data was created (no `[TEST]` rows exist); the demo account was removed from the local allow-list, and the test browser was signed back in to the owner's local account.

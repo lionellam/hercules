@@ -1,7 +1,7 @@
 # Project Hercules — Test Plan: Web App v1
 
 ```
-Version 1.19 · Draft
+Version 1.20 · Draft
 Last Reviewed: 15 November 2026
 Produced with AI Assistance (Claude Code)
 ```
@@ -30,6 +30,7 @@ Produced with AI Assistance (Claude Code)
 | 1.17 | 2026-11-14 | Lionel Lam | Pencil and calendar icons: C-07 and C-11 updated; new C-12 (the date sits flush right on iPhone) |
 | 1.18 | 2026-11-14 | Lionel Lam | Accuracy review: M-04 says sheets appear at the bottom (no sliding) and includes the review sheet; M-05 includes the review sheet as a centred dialog; C-12 tagged **[Phone]** |
 | 1.19 | 2026-11-15 | Lionel Lam | Sheet animation: C-07 and M-04 updated; new C-13 to C-16 |
+| 1.20 | 2026-11-15 | Lionel Lam | R-01 checks the CSV button's outline in light and dark (1.3.3) |
 
 ---
 
@@ -320,7 +321,7 @@ These need a look at the local database; ask Claude to run them.
 
 | ID | Test | Steps | Expected result |
 |---|---|---|---|
-| R-01 | Button placement | Open Summary | A **CSV** button sits beside the month's total |
+| R-01 | Button placement and look | Open Summary, in light and then dark appearance | A **CSV** button sits beside the month's total. It has no fill and a clearly visible grey outline in both appearances, and looks lighter than the dark Parse and Save buttons |
 | R-02 | This month | On this month, tap **CSV**; open the file in a spreadsheet | The file `hercules-expenses-YYYY-MM.csv` downloads (a phone shows its save or share options). A message names the file. It has a header row and one row per expense logged this month, oldest first, and the Amount column adds up to Summary's total |
 | R-03 | Last month | Switch to last month, tap **CSV** | The file is named for last month and contains the whole month; its total matches last month's Summary |
 | R-04 | Columns | Look at the header row and a few rows | Date, Category, Merchant, Amount, Currency, Remarks, What you typed, Edited (Yes/No), Logged at (Singapore time); amounts have two decimal places |
