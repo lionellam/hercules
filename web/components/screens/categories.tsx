@@ -3,7 +3,7 @@
 import { useContext, useState } from "react";
 import { api, fmt, useCached, type ApiCache } from "@/lib/client";
 import type { Category } from "@/lib/types";
-import { ConfirmSheet, UndoContext } from "../confirm";
+import { ConfirmSheet, UndoContext, useLeave } from "../confirm";
 import { useHomeCurrency } from "../currency";
 import { useMoney } from "../currency";
 
@@ -19,15 +19,20 @@ function CategorySheet({ category, retired, online, onClose, onChanged }: { cate
   const showUndo = useContext(UndoContext);
   const [asking, setAsking] = useState<"retire" | "discard" | null>(null);
   const dirty = name !== (category?.name ?? "") || budget !== (category?.monthly_budget?.toFixed(2) ?? "");
-  const requestClose = () => (busy ? undefined : dirty ? setAsking("discard") : onClose());
+  // Every way of closing slides the sheet away first (Specification 4.2)
+  const [leaving, leave] = useLeave();
+  const close = () => leave(onClose);
+  const requestClose = () => (busy ? undefined : dirty ? setAsking("discard") : close());
 
   async function run(action: () => Promise<unknown>) {
     setBusy(true);
     setError("");
     try {
       await action();
-      onClose();
-      onChanged();
+      leave(() => {
+        onClose();
+        onChanged();
+      });
     } catch (e) {
       setError((e as Error).message);
       setBusy(false);
@@ -47,16 +52,18 @@ function CategorySheet({ category, retired, online, onClose, onChanged }: { cate
   async function retire() {
     if (!category) return;
     await api(`/api/categories/${category.id}`, { method: "DELETE" });
-    onClose();
-    onChanged();
-    showUndo(`${category.name} retired`, async () => {
-      await api(`/api/categories/${category.id}/restore`, { method: "POST" });
+    leave(() => {
+      onClose();
       onChanged();
+      showUndo(`${category.name} retired`, async () => {
+        await api(`/api/categories/${category.id}/restore`, { method: "POST" });
+        onChanged();
+      });
     });
   }
 
   return (
-    <div className="sheet-backdrop" onClick={requestClose}>
+    <div className={`sheet-backdrop${leaving ? " leaving" : ""}`} onClick={requestClose}>
       <div className="sheet" onClick={(ev) => ev.stopPropagation()}>
         <div className="card">
           <div className="card-title">{category ? "Edit category" : "Add category"}</div>
@@ -113,7 +120,7 @@ function CategorySheet({ category, retired, online, onClose, onChanged }: { cate
           body={`Your changes to this category won't be saved.`}
           confirmLabel="Discard changes"
           cancelLabel="Keep editing"
-          onConfirm={onClose}
+          onConfirm={close}
           onCancel={() => setAsking(null)}
         />
       )}

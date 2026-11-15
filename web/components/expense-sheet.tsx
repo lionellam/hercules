@@ -5,7 +5,7 @@ import { useContext, useState } from "react";
 import { api, fmt } from "@/lib/client";
 import { dayMonth } from "@/lib/dates";
 import type { Category, Expense } from "@/lib/types";
-import { ConfirmSheet, UndoContext } from "./confirm";
+import { ConfirmSheet, UndoContext, useLeave } from "./confirm";
 import { useHomeCurrency } from "./currency";
 import ReviewCard, { type Fields } from "./review-card";
 
@@ -43,29 +43,37 @@ export function EditSheet({ expense, categories, online, onClose, onChanged }: {
       ? [...categories, { id: expense.category_id, name: `${expense.category} (retired)` }]
       : categories;
 
+  // Every way of closing slides the sheet away first (Specification 4.2)
+  const [leaving, leave] = useLeave();
+  const close = () => leave(onClose);
+
   async function save(fields: Fields, edited: boolean) {
     await api(`/api/expenses/${expense.id}`, { method: "PATCH", body: JSON.stringify({ ...fields, was_edited: edited }) });
-    onClose();
-    onChanged();
+    leave(() => {
+      onClose();
+      onChanged();
+    });
   }
 
   const showUndo = useContext(UndoContext);
   const [dirty, setDirty] = useState(false);
   const [asking, setAsking] = useState<"delete" | "discard" | null>(null);
-  const requestClose = () => (dirty ? setAsking("discard") : onClose());
+  const requestClose = () => (dirty ? setAsking("discard") : close());
 
   async function remove() {
     await api(`/api/expenses/${expense.id}`, { method: "DELETE" });
-    onClose();
-    onChanged();
-    showUndo("Expense deleted", async () => {
-      await api(`/api/expenses/${expense.id}/restore`, { method: "POST" });
+    leave(() => {
+      onClose();
       onChanged();
+      showUndo("Expense deleted", async () => {
+        await api(`/api/expenses/${expense.id}/restore`, { method: "POST" });
+        onChanged();
+      });
     });
   }
 
   return (
-    <div className="sheet-backdrop" onClick={requestClose}>
+    <div className={`sheet-backdrop${leaving ? " leaving" : ""}`} onClick={requestClose}>
       <div className="sheet" onClick={(ev) => ev.stopPropagation()}>
         <ReviewCard
           title="Edit expense"
@@ -106,7 +114,7 @@ export function EditSheet({ expense, categories, online, onClose, onChanged }: {
           body="Your changes to this expense won't be saved."
           confirmLabel="Discard changes"
           cancelLabel="Keep editing"
-          onConfirm={onClose}
+          onConfirm={close}
           onCancel={() => setAsking(null)}
         />
       )}

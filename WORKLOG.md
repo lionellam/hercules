@@ -4,7 +4,7 @@
 Maintained by: Lionel Lam Song Poh, James Wong
 Purpose: Record of work done, decisions made, challenges encountered, and assumptions held —
 to serve as a lessons learned reference for current and future contributors.
-Last updated: 14 November 2026
+Last updated: 15 November 2026
 ```
 
 ---
@@ -1402,3 +1402,26 @@ Last updated: 14 November 2026
 - The quick answer that the app is slow after a quiet spell because the database wakes up couldn't be confirmed from the code (it fits Neon's free tier pausing when idle, while parse timings so far point to the Claude call). The owner chose to keep it as it is.
 - Checked and found correct: the content rules (the owner isn't named, no competitor apps, no hint of recovering deleted expenses beyond Undo, the Updated date), that the live page matched the repository before these fixes, and the text and drawings for sign-in, logging and the review sheet, the currency rules, editing and deleting, History search, Summary, spending pace, Settings, categories and privacy.
 - The guide's Updated date was already 14 November 2026. Documents only, so the app version is unchanged.
+
+---
+
+## 15 November 2026 — Version 1.3.2: Sheets Slide Up and Down
+
+### What Was Done
+- The owner asked for the review and edit sheets to move when they appear and disappear, instead of appearing suddenly, as a cue to what needs attention, mainly on phones. This was already a follow-up in Architecture's Known Gaps.
+- Proposed, and agreed after an animated mockup (`design/sheet-animation-mockups.html`, with Faster, Proposed and Slower speeds and a Reduce Motion option):
+  - on phones, sheets slide up from the bottom in 0.3 seconds as the background fades in, easing to a stop, and slide back down in 0.2 seconds as it fades out, however they close;
+  - on wider screens, the centred dialog fades in while growing from 97% to full size, and reverses on closing;
+  - the same for every confirmation sheet ("Discard your edits?", "Delete this expense?", "Retire …?", "Sign out?", "Switch to …?"); the owner chose to include them;
+  - with Reduce Motion on, sheets only fade.
+- Built with CSS animations of movement and fading only. A small shared helper (`useLeave` in `web/components/confirm.tsx`) lets each sheet play its closing movement before it is removed; the review sheet, the expense and category edit sheets and the confirmation sheet use it. A confirmation now removes itself after confirming, so the currency switch no longer closes it directly.
+- Version **1.3.2** (a small tweak), with a changelog entry. Updated the Specification (v0.49, step 5 and Section 4.2), Architecture (v0.30, decision 38; the Known Gaps item marked done) and Test Plan (v1.19: C-07 and M-04 updated; new C-13 to C-16).
+- Tested locally on the demo account (confirmed first), at phone size unless stated:
+  - **Edit sheet:** 80 ms after opening it was partway up (267 pixels below its resting place) with the background at 18%, and settled fully by 0.4 seconds. Cancel slid it down (64 pixels down after 80 ms, background fading, taps blocked), and it was removed after about 0.2 seconds.
+  - **Delete:** "Delete this expense?" slid up over the edit sheet; after **Delete expense**, both started sliding down together about 30 ms later and were gone by about 0.25 seconds, then the Undo bar appeared; Undo restored the expense.
+  - **Discard changes:** after changing the merchant, tapping outside slid "Discard changes?" up while the edit sheet stayed still; **Keep editing** slid only the confirmation away and kept the change; **Save** slid the edit sheet away and the change was saved.
+  - **Review sheet:** after a real parse of `[TEST] lunch 5.50` it slid up; **Discard** slid it down, kept the typed text and re-enabled Parse.
+  - **Wider window (1,024 pixels):** the sign-out confirmation grew in from 97% while fading in, and shrank out on **Cancel**, without signing out.
+  - **Reduce Motion:** the rule is in place, but the test browser can't switch that setting on; test C-16 is for the owner's phone.
+  - Type-check, lint and a production build passed.
+- Clean-up: the test expense and the test parse were deleted (no `[TEST]` rows remain), the demo account was removed from the local allow-list, and the test browser was signed back in to the owner's local account.

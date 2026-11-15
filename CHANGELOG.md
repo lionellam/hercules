@@ -6,6 +6,13 @@ Versions follow [semantic versioning](https://semver.org): **major** for a chang
 
 ---
 
+## 1.3.2 — 15 November 2026
+
+**Improved**
+- On a phone, the review and edit sheets and the confirmations now slide up from the bottom when they open and slide back down when they close, so it's easier to see what needs your attention. On a tablet or computer they fade in and grow slightly instead. With your phone's Reduce Motion setting on, they just fade.
+
+---
+
 ## 1.3.1 — 14 November 2026
 
 **Improved**

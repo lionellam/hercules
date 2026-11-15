@@ -4,7 +4,7 @@ import { useRef, useState } from "react";
 import { api, expensesUrl, fmt, useCached, type ApiCache } from "@/lib/client";
 import { localToday } from "@/lib/dates";
 import type { Category, Expense, SummaryRow } from "@/lib/types";
-import { ConfirmSheet } from "../confirm";
+import { ConfirmSheet, useLeave } from "../confirm";
 import { NotIncluded, useHomeCurrency, useMoney } from "../currency";
 import { EditSheet, ExpenseRow } from "../expense-sheet";
 import ReviewCard, { type Fields } from "../review-card";
@@ -49,6 +49,9 @@ export default function LogScreen({ categories, online, cache, onSaved }: { cate
   const [parsed, setParsed] = useState<{ raw: string; fields: Fields } | null>(null);
   const [reviewDirty, setReviewDirty] = useState(false);
   const [askDiscard, setAskDiscard] = useState(false);
+  // Closing the review sheet slides it away before it is removed (Specification 4.2)
+  const [reviewLeaving, leaveReview] = useLeave();
+  const closeReview = () => leaveReview(() => setParsed(null));
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [toast, setToast] = useState("");
@@ -85,7 +88,7 @@ export default function LogScreen({ categories, online, cache, onSaved }: { cate
       method: "POST",
       body: JSON.stringify({ ...fields, raw_input: parsed.raw, was_edited: edited }),
     });
-    setParsed(null);
+    closeReview();
     setText("");
     setToast("Saved");
     setTimeout(() => setToast(""), 1600);
@@ -93,7 +96,7 @@ export default function LogScreen({ categories, online, cache, onSaved }: { cate
   }
 
   // Discard and tapping outside the review sheet do the same, asking first if a detail was changed
-  const requestDiscard = () => (reviewDirty ? setAskDiscard(true) : setParsed(null));
+  const requestDiscard = () => (reviewDirty ? setAskDiscard(true) : closeReview());
 
   const today = new Date().toLocaleDateString("en-SG", { weekday: "long", day: "numeric", month: "long" });
 
@@ -141,7 +144,7 @@ export default function LogScreen({ categories, online, cache, onSaved }: { cate
         {toast && <p className="toast">{toast}</p>}
       </div>
       {parsed && (
-        <div className="sheet-backdrop" onClick={requestDiscard}>
+        <div className={`sheet-backdrop${reviewLeaving ? " leaving" : ""}`} onClick={requestDiscard}>
           <div className="sheet" onClick={(ev) => ev.stopPropagation()}>
             <ReviewCard
               title="Review before saving"
@@ -163,10 +166,7 @@ export default function LogScreen({ categories, online, cache, onSaved }: { cate
           title="Discard your edits?"
           confirmLabel="Discard"
           cancelLabel="Keep reviewing"
-          onConfirm={() => {
-            setAskDiscard(false);
-            setParsed(null);
-          }}
+          onConfirm={closeReview}
           onCancel={() => setAskDiscard(false)}
         />
       )}

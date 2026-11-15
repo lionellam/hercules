@@ -74,7 +74,6 @@ export function CurrencyPage({ online, onBack, onSaved }: { online: boolean; onB
   async function switchTo(code: string) {
     await api(SETTINGS_URL, { method: "PATCH", body: JSON.stringify({ default_currency: code }) });
     setChosen(code);
-    setAsking(null);
     setError("");
     onSaved(code);
   }

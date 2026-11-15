@@ -1,8 +1,8 @@
 # Project Hercules — Test Plan: Web App v1
 
 ```
-Version 1.18 · Draft
-Last Reviewed: 14 November 2026
+Version 1.19 · Draft
+Last Reviewed: 15 November 2026
 Produced with AI Assistance (Claude Code)
 ```
 
@@ -29,6 +29,7 @@ Produced with AI Assistance (Claude Code)
 | 1.16 | 2026-11-14 | Lionel Lam | Review card in a sheet: B-01, C-03 and C-04 updated; new C-07 to C-11; S-03 uses **Save expense** |
 | 1.17 | 2026-11-14 | Lionel Lam | Pencil and calendar icons: C-07 and C-11 updated; new C-12 (the date sits flush right on iPhone) |
 | 1.18 | 2026-11-14 | Lionel Lam | Accuracy review: M-04 says sheets appear at the bottom (no sliding) and includes the review sheet; M-05 includes the review sheet as a centred dialog; C-12 tagged **[Phone]** |
+| 1.19 | 2026-11-15 | Lionel Lam | Sheet animation: C-07 and M-04 updated; new C-13 to C-16 |
 
 ---
 
@@ -123,12 +124,16 @@ After Parse, the review card opens in a sheet over the Log screen. Its save butt
 | C-04 | Discard after a change asks first | Parse, change the amount → tap **Discard** | "Discard your edits?" appears, with no explanation text and a red **Discard**. **Keep reviewing** returns to the card with your change. **Discard** closes the card; the typed text stays; nothing is saved |
 | C-05 | Amount must be above zero | On a card, set the amount to 0 or text such as "abc" → Save | "Please enter an amount." Nothing is saved |
 | C-06 | Impossible date is refused | Using the browser's developer tools or the API, try to save an expense dated 2026-02-31 | The save is refused with "Please check the amount and fields." |
-| C-07 | The review sheet | On a phone, parse `[TEST] lunch 5.50` | A sheet opens at the bottom over the darkened Log screen, with no handle and no animation. It shows "REVIEW BEFORE SAVING", the typed text in quotes, the amount with its currency, and Category, Merchant, Date and Remarks. Category, Merchant and Remarks each have a pencil, Date has a calendar, and the amount has no icon. Below are full-width **Save expense** and **Discard** buttons. The Today list can't be tapped while the sheet is open |
+| C-07 | The review sheet | On a phone, parse `[TEST] lunch 5.50` | A sheet opens at the bottom over the darkened Log screen, with no handle, sliding up from the bottom edge as the background darkens. It shows "REVIEW BEFORE SAVING", the typed text in quotes, the amount with its currency, and Category, Merchant, Date and Remarks. Category, Merchant and Remarks each have a pencil, Date has a calendar, and the amount has no icon. Below are full-width **Save expense** and **Discard** buttons. The Today list can't be tapped while the sheet is open |
 | C-08 | Tapping outside without changes | Parse `[TEST] lunch 5.50` → tap the darkened area above the sheet | The sheet closes straight away, as with Discard. The typed text stays in the box and Parse can be tapped again. Nothing is saved |
 | C-09 | Tapping outside after a change | Parse, change the merchant → tap the darkened area | "Discard your edits?" appears. **Keep reviewing** returns to the sheet with the change; **Discard** closes it, the typed text stays, nothing is saved |
 | C-10 | Wider screens | In a window at least 768 pixels wide, parse `[TEST] lunch 5.50` | The review appears as a centred dialog over the darkened screen; tapping outside works as in C-08 |
 | C-11 | Edit sheet | Open a saved `[TEST]` expense from Today | The edit sheet has the same pencil and calendar icons as the review sheet. Its button still says **Save**, and Delete, Cancel and Save work as before |
 | C-12 | Date on iPhone **[Phone]** | On an iPhone, in Safari or the home-screen app, parse `[TEST] lunch 5.50`, then open a saved expense; tap the date on each | On both sheets the date sits flush right, lined up with the values above and below, with the calendar icon beside it. Tapping the date opens the date picker |
+| C-13 | Sheets slide away | On a phone, parse `[TEST] lunch 5.50` → **Discard**; parse again → tap outside; parse again → **Save expense**; open the saved expense → **Cancel**; open it again → **Delete** → **Delete expense** | Each time the sheet slides back down (about a fifth of a second) as the background lightens, then is gone. After Delete, both the confirmation and the edit sheet slide away together and Undo appears. Nothing stays on screen or blocks taps |
+| C-14 | Confirmation over a sheet | Parse, change the merchant → **Discard**; then **Keep reviewing** | "Discard your edits?" slides up over the review sheet, which stays still; **Keep reviewing** slides only the confirmation away |
+| C-15 | Wider screens | In a window at least 768 pixels wide, parse `[TEST] lunch 5.50`, then **Discard** | The dialog fades in while growing slightly, and fades out while shrinking slightly; it doesn't slide |
+| C-16 | Reduce Motion **[Phone]** | Turn on the phone's Reduce Motion (iPhone: Settings → Accessibility → Motion), then repeat C-13's first step | The sheet fades in and out without sliding |
 
 ### D. Fixing, Deleting and Undo
 
@@ -264,7 +269,7 @@ To set up I-01 to I-05: create a `zz-test-` category with a $300 budget and log 
 | M-01 | Light and dark | Settings → Appearance → **Light**, then **Dark** | The app switches theme at once. Reload: the choice is kept on that device |
 | M-02 | System follows the device | Settings → Appearance → **System**, then switch the device between light and dark | The app follows the device. A new device starts on System |
 | M-03 | Pinned tops | Scroll on each of the four tabs; then hold a phone sideways and scroll again | Upright, each tab's heading and main control stay at the top (on Summary, also the total). Sideways on a phone, nothing stays at the top |
-| M-04 | Phone layout | Use a phone, or a browser window narrower than 768 pixels | One column; the review and edit sheets, and confirmations, appear at the bottom of the screen |
+| M-04 | Phone layout | Use a phone, or a browser window narrower than 768 pixels | One column; the review and edit sheets, and confirmations, slide up from the bottom of the screen |
 | M-05 | Tablet and computer | Use windows 768, 1,024 and 1,280 pixels wide or more | The app widens to about 820, 920 and 1,000 pixels; Log and Summary show two columns; the review and edit sheets, and confirmations, open as centred dialogs |
 | M-06 | No sideways scrolling | Check each screen at phone width | Nothing makes the page scroll sideways |
 

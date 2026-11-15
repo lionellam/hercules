@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sheet Animation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root { --page: #ececea; --page-text: #18181b; --page-muted: #5f5f66; --open: 300ms; --close: 200ms; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--page); color: var(--page-text); font-family: Inter, -apple-system, system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  main { max-width: 1260px; margin: 0 auto; padding: 36px 16px 80px; }
+  h1 { font-size: 28px; letter-spacing: -0.02em; margin: 0 0 8px; }
+  .intro p { color: var(--page-muted); max-width: 820px; line-height: 1.55; margin: 0 0 10px; font-size: 15px; }
+  .controls { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; margin: 18px 0 6px; font-size: 14px; }
+  .controls .label { color: var(--page-muted); }
+  .seg { display: inline-flex; background: #dcdcd8; border-radius: 10px; padding: 3px; }
+  .seg button { border: none; background: none; padding: 6px 12px; border-radius: 8px; font: inherit; font-size: 13.5px; color: var(--page-muted); cursor: pointer; }
+  .seg button.on { background: #fff; color: var(--page-text); font-weight: 600; box-shadow: 0 1px 3px rgba(0,0,0,.12); }
+  .check { display: inline-flex; align-items: center; gap: 6px; cursor: pointer; }
+  .frames { display: flex; flex-wrap: wrap; gap: 30px 26px; align-items: flex-start; margin-top: 22px; }
+  figure { margin: 0; max-width: 100%; }
+  figcaption { max-width: 560px; font-size: 13px; color: var(--page-muted); margin-top: 12px; line-height: 1.5; }
+  figcaption b { color: var(--page-text); }
+  .badge { display: inline-block; font-size: 11px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; padding: 2px 7px; border-radius: 6px; margin-right: 6px; vertical-align: 1px; background: #1d4ed8; color: #fff; }
+  .badge.alt { background: #7c3aed; }
+  .buttons { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+  .buttons button { border: 1px solid #c9c9c4; background: #fff; border-radius: 10px; padding: 7px 12px; font: inherit; font-size: 13px; cursor: pointer; }
+
+  /* Frames */
+  .phone { width: 340px; height: 680px; border-radius: 30px; overflow: hidden; border: 1px solid rgba(0,0,0,.08); box-shadow: 0 1px 2px rgba(0,0,0,.06), 0 10px 28px rgba(0,0,0,.08); }
+  .desk { width: 560px; max-width: 100%; height: 420px; border-radius: 14px; overflow: hidden; border: 1px solid rgba(0,0,0,.1); box-shadow: 0 10px 28px rgba(0,0,0,.08); }
+
+  /* App look, from web/app/globals.css */
+  .app { --bg: #fff; --surface: #fff; --text: #18181b; --muted: #71717a; --line: #e7e7e4; --soft: #f4f4f5; --bad: #b91c1c;
+         position: relative; height: 100%; background: var(--bg); color: var(--text); font-size: 15px; display: flex; flex-direction: column; overflow: hidden; }
+  .app .top { padding: 28px 20px 14px; border-bottom: 1px solid var(--line); }
+  .app .date { color: var(--muted); font-size: 14px; }
+  .app h3 { font-size: 27px; font-weight: 700; letter-spacing: -0.02em; }
+  .app .input { background: var(--soft); border-radius: 16px; padding: 14px; margin-top: 12px; font-size: 17px; }
+  .app .input .r { display: flex; justify-content: flex-end; margin-top: 10px; }
+  .app .btn { height: 38px; padding: 0 15px; border-radius: 12px; font-weight: 600; display: inline-flex; align-items: center; background: #18181b; color: #fff; font-size: 14px; }
+  .app .spent { display: flex; justify-content: space-between; margin-top: 12px; color: var(--muted); font-size: 14px; }
+  .app .spent b { color: var(--text); }
+  .app .body { padding: 0 20px; }
+  .app .h { margin-top: 18px; font-size: 13px; color: var(--muted); font-weight: 600; letter-spacing: .04em; }
+  .app .item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--line); }
+  .app .item .c { color: var(--muted); font-size: 13px; }
+
+  /* The sheet and its backdrop, with the proposed animation */
+  .backdrop { position: absolute; inset: 0; background: rgba(0,0,0,.4); display: flex; align-items: flex-end; justify-content: center; opacity: 0; visibility: hidden; }
+  .backdrop.confirm { background: rgba(0,0,0,.25); z-index: 2; }
+  .sheet { width: 100%; background: var(--surface); border-radius: 20px 20px 0 0; padding: 18px 18px 22px; transform: translateY(100%); }
+  .desk .backdrop { align-items: center; }
+  .desk .sheet { width: 340px; border-radius: 18px; transform: scale(.97); opacity: 0; }
+  /* Opening: backdrop fades in, sheet slides up and eases to a stop */
+  .backdrop.open { opacity: 1; visibility: visible; transition: opacity var(--open) ease-out, visibility 0s; }
+  .backdrop.open .sheet { transform: none; transition: transform var(--open) cubic-bezier(.32, .72, 0, 1); }
+  .desk .backdrop.open .sheet { opacity: 1; transition: transform var(--open) cubic-bezier(.32, .72, 0, 1), opacity var(--open) ease-out; }
+  /* Closing: a little faster, accelerating away */
+  .backdrop.closing { opacity: 0; visibility: visible; transition: opacity var(--close) ease-in; }
+  .backdrop.closing .sheet { transform: translateY(100%); transition: transform var(--close) cubic-bezier(.4, 0, 1, 1); }
+  .desk .backdrop.closing .sheet { transform: scale(.97); opacity: 0; transition: transform var(--close) ease-in, opacity var(--close) ease-in; }
+  /* Reduce Motion: fade only, no movement */
+  .reduced .sheet, .reduced .desk .sheet { transform: none !important; }
+  .reduced .backdrop.open .sheet, .reduced .backdrop.closing .sheet { transition: opacity var(--open) ease-out; }
+
+  .card-t { font-size: 12px; font-weight: 600; color: var(--muted); letter-spacing: .06em; }
+  .raw { color: var(--muted); font-size: 13.5px; font-style: italic; margin-top: 6px; }
+  .amt { display: flex; align-items: baseline; gap: 8px; margin: 10px 0 8px; }
+  .amt .pick { background: var(--soft); border-radius: 8px; padding: 3px 8px; font-weight: 600; font-size: 15px; }
+  .amt b { font-size: 32px; }
+  .field { display: flex; justify-content: space-between; padding: 10px 0; border-top: 1px solid var(--line); font-size: 14.5px; }
+  .field span:first-child { color: var(--muted); }
+  .field span:last-child { font-weight: 500; }
+  .save { margin-top: 12px; background: #18181b; color: #fff; border-radius: 12px; text-align: center; padding: 12px 0; font-weight: 600; cursor: pointer; }
+  .disc { text-align: center; color: var(--muted); padding: 11px 0 0; font-weight: 600; cursor: pointer; }
+  .conf h4 { font-size: 18px; }
+  .conf p { color: var(--muted); font-size: 14px; margin-top: 8px; line-height: 1.5; }
+  .red { margin-top: 16px; background: var(--bad); color: #fff; border-radius: 12px; text-align: center; padding: 12px 0; font-weight: 600; cursor: pointer; }
+</style>
+</head>
+<body>
+<main>
+  <div class="intro">
+    <h1>Sheet animation</h1>
+    <p>Tap <b>Open</b> to show a sheet and <b>Close</b> (or the sheet's own buttons, or the darkened area) to dismiss it. On a phone the sheet slides up from the bottom and eases to a stop, while the background fades in; closing slides it down a little faster. On wider screens the centred dialog fades in and grows slightly instead. Confirmation sheets ("Discard your edits?", "Delete this expense?" and so on) move the same way.</p>
+  </div>
+  <div class="controls">
+    <span class="label">Speed</span>
+    <div class="seg" id="speed">
+      <button data-o="220" data-c="160">Faster (0.22 s)</button>
+      <button data-o="300" data-c="200" class="on">Proposed (0.3 s)</button>
+      <button data-o="420" data-c="280">Slower (0.42 s)</button>
+    </div>
+    <label class="check"><input type="checkbox" id="reduced"> Phone's "Reduce Motion" turned on (fade only)</label>
+  </div>
+
+  <div class="frames">
+    <figure>
+      <div class="phone"><div class="app" id="phone"></div></div>
+      <div class="buttons">
+        <button data-target="phone" data-open="review">Open review sheet</button>
+        <button data-target="phone" data-open="confirm">Open "Discard your edits?"</button>
+        <button data-target="phone" data-close>Close</button>
+      </div>
+      <figcaption><span class="badge">Phone</span><b>Slide up, slide down.</b> The review sheet after Parse; the edit sheet moves the same way. "Discard your edits?" opens over it, and closes back to it.</figcaption>
+    </figure>
+    <figure>
+      <div class="desk"><div class="app" id="desk"></div></div>
+      <div class="buttons">
+        <button data-target="desk" data-open="review">Open review dialog</button>
+        <button data-target="desk" data-open="confirm">Open "Discard your edits?"</button>
+        <button data-target="desk" data-close>Close</button>
+      </div>
+      <figcaption><span class="badge alt">iPad and desktop</span><b>Fade and grow.</b> The centred dialog starts at 97% of its size and settles to full size as it fades in; closing reverses it.</figcaption>
+    </figure>
+  </div>
+</main>
+<script>
+const logScreen = `<div class="top"><div class="date">Sunday, 15 November</div><h3>Log an expense</h3>
+  <div class="input">Lunch at Ya Kun for $4.50<div class="r"><span class="btn">Parse</span></div></div>
+  <div class="spent"><span>Spent today</span><b>$39.50</b></div></div>
+  <div class="body"><div class="h">TODAY</div>
+  <div class="item"><div><div>Toast Box</div><div class="c">Food &amp; Dining</div></div><div>30.00</div></div>
+  <div class="item"><div><div>MRT</div><div class="c">Transport</div></div><div>9.50</div></div></div>`;
+const review = `<div class="backdrop" data-sheet="review"><div class="sheet">
+  <div class="card-t">REVIEW BEFORE SAVING</div><div class="raw">“Lunch at Ya Kun for $4.50”</div>
+  <div class="amt"><span class="pick">SGD ▾</span><b>4.50</b></div>
+  <div class="field"><span>Category</span><span>Food &amp; Dining ✎</span></div>
+  <div class="field"><span>Merchant</span><span>Ya Kun ✎</span></div>
+  <div class="field"><span>Date</span><span>15/11/2026 ▦</span></div>
+  <div class="field"><span>Remarks</span><span style="color:var(--muted);font-weight:400">Optional ✎</span></div>
+  <div class="save" data-close-one>Save expense</div><div class="disc" data-close-one>Discard</div></div></div>`;
+const confirm = `<div class="backdrop confirm" data-sheet="confirm"><div class="sheet conf">
+  <h4>Discard your edits?</h4>
+  <div class="red" data-close-one>Discard</div><div class="disc" data-close-one>Keep reviewing</div></div></div>`;
+for (const id of ["phone", "desk"]) document.getElementById(id).innerHTML = logScreen + review + confirm;
+
+const closeMs = () => parseInt(getComputedStyle(document.documentElement).getPropertyValue("--close"));
+function open(target, which) {
+  const el = document.querySelector(`#${target} [data-sheet="${which}"]`);
+  if (which === "confirm") open(target, "review");
+  el.classList.remove("closing");
+  void el.offsetWidth; // start from the hidden position
+  el.classList.add("open");
+}
+function close(el) {
+  if (!el.classList.contains("open")) return;
+  el.classList.remove("open");
+  el.classList.add("closing");
+  setTimeout(() => el.classList.remove("closing"), closeMs());
+}
+document.querySelectorAll("[data-open]").forEach((b) => b.addEventListener("click", () => open(b.dataset.target, b.dataset.open)));
+document.querySelectorAll("[data-close]").forEach((b) => b.addEventListener("click", () => {
+  const sheets = [...document.querySelectorAll(`#${b.dataset.target} .backdrop.open`)];
+  close(sheets.at(-1)); // the top one first, as in the app
+}));
+document.addEventListener("click", (ev) => {
+  const t = ev.target;
+  if (t.matches("[data-close-one]")) close(t.closest(".backdrop"));
+  else if (t.classList.contains("backdrop")) close(t);
+});
+document.querySelectorAll("#speed button").forEach((b) => b.addEventListener("click", () => {
+  document.querySelectorAll("#speed button").forEach((x) => x.classList.toggle("on", x === b));
+  document.documentElement.style.setProperty("--open", b.dataset.o + "ms");
+  document.documentElement.style.setProperty("--close", b.dataset.c + "ms");
+}));
+document.getElementById("reduced").addEventListener("change", (ev) => document.body.classList.toggle("reduced", ev.target.checked));
+</script>
+</body>
+</html>

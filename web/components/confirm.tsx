@@ -36,7 +36,23 @@ export function useUndoBar() {
   return { showUndo, element };
 }
 
-// The app's own confirmation, used instead of the browser's prompt (which some browsers switch off)
+// Sheets slide (or fade) away before they're removed (Specification 4.2). `leave(then)` starts the closing
+// movement and runs `then` once it has finished; `leaving` adds the "leaving" class that plays it.
+export const LEAVE_MS = 200;
+export function useLeave() {
+  const [leaving, setLeaving] = useState(false);
+  const leave = useCallback((then: () => void) => {
+    setLeaving(true);
+    setTimeout(() => {
+      then();
+      setLeaving(false);
+    }, LEAVE_MS);
+  }, []);
+  return [leaving, leave] as const;
+}
+
+// The app's own confirmation, used instead of the browser's prompt (which some browsers switch off).
+// Confirming runs onConfirm, then the sheet slides away and onCancel removes it
 export function ConfirmSheet({ title, body, detail, confirmLabel, cancelLabel = "Cancel", danger = true, onConfirm, onCancel }: {
   title: string;
   body?: React.ReactNode;
@@ -49,18 +65,20 @@ export function ConfirmSheet({ title, body, detail, confirmLabel, cancelLabel = 
 }) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
+  const [leaving, leave] = useLeave();
   async function confirm() {
     setBusy(true);
     setError("");
     try {
       await onConfirm();
+      leave(onCancel);
     } catch (e) {
       setError((e as Error).message);
       setBusy(false);
     }
   }
   return (
-    <div className="confirm-backdrop" onClick={(ev) => { ev.stopPropagation(); if (!busy) onCancel(); }}>
+    <div className={`confirm-backdrop${leaving ? " leaving" : ""}`} onClick={(ev) => { ev.stopPropagation(); if (!busy) leave(onCancel); }}>
       <div className="confirm-sheet" role="alertdialog" aria-modal="true" aria-label={title} onClick={(ev) => ev.stopPropagation()}>
         <h2>{title}</h2>
         {body && <div className="confirm-body">{body}</div>}
@@ -68,7 +86,7 @@ export function ConfirmSheet({ title, body, detail, confirmLabel, cancelLabel = 
         {error && <p className="error">{error}</p>}
         <div className="confirm-actions">
           <button className={`btn ${danger ? "btn-red" : "btn-primary"}`} disabled={busy} onClick={confirm}>{busy ? "Please wait…" : confirmLabel}</button>
-          <button className="btn btn-ghost" disabled={busy} onClick={onCancel}>{cancelLabel}</button>
+          <button className="btn btn-ghost" disabled={busy} onClick={() => leave(onCancel)}>{cancelLabel}</button>
         </div>
       </div>
     </div>
