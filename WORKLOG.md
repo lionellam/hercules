@@ -1425,3 +1425,4 @@ Last updated: 15 November 2026
   - **Reduce Motion:** the rule is in place, but the test browser can't switch that setting on; test C-16 is for the owner's phone.
   - Type-check, lint and a production build passed.
 - Clean-up: the test expense and the test parse were deleted (no `[TEST]` rows remain), the demo account was removed from the local allow-list, and the test browser was signed back in to the owner's local account.
+- **Confirmed (15 November 2026):** after the deploy, the owner checked on their phone that the sheets slide up and down with 1.3.2, and that with Reduce Motion on they only fade (test C-16).
