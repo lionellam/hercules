@@ -1440,3 +1440,17 @@ Last updated: 15 November 2026
 - Tested locally on the demo account (confirmed first): on Summary the button had no fill and its outline was `#71717a` in dark and `#8e8e96` in light, with the label in the text colour; **CSV** still returned the month's file (CSV, 18 lines); Settings showed Version 1.3.3. The guide's Summary drawing was checked in a local preview. Type-check, lint (the one known warning) and a production build passed.
 - Clean-up: no test data was created (no `[TEST]` rows exist); the demo account was removed from the local allow-list, and the test browser was signed back in to the owner's local account.
 - **Confirmed (15 November 2026):** after the deploy, the owner checked on their phone that the CSV button on Summary shows its outline with 1.3.3.
+
+---
+
+## 15 November 2026 — Document Integrity Check After 1.3.3
+
+### What Was Done
+- At the owner's request, checked the documents after 1.3.2 (sheet animation) and 1.3.3 (outlined CSV button). No problems were found:
+  1. Each document's version header matches the last row of its Version History: Specification 0.50, Architecture 0.31, Test Plan 1.20, Charter 0.14, Project Plan 0.14; Last Reviewed dates are current.
+  2. `web/package.json` (1.3.3), `CHANGELOG.md` and the Git tags agree; every changelog version has a tag, and the local and GitHub tags match.
+  3. No wording from before the sheet animation remains (Architecture's "no animation" is struck through with its update note). The outlined CSV button is in Specification 4.5, Architecture decision 35 and Test Plan R-01. The Charter and Project Plan don't go to that level of detail, so they needed no change.
+  4. The user guide follows its content rules, is dated 15 November 2026, and the live Pages copy is identical to the repository.
+  5. Both READMEs are accurate, and this worklog is dated.
+- Noted, not a fault: the Go-Live Checklist (last updated 2 November 2026) still has three open items for the owner: reporting anything odd, inviting family and friends, and an optional review of Architecture's decisions.
+- Documents only, so the app version stays at 1.3.3.
