@@ -44,6 +44,15 @@ Versions follow semantic versioning (Architecture decision 34): **major** for a 
 
 Settings shows the version with the commit and build time, so you can check which version is live.
 
+## Experimental features
+
+Settings → Experimental features lists features that are deployed but hidden until switched on, on each device (Specification 4.7, Architecture decision 39). Switches are saved in the browser's local storage, so each device has its own.
+
+1. Add an entry to `EXPERIMENTS` in `lib/experiments.ts`: an `id` (kept the same while the feature is listed), a `name` and a one-line `description`.
+2. Where the feature appears, check it with `useExperiment("its-id")` from `components/experiments.tsx`, and show the feature only when it's on.
+3. Ship it as a normal release; it can then be switched on and off without another deploy. A feature needing a database change still needs that change first.
+4. When the feature is kept for everyone, or dropped, remove its entry and its checks in the same release. Saved switches for features no longer listed are ignored.
+
 ## Deploying
 
 1. **Anthropic** — in the Anthropic Console, create an API key and set a **US$5 monthly spend limit** on the account.

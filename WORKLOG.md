@@ -1491,3 +1491,13 @@ Last updated: 16 November 2026
   - Type-check, lint (the one known warning) and a production build passed.
 - Clean-up: no expenses or parses were created; the temporary delay was removed; the demo account was removed from the local allow-list, and the test browser was signed out, as it was before the test.
 - **Confirmed (16 November 2026):** after the deploy, the owner checked on their phone that the loading placeholders work with 1.4.1.
+
+---
+
+## 16 November 2026 — Document Integrity Check After 1.4.1
+
+### What Was Done
+- At the owner's request, checked the documents after 1.4.0 (experimental features page) and 1.4.1 (loading placeholders). Version histories, `CHANGELOG.md`, `web/package.json` and the Git tags (to v1.4.1) agreed; both changes were in the Specification, Architecture, Test Plan and (for 1.4.0) the Project Plan; no document still described the old loading states; the user guide followed its content rules and the live copy matched the repository. Two gaps were found and fixed:
+  1. Architecture (v0.34): decision 23 said "Nothing is stored on the device", meaning expense data, though the appearance choice (decision 33) and experimental switches (decision 39) are kept there. It now says no expenses or other account data are stored on the device, and names the two exceptions.
+  2. `web/README.md`: a new "Experimental features" section explains how to add a feature behind a switch and remove it later; the steps were only in a code comment.
+- Documents only, so the app version stays at 1.4.1.
