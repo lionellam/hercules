@@ -103,6 +103,12 @@ td.num { font-variant-numeric: tabular-nums; white-space: nowrap; }
 
 .figure-row { display: flex; flex-wrap: wrap; gap: 28px; align-items: flex-start; margin: 26px 0 10px; }
 figure { margin: 0; min-width: 0; }
+/* A pair of drawings: both phones share one row, so they're always the same height, with the captions underneath */
+.figure-row.pair { display: grid; grid-template-columns: repeat(auto-fill, 300px); gap: 28px; }
+.figure-row.pair > figure { display: grid; grid-template-rows: subgrid; grid-row: span 2; row-gap: 0; }
+.figure-row.pair .phone { display: flex; flex-direction: column; }
+.figure-row.pair .phone > .m { flex: 1; display: flex; flex-direction: column; }
+.figure-row.pair .phone > .m > .tabs { margin-top: auto; }
 figcaption { font-size: 14px; color: var(--ink-2); margin-top: 10px; max-width: 320px; line-height: 1.45; }
 figcaption b { color: var(--ink); }
 .diagram { overflow-x: auto; background: var(--paper); border: 1px solid var(--rule); border-radius: 12px; padding: 16px; margin: 20px 0; }
@@ -214,6 +220,7 @@ footer { margin-top: 72px; padding-top: 18px; border-top: 1px solid var(--rule);
   h2 { font-size: 26px; }
   .phone { width: 100%; }
   figcaption { max-width: none; }
+  .figure-row.pair { grid-template-columns: minmax(0, 1fr); }
 }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 html { scroll-behavior: smooth; }
@@ -324,9 +331,9 @@ dl.faq dd { margin: 2px 0 0; color: var(--ink-2); }
     <p>*Note: You may choose your own language model to perform the natural language parsing. However, do note that the parsing performance may vary.</p>
 
 
-    <div class="figure-row">
+    <div class="figure-row pair">
       <figure>
-        <div class="phone"><div class="m" style="min-height:540px;display:flex;flex-direction:column">
+        <div class="phone"><div class="m">
           <div class="top">
             <div class="sub">Saturday, 7 November</div>
             <h5>Log an expense</h5>
@@ -341,7 +348,7 @@ dl.faq dd { margin: 2px 0 0; color: var(--ink-2); }
             <div class="cat"><div class="cat-top"><span>Food &amp; Dining<span class="n">1</span></span><strong>30.00</strong></div><div class="track"><div class="fill" style="width:100%"></div></div></div>
             <div class="cat"><div class="cat-top"><span>Transport<span class="n">1</span></span><strong>9.50</strong></div><div class="track"><div class="fill" style="width:32%"></div></div></div>
           </div>
-          <div class="tabs" style="margin-top:auto">
+          <div class="tabs">
             <span class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Log</span>
             <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg>History</span>
             <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 20V10M12 20V4M18 20v-6"/></svg>Summary</span>
@@ -401,9 +408,9 @@ dl.faq dd { margin: 2px 0 0; color: var(--ink-2); }
     <h2 id="fix">Fixing and deleting</h2>
     <p>Tap any expense, in the Today list or in History, to open it. Change what you need and tap <b>Save</b>. Expenses you've changed from what Claude suggested show a small <b>edited</b> tag.</p>
     <p>To delete, open the expense and tap <b>Delete</b>. The app shows which expense it is and asks you to confirm. After deleting, an <b>Undo</b> bar appears at the bottom for about five seconds. Tap it to bring the expense back.</p>
-    <div class="figure-row">
+    <div class="figure-row pair">
       <figure>
-        <div class="phone"><div class="m" style="position:relative;min-height:573px;display:flex;flex-direction:column">
+        <div class="phone"><div class="m" style="position:relative">
           <div class="top flat"><h5>History</h5><div class="month"><i>‹</i><span>November 2026</span><i style="opacity:.35">›</i></div><div class="msearch"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><span class="q ph">Search expenses</span></div></div>
           <div class="body" style="opacity:.35">
             <div class="day">SAT, 7 NOV</div>
@@ -451,7 +458,7 @@ dl.faq dd { margin: 2px 0 0; color: var(--ink-2); }
     <h2 id="history">History</h2>
     <p>History lists every expense month by month, newest first, grouped by day. Use the arrows beside the month to go back to earlier months. Tap any expense to edit or delete it.</p>
     <p><b>Searching.</b> Type in the search box below the month to find expenses in that month. The list narrows with each letter, and shows how many match and what they add up to. You can search by merchant, category, the words you typed, remarks or amount, such as "grab" or "14.20". Tap × to clear it. Changing the month or leaving History clears the search too.</p>
-    <div class="figure-row">
+    <div class="figure-row pair">
       <figure>
         <div class="phone"><div class="m">
           <div class="top">
@@ -472,7 +479,7 @@ dl.faq dd { margin: 2px 0 0; color: var(--ink-2); }
         <figcaption><b>History.</b> Grouped by day. "edited" marks expenses you changed from what Claude suggested.</figcaption>
       </figure>
       <figure>
-        <div class="phone"><div class="m" style="min-height:513px;display:flex;flex-direction:column">
+        <div class="phone"><div class="m">
           <div class="top">
             <h5>History</h5>
             <div class="month"><i>‹</i><span>November 2026</span><i style="opacity:.35">›</i></div>
@@ -501,7 +508,7 @@ dl.faq dd { margin: 2px 0 0; color: var(--ink-2); }
       <li><b>Spending pace</b>, shown only for the current month, only for expense categories with a defined budget. More information in the next section.</li>
       <li><b>Export your expenses</b>, by tapping the <b>CSV</b> button beside the total to export that month's expenses as a CSV file, which can be opened in Excel, Numbers or Google Sheets.</li>
     </ul>
-    <div class="figure-row">
+    <div class="figure-row pair">
       <figure>
         <div class="phone"><div class="m">
           <div class="top">
@@ -536,7 +543,7 @@ dl.faq dd { margin: 2px 0 0; color: var(--ink-2); }
         <figcaption><b>Summary, this month.</b> <b>CSV</b> beside the total downloads the month's expenses. The marker on each budgeted bar shows the amount expected by today. Food &amp; Dining is open to show its burn-up chart.</figcaption>
       </figure>
       <figure>
-        <div class="phone"><div class="m" style="min-height:586px;display:flex;flex-direction:column">
+        <div class="phone"><div class="m">
           <div class="top">
             <h5>Summary</h5>
             <div class="seg"><span class="on">November</span><span>October</span></div>
@@ -582,7 +589,7 @@ dl.faq dd { margin: 2px 0 0; color: var(--ink-2); }
       <li><b>Account:</b> the email address you're signed in with, and <b>Sign out</b>, which asks you to confirm first.</li>
       <li><b>Version:</b> at the bottom, the app's version number and when it was last updated. Handy to mention if you report a problem.</li>
     </ul>
-    <div class="figure-row">
+    <div class="figure-row pair">
       <figure>
         <div class="phone"><div class="m">
           <div class="top"><h5>Settings</h5></div>
@@ -604,7 +611,7 @@ dl.faq dd { margin: 2px 0 0; color: var(--ink-2); }
         <figcaption><b>Settings.</b> Categories &amp; budgets, Currency and Experimental features each open their own page; tap "‹ Settings" there to come back.</figcaption>
       </figure>
       <figure>
-        <div class="phone"><div class="m" style="position:relative;min-height:599px;display:flex;flex-direction:column">
+        <div class="phone"><div class="m" style="position:relative">
           <div class="top"><h5>Settings</h5></div>
           <div class="body" style="opacity:.35">
             <div class="sh">SPENDING</div>
