@@ -1471,3 +1471,4 @@ Last updated: 16 November 2026
   - The user guide's Settings section and drawings were checked in a local preview.
   - Type-check, lint (the one known warning) and a production build passed.
 - Clean-up: no expenses or parses were created; the temporary test feature was removed (the list is empty); the demo account was removed from the local allow-list, and the test browser was signed out, as it was before the test.
+- **Confirmed (16 November 2026):** after the deploy, the owner checked on their phone that Settings shows the Experimental section and the Experimental features page works with 1.4.0 ("Nothing to try right now").
