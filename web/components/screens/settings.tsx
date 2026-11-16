@@ -1,12 +1,13 @@
 "use client";
 
-// Settings (Specification 4.4): Categories & budgets, Currency, Appearance, Account, and the version running
+// Settings (Specification 4.4): Categories & budgets, Currency, Appearance, Experimental features, Account, and the version running
 import { useState } from "react";
 import { signOutAction } from "@/app/actions";
 import type { ApiCache } from "@/lib/client";
 import type { Category } from "@/lib/types";
 import { ConfirmSheet } from "../confirm";
 import { CurrencyPage, SETTINGS_URL, useHomeCurrency } from "../currency";
+import { ExperimentsPage, useExperimentsSummary } from "../experiments";
 import { currencyName } from "@/lib/currencies";
 import { AppearanceChoice } from "../theme";
 import CategoriesScreen from "./categories";
@@ -33,6 +34,12 @@ const CoinsIcon = () => (
     <path d="M15.5 9.5a6 6 0 1 1-6 6" />
   </svg>
 );
+// A flask, for experimental features
+const FlaskIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M9 3h6M10 3v6L4.5 18.5A2 2 0 0 0 6.2 21.5h11.6a2 2 0 0 0 1.7-3L14 9V3M7 15h10" />
+  </svg>
+);
 const PersonIcon = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden="true">
     <circle cx="12" cy="8" r="4" />
@@ -42,8 +49,9 @@ const PersonIcon = () => (
 
 export default function SettingsScreen({ email, categories, online, cache, onChanged }: { email: string; categories: Category[]; online: boolean; cache: ApiCache; onChanged: () => void }) {
   // Opening the Settings tab always starts on this list
-  const [page, setPage] = useState<"list" | "categories" | "currency">("list");
+  const [page, setPage] = useState<"list" | "categories" | "currency" | "experiments">("list");
   const home = useHomeCurrency();
+  const experiments = useExperimentsSummary();
   const backToList = () => {
     setPage("list");
     window.scrollTo({ top: 0 });
@@ -69,6 +77,8 @@ export default function SettingsScreen({ email, categories, online, cache, onCha
     // Fetching the saved setting again updates the default everywhere, so lists and budget labels follow it at once
     return <CurrencyPage online={online} onBack={backToList} onSaved={() => cache.load(SETTINGS_URL, true)} />;
   }
+
+  if (page === "experiments") return <ExperimentsPage onBack={backToList} />;
 
   const budgeted = categories.filter((c) => c.monthly_budget != null).length;
   const updated = builtAtLabel();
@@ -113,6 +123,22 @@ export default function SettingsScreen({ email, categories, online, cache, onCha
 
       <p className="settings-h">Appearance</p>
       <AppearanceChoice />
+
+      <p className="settings-h">Experimental</p>
+      <button
+        className="settings-row"
+        onClick={() => {
+          setPage("experiments");
+          window.scrollTo({ top: 0 });
+        }}
+      >
+        <span className="settings-icon"><FlaskIcon /></span>
+        <span className="settings-text">
+          <span className="t">Experimental features</span>
+          <span className="d">{experiments}</span>
+        </span>
+        <span className="settings-chev" aria-hidden="true">›</span>
+      </button>
 
       <p className="settings-h">Account</p>
       <div className="settings-row static">

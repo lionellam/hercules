@@ -4,7 +4,7 @@
 Maintained by: Lionel Lam Song Poh, James Wong
 Purpose: Record of work done, decisions made, challenges encountered, and assumptions held —
 to serve as a lessons learned reference for current and future contributors.
-Last updated: 15 November 2026
+Last updated: 16 November 2026
 ```
 
 ---
@@ -1454,3 +1454,20 @@ Last updated: 15 November 2026
   5. Both READMEs are accurate, and this worklog is dated.
 - Noted, not a fault: the Go-Live Checklist (last updated 2 November 2026) still has three open items for the owner: reporting anything odd, inviting family and friends, and an optional review of Architecture's decisions.
 - Documents only, so the app version stays at 1.3.3.
+
+---
+
+## 16 November 2026 — Version 1.4.0: Experimental Features Page
+
+### What Was Done
+- The owner asked for a page in Settings listing experimental features with switches, to try features in the real app without rebuilding and redeploying each time they're turned on or off.
+- Mockups (`design/experimental-features-mockups.html`): A, an "Experimental" section in Settings, or B, a row hidden until the version line is tapped five times; C, the page with one row and switch per feature (with a "New" label and **Turn all off**), and D, the page with nothing to try. The owner chose **A** and **D**, with the page shown to **everyone** signed in (owner-only was recommended) and switches remembered **on the device** (on the account was recommended).
+- Built as chosen: the Experimental section between Appearance and Account, with a row reading "None right now" (or, once features are listed, "1 of 3 on" and so on), opening a page with "‹ Settings", a note that features may change or be removed and that switches apply on this device only, and either one row with a switch per feature or "Nothing to try right now". The list of features lives in `web/lib/experiments.ts` and starts empty; a feature's code checks `useExperiment("its-id")`. Switches are saved in local storage (`hercules-experiments`); every feature is off until switched on, and a saved switch for a feature no longer listed is ignored. The "New" label and **Turn all off** from mockup C weren't built, as only D was chosen for the page; they can be added later.
+- Documents: Specification v0.51 (Section 4.4 and new Section 4.7), Architecture v0.32 (new decision 39; decision 33 noted), Test Plan v1.21 (Q-02 updated; new Q-09, and Q-10 for when a feature is listed), Project Plan v0.15 (Settings feature). The user guide describes the page, its Settings drawings show the new section, and its privacy line now says experimental switches are also saved on the device (Updated 16 November 2026).
+- Version **1.4.0** (a new feature), with a changelog entry. No database change.
+- Tested locally on the demo account (confirmed first), at phone size:
+  - With a temporary `zz-test` feature added to the list (not committed): the Settings row read "0 of 1 on"; switching it on saved `{"zz-test":true}` on the device; after a reload the row read "1 of 1 on" and the switch was still on; switching it off cleared the saved value. The switch was checked in dark and light (off: light grey; on: the app's main colour).
+  - With the list empty again, as shipped: the row reads "None right now", the page shows "Nothing to try right now", "‹ Settings" returns to the list, and leaving for Log and coming back to Settings shows the list. Settings showed Version 1.4.0.
+  - The user guide's Settings section and drawings were checked in a local preview.
+  - Type-check, lint (the one known warning) and a production build passed.
+- Clean-up: no expenses or parses were created; the temporary test feature was removed (the list is empty); the demo account was removed from the local allow-list, and the test browser was signed out, as it was before the test.

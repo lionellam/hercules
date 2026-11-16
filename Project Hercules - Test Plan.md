@@ -1,8 +1,8 @@
 # Project Hercules — Test Plan: Web App v1
 
 ```
-Version 1.20 · Draft
-Last Reviewed: 15 November 2026
+Version 1.21 · Draft
+Last Reviewed: 16 November 2026
 Produced with AI Assistance (Claude Code)
 ```
 
@@ -31,6 +31,7 @@ Produced with AI Assistance (Claude Code)
 | 1.18 | 2026-11-14 | Lionel Lam | Accuracy review: M-04 says sheets appear at the bottom (no sliding) and includes the review sheet; M-05 includes the review sheet as a centred dialog; C-12 tagged **[Phone]** |
 | 1.19 | 2026-11-15 | Lionel Lam | Sheet animation: C-07 and M-04 updated; new C-13 to C-16 |
 | 1.20 | 2026-11-15 | Lionel Lam | R-01 checks the CSV button's outline in light and dark (1.3.3) |
+| 1.21 | 2026-11-16 | Lionel Lam | Experimental features: Q-02 updated; new Q-09 and Q-10 |
 
 ---
 
@@ -309,13 +310,15 @@ These need a look at the local database; ask Claude to run them.
 | ID | Test | Steps | Expected result |
 |---|---|---|---|
 | Q-01 | Tab bar | Look at the tabs at the bottom | Log, History, Summary and **Settings** (a gear). There's no Categories tab |
-| Q-02 | Settings list | Open **Settings** | Groups for Spending (**Categories & budgets** and **Currency**), Appearance and Account, then the version and last-updated time |
+| Q-02 | Settings list | Open **Settings** | Groups for Spending (**Categories & budgets** and **Currency**), Appearance, Experimental (**Experimental features**) and Account, then the version and last-updated time |
 | Q-03 | Category count | Look at the Categories & budgets row; then add or retire a `zz-test-` category and look again | It shows the number of categories in use and how many have a budget, and updates after the change |
 | Q-04 | Opening and going back | Tap **Categories & budgets**, then **‹ Settings** | The Categories & budgets page opens, with the same list, Add category and Retired group as before; "‹ Settings" returns to the list |
 | Q-05 | Returning to Settings | Open Categories & budgets, switch to Log, then tap Settings | The Settings list shows, not Categories & budgets |
 | Q-06 | No theme icon on screens | Look at the top of Log, History and Summary | There's no sun or moon icon |
 | Q-07 | Account | Look at the Account group | Your email address, and Sign out (see A-05). Summary no longer has a sign-out section at the bottom |
 | Q-08 | Version and last updated | Look at the bottom of Settings; compare with `CHANGELOG.md` and the latest deploy; then try a short window (for example a phone held sideways) | The line sits at the bottom of the screen, just above the tab bar (on a short window, after Sign out once scrolled). The version number matches the newest entry in the changelog (for example 1.0.0), followed by a short code for the exact version and the date and time of the latest deploy |
+| Q-09 | Experimental features, none | Settings → look at the Experimental row, then tap **Experimental features**, then **‹ Settings** | The row reads "None right now". The page shows the heading, the note about features being tried out on this device only, and "Nothing to try right now"; "‹ Settings" returns to the list. Switching to another tab and back to Settings shows the list |
+| Q-10 | Experimental switch **[when a feature is listed]** | Open Experimental features and switch a feature on; check the feature appears; reload the page; then switch it off | The Settings row counts it (for example "1 of 1 on"). The feature appears straight away, is still on after the reload, and disappears when switched off. On another device or browser it is off |
 
 ### R. Downloading Expenses (CSV)
 

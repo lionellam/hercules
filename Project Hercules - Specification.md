@@ -1,8 +1,8 @@
 # Project Hercules — Specification Sheet: "Log an Expense" Flow
 
 ```
-Version 0.50 · Draft 
-Last Reviewed: 15 November 2026
+Version 0.51 · Draft 
+Last Reviewed: 16 November 2026
 Produced with AI Assistance (Claude Code)
 ```
 
@@ -60,6 +60,7 @@ Produced with AI Assistance (Claude Code)
 | 0.48 | 2026-11-14 | Lionel Lam | Accuracy review: confirmation sheets appear without sliding, and switching the default currency is listed (Section 4.2); "Other" is found by name (step 4); the AI boundary lists currency and remarks (Section 6); the pie chart's "Everything else" shows a count (step 8); `sort_order` added to Category (Section 5.2) |
 | 0.49 | 2026-11-15 | Lionel Lam | Sheets slide up and down on phones, and fade and grow on wider screens; fade only with Reduce Motion (step 5, Section 4.2) |
 | 0.50 | 2026-11-15 | Lionel Lam | The CSV button is outlined, for an edge contrast of at least 3:1 in light and dark (Section 4.5) |
+| 0.51 | 2026-11-16 | Lionel Lam | Experimental features page in Settings, with switches remembered on the device; it starts with no features (Sections 4.4 and 4.7) |
 
 ---
 
@@ -181,10 +182,11 @@ Settings is the fourth tab, with a gear icon, after Log, History and Summary. It
 
 - **Spending:** **Categories & budgets**, with the number of categories in use and how many have a budget (for example "14 categories · 5 with a budget"). Tapping it opens the Categories & budgets page, which works exactly as the Categories tab did (see the Category notes in Section 5), with "‹ Settings" at the top to go back. Below it, **Currency** shows the default currency (for example "SGD · Singapore dollar") and opens the Currency page (Section 4.6).
 - **Appearance:** System, Light or Dark. System follows the device's setting. The choice is saved on that device only. This replaces the sun or moon icon that was at the top of every screen.
+- **Experimental:** **Experimental features**, showing how many are switched on (for example "1 of 3 on"), or "None right now" when there are none. It opens the Experimental features page (Section 4.7).
 - **Account:** the email address signed in with, and **Sign out**, which moves here from the bottom of Summary and asks for confirmation first (Section 4.2).
 - **At the bottom of the screen,** just above the tab bar: the app's version number and the date and time it was last updated, meaning when the version running was built and deployed. On a screen too short to show everything, it follows Sign out and is reached by scrolling.
 
-Opening the Settings tab always shows the Settings list, even if Categories & budgets or Currency was open when you left it.
+Opening the Settings tab always shows the Settings list, even if Categories & budgets, Currency or Experimental features was open when you left it.
 
 ### 4.5 Downloading Expenses (CSV)
 
@@ -238,6 +240,17 @@ The language model is asked to report a currency only when the text names one; t
 **Switching the default** asks first, with a confirmation sheet: "Switch to MYR?" explains that totals, budgets and pace will count only MYR, that expenses in other currencies, including SGD ones, aren't converted and will show as not included, and that budgets keep their amounts. Switching changes no saved expense or budget, so switching back restores the earlier totals exactly. The Currency page's note reads: "Used when what you type doesn't name a currency. Totals and budgets count only this currency."
 
 ---
+
+### 4.7 Experimental Features
+
+A page for trying out features that are built and deployed but not yet switched on for everyone, so each can be turned on and off without a new release.
+
+- **Who sees it:** everyone signed in.
+- **The page:** "‹ Settings" to go back, the heading **Experimental features**, and a short note: "Features still being tried out. They may change or be removed. Switching one on or off takes effect straight away, on this device only." Below it, one row per feature with its name, a one-line description and a switch. A switch takes effect at once, with no Save step.
+- **No features:** the page says "Nothing to try right now" and "New features being tested will appear here.", and the Settings row reads "None right now". The page starts this way, with no features.
+- **Remembered on the device:** each switch is saved on that device and browser only, not in the account, so a feature switched on at the computer is off on the phone until switched on there too. Every feature is off until switched on.
+- **What a switch can and can't do:** a feature's code is built and deployed once, hidden behind its switch; after that it can be turned on and off as often as needed without another release. A feature that needs a database change still needs that change first.
+- **Adding and removing features:** each feature is added to the list in the code with its own name and description. When a feature is ready for everyone, its switch is removed and it is simply part of the app (a normal release); when one is dropped, its code and switch are removed. A saved switch for a feature no longer in the list is ignored.
 
 ## 5. Data Model (Draft)
 

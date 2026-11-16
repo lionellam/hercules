@@ -6,6 +6,13 @@ Versions follow [semantic versioning](https://semver.org): **major** for a chang
 
 ---
 
+## 1.4.0 — 16 November 2026
+
+**New**
+- **Settings → Experimental features**: a page for trying out new features before they're switched on for everyone, each with a switch to turn it on or off. Switches are remembered on that device only. There's nothing to try yet, so for now the page says so.
+
+---
+
 ## 1.3.3 — 15 November 2026
 
 **Improved**
