@@ -271,9 +271,9 @@ dl.faq dd { margin: 2px 0 0; color: var(--ink-2); }
   <nav class="toc" aria-label="Contents">
     <p>Contents</p>
     <ol>
-      <li><a href="#about">What it is, and why</a></li>
-      <li><a href="#start">Getting started</a></li>
-      <li><a href="#log">Logging an expense</a></li>
+      <li><a href="#about">What Hercules is, and what makes it different</a></li>
+      <li><a href="#start">Getting started with Hercules</a></li>
+      <li><a href="#log">How to record an expense</a></li>
       <li><a href="#writing">What to type</a></li>
       <li><a href="#fix">Fixing and deleting</a></li>
       <li><a href="#history">History</a></li>
@@ -297,8 +297,8 @@ dl.faq dd { margin: 2px 0 0; color: var(--ink-2); }
       </div>
     </header>
 
-    <h2 id="about">What Hercules is, and why</h2>
-    <p><b>Logging your expenses should be a seamless affair.</b> Instead of populating a set of fields for every purchase, you type it the way you'd say it, such as "had coffee at Starbucks for $4.90", and Hercules takes care of the rest. Hercules then keeps your spending organised by day, month and category, and tracks it against any monthly budgets you set.</p>
+    <h2 id="about">What Hercules is, and what makes it different</h2>
+    <p><b>Logging your expenses should be a seamless affair.</b> Instead of painstakingly populating a set of fields for every purchase, you type it the way you'd say it, such as "had coffee at Starbucks for $4.90", and Hercules takes care of the rest. Hercules then keeps your spending organised by day, month and category, and tracks it against any monthly budgets you set.</p>
 
     <h3>Unique selling points</h3>
     <div class="principles">
@@ -316,7 +316,7 @@ dl.faq dd { margin: 2px 0 0; color: var(--ink-2); }
 
     <h2 id="log">How to record an expense</h2>
     <ol class="steps">
-      <li><span><b>Type the expense</b> in the box at the top of the Log screen, in your own words.</span></li>
+      <li><span><b>Type out your expense</b> in the <b>Log your expense</b> text box, in your own words.</span></li>
       <li class="ai"><span><b>Tap Parse.</b><span class="tag-ai">AI</span> Haiku*, the language model that reads your text, picks out the amount, category, merchant and date.</span></li>
       <li><span><b>Check the review card.</b> It opens over the Log screen. Every field can be changed: tap the amount, pick a different category, fix the date, or add a remark.</span></li>
       <li><span><b>Tap Save expense.</b> The expense appears straight away under <b>Today</b>, and in History and Summary.</span></li>
@@ -381,7 +381,7 @@ dl.faq dd { margin: 2px 0 0; color: var(--ink-2); }
     </div>
 
     <h2 id="writing">What to type</h2>
-    <p>Write it the way you'd say it. Include the amount, and anything else that helps: where, what for, and when, if it wasn't today. For example:</p>
+    <p>Type out your expense just the way you'd say it. Include the amount, and anything else that helps: where, what for, and when, if it wasn't today. For example:</p>
     <div class="table-wrap"><table>
       <thead><tr><th>You type</th><th>Amount</th><th>Category</th><th>Merchant</th><th>Date</th></tr></thead>
       <tbody>
@@ -394,8 +394,8 @@ dl.faq dd { margin: 2px 0 0; color: var(--ink-2); }
     <ul class="plain">
       <li><b>Dates:</b> no date means today. "Yesterday", "last Friday" and "3 Nov" all work.</li>
       <li><b>Currency:</b> your default currency (Singapore dollars unless you change it in <b>Settings</b> → <b>Currency</b>) unless you name another, such as "450 baht" or "USD 120". A plain "$" means your default if it's a dollar currency (such as SGD or AUD), otherwise US dollars. To change the currency before saving, tap the code beside the amount, such as <b>SGD ▾</b>. Totals count only your default currency; others are shown beside them as "Not included", without converting.</li>
-      <li><b>Categories:</b> Claude can only choose from your own list. If nothing fits, it uses <b>Other</b>.</li>
-      <li><b>Remarks:</b> extra details that don't fit elsewhere, such as "with the team", go into Remarks.</li>
+      <li><b>Categories:</b> The language model chooses the best category from your own list of expense categories. If nothing fits, it uses <b>Other</b>. Refer to the <b>Categories & budgets</b> section for more details.</li>
+      <li><b>Remarks:</b> useful details that don't fit elsewhere, such as "dinner with mum and dad", or "from the bake sale", go into Remarks.</li>
     </ul>
 
     <h2 id="fix">Fixing and deleting</h2>
@@ -403,7 +403,7 @@ dl.faq dd { margin: 2px 0 0; color: var(--ink-2); }
     <p>To delete, open the expense and tap <b>Delete</b>. The app shows which expense it is and asks you to confirm. After deleting, an <b>Undo</b> bar appears at the bottom for about five seconds. Tap it to bring the expense back.</p>
     <div class="figure-row">
       <figure>
-        <div class="phone"><div class="m" style="position:relative">
+        <div class="phone"><div class="m" style="position:relative;min-height:573px;display:flex;flex-direction:column">
           <div class="top flat"><h5>History</h5><div class="month"><i>‹</i><span>November 2026</span><i style="opacity:.35">›</i></div><div class="msearch"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><span class="q ph">Search expenses</span></div></div>
           <div class="body" style="opacity:.35">
             <div class="day">SAT, 7 NOV</div>
@@ -472,7 +472,7 @@ dl.faq dd { margin: 2px 0 0; color: var(--ink-2); }
         <figcaption><b>History.</b> Grouped by day. "edited" marks expenses you changed from what Claude suggested.</figcaption>
       </figure>
       <figure>
-        <div class="phone"><div class="m">
+        <div class="phone"><div class="m" style="min-height:513px;display:flex;flex-direction:column">
           <div class="top">
             <h5>History</h5>
             <div class="month"><i>‹</i><span>November 2026</span><i style="opacity:.35">›</i></div>
@@ -536,7 +536,7 @@ dl.faq dd { margin: 2px 0 0; color: var(--ink-2); }
         <figcaption><b>Summary, this month.</b> <b>CSV</b> beside the total downloads the month's expenses. The marker on each budgeted bar shows the amount expected by today. Food &amp; Dining is open to show its burn-up chart.</figcaption>
       </figure>
       <figure>
-        <div class="phone"><div class="m">
+        <div class="phone"><div class="m" style="min-height:586px;display:flex;flex-direction:column">
           <div class="top">
             <h5>Summary</h5>
             <div class="seg"><span class="on">November</span><span>October</span></div>
@@ -604,7 +604,7 @@ dl.faq dd { margin: 2px 0 0; color: var(--ink-2); }
         <figcaption><b>Settings.</b> Categories &amp; budgets, Currency and Experimental features each open their own page; tap "‹ Settings" there to come back.</figcaption>
       </figure>
       <figure>
-        <div class="phone"><div class="m" style="position:relative">
+        <div class="phone"><div class="m" style="position:relative;min-height:599px;display:flex;flex-direction:column">
           <div class="top"><h5>Settings</h5></div>
           <div class="body" style="opacity:.35">
             <div class="sh">SPENDING</div>
