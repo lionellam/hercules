@@ -7,6 +7,7 @@ import type { Category, Expense, SummaryRow } from "@/lib/types";
 import { ConfirmSheet, useLeave } from "../confirm";
 import { NotIncluded, useHomeCurrency, useMoney } from "../currency";
 import { EditSheet, ExpenseRow } from "../expense-sheet";
+import { SkeletonBar, SkeletonRows, SlowNote } from "../loading";
 import ReviewCard, { type Fields } from "../review-card";
 
 // Totals are added without currency conversion, as in Summary
@@ -137,7 +138,8 @@ export default function LogScreen({ categories, online, cache, onSaved }: { cate
         </div>
         <p className="today-total">
           <span>Spent today</span>
-          <strong>{monthRows ? money(todaysHome.reduce((sum, e) => sum + e.amount, 0)) : "—"}</strong>
+          {/* A placeholder until this month's expenses first arrive */}
+          {monthRows ? <strong>{money(todaysHome.reduce((sum, e) => sum + e.amount, 0))}</strong> : <SkeletonBar width={62} height={16} />}
         </p>
         <NotIncluded items={todays} />
         {error && <p className="error">{error}</p>}
@@ -173,7 +175,17 @@ export default function LogScreen({ categories, online, cache, onSaved }: { cate
       <div className="columns">
         <div>
           <p className="recent-h">TODAY</p>
-          {todays.length ? todays.map((e) => <ExpenseRow key={e.id} e={e} onClick={() => setEditing(e)} />) : <p className="sub">Nothing logged yet today.</p>}
+          {/* "Nothing logged yet today." only once that's known to be true */}
+          {!monthRows ? (
+            <>
+              <SkeletonRows count={3} />
+              <SlowNote />
+            </>
+          ) : todays.length ? (
+            todays.map((e) => <ExpenseRow key={e.id} e={e} onClick={() => setEditing(e)} />)
+          ) : (
+            <p className="sub">Nothing logged yet today.</p>
+          )}
         </div>
         {/* Shown only when today has spending in the default currency, which is all it counts */}
         {todaysHome.length > 0 && (

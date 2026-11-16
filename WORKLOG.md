@@ -1472,3 +1472,21 @@ Last updated: 16 November 2026
   - Type-check, lint (the one known warning) and a production build passed.
 - Clean-up: no expenses or parses were created; the temporary test feature was removed (the list is empty); the demo account was removed from the local allow-list, and the test browser was signed out, as it was before the test.
 - **Confirmed (16 November 2026):** after the deploy, the owner checked on their phone that Settings shows the Experimental section and the Experimental features page works with 1.4.0 ("Nothing to try right now").
+
+---
+
+## 16 November 2026 — Version 1.4.1: Loading Placeholders
+
+### What Was Done
+- The owner noticed that after a quiet spell the Log screen's list takes a while to appear, and asked for a loading indicator. While loading, Log showed "Nothing logged yet today." even when expenses were on their way, History showed "Loading…", and Summary showed a total of $0.00.
+- Mockups (`design/log-loading-mockups.html`): A, placeholder rows with a shimmer; B, a spinner with "Loading today's expenses…"; C, a thin moving line; and an add-on note when loading is slow. The owner chose **A with the slow-start note**, and to include **History and Summary**, whose placeholders were then mocked up and approved.
+- Built: shared placeholders in `web/components/loading.tsx`. Log shows three placeholder rows and a short bar for "Spent today"; History, two placeholder day headings with rows (also when moving to a month not yet loaded); Summary, a bar for the total and four placeholder category bars. Empty messages and totals appear only once the data has arrived. After 3 seconds, "Taking a little longer than usual. Hercules is starting up after a quiet spell." appears under the placeholders. The shimmer stops with Reduce Motion. Later refreshes keep showing the current data, as before.
+- Documents: Specification v0.52 (process flow step 8), Architecture v0.33 (decision 23 update), Test Plan v1.22 (new M-07 and M-08). The user guide's quick answer on the app being slow after a while now mentions the placeholders and note.
+- Version **1.4.1** (an improvement), with a changelog entry. No database change.
+- Tested locally on the demo account (confirmed first), at phone size, with a temporary 5-second delay added to the expenses and summary routes (removed afterwards; the routes are unchanged):
+  - **Log:** placeholders showed straight away, the note appeared after about 3 seconds, and when the data arrived the placeholders were replaced; "Nothing logged yet today." appeared only then (the demo account had nothing today).
+  - **Summary:** a bar in place of the total and four placeholder category bars, then the real total ($2,182.73) and 7 category bars, with no placeholders left.
+  - **History:** moving to October showed two placeholder day headings with four rows, and no "Loading…".
+  - Checked in dark and light. Without the delay, Settings showed Version 1.4.1 and the data loaded as before.
+  - Type-check, lint (the one known warning) and a production build passed.
+- Clean-up: no expenses or parses were created; the temporary delay was removed; the demo account was removed from the local allow-list, and the test browser was signed out, as it was before the test.

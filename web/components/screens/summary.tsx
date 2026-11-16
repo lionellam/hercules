@@ -8,6 +8,7 @@ import type { Category, Expense, SummaryRow } from "@/lib/types";
 import { BurnUp, PaceNote } from "../pace";
 import SpendPie from "../spend-pie";
 import { NotIncluded, useHomeCurrency, useMoney } from "../currency";
+import { SkeletonBar, SkeletonCategories, SlowNote } from "../loading";
 
 // The iPhone home-screen app (navigator.standalone) can't return from a download, so there the CSV goes
 // through the share sheet instead (Specification 4.5). Elsewhere the normal download is used.
@@ -114,7 +115,8 @@ export default function SummaryScreen({ cache, categories }: { cache: ApiCache; 
           <div className="total-row">
             <div>
               <div className="sub">{offset === 0 ? "Spent so far this month" : `Spent in ${monthLabel(month)}`}</div>
-              <div className="big">{money(total)}</div>
+              {/* A placeholder, not $0.00, until the month's figures first arrive */}
+              {rows ? <div className="big">{money(total)}</div> : <SkeletonBar width={150} height={30} className="sk-big" />}
             </div>
             {/* Downloads the month shown as a CSV file (Specification 4.5) */}
             <a
@@ -140,6 +142,12 @@ export default function SummaryScreen({ cache, categories }: { cache: ApiCache; 
       </div>
       <div className="columns">
         <div>
+          {!rows && (
+            <>
+              <SkeletonCategories />
+              <SlowNote />
+            </>
+          )}
           {rows?.map((r) => {
             const budget = isCurrent ? (r.budget ?? null) : null;
             const pace = budget != null && "daily" in r ? r : null;

@@ -6,6 +6,13 @@ Versions follow [semantic versioning](https://semver.org): **major** for a chang
 
 ---
 
+## 1.4.1 — 16 November 2026
+
+**Improved**
+- While Log, History and Summary are loading, grey placeholders show where your expenses and totals will appear, instead of "Nothing logged yet today." or a $0.00 total. If it takes more than a few seconds, for example the first time after a quiet spell, a short note explains why.
+
+---
+
 ## 1.4.0 — 16 November 2026
 
 **New**

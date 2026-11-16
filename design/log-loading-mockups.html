@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Log Loading</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root { --page: #ececea; --page-text: #18181b; --page-muted: #5f5f66; --page-card: #fafaf9; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--page); color: var(--page-text); font-family: Inter, -apple-system, system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  main { max-width: 1260px; margin: 0 auto; padding: 36px 16px 80px; }
+  h1 { font-size: 28px; letter-spacing: -0.02em; margin: 0 0 8px; }
+  h2 { font-size: 20px; letter-spacing: -0.01em; margin: 48px 0 6px; }
+  .lead { color: var(--page-muted); max-width: 840px; line-height: 1.55; margin: 0 0 10px; font-size: 15px; }
+  .frames { display: flex; flex-wrap: wrap; gap: 30px 26px; align-items: flex-start; margin-top: 18px; }
+  figure { margin: 0; max-width: 100%; }
+  figcaption { max-width: 340px; font-size: 13px; color: var(--page-muted); margin-top: 12px; line-height: 1.5; }
+  figcaption b { color: var(--page-text); }
+  .badge { display: inline-block; font-size: 11px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; padding: 2px 7px; border-radius: 6px; margin-right: 6px; vertical-align: 1px; background: #1d4ed8; color: #fff; }
+  .badge.now { background: #b45309; }
+  .badge.alt { background: #7c3aed; }
+  .phone { width: 340px; max-width: 100%; height: 640px; border-radius: 30px; overflow: hidden; border: 1px solid rgba(0,0,0,.08);
+           box-shadow: 0 1px 2px rgba(0,0,0,.06), 0 10px 28px rgba(0,0,0,.08); }
+  .notes { margin-top: 56px; background: var(--page-card); border-radius: 16px; padding: 22px 26px; max-width: 880px; }
+  .notes h2 { margin: 0 0 10px; font-size: 18px; }
+  .notes ul { padding-left: 20px; line-height: 1.6; font-size: 14.5px; }
+  .notes li { margin-bottom: 4px; }
+
+  /* App tokens and Log styles, from web/app/globals.css */
+  .app { --bg: #fff; --text: #18181b; --muted: #71717a; --line: #e7e7e4; --accent: #18181b; --accent-text: #fff; --soft: #f4f4f5; --bar: #18181b; --sk: #ececee; --sk-hi: #f7f7f8;
+         background: var(--bg); color: var(--text); font-size: 15px; position: relative; height: 100%; display: flex; flex-direction: column; }
+  .app.dark { --bg: #18181b; --text: #f4f4f5; --muted: #a1a1aa; --line: #27272a; --accent: #f4f4f5; --accent-text: #18181b; --soft: #27272a; --bar: #f4f4f5; --sk: #27272a; --sk-hi: #323236; }
+  .app .top { padding: 28px 20px 14px; border-bottom: 1px solid var(--line); position: relative; }
+  .app .date { color: var(--muted); font-size: 14px; }
+  .app h3 { font-size: 28px; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 18px; }
+  .app .input { background: var(--soft); border-radius: 16px; padding: 14px; }
+  .app .input .ph { color: var(--muted); font-size: 17px; height: 44px; }
+  .app .input .r { display: flex; justify-content: flex-end; }
+  .app .btn { height: 40px; padding: 0 18px; border-radius: 12px; font-size: 15px; font-weight: 600; background: var(--accent); color: var(--accent-text); display: inline-flex; align-items: center; opacity: .4; }
+  .app .spent { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; color: var(--muted); font-size: 14px; }
+  .app .spent strong { color: var(--text); font-size: 16px; font-variant-numeric: tabular-nums; }
+  .app .body { flex: 1; overflow: hidden; padding: 0 20px; }
+  .app .rh { margin-top: 26px; font-size: 13px; color: var(--muted); font-weight: 600; letter-spacing: .04em; }
+  .app .empty { color: var(--muted); font-size: 14px; margin-top: 6px; }
+  .app .item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--line); }
+  .app .item .m { font-weight: 500; }
+  .app .item .c { color: var(--muted); font-size: 13px; margin-top: 2px; }
+  .app .item .a { font-weight: 600; font-variant-numeric: tabular-nums; }
+  .app .cat { margin-top: 16px; }
+  .app .cat-top { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 6px; }
+  .app .track { height: 6px; background: var(--soft); border-radius: 3px; overflow: hidden; }
+  .app .fill { height: 100%; background: var(--bar); border-radius: 3px; }
+  .app .tabbar { display: flex; border-top: 1px solid var(--line); padding: 8px 0 18px; background: var(--bg); }
+  .app .tabbar span { flex: 1; text-align: center; font-size: 11px; color: var(--muted); }
+  .app .tabbar span.on { color: var(--text); font-weight: 600; }
+  .mark { outline: 2px dashed #1d4ed8; outline-offset: 4px; border-radius: 6px; }
+  .wrong { outline: 2px dashed #b45309; outline-offset: 4px; border-radius: 6px; }
+
+  /* A · Placeholder rows with a soft shimmer */
+  .sk { display: block; border-radius: 6px; background: linear-gradient(90deg, var(--sk) 0%, var(--sk-hi) 40%, var(--sk) 80%) 0 0 / 300% 100%; animation: shimmer 1.4s ease-in-out infinite; }
+  @keyframes shimmer { from { background-position: 100% 0; } to { background-position: 0 0; } }
+  .sk-row { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--line); }
+  .sk-row .l { display: flex; flex-direction: column; gap: 7px; }
+  /* B · A spinner and a line of text */
+  .spin { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: 14px; margin-top: 14px; }
+  .spin i { width: 16px; height: 16px; border-radius: 50%; border: 2px solid var(--line); border-top-color: var(--muted); animation: turn .8s linear infinite; }
+  @keyframes turn { to { transform: rotate(360deg); } }
+  /* C · A thin moving line under the top section */
+  .bar { position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; overflow: hidden; }
+  .bar::after { content: ''; position: absolute; top: 0; bottom: 0; width: 35%; background: var(--text); opacity: .55; animation: slide 1.2s ease-in-out infinite; }
+  @keyframes slide { from { left: -35%; } to { left: 100%; } }
+  /* History and Summary */
+  .app .seg2 { display: flex; background: var(--soft); border-radius: 12px; padding: 3px; }
+  .app .seg2 span { flex: 1; text-align: center; padding: 7px 0; border-radius: 10px; font-size: 14px; color: var(--muted); }
+  .app .seg2 span.on { background: var(--bg); color: var(--text); box-shadow: 0 1px 3px rgba(0,0,0,.1); font-weight: 500; }
+  .app.dark .seg2 span.on { background: #3f3f46; }
+  .app .search { margin-top: 12px; background: var(--soft); border-radius: 12px; padding: 10px 12px; color: var(--muted); font-size: 15px; }
+  .app .day { margin: 20px 0 4px; }
+  .app .tot { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 16px; }
+  .app .sub2 { color: var(--muted); font-size: 14px; }
+  .app .sub2 b { color: var(--text); }
+  .app .csv { height: 34px; padding: 0 12px; border-radius: 10px; box-shadow: inset 0 0 0 1.5px #8e8e96; font-size: 14px; font-weight: 600; display: inline-flex; align-items: center; margin-bottom: 4px; }
+  .app .cat .cat-top { align-items: center; }
+  /* Slow-start note */
+  .wake { margin-top: 14px; font-size: 13px; color: var(--muted); line-height: 1.45; }
+  @media (prefers-reduced-motion: reduce) { .sk, .spin i, .bar::after { animation: none; } }
+</style>
+</head>
+<body>
+<main>
+  <h1>Log Loading</h1>
+  <p class="lead">The Log screen while today's expenses are still being fetched, for example the first time the app is opened after a quiet spell. Phone size, light appearance unless marked. Dashed blue outlines mark what's new; the orange outline marks today's problem. The placeholders shimmer, spin or move in this page; with Reduce Motion on they'd stay still.</p>
+
+  <h2>Today</h2>
+  <div class="frames">
+    <figure>
+      <div class="phone"><div class="app">
+        <div class="top">
+          <div class="date">Monday, 16 November</div><h3>Log an expense</h3>
+          <div class="input"><div class="ph">e.g. Lunch at LJS for $4.50 yesterday</div><div class="r"><span class="btn">Parse</span></div></div>
+          <div class="spent"><span>Spent today</span><strong>—</strong></div>
+        </div>
+        <div class="body">
+          <div class="rh">TODAY</div>
+          <div class="empty wrong">Nothing logged yet today.</div>
+        </div>
+        <div class="tabbar"><span class="on">Log</span><span>History</span><span>Summary</span><span>Settings</span></div>
+      </div></div>
+      <figcaption><span class="badge now">Now</span><b>While loading, today.</b> "Spent today" shows a dash, and the list says <b>"Nothing logged yet today."</b> even when there are expenses still on their way, which can look like they've gone missing. Then everything appears at once.</figcaption>
+    </figure>
+  </div>
+
+  <h2>A · Placeholder rows</h2>
+  <p class="lead">Grey shapes the size of real rows stand in for the list and for the "Spent today" figure, with a soft shimmer passing across them. When the data arrives, the real rows replace them in the same place, so nothing jumps.</p>
+  <div class="frames">
+    <figure>
+      <div class="phone"><div class="app">
+        <div class="top">
+          <div class="date">Monday, 16 November</div><h3>Log an expense</h3>
+          <div class="input"><div class="ph">e.g. Lunch at LJS for $4.50 yesterday</div><div class="r"><span class="btn">Parse</span></div></div>
+          <div class="spent"><span>Spent today</span><span class="sk mark" style="width:62px;height:16px"></span></div>
+        </div>
+        <div class="body">
+          <div class="rh">TODAY</div>
+          <div class="mark" style="outline-offset:2px">
+            <div class="sk-row"><span class="l"><span class="sk" style="width:120px;height:13px"></span><span class="sk" style="width:84px;height:10px"></span></span><span class="sk" style="width:44px;height:13px"></span></div>
+            <div class="sk-row"><span class="l"><span class="sk" style="width:150px;height:13px"></span><span class="sk" style="width:70px;height:10px"></span></span><span class="sk" style="width:40px;height:13px"></span></div>
+            <div class="sk-row"><span class="l"><span class="sk" style="width:100px;height:13px"></span><span class="sk" style="width:92px;height:10px"></span></span><span class="sk" style="width:48px;height:13px"></span></div>
+          </div>
+        </div>
+        <div class="tabbar"><span class="on">Log</span><span>History</span><span>Summary</span><span>Settings</span></div>
+      </div></div>
+      <figcaption><span class="badge">Recommended</span><b>A · Light.</b> Three placeholder rows under Today, and a short bar where the total goes. It's clear something is coming and roughly what shape it takes. Today by category is left out until the data is in, as it is now.</figcaption>
+    </figure>
+    <figure>
+      <div class="phone"><div class="app dark">
+        <div class="top">
+          <div class="date">Monday, 16 November</div><h3>Log an expense</h3>
+          <div class="input"><div class="ph">e.g. Lunch at LJS for $4.50 yesterday</div><div class="r"><span class="btn">Parse</span></div></div>
+          <div class="spent"><span>Spent today</span><span class="sk" style="width:62px;height:16px"></span></div>
+        </div>
+        <div class="body">
+          <div class="rh">TODAY</div>
+          <div class="sk-row"><span class="l"><span class="sk" style="width:120px;height:13px"></span><span class="sk" style="width:84px;height:10px"></span></span><span class="sk" style="width:44px;height:13px"></span></div>
+          <div class="sk-row"><span class="l"><span class="sk" style="width:150px;height:13px"></span><span class="sk" style="width:70px;height:10px"></span></span><span class="sk" style="width:40px;height:13px"></span></div>
+          <div class="sk-row"><span class="l"><span class="sk" style="width:100px;height:13px"></span><span class="sk" style="width:92px;height:10px"></span></span><span class="sk" style="width:48px;height:13px"></span></div>
+        </div>
+        <div class="tabbar"><span class="on">Log</span><span>History</span><span>Summary</span><span>Settings</span></div>
+      </div></div>
+      <figcaption><b>A · Dark.</b> The same, in dark grey.</figcaption>
+    </figure>
+    <figure>
+      <div class="phone"><div class="app">
+        <div class="top">
+          <div class="date">Monday, 16 November</div><h3>Log an expense</h3>
+          <div class="input"><div class="ph">e.g. Lunch at LJS for $4.50 yesterday</div><div class="r"><span class="btn">Parse</span></div></div>
+          <div class="spent"><span>Spent today</span><strong>$23.10</strong></div>
+        </div>
+        <div class="body">
+          <div class="rh">TODAY</div>
+          <div class="item"><div><div class="m">Kopitiam</div><div class="c">Food &amp; Dining</div></div><div class="a">4.80</div></div>
+          <div class="item"><div><div class="m">Grab to office</div><div class="c">Transport</div></div><div class="a">14.50</div></div>
+          <div class="item"><div><div class="m">Starbucks</div><div class="c">Food &amp; Dining</div></div><div class="a">3.80</div></div>
+          <div class="rh">TODAY BY CATEGORY</div>
+          <div class="cat"><div class="cat-top"><span>Transport</span><strong>14.50</strong></div><div class="track"><div class="fill" style="width:100%"></div></div></div>
+          <div class="cat"><div class="cat-top"><span>Food &amp; Dining</span><strong>8.60</strong></div><div class="track"><div class="fill" style="width:59%"></div></div></div>
+        </div>
+        <div class="tabbar"><span class="on">Log</span><span>History</span><span>Summary</span><span>Settings</span></div>
+      </div></div>
+      <figcaption><b>A · Loaded.</b> The real rows take the placeholders' place. On a day with nothing logged, "Nothing logged yet today." only appears now, once it's actually true.</figcaption>
+    </figure>
+  </div>
+
+  <h2>B · Spinner and a line of text</h2>
+  <div class="frames">
+    <figure>
+      <div class="phone"><div class="app">
+        <div class="top">
+          <div class="date">Monday, 16 November</div><h3>Log an expense</h3>
+          <div class="input"><div class="ph">e.g. Lunch at LJS for $4.50 yesterday</div><div class="r"><span class="btn">Parse</span></div></div>
+          <div class="spent"><span>Spent today</span><strong>—</strong></div>
+        </div>
+        <div class="body">
+          <div class="rh">TODAY</div>
+          <div class="spin mark"><i></i>Loading today's expenses…</div>
+        </div>
+        <div class="tabbar"><span class="on">Log</span><span>History</span><span>Summary</span><span>Settings</span></div>
+      </div></div>
+      <figcaption><span class="badge alt">Alternative</span><b>B · Spinner.</b> A small spinner and "Loading today's expenses…" in place of the list. Says plainly what's happening, but the list then pops in below it all at once.</figcaption>
+    </figure>
+  </div>
+
+  <h2>C · A thin moving line</h2>
+  <div class="frames">
+    <figure>
+      <div class="phone"><div class="app">
+        <div class="top">
+          <div class="date">Monday, 16 November</div><h3>Log an expense</h3>
+          <div class="input"><div class="ph">e.g. Lunch at LJS for $4.50 yesterday</div><div class="r"><span class="btn">Parse</span></div></div>
+          <div class="spent"><span>Spent today</span><strong>—</strong></div>
+          <div class="bar mark"></div>
+        </div>
+        <div class="body">
+          <div class="rh">TODAY</div>
+        </div>
+        <div class="tabbar"><span class="on">Log</span><span>History</span><span>Summary</span><span>Settings</span></div>
+      </div></div>
+      <figcaption><span class="badge alt">Alternative</span><b>C · Line.</b> A thin line slides along the bottom edge of the top section, as many sites do while a page loads, and the list stays empty. The quietest option, but easy to miss.</figcaption>
+    </figure>
+  </div>
+
+  <h2>Add-on · A note when it's slow</h2>
+  <div class="frames">
+    <figure>
+      <div class="phone"><div class="app">
+        <div class="top">
+          <div class="date">Monday, 16 November</div><h3>Log an expense</h3>
+          <div class="input"><div class="ph">e.g. Lunch at LJS for $4.50 yesterday</div><div class="r"><span class="btn">Parse</span></div></div>
+          <div class="spent"><span>Spent today</span><span class="sk" style="width:62px;height:16px"></span></div>
+        </div>
+        <div class="body">
+          <div class="rh">TODAY</div>
+          <div class="sk-row"><span class="l"><span class="sk" style="width:120px;height:13px"></span><span class="sk" style="width:84px;height:10px"></span></span><span class="sk" style="width:44px;height:13px"></span></div>
+          <div class="sk-row"><span class="l"><span class="sk" style="width:150px;height:13px"></span><span class="sk" style="width:70px;height:10px"></span></span><span class="sk" style="width:40px;height:13px"></span></div>
+          <div class="sk-row"><span class="l"><span class="sk" style="width:100px;height:13px"></span><span class="sk" style="width:92px;height:10px"></span></span><span class="sk" style="width:48px;height:13px"></span></div>
+          <div class="wake mark">Taking a little longer than usual. Hercules is starting up after a quiet spell.</div>
+        </div>
+        <div class="tabbar"><span class="on">Log</span><span>History</span><span>Summary</span><span>Settings</span></div>
+      </div></div>
+      <figcaption><b>Add-on to A (or B).</b> If loading takes more than about 3 seconds, a short line explains why. It goes when the data arrives. Optional.</figcaption>
+    </figure>
+  </div>
+
+  <h2>History and Summary</h2>
+  <p class="lead">The same placeholders on the other two screens, the first time each is opened. Their headings, month buttons and search field work straight away.</p>
+  <div class="frames">
+    <figure><div class="phone"><div class="app ">
+        <div class="top">
+          <h3 style="margin-bottom:14px">History</h3>
+          <div class="seg2"><span class="on">November</span><span>October</span></div>
+          <div class="search">Search this month</div>
+        </div>
+        <div class="body"><div class="mark">
+          <div class="day"><span class="sk" style="width:110px;height:11px"></span></div>
+          <div class="sk-row"><span class="l"><span class="sk" style="width:120px;height:13px"></span><span class="sk" style="width:84px;height:10px"></span></span><span class="sk" style="width:44px;height:13px"></span></div><div class="sk-row"><span class="l"><span class="sk" style="width:150px;height:13px"></span><span class="sk" style="width:70px;height:10px"></span></span><span class="sk" style="width:40px;height:13px"></span></div>
+          <div class="day"><span class="sk" style="width:96px;height:11px"></span></div>
+          <div class="sk-row"><span class="l"><span class="sk" style="width:100px;height:13px"></span><span class="sk" style="width:92px;height:10px"></span></span><span class="sk" style="width:48px;height:13px"></span></div><div class="sk-row"><span class="l"><span class="sk" style="width:136px;height:13px"></span><span class="sk" style="width:64px;height:10px"></span></span><span class="sk" style="width:42px;height:13px"></span></div>
+        </div></div>
+        <div class="tabbar"><span>Log</span><span class="on">History</span><span>Summary</span><span>Settings</span></div>
+      </div></div><figcaption><b>History · loading.</b> Two placeholder day headings, each with placeholder rows, in place of today's "Loading…". "No expenses this month." appears only once it's true.</figcaption></figure>
+    <figure><div class="phone"><div class="app ">
+        <div class="top">
+          <h3 style="margin-bottom:14px">Summary</h3>
+          <div class="seg2"><span class="on">November</span><span>October</span></div>
+          <div class="tot"><div><div class="sub2">Spent so far this month</div><span class="sk mark" style="display:block;width:150px;height:30px;margin-top:6px"></span></div><span class="csv">CSV</span></div>
+          <div class="sub2" style="margin-top:6px"><b>Day 16 of 30</b> · Mon, 16 Nov</div>
+        </div>
+        <div class="body"><div class="mark" style="padding-bottom:4px">
+          <div class="cat"><div class="cat-top"><span class="sk" style="width:90px;height:12px"></span><span class="sk" style="width:80px;height:12px"></span></div><div class="track"><div class="sk" style="width:80%;height:100%;border-radius:3px"></div></div></div><div class="cat"><div class="cat-top"><span class="sk" style="width:70px;height:12px"></span><span class="sk" style="width:90px;height:12px"></span></div><div class="track"><div class="sk" style="width:55%;height:100%;border-radius:3px"></div></div></div><div class="cat"><div class="cat-top"><span class="sk" style="width:110px;height:12px"></span><span class="sk" style="width:60px;height:12px"></span></div><div class="track"><div class="sk" style="width:35%;height:100%;border-radius:3px"></div></div></div><div class="cat"><div class="cat-top"><span class="sk" style="width:80px;height:12px"></span><span class="sk" style="width:70px;height:12px"></span></div><div class="track"><div class="sk" style="width:20%;height:100%;border-radius:3px"></div></div></div>
+        </div></div>
+        <div class="tabbar"><span>Log</span><span>History</span><span class="on">Summary</span><span>Settings</span></div>
+      </div></div><figcaption><b>Summary · loading.</b> A placeholder bar where the month's total goes (today it shows <b>$0.00</b> while loading), and placeholder category bars. The CSV button and day line show as normal.</figcaption></figure>
+    <figure><div class="phone"><div class="app dark">
+        <div class="top">
+          <h3 style="margin-bottom:14px">Summary</h3>
+          <div class="seg2"><span class="on">November</span><span>October</span></div>
+          <div class="tot"><div><div class="sub2">Spent so far this month</div><span class="sk " style="display:block;width:150px;height:30px;margin-top:6px"></span></div><span class="csv">CSV</span></div>
+          <div class="sub2" style="margin-top:6px"><b>Day 16 of 30</b> · Mon, 16 Nov</div>
+        </div>
+        <div class="body"><div class="" style="padding-bottom:4px">
+          <div class="cat"><div class="cat-top"><span class="sk" style="width:90px;height:12px"></span><span class="sk" style="width:80px;height:12px"></span></div><div class="track"><div class="sk" style="width:80%;height:100%;border-radius:3px"></div></div></div><div class="cat"><div class="cat-top"><span class="sk" style="width:70px;height:12px"></span><span class="sk" style="width:90px;height:12px"></span></div><div class="track"><div class="sk" style="width:55%;height:100%;border-radius:3px"></div></div></div><div class="cat"><div class="cat-top"><span class="sk" style="width:110px;height:12px"></span><span class="sk" style="width:60px;height:12px"></span></div><div class="track"><div class="sk" style="width:35%;height:100%;border-radius:3px"></div></div></div><div class="cat"><div class="cat-top"><span class="sk" style="width:80px;height:12px"></span><span class="sk" style="width:70px;height:12px"></span></div><div class="track"><div class="sk" style="width:20%;height:100%;border-radius:3px"></div></div></div>
+        </div></div>
+        <div class="tabbar"><span>Log</span><span>History</span><span class="on">Summary</span><span>Settings</span></div>
+      </div></div><figcaption><b>Summary · dark.</b> The same, in dark grey.</figcaption></figure>
+  </div>
+
+  <div class="notes">
+    <h2>Notes</h2>
+    <ul>
+      <li><b>Typing isn't held up.</b> In every option the text box and Parse work straight away; only the list and "Spent today" wait.</li>
+      <li><b>Only when there's nothing to show yet.</b> The placeholders appear only before the first load. Later refreshes, after saving or editing, keep showing the current list as they do now, so nothing flickers.</li>
+      <li><b>History and Summary</b> have the same wait the first time they're opened. The same treatment could be used there, as placeholder rows on History and placeholder bars on Summary, either now or later.</li>
+      <li><b>Reduce Motion:</b> the shimmer, spinner and moving line stand still.</li>
+      <li><b>Why it's slow after a quiet spell:</b> most likely the hosting and the database both start up again after being idle, as they do on free plans. This makes the wait clear; it doesn't make it shorter.</li>
+    </ul>
+  </div>
+</main>
+</body>
+</html>

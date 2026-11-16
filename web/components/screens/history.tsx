@@ -6,6 +6,7 @@ import { dayLabel, monthKey, monthLabel } from "@/lib/dates";
 import type { Category, Expense } from "@/lib/types";
 import { EditSheet, ExpenseRow } from "../expense-sheet";
 import { NotIncluded, useHomeCurrency, useMoney } from "../currency";
+import { SkeletonBar, SkeletonRows, SlowNote } from "../loading";
 
 // Every word must appear somewhere in the expense, in any order, ignoring capitals (Specification 4.3)
 function matches(e: Expense, words: string[]) {
@@ -67,7 +68,14 @@ export default function HistoryScreen({ categories, online, cache, onChanged }: 
         </div>
       </div>
       {!shown ? (
-        <p className="sub empty">Loading…</p>
+        // Placeholders until the month's expenses first arrive: two day headings, each with rows
+        <div className="sk-list">
+          <p className="day"><SkeletonBar width={110} height={11} /></p>
+          <SkeletonRows count={2} />
+          <p className="day"><SkeletonBar width={96} height={11} /></p>
+          <SkeletonRows count={2} from={2} />
+          <SlowNote />
+        </div>
       ) : searching && shown.length === 0 ? (
         <div className="no-results">
           <b>No search results</b>

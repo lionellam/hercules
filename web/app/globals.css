@@ -1,7 +1,7 @@
 :root {
   color-scheme: light;
   --bg: #ffffff; --surface: #ffffff; --text: #18181b; --muted: #71717a;
-  --line: #e7e7e4; --accent: #18181b; --accent-text: #ffffff; --soft: #f4f4f5; --edge: #8e8e96; --switch-off: #d4d4d8;
+  --line: #e7e7e4; --accent: #18181b; --accent-text: #ffffff; --soft: #f4f4f5; --edge: #8e8e96; --switch-off: #d4d4d8; --sk: #ececee; --sk-hi: #f7f7f8;
   --bar: #18181b; --good: #15803d; --bad: #b91c1c; --hl: #fde68a;
   --g-bg: #ffffff; --g-border: #747775; --g-text: #1f1f1f;
   --pie-1: #2a78d6; --pie-2: #eb6834; --pie-3: #1baf7a; --pie-4: #eda100; --pie-5: #e87ba4; --pie-6: #008300; --pie-rest: #a1a1aa;
@@ -10,7 +10,7 @@
   :root:not([data-theme="light"]) {
     color-scheme: dark;
     --bg: #18181b; --surface: #18181b; --text: #f4f4f5; --muted: #a1a1aa;
-    --line: #27272a; --accent: #f4f4f5; --accent-text: #18181b; --soft: #27272a; --edge: #71717a; --switch-off: #3f3f46;
+    --line: #27272a; --accent: #f4f4f5; --accent-text: #18181b; --soft: #27272a; --edge: #71717a; --switch-off: #3f3f46; --sk: #27272a; --sk-hi: #323236;
     --bar: #f4f4f5; --good: #4ade80; --bad: #f87171; --hl: #713f12;
     --g-bg: #131314; --g-border: #8e918f; --g-text: #e3e3e3;
     --pie-1: #3987e5; --pie-2: #d95926; --pie-3: #199e70; --pie-4: #c98500; --pie-5: #d55181; --pie-6: #008300; --pie-rest: #71717a;
@@ -20,7 +20,7 @@
 :root[data-theme="dark"] {
   color-scheme: dark;
   --bg: #18181b; --surface: #18181b; --text: #f4f4f5; --muted: #a1a1aa;
-  --line: #27272a; --accent: #f4f4f5; --accent-text: #18181b; --soft: #27272a; --edge: #71717a; --switch-off: #3f3f46;
+  --line: #27272a; --accent: #f4f4f5; --accent-text: #18181b; --soft: #27272a; --edge: #71717a; --switch-off: #3f3f46; --sk: #27272a; --sk-hi: #323236;
   --bar: #f4f4f5; --good: #4ade80; --bad: #f87171; --hl: #713f12;
   --g-bg: #131314; --g-border: #8e918f; --g-text: #e3e3e3;
   --pie-1: #3987e5; --pie-2: #d95926; --pie-3: #199e70; --pie-4: #c98500; --pie-5: #d55181; --pie-6: #008300; --pie-rest: #71717a;
@@ -137,6 +137,20 @@ textarea::placeholder { color: var(--muted); }
 .settings-text .d { color: var(--muted); font-size: 13px; margin-top: 2px; overflow-wrap: anywhere; }
 .settings-chev { color: var(--muted); font-size: 20px; }
 .settings-version { margin-top: auto; padding-top: 28px; color: var(--muted); font-size: 12.5px; text-align: center; line-height: 1.6; font-variant-numeric: tabular-nums; }
+/* Loading placeholders (Specification step 8): grey shapes with a soft shimmer, until a screen's data first arrives */
+.sk { display: block; border-radius: 6px; background: linear-gradient(90deg, var(--sk) 0%, var(--sk-hi) 40%, var(--sk) 80%) 0 0 / 300% 100%;
+      animation: sk-shimmer 1.4s ease-in-out infinite; }
+@keyframes sk-shimmer { from { background-position: 100% 0; } to { background-position: 0 0; } }
+.sk-row { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--line); }
+.sk-l { display: flex; flex-direction: column; gap: 7px; }
+.sk-cat-top { align-items: center; }
+.sk-fill { border-radius: 3px; }
+.sk-big { margin-top: 6px; margin-bottom: 4px; }
+.today-total .sk { align-self: center; }
+.slow-note { margin-top: 14px; font-size: 13px; color: var(--muted); line-height: 1.45; }
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+@media (prefers-reduced-motion: reduce) { .sk { animation: none; } }
+
 /* Experimental features (Specification 4.7): one row per feature with a switch */
 .experiment-list { list-style: none; }
 .experiment-list li { display: flex; align-items: flex-start; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--line); }

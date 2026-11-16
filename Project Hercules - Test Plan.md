@@ -1,7 +1,7 @@
 # Project Hercules — Test Plan: Web App v1
 
 ```
-Version 1.21 · Draft
+Version 1.22 · Draft
 Last Reviewed: 16 November 2026
 Produced with AI Assistance (Claude Code)
 ```
@@ -32,6 +32,7 @@ Produced with AI Assistance (Claude Code)
 | 1.19 | 2026-11-15 | Lionel Lam | Sheet animation: C-07 and M-04 updated; new C-13 to C-16 |
 | 1.20 | 2026-11-15 | Lionel Lam | R-01 checks the CSV button's outline in light and dark (1.3.3) |
 | 1.21 | 2026-11-16 | Lionel Lam | Experimental features: Q-02 updated; new Q-09 and Q-10 |
+| 1.22 | 2026-11-16 | Lionel Lam | New M-07 and M-08: loading placeholders and the slow-start note (1.4.1) |
 
 ---
 
@@ -274,6 +275,8 @@ To set up I-01 to I-05: create a `zz-test-` category with a $300 budget and log 
 | M-04 | Phone layout | Use a phone, or a browser window narrower than 768 pixels | One column; the review and edit sheets, and confirmations, slide up from the bottom of the screen |
 | M-05 | Tablet and computer | Use windows 768, 1,024 and 1,280 pixels wide or more | The app widens to about 820, 920 and 1,000 pixels; Log and Summary show two columns; the review and edit sheets, and confirmations, open as centred dialogs |
 | M-06 | No sideways scrolling | Check each screen at phone width | Nothing makes the page scroll sideways |
+| M-07 | Loading placeholders | Open the app after it has been closed for a while (or, locally, slow the expenses route down); on Log, then Summary, then History moved to an earlier month | While loading: grey placeholder rows (Log, History) or bars (Summary) with a soft shimmer, and a short grey bar instead of "Spent today" or the month's total. No "Nothing logged yet today.", "No expenses this month." or $0.00 until the data arrives; then the real content replaces the placeholders. The text box, Parse, month buttons and search still work |
+| M-08 | Slow-start note | As M-07, with loading taking more than 3 seconds | "Taking a little longer than usual. Hercules is starting up after a quiet spell." appears under the placeholders and goes when the data arrives. With Reduce Motion on, the placeholders don't shimmer |
 
 ### N. Phones
 
