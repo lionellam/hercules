@@ -1490,3 +1490,4 @@ Last updated: 16 November 2026
   - Checked in dark and light. Without the delay, Settings showed Version 1.4.1 and the data loaded as before.
   - Type-check, lint (the one known warning) and a production build passed.
 - Clean-up: no expenses or parses were created; the temporary delay was removed; the demo account was removed from the local allow-list, and the test browser was signed out, as it was before the test.
+- **Confirmed (16 November 2026):** after the deploy, the owner checked on their phone that the loading placeholders work with 1.4.1.
