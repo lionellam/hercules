@@ -49,6 +49,7 @@ Key documents, all at the repository root: Specification, Architecture (decision
 
 `Project Hercules - How Hercules Works.html`, published to GitHub Pages by `.github/workflows/guide-pages.yml` when it changes on `main`.
 
+- **Audience:** the guide is for a general reader. Keep it short and plain: explain what people need to use the app, avoid technical terms and fine detail they'd skim past (exact figures, edge cases, how it works inside), and keep the owner's wording when they've edited it by hand.
 - **Content rules:** never name the owner ("the app owner" only where needed, such as asking for an invitation); never name competitor apps; never offer or hint at recovering deleted expenses beyond Undo; update the "Updated" date.
 - **Pictures are HTML mockups drawn in the page, not screenshots.** When the app's look changes, edit the mockup to match.
 - **Show the owner a preview before committing** a guide change.
