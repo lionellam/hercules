@@ -1501,3 +1501,14 @@ Last updated: 16 November 2026
   1. Architecture (v0.34): decision 23 said "Nothing is stored on the device", meaning expense data, though the appearance choice (decision 33) and experimental switches (decision 39) are kept there. It now says no expenses or other account data are stored on the device, and names the two exceptions.
   2. `web/README.md`: a new "Experimental features" section explains how to add a feature behind a switch and remove it later; the steps were only in a code comment.
 - Documents only, so the app version stays at 1.4.1.
+
+---
+
+## 16 November 2026 — User Guide Edited by the Owner
+
+### What Was Done
+- The owner hand-edited the user guide and asked for their wording to be kept as written:
+  - The title and heading now read "How Hercules smart expense tracker works", with a new opening paragraph describing Hercules as an expense tracker that uses a large language model to read expenses typed in everyday language.
+  - "Why it exists" is now "Unique selling points", with three cards (Logging your expenses should be easy; No subscription; Budgets you can act on). The "Who it's for" line and the "You stay in control", "Private by design" and "A test of a method" cards were removed.
+  - The Summary section's introduction and list were rewritten more briefly.
+- Checked against the guide's content rules before committing (no names, no other apps, nothing on recovering deleted expenses). Documents only, so the app version stays at 1.4.1.
