@@ -4,7 +4,7 @@
 Maintained by: Lionel Lam Song Poh, James Wong
 Purpose: Record of work done, decisions made, challenges encountered, and assumptions held —
 to serve as a lessons learned reference for current and future contributors.
-Last updated: 16 November 2026
+Last updated: 17 November 2026
 ```
 
 ---
@@ -1515,3 +1515,4 @@ Last updated: 16 November 2026
 - **Further owner edits (16 November 2026):** the owner then reworded the opening paragraph, the "What it is, and why" introduction, the three cards ("No subscription" became "Negligible cost", "Budgets you can act on" became "Actionable budgets"), Getting started and the first steps of logging an expense, removed "What it doesn't do", and added a footnote that another language model can be used for parsing. A typo ("constrast") was fixed at the owner's request. Noted to the owner, and left as written: the Negligible cost card and the footnote speak to someone running their own copy of Hercules, and the tip for "This account hasn't been invited" was removed.
 - **More owner edits (16 November 2026):** the owner shortened Getting started (no "link you were sent"; the paragraph on staying signed in, the four tabs and wider screens removed), renamed "Logging an expense" to "How to record an expense", rewrote the Log and review captions (the review caption is now "Human in the loop"), and removed the six tips after the logging steps (saving, Discard, clearing the box, Spent today, offline, the 100-a-day limit). Kept as written; "Human in the loop" was noted to the owner as a possibly technical term for a general reader.
 - **Owner edits and drawing heights (16 November 2026):** the owner renamed "What it is, and why" to "What Hercules is, and what makes it different" and reworded the first logging step, the "What to type" introduction and the Categories and Remarks notes. At the owner's request, each pair of phone drawings was made the same height (Delete and Undo, History and Searching, the two Summary drawings, Settings and Signing out, matching the taller of each), and the Contents list was updated to match the renamed headings. Noted to the owner and left as written: the first logging step refers to a "Log your expense" text box, while the screen's heading is "Log an expense".
+- **Privacy section removed (17 November 2026):** at the owner's request, the user guide's "Your privacy" section and its Contents line were removed. It had covered who can see expenses, that typed text goes to Claude (Anthropic) and isn't used for training, what Google shares at sign-in, and what's kept on the device. The owner was told this was the only place in the guide covering these points, and chose to remove it as it was; no other document or link depended on it.
