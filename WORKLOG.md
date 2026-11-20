@@ -1546,3 +1546,4 @@ Last updated: 20 November 2026
 
 ### Clean-up
 - Deleted the 4 `[TEST]` expenses and the 6 parse entries the tests created; no `[TEST]` rows remain in any account. Reset the experimental switch in the test browser, removed the demo account from the local allow-list, and signed the test browser back in to the owner's account, as it was before.
+- **Confirmed (20 November 2026):** after the deploy, the owner checked on their phone that Intelligent Merchant Selection works with 1.5.0.
