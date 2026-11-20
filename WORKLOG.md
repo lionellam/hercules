@@ -1622,3 +1622,4 @@ Last updated: 21 November 2026
 
 ### Clean-up
 - Deleted the 2 `[TEST]` expenses, the `zz-test-` category and the 1 parse entry the tests created; none remain in any account. Removed the demo account from the local allow-list and signed the test browser back in to the owner's account, as it was before.
+- **Confirmed (21 November 2026):** after the deploy, the owner checked on their phone that the app works as before with 1.5.2.
