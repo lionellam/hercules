@@ -1560,3 +1560,11 @@ Last updated: 20 November 2026
   3. Test Plan (v1.24), Q-10: no longer marked "[when a feature is listed]", now that one always is; it uses Intelligent Merchant Selection, with "1 of 1 on" and "0 of 1 on", and checks merchants come back as typed when it's off.
   4. `web/README.md`: the experimental features steps now say how to tell the server a switch is on (a flag in the request only when it's on, as with `knownMerchants`).
 - Documents only, so the app version stays at 1.5.0.
+
+---
+
+## 20 November 2026 — Experimental Features Code: Revisit Later
+
+### What Was Done
+- The owner asked whether the experimental features code needs refactoring to stay easy to find and maintain. With one feature touching about six places, it doesn't yet. Two small improvements were proposed: type-checked feature ids (so a mistyped id, or a check left behind after a feature is removed, fails the type check) and one searchable comment at every place a feature touches. The owner chose to revisit this later, so it's recorded in the Architecture's Known Gaps and Follow-ups (v0.37), with when to revisit it: several experiments at once, or one needing its own screens or several server routes.
+- Documents only, so the app version stays at 1.5.0.

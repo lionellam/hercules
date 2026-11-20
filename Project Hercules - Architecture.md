@@ -1,7 +1,7 @@
 # Project Hercules — Architecture: Web App v1
 
 ```
-Version 0.36 · Draft
+Version 0.37 · Draft
 Last Reviewed: 20 November 2026
 Produced with AI Assistance (Claude Code)
 ```
@@ -46,6 +46,7 @@ Produced with AI Assistance (Claude Code)
 | 0.34 | 2026-11-16 | Lionel Lam | Integrity check: decision 23 clarifies that only the appearance choice and experimental switches are stored on the device |
 | 0.35 | 2026-11-20 | Lionel Lam | Decision 40: Intelligent Merchant Selection, the first experimental feature (1.5.0); decision 39 notes how the server is told a switch is on |
 | 0.36 | 2026-11-20 | Lionel Lam | Integrity check: decision 37 notes the merchants timing step and count; decision 4 notes that merchant names are sent when Intelligent Merchant Selection is on |
+| 0.37 | 2026-11-20 | Lionel Lam | Known Gaps: tidy the experimental features code when it's worth it (type-checked ids, one searchable comment per feature) |
 
 ---
 
@@ -173,3 +174,4 @@ With these decisions, Project Hercules is framed as a **hosted, invite-only fami
 - Choose how to speed up parsing once the live app has recorded timings for 10–15 everyday parses (decision 37)
 - Change `sslmode=require` to `sslmode=verify-full` in the live `DATABASE_URL` (Vercel's environment settings; done by Lionel). Each time a server starts, the database driver warns that `require` is treated as `verify-full` for now, which checks the database's certificate, but that pg 9 will make `require` weaker, so it no longer checks the certificate. `web/package.json` allows only pg 8, so nothing changes until then, but the address should be updated before any upgrade to pg 9 (seen in Vercel's logs, 14 November 2026)
 - ~~Consider a short slide-up animation when sheets open (review, edit and confirmation sheets), to make the app feel more intuitive; left out of decision 38 for now (14 November 2026)~~ *Done in 1.3.2 (15 November 2026); see decision 38.*
+- Tidy the experimental features code when it's worth it (decision 39; discussed 20 November 2026, not needed yet with one feature): (1) let `useExperiment` accept only ids on the `EXPERIMENTS` list, so a mistyped id or a check left behind after a feature is removed fails the type check instead of being silently off; (2) mark every place a feature touches with one searchable comment, such as `// Experiment: known-merchants`, including server-side flags. Revisit when several experiments run at once, or one needs its own screens or several server routes; at that point, also consider keeping each experiment's code together
