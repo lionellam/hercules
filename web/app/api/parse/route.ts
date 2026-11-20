@@ -1,7 +1,8 @@
 import { z } from "zod";
 import { currentUser, unauthorized } from "@/lib/session";
 import { claimParse, getCategories, monthMerchants, realDate, DAILY_PARSE_LIMIT } from "@/lib/expenses";
-import { parseExpense, ParseError, type ParseResult } from "@/lib/parser";
+import { parseExpense, ParseError } from "@/lib/parser";
+import { stopwatch } from "@/lib/timing";
 
 const body = z.object({
   text: z.string().trim().min(1).max(500),
@@ -9,37 +10,6 @@ const body = z.object({
   // Sent by the device when Intelligent Merchant Selection is switched on there (Architecture decision 40)
   knownMerchants: z.boolean().optional(),
 });
-
-// Architecture decision 37: how long each step took, never the expense text or who parsed it
-function stopwatch() {
-  const start = performance.now();
-  let last = start;
-  const steps: [string, number][] = [];
-  let total: number | undefined;
-  const totalMs = () => (total ??= Math.round(performance.now() - start));
-  return {
-    lap(name: string) {
-      const now = performance.now();
-      steps.push([name, Math.round(now - last)]);
-      last = now;
-    },
-    header() {
-      return [...steps, ["total", totalMs()] as [string, number]]
-        .map(([n, ms]) => `${n};dur=${ms}`)
-        .join(", ");
-    },
-    // How many merchants were sent, never their names
-    log(outcome: string, result?: ParseResult, merchantsSent?: number) {
-      const parts = [...steps.map(([n, ms]) => `${n}=${ms}ms`), `total=${totalMs()}ms`];
-      if (merchantsSent !== undefined) parts.push(`merchants_sent=${merchantsSent}`);
-      if (result) {
-        parts.push(`using=${result.model}`);
-        if (result.usage) parts.push(`tokens_in=${result.usage.input}`, `tokens_out=${result.usage.output}`);
-      }
-      console.log(`parse timing ${outcome} ${parts.join(" ")}`);
-    },
-  };
-}
 
 export async function POST(req: Request) {
   const timer = stopwatch();

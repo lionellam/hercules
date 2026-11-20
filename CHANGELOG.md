@@ -6,6 +6,13 @@ Versions follow [semantic versioning](https://semver.org): **major** for a chang
 
 ---
 
+## 1.5.2 — 21 November 2026
+
+**Improved**
+- Behind-the-scenes tidy-up to keep the app easy to maintain. Nothing looks or works differently.
+
+---
+
 ## 1.5.1 — 20 November 2026
 
 **Improved**

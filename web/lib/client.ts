@@ -4,7 +4,10 @@ import { useCallback, useEffect, useRef, useState } from "react";
 export const fmt = (n: number) => n.toLocaleString("en-SG", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
 export async function api<T>(url: string, init?: RequestInit): Promise<T> {
-  const res = await fetch(url, { ...init, headers: { "Content-Type": "application/json" } });
+  // JSON unless the caller says otherwise; any headers passed in are kept
+  const headers = new Headers(init?.headers);
+  if (!headers.has("Content-Type")) headers.set("Content-Type", "application/json");
+  const res = await fetch(url, { ...init, headers });
   if (res.status === 401) {
     window.location.href = "/signin";
     throw new Error("Not signed in");

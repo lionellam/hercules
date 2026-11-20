@@ -4,7 +4,7 @@
 Maintained by: Lionel Lam Song Poh, James Wong
 Purpose: Record of work done, decisions made, challenges encountered, and assumptions held —
 to serve as a lessons learned reference for current and future contributors.
-Last updated: 20 November 2026
+Last updated: 21 November 2026
 ```
 
 ---
@@ -1601,3 +1601,24 @@ Last updated: 20 November 2026
 - At the owner's request, checked the documents after the Known Gaps follow-up and 1.5.1. Version headers matched their last Version History rows; `web/package.json`, `CHANGELOG.md` and the Git tags (to v1.5.1, local and on GitHub) agreed; the worklog was dated. No document mentioned the old Next.js version or the missing headers. The user guide was unchanged and the live copy matched the repository; 1.5.1 changes nothing a reader sees, so the guide needs no update.
 - One fix, applied at the owner's request: Project Charter (v0.15), section 8, marks "Security risks — how do we protect user data and API keys adequately?" as addressed by the security review and 1.5.1 (Architecture decision 41), and the line on sending expense text to Anthropic now also mentions the merchant names sent while Intelligent Merchant Selection is on.
 - Documents only, so the app version stays at 1.5.1.
+
+---
+
+## 21 November 2026 — Version 1.5.2: Code Tidy-up
+
+### What Was Done
+- The owner asked whether the code needs refactoring to stay readable and maintainable. It doesn't broadly (about 3,200 lines, consistently laid out). Four small tidy-ups were proposed; the owner chose these three, with no change in behaviour:
+  1. One shared id check, `routeId` in `web/lib/route-id.ts`, used by the four routes with an id in the address (an expense or a category, and their restore routes), replacing two helpers and two inline copies.
+  2. The parse timing helper moved from the parse route to `web/lib/timing.ts`, so the route reads as its steps (90 lines down to 53).
+  3. The screens' `api()` helper kept only its own `Content-Type` header and dropped any headers a caller passed; it now keeps them (nothing passed headers, so nothing changed for users).
+  - Not chosen: splitting `web/lib/expenses.ts` (still easy to find things in at about 220 lines). The experimental features tidy-up stays in Known Gaps.
+- Documents: Architecture v0.39 (decision 37 notes the timing helper's new file). No Specification or Test Plan change, as nothing behaves differently. Version 1.5.2 (a patch).
+
+### Tests (local, demo account)
+- Expense routes: edit, delete, restore and delete again all succeeded. Bad ids (`abc`, `0`, `-1`, `1.5`, and one that doesn't exist) gave the same answers as before: 400 for an edit with an invalid id, otherwise 404.
+- Category routes: a `zz-test-` category was added, renamed with a budget, retired, restored and retired again. Bad ids (`abc`, `0`, `1.5`) gave 400, as before.
+- Parsed and saved "[TEST] kopi at Ya Kun 2.40" through the app: saved as Ya Kun, SGD 2.40, Food & Dining. The server's parse timing line had the same format as before.
+- Type-check and lint (the one known warning) passed; the production build passed.
+
+### Clean-up
+- Deleted the 2 `[TEST]` expenses, the `zz-test-` category and the 1 parse entry the tests created; none remain in any account. Removed the demo account from the local allow-list and signed the test browser back in to the owner's account, as it was before.
