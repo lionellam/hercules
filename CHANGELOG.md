@@ -6,6 +6,13 @@ Versions follow [semantic versioning](https://semver.org): **major** for a chang
 
 ---
 
+## 1.5.1 — 20 November 2026
+
+**Improved**
+- Security: Hercules can no longer be shown inside another website's page, and it sends a few more standard protections with every page. Also updated the framework the app is built on (Next.js) to its latest patch, which fixes several reported issues.
+
+---
+
 ## 1.5.0 — 20 November 2026
 
 **New (experimental)**

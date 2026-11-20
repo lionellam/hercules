@@ -1568,3 +1568,25 @@ Last updated: 20 November 2026
 ### What Was Done
 - The owner asked whether the experimental features code needs refactoring to stay easy to find and maintain. With one feature touching about six places, it doesn't yet. Two small improvements were proposed: type-checked feature ids (so a mistyped id, or a check left behind after a feature is removed, fails the type check) and one searchable comment at every place a feature touches. The owner chose to revisit this later, so it's recorded in the Architecture's Known Gaps and Follow-ups (v0.37), with when to revisit it: several experiments at once, or one needing its own screens or several server routes.
 - Documents only, so the app version stays at 1.5.0.
+
+---
+
+## 20 November 2026 — Security Review, and Version 1.5.1: Security Headers and Next.js 16.4.6
+
+### What Was Done
+- At the owner's request, reviewed the whole app for security problems. Sound: every API route checks the signed-in person and re-checks the allow-list on each request; every query is limited to that person's rows, with values passed as parameters; request bodies are validated; no unsafe HTML (the one inline script is the fixed theme snippet); CSV cells that could run as formulas are neutralised; the dev sign-in is off in production builds; no secrets in the repository or its history; the parse log holds timings and counts only. On the live app, signed-out requests to list expenses, download a CSV, delete an expense and parse were all refused (401).
+- Four findings were reported. The owner chose to fix the first two:
+  1. Next.js 16.4.3 had a moderate advisory (seven issues; most in features Hercules doesn't use). Updated `next` and `eslint-config-next` to 16.4.6, pinned exactly. `npm audit` for the app's runtime packages now reports none.
+  2. Apart from HSTS (added by Vercel), no security headers were sent. Added `X-Frame-Options: DENY`, `Content-Security-Policy: frame-ancestors 'none'`, `X-Content-Type-Options: nosniff` and `Referrer-Policy: same-origin` to every response, in `web/next.config.ts`.
+  - Set aside by the owner: the daily parse limit's count and record are two steps, so simultaneous requests could slightly exceed it; Google sign-in doesn't check `email_verified`. Both are recorded in Architecture decision 41.
+- Documents: Architecture v0.38 (new decision 41), Test Plan v1.25 (new A-11 and S-09). Version 1.5.1 (a patch).
+
+### Tests (local)
+- The sign-in page and a signed-out API route (`/api/settings`, 401) both carried the four headers.
+- A page on another local address that tried to show Hercules in a frame got an empty frame.
+- On the demo account: Log, History, Summary and Settings all loaded, Settings showed "Version 1.5.1", and there were no console errors. The sign-in page's theme script still ran.
+- Type-check and lint (the one known warning) passed. The production build passed first time, without the Next.js security reminder that 1.5.0's build showed.
+- Noted, not changed: `npm audit` still reports moderate advisories in the lint tools' `@typescript-eslint` packages. They are development tools only and aren't part of the deployed app.
+
+### Clean-up
+- No expenses or parses were created. Removed the demo account from the local allow-list and signed the test browser back in to the owner's account, as it was before.

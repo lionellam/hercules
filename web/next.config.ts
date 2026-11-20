@@ -22,6 +22,21 @@ const nextConfig: NextConfig = {
   partialPrefetching: true,
   // Dev server only: lets a phone on the home network open the app via the Mac's IP or Bonjour name
   allowedDevOrigins: ["192.168.*.*", "*.local"],
+  // Architecture decision 41: no showing the app inside another site's frame, no guessing file types, and no
+  // full addresses sent to other sites. Vercel adds HSTS itself
+  async headers() {
+    return [
+      {
+        source: "/:path*",
+        headers: [
+          { key: "X-Frame-Options", value: "DENY" },
+          { key: "Content-Security-Policy", value: "frame-ancestors 'none'" },
+          { key: "X-Content-Type-Options", value: "nosniff" },
+          { key: "Referrer-Policy", value: "same-origin" },
+        ],
+      },
+    ];
+  },
 };
 
 export default nextConfig;

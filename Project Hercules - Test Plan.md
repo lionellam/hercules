@@ -1,7 +1,7 @@
 # Project Hercules — Test Plan: Web App v1
 
 ```
-Version 1.24 · Draft
+Version 1.25 · Draft
 Last Reviewed: 20 November 2026
 Produced with AI Assistance (Claude Code)
 ```
@@ -35,6 +35,7 @@ Produced with AI Assistance (Claude Code)
 | 1.22 | 2026-11-16 | Lionel Lam | New M-07 and M-08: loading placeholders and the slow-start note (1.4.1) |
 | 1.23 | 2026-11-20 | Lionel Lam | New B-15 to B-17: Intelligent Merchant Selection (1.5.0); Q-09 applies only when no feature is listed |
 | 1.24 | 2026-11-20 | Lionel Lam | Integrity check: Q-10 uses Intelligent Merchant Selection, now that a feature is always listed |
+| 1.25 | 2026-11-20 | Lionel Lam | New A-11 and S-09: security headers (1.5.1) |
 
 ---
 
@@ -97,6 +98,7 @@ For each run, note the date, the device and browser, whether it was the local or
 | A-08 | Dev sign-in is local only | Open the live app's sign-in screen | Only "Sign in with Google" shows; there's no "Dev sign in" form |
 | A-09 | Cancelling sign-out | Settings → **Sign out**, then **Cancel** (or tap outside the sheet) | The sheet closes and you stay signed in on Settings |
 | A-10 | Nothing carries over after sign-out | Open Settings, sign out, then sign in again on the same browser tab (or as a second test account, see A-07) | The app opens fresh on **Log**, showing only the signed-in person's data, not the tab or data from before |
+| A-11 | Security headers | Load the app and an API route (for example `/api/settings`), and look at the response headers in the browser's developer tools (Network) | Both carry `X-Frame-Options: DENY`, `Content-Security-Policy: frame-ancestors 'none'`, `X-Content-Type-Options: nosniff` and `Referrer-Policy: same-origin`. Opening the app inside a frame on another page shows nothing |
 
 ### B. Logging an Expense
 
@@ -382,6 +384,7 @@ A quick check on the live app after each deploy. Use your own account, and remov
 | S-06 | User guide | Open https://lionellam.github.io/hercules/ | The user guide loads |
 | S-07 | Version | Settings → look at the bottom, above the tab bar | After a release, the version matches the newest entry in `CHANGELOG.md`, the short code matches the latest commit, and "Last updated" is the time of this deploy |
 | S-08 | CSV download | Summary → **CSV** on this month; open the file. In the iPhone home-screen app, the share sheet opens instead: choose **Save to Files**, then open the file | The file downloads (or saves to Files), and its Amount column adds up to this month's total on Summary |
+| S-09 | Security headers | On the live address, check the response headers as in A-11 (or `curl -sI` the address) | The four headers from A-11 are there, as well as `Strict-Transport-Security` |
 
 The test expense from S-03 stays in the database as a deleted record. That's harmless, but it can be removed by Lionel if wanted.
 
