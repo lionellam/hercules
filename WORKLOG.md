@@ -1592,3 +1592,12 @@ Last updated: 20 November 2026
 - No expenses or parses were created. Removed the demo account from the local allow-list and signed the test browser back in to the owner's account, as it was before.
 - **After the deploy (20 November 2026):** the live sign-in page sent all four new headers, as well as HSTS, about 50 seconds after the push (S-09).
 - **Confirmed (20 November 2026):** after the deploy, the owner checked on their phone that the app works as before with 1.5.1.
+
+---
+
+## 20 November 2026 — Document Integrity Check After 1.5.1
+
+### What Was Done
+- At the owner's request, checked the documents after the Known Gaps follow-up and 1.5.1. Version headers matched their last Version History rows; `web/package.json`, `CHANGELOG.md` and the Git tags (to v1.5.1, local and on GitHub) agreed; the worklog was dated. No document mentioned the old Next.js version or the missing headers. The user guide was unchanged and the live copy matched the repository; 1.5.1 changes nothing a reader sees, so the guide needs no update.
+- One fix, applied at the owner's request: Project Charter (v0.15), section 8, marks "Security risks — how do we protect user data and API keys adequately?" as addressed by the security review and 1.5.1 (Architecture decision 41), and the line on sending expense text to Anthropic now also mentions the merchant names sent while Intelligent Merchant Selection is on.
+- Documents only, so the app version stays at 1.5.1.
