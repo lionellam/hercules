@@ -4,7 +4,7 @@
 Maintained by: Lionel Lam Song Poh, James Wong
 Purpose: Record of work done, decisions made, challenges encountered, and assumptions held —
 to serve as a lessons learned reference for current and future contributors.
-Last updated: 17 November 2026
+Last updated: 20 November 2026
 ```
 
 ---
@@ -1516,3 +1516,33 @@ Last updated: 17 November 2026
 - **More owner edits (16 November 2026):** the owner shortened Getting started (no "link you were sent"; the paragraph on staying signed in, the four tabs and wider screens removed), renamed "Logging an expense" to "How to record an expense", rewrote the Log and review captions (the review caption is now "Human in the loop"), and removed the six tips after the logging steps (saving, Discard, clearing the box, Spent today, offline, the 100-a-day limit). Kept as written; "Human in the loop" was noted to the owner as a possibly technical term for a general reader.
 - **Owner edits and drawing heights (16 November 2026):** the owner renamed "What it is, and why" to "What Hercules is, and what makes it different" and reworded the first logging step, the "What to type" introduction and the Categories and Remarks notes. At the owner's request, each pair of phone drawings was made the same height (Delete and Undo, History and Searching, the two Summary drawings, Settings and Signing out, matching the taller of each), and the Contents list was updated to match the renamed headings. Noted to the owner and left as written: the first logging step refers to a "Log your expense" text box, while the screen's heading is "Log an expense".
 - **Privacy section removed (17 November 2026):** at the owner's request, the user guide's "Your privacy" section and its Contents line were removed. It had covered who can see expenses, that typed text goes to Claude (Anthropic) and isn't used for training, what Google shares at sign-in, and what's kept on the device. The owner was told this was the only place in the guide covering these points, and chose to remove it as it was; no other document or link depended on it.
+
+---
+
+## 20 November 2026 — Version 1.5.0: Intelligent Merchant Selection (Experimental)
+
+### What Was Done
+- The owner asked for parsing to "learn" the merchant names used in the current month, so variants such as "ntuc", "NTUC" or "fairprice" come back as "NTUC FairPrice". Added as the first experimental feature, **Intelligent Merchant Selection** ("Infer merchant names from current month's expenses."), off until switched on, on each device.
+- How it works (Architecture decision 40): with the switch on, the Log screen's parse request carries `knownMerchants: true`; the server reads the distinct merchants on the person's expenses dated in the current month and adds them to the prompt, with the rule to return a listed name exactly when the text clearly refers to it, and otherwise the merchant as written. Parse timing adds a `merchants` step and logs `merchants_sent` (a count, never the names).
+- Documents: Specification v0.53 (step 3, Sections 4.7, 5.1, 5.3 and 6), Architecture v0.35 (new decision 40; decision 39 updated), Test Plan v1.23 (new B-15 to B-17; Q-09 applies only when no feature is listed). The Charter and Project Plan are unchanged, as the feature is experimental. Mockups: `design/known-merchants-mockups.html`.
+
+### Options and the Owner's Choices
+- Names differing only in capitals or spaces count as one, keeping the spelling used most (chosen over a plain "select distinct", which would offer a badly typed name back as valid).
+- At most the 50 most-used merchants.
+- No visible change on the review sheet (chosen over a note saying a name was matched).
+- The owner renamed the switch from the proposed "Remember this month's merchants" to "Intelligent Merchant Selection", with their own description.
+- Only the current month is used, as the owner specified; early in a month there may be nothing to match.
+
+### Tests (local, demo account)
+- Added four `[TEST]` Groceries expenses dated 20 November: "NTUC FairPrice" twice, "ntuc  fairprice" and "Cold Storage". The merchant query returned 12 names for the month (including the sample data's), with "NTUC FairPrice" as one name with 3 uses: the grouping worked.
+- With the switch on: "[TEST] ntuc 45.20" and "[TEST] fairprice 12" both came back as "NTUC FairPrice"; "[TEST] don don donki 18.90" came back as "Don Don Donki". With it off: "[TEST] ntuc 45.20" came back as "NTUC" (B-15 to B-17).
+- "[TEST] sheng siong 18.90" came back as "Sheng Siong", but that name is already in the demo's sample data, so it wasn't a test of a new merchant; "Don Don Donki" was used instead.
+- The server log showed `merchants=17ms … merchants_sent=12` with the switch on and no merchants step with it off; no names were logged. About 210 more input tokens per parse with 12 names (1,540 against 1,327).
+- In the app on a phone-sized screen: the Experimental features page lists the switch; switched on, Parse of "[TEST] ntuc 45.20" showed Merchant "NTUC FairPrice" on an otherwise unchanged review sheet (discarded, not saved).
+- Type-check and lint (the one known warning) passed. The production build passed, after a first run stopped on Next.js's security-advisory reminder (the same command passed on the next run, and the build before the change passed too).
+
+### Slips and Lessons
+- The mockup showed a "New" tag and a "Turn all off" button on the Experimental features page, copied from an earlier mockup option that wasn't chosen for 1.4.0. The real page has neither. The mockup now matches the app, with a note saying so. Lesson: mock up from the app as built, not from earlier mockups.
+
+### Clean-up
+- Deleted the 4 `[TEST]` expenses and the 6 parse entries the tests created; no `[TEST]` rows remain in any account. Reset the experimental switch in the test browser, removed the demo account from the local allow-list, and signed the test browser back in to the owner's account, as it was before.

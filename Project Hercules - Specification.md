@@ -1,8 +1,8 @@
 # Project Hercules — Specification Sheet: "Log an Expense" Flow
 
 ```
-Version 0.52 · Draft 
-Last Reviewed: 16 November 2026
+Version 0.53 · Draft 
+Last Reviewed: 20 November 2026
 Produced with AI Assistance (Claude Code)
 ```
 
@@ -62,6 +62,7 @@ Produced with AI Assistance (Claude Code)
 | 0.50 | 2026-11-15 | Lionel Lam | The CSV button is outlined, for an edge contrast of at least 3:1 in light and dark (Section 4.5) |
 | 0.51 | 2026-11-16 | Lionel Lam | Experimental features page in Settings, with switches remembered on the device; it starts with no features (Sections 4.4 and 4.7) |
 | 0.52 | 2026-11-16 | Lionel Lam | Loading placeholders on Log, History and Summary, with a note when loading is slow (process flow step 8) |
+| 0.53 | 2026-11-20 | Lionel Lam | First experimental feature, Intelligent Merchant Selection: Parse matches merchant names to those used this month (step 3, Sections 4.7, 5.1, 5.3 and 6) |
 
 ---
 
@@ -101,7 +102,7 @@ This spec exists to align the team before the process flow diagram (UPN) and fea
 
 1. **User enters expense** — free text, e.g. *"spent $12 on lunch at McDonald's yesterday"*. The heading and text input stay fixed at the top of the Log screen while the content below scrolls, so a new expense can be entered from anywhere in the list. Once there is text in the box, an "×" button at its top right clears it in one tap, without asking. Directly below the input, this section also shows today's total spend (counting only the default currency; other currencies are listed under it as not included, Section 4.6)
 2. **Application fetches active categories** — before calling the language model, the application queries the Category table for the user's active categories and injects the list into the prompt. This is an application-side step; no AI is involved.
-3. **Language model parses input** — the AI step. Produces structured fields (amount, category, merchant, date, etc.) from the raw text, returned via structured outputs so the response is always valid JSON in the expected shape. The currency is returned only when the text names one; otherwise the application uses the default currency from Settings (Section 4.6). For category, the language model is instructed to return exactly one name from the injected category list, or "Other" if nothing fits. No free-text category invention.
+3. **Language model parses input** — the AI step. Produces structured fields (amount, category, merchant, date, etc.) from the raw text, returned via structured outputs so the response is always valid JSON in the expected shape. The currency is returned only when the text names one; otherwise the application uses the default currency from Settings (Section 4.6). For category, the language model is instructed to return exactly one name from the injected category list, or "Other" if nothing fits. No free-text category invention. With the experimental **Intelligent Merchant Selection** switched on, the application also injects the merchant names from the current month's expenses, and the model returns a listed name when the text clearly refers to it (Section 4.7).
 4. **Application resolves `category_id`** — the returned category name is matched via exact lookup against the Category table. If the name doesn't match, the application falls back to the category named "Other", which always sorts last and can't be renamed (Section 5.2). No fuzzy matching required.
 5. **Confirmation screen is presented** — parsed fields shown as editable form elements (not a static summary). The review card opens in a sheet at the bottom of the screen, over the darkened Log screen (a centred dialog on wider screens), like the sheet for editing a saved expense, so it is clear that it needs an answer. It keeps the heading "Review before saving" and shows the typed text in quotes for reference. A pencil beside Category, Merchant and Remarks shows they can be changed, and a calendar beside Date shows it opens a date picker; the amount has no icon. The app draws these icons itself, so they look the same on every device, and every value, the date included, sits flush right. Below the fields are two full-width buttons, **Save expense** and **Discard**. Tapping outside the sheet does the same as Discard: the sheet closes, nothing is saved, and the typed text stays in the box, so it can be changed and parsed again (asking first if any detail was changed; Section 4.2). The sheet slides up into view and back down when it closes (Section 4.2). The sheet for editing a saved expense has the same pencil and calendar icons, and keeps its **Save** button and its Delete, Cancel and Save row. The currency code beside the amount is a small button that opens a list of the 20 currencies in Section 4.6, to change the currency of this expense only; the same applies when editing a saved expense.
 6. **User reviews and optionally edits fields directly** — this is the human-in-the-loop step. No re-prompting of the model occurs; corrections are direct field edits.
@@ -248,10 +249,12 @@ A page for trying out features that are built and deployed but not yet switched 
 
 - **Who sees it:** everyone signed in.
 - **The page:** "‹ Settings" to go back, the heading **Experimental features**, and a short note: "Features still being tried out. They may change or be removed. Switching one on or off takes effect straight away, on this device only." Below it, one row per feature with its name, a one-line description and a switch. A switch takes effect at once, with no Save step.
-- **No features:** the page says "Nothing to try right now" and "New features being tested will appear here.", and the Settings row reads "None right now". The page starts this way, with no features.
+- **No features:** the page says "Nothing to try right now" and "New features being tested will appear here.", and the Settings row reads "None right now". The page started this way, with no features, in 1.4.0.
 - **Remembered on the device:** each switch is saved on that device and browser only, not in the account, so a feature switched on at the computer is off on the phone until switched on there too. Every feature is off until switched on.
 - **What a switch can and can't do:** a feature's code is built and deployed once, hidden behind its switch; after that it can be turned on and off as often as needed without another release. A feature that needs a database change still needs that change first.
 - **Adding and removing features:** each feature is added to the list in the code with its own name and description. When a feature is ready for everyone, its switch is removed and it is simply part of the app (a normal release); when one is dropped, its code and switch are removed. A saved switch for a feature no longer in the list is ignored.
+- **Features listed now:**
+  - **Intelligent Merchant Selection** ("Infer merchant names from current month's expenses."): when on, each Parse also gives the language model the merchant names already on the current month's expenses (the month of today's date on the device), and the model returns the name exactly as listed when the text clearly refers to one of them, even shortened, in different capitals or only in part (for example "ntuc" or "fairprice" for "NTUC FairPrice"). Otherwise it returns the merchant as written, or none, as when the switch is off; it doesn't force an unrelated merchant onto the list. Names that differ only in capitals or spaces count as one, using the spelling used most often this month; the list holds at most the 50 most-used merchants. With no merchants yet this month, parsing works as with the switch off. The review sheet looks the same; only the merchant it shows can differ, and it can be changed before saving as usual. Only Parse on the Log screen uses it. While it's on, this month's merchant names are sent to the language model with each entry.
 
 ## 5. Data Model (Draft)
 
@@ -265,7 +268,7 @@ A page for trying out features that are built and deployed but not yet switched 
 | `amount` | number | Parsed or user-edited |
 | `currency` | string | Three-letter currency code. The currency named in the text, otherwise the user's default currency (Section 4.6); can be changed on the review card. Totals and summaries count only the default currency and never convert (Section 4.6) |
 | `category_id` | identifier (FK → `Category`) | References a category from the user's own list, not a raw string |
-| `merchant` | string (optional) | Free text; autocomplete-suggested from the user's prior entries, not constrained to a list. *Suggestions not yet built in the web app* |
+| `merchant` | string (optional) | Free text; autocomplete-suggested from the user's prior entries, not constrained to a list. *Suggestions not yet built in the web app.* With the experimental Intelligent Merchant Selection on, Parse matches the merchant to one already used this month (Section 4.7) |
 | `date` | date | Parsed or defaulted to today. Must be a real calendar date in the years 2000 to 2099; a parsed date that isn't falls back to today |
 | `other_sub_label` | string (optional) | Only populated when the selected category has `is_other = true`; captures specificity (e.g. "gift", "charity") without overloading `remarks`. *Not yet built in the web app: the column exists, but the review card doesn't ask for it, so it is currently always empty* |
 | `remarks` | string (optional) | Freeform, **user-authored** notes — distinct from `raw_input`, which is model input |
@@ -296,7 +299,7 @@ Per-user and extensible — this is a **user preference**, not a global constant
 
 ### 5.3 `Merchant` — no dedicated table (for now)
 
-Merchant is handled as autocomplete-over-free-text, not a constrained/enum list. Suggestions are derived from the user's own prior entries (e.g. distinct prior `merchant` values for that `user_id`), rather than stored as a separate managed list. *Not yet built in the web app: the merchant field is currently plain free text with no suggestions.*
+Merchant is handled as autocomplete-over-free-text, not a constrained/enum list. Suggestions are derived from the user's own prior entries (e.g. distinct prior `merchant` values for that `user_id`), rather than stored as a separate managed list. *Not yet built in the web app: the merchant field is currently plain free text with no suggestions.* The experimental Intelligent Merchant Selection (Section 4.7) uses the same idea at parse time: the distinct merchants on the current month's expenses are given to the language model, so a shortened or differently written name comes back in the spelling already used.
 
 *Flagged as a possible future refinement:* a dedicated `Merchant` table would become worthwhile if richer metadata is ever needed (e.g. a default category per merchant, merchant aliases/name normalization) — not required for this phase.
 
@@ -335,6 +338,7 @@ To keep this explicit and reviewable:
 | — | Saving/storing data |
 | — | Retrieving or querying past expenses |
 | — | Handling user edits |
+| Merchant matching, with the experimental Intelligent Merchant Selection on: returning a name from this month's merchant list (injected by the application) when the text clearly refers to it | Fetching this month's merchant list (application responsibility) |
 | — | Any category/merchant list management |
 | — | Authentication, allow-list checks, and usage/spend limits |
 

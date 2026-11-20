@@ -1,8 +1,8 @@
 # Project Hercules — Test Plan: Web App v1
 
 ```
-Version 1.22 · Draft
-Last Reviewed: 16 November 2026
+Version 1.23 · Draft
+Last Reviewed: 20 November 2026
 Produced with AI Assistance (Claude Code)
 ```
 
@@ -33,6 +33,7 @@ Produced with AI Assistance (Claude Code)
 | 1.20 | 2026-11-15 | Lionel Lam | R-01 checks the CSV button's outline in light and dark (1.3.3) |
 | 1.21 | 2026-11-16 | Lionel Lam | Experimental features: Q-02 updated; new Q-09 and Q-10 |
 | 1.22 | 2026-11-16 | Lionel Lam | New M-07 and M-08: loading placeholders and the slow-start note (1.4.1) |
+| 1.23 | 2026-11-20 | Lionel Lam | New B-15 to B-17: Intelligent Merchant Selection (1.5.0); Q-09 applies only when no feature is listed |
 
 ---
 
@@ -114,6 +115,9 @@ For each run, note the date, the device and browser, whether it was the local or
 | B-12 | Typed text is kept | Save `[TEST] dinner with the team 30`, then open it from Today | The card shows the original text in italics at the top: "[TEST] dinner with the team 30" |
 | B-13 | Text length limit | Paste text longer than 500 characters into the box | The box stops accepting text at 500 characters |
 | B-14 | Clearing the box | With the box empty, look for an ×; then type some text and tap the **×** at the top right of the box | No × while the box is empty. With text, the × appears; tapping it empties the box without asking, the cursor stays in the box, Parse dims, and the × disappears until you type again |
+| B-15 | Intelligent Merchant Selection matches a known merchant **[Claude]** | Save `[TEST] groceries 20` with the merchant changed to "NTUC FairPrice", dated this month. Switch **Intelligent Merchant Selection** on (Settings → Experimental features). Parse `[TEST] ntuc 45.20`, then `[TEST] fairprice 12` | Both review sheets show the merchant "NTUC FairPrice", which can still be changed before saving. Nothing else on the sheet looks different |
+| B-16 | Intelligent Merchant Selection leaves new merchants alone **[Claude]** | With the switch on and "NTUC FairPrice" saved this month, parse `[TEST] sheng siong 18.90` | The merchant is "Sheng Siong" (as written), not "NTUC FairPrice" |
+| B-17 | Intelligent Merchant Selection switched off **[Claude]** | Switch it off, then parse `[TEST] ntuc 45.20` | The merchant comes back as typed ("ntuc" or "NTUC"), as before the feature. The server log's parse timing line has no `merchants` step or `merchants_sent` count; with the switch on (B-15) it has both, and never the names |
 
 ### C. The Review Card
 
@@ -320,7 +324,7 @@ These need a look at the local database; ask Claude to run them.
 | Q-06 | No theme icon on screens | Look at the top of Log, History and Summary | There's no sun or moon icon |
 | Q-07 | Account | Look at the Account group | Your email address, and Sign out (see A-05). Summary no longer has a sign-out section at the bottom |
 | Q-08 | Version and last updated | Look at the bottom of Settings; compare with `CHANGELOG.md` and the latest deploy; then try a short window (for example a phone held sideways) | The line sits at the bottom of the screen, just above the tab bar (on a short window, after Sign out once scrolled). The version number matches the newest entry in the changelog (for example 1.0.0), followed by a short code for the exact version and the date and time of the latest deploy |
-| Q-09 | Experimental features, none | Settings → look at the Experimental row, then tap **Experimental features**, then **‹ Settings** | The row reads "None right now". The page shows the heading, the note about features being tried out on this device only, and "Nothing to try right now"; "‹ Settings" returns to the list. Switching to another tab and back to Settings shows the list |
+| Q-09 | Experimental features, none **[when no feature is listed]** | Settings → look at the Experimental row, then tap **Experimental features**, then **‹ Settings** | The row reads "None right now". The page shows the heading, the note about features being tried out on this device only, and "Nothing to try right now"; "‹ Settings" returns to the list. Switching to another tab and back to Settings shows the list |
 | Q-10 | Experimental switch **[when a feature is listed]** | Open Experimental features and switch a feature on; check the feature appears; reload the page; then switch it off | The Settings row counts it (for example "1 of 1 on"). The feature appears straight away, is still on after the reload, and disappears when switched off. On another device or browser it is off |
 
 ### R. Downloading Expenses (CSV)

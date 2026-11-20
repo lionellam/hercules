@@ -22,7 +22,18 @@ export type ParseResult = {
 
 const MODEL = process.env.HERCULES_MODEL ?? "claude-haiku-5-5";
 
-function buildPrompt(rawInput: string, categories: string[], today: string) {
+// Intelligent Merchant Selection (Architecture decision 40): only added when there are merchants to match
+function merchantRule(knownMerchants: string[]) {
+  if (!knownMerchants.length) return "";
+  return `
+
+Merchants the user has already used this month:
+${knownMerchants.map((m) => `- ${m}`).join("\n")}
+
+- For "merchant": if the input clearly refers to one of the merchants above, even shortened, in different capitals or only in part (for example "ntuc" or "fairprice" for "NTUC FairPrice"), return that merchant exactly as listed. Only do this when it is clearly the same place; otherwise follow the merchant instruction below as usual.`;
+}
+
+function buildPrompt(rawInput: string, categories: string[], today: string, knownMerchants: string[]) {
   const yesterday = shiftDays(today, -1);
   return `You are an expense parser. Extract structured expense details from the user's natural language input.
 
@@ -32,7 +43,7 @@ The user's input is:
 Today's date is ${today}.
 
 The user's available expense categories are:
-${categories.map((c) => `- ${c}`).join("\n")}
+${categories.map((c) => `- ${c}`).join("\n")}${merchantRule(knownMerchants)}
 
 Instructions:
 - Choose the single best-matching category from the list above. If nothing fits, use "Other".
@@ -59,10 +70,16 @@ Output: {"amount": 450.00, "currency": "THB", "category": "Food & Dining", "merc
 export class ParseError extends Error {}
 
 // The currency comes back already decided: the one named in the text, otherwise the person's default (Specification 4.6)
-export async function parseExpense(rawInput: string, categories: string[], today: string, defaultCurrency: string): Promise<ParseResult> {
+export async function parseExpense(
+  rawInput: string,
+  categories: string[],
+  today: string,
+  defaultCurrency: string,
+  knownMerchants: string[] = [],
+): Promise<ParseResult> {
   if (!process.env.ANTHROPIC_API_KEY) {
     if (process.env.NODE_ENV === "production") throw new ParseError("Parser is not configured");
-    return { expense: standInParse(rawInput, categories, today, defaultCurrency), model: "stand-in", usage: null };
+    return { expense: standInParse(rawInput, categories, today, defaultCurrency, knownMerchants), model: "stand-in", usage: null };
   }
 
   const schema = z.object({
@@ -79,7 +96,7 @@ export async function parseExpense(rawInput: string, categories: string[], today
     model: MODEL,
     max_tokens: 4000,
     output_config: { effort: "low", format: zodOutputFormat(schema) },
-    messages: [{ role: "user", content: buildPrompt(rawInput, categories, today) }],
+    messages: [{ role: "user", content: buildPrompt(rawInput, categories, today, knownMerchants) }],
   });
 
   if (response.stop_reason === "refusal" || !response.parsed_output) {
@@ -98,7 +115,7 @@ export async function parseExpense(rawInput: string, categories: string[], today
 }
 
 // Keyword-based stand-in for local development without an API key.
-function standInParse(raw: string, categories: string[], today: string, defaultCurrency: string): ParsedExpense {
+function standInParse(raw: string, categories: string[], today: string, defaultCurrency: string, knownMerchants: string[]): ParsedExpense {
   const keywords: Record<string, RegExp> = {
     "Food & Dining": /lunch|dinner|breakfast|coffee|kopi|meal|food/i,
     Transport: /grab|taxi|bus|mrt|ride|petrol/i,
@@ -107,13 +124,16 @@ function standInParse(raw: string, categories: string[], today: string, defaultC
   };
   const amount = raw.match(/\$?\s?(\d+(?:\.\d{1,2})?)/);
   const merchant = raw.match(/\bat\s+([A-Z][\w'&]*(?:\s+[A-Z][\w'&]*)*)/);
+  // A rough stand-in for Intelligent Merchant Selection: a known merchant any of whose words is typed
+  const words = raw.toLowerCase().split(/[^a-z0-9&']+/).filter((w) => w.length > 2);
+  const known = knownMerchants.find((m) => m.toLowerCase().split(/[^a-z0-9&']+/).some((w) => w.length > 2 && words.includes(w)));
   const category =
     Object.entries(keywords).find(([c, re]) => categories.includes(c) && re.test(raw))?.[0] ?? "Other";
   return {
     amount: amount ? parseFloat(amount[1]) : null,
     currency: resolveCurrency(raw.match(/\b(USD|MYR|THB|JPY|EUR|GBP)\b/i)?.[1] ?? null, raw, defaultCurrency),
     category,
-    merchant: merchant ? merchant[1] : null,
+    merchant: known ?? (merchant ? merchant[1] : null),
     date: /yesterday/i.test(raw) ? shiftDays(today, -1) : today,
     remarks: null,
   };

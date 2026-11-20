@@ -111,6 +111,23 @@ async function ownsCategory(userId: string, categoryId: number) {
   return rows.length > 0;
 }
 
+// Intelligent Merchant Selection (Architecture decision 40): this month's merchants, counting names that differ only in
+// capitals or spaces as one and keeping the spelling used most; at most the 50 most-used
+export const MAX_KNOWN_MERCHANTS = 50;
+export async function monthMerchants(userId: string, month: string) {
+  const [start, end] = monthRange(month);
+  const rows = await query<{ name: string }>(
+    `SELECT mode() WITHIN GROUP (ORDER BY regexp_replace(btrim(merchant), '\\s+', ' ', 'g')) AS name
+     FROM expenses
+     WHERE user_id = $1 AND deleted_at IS NULL AND date >= $2 AND date < $3 AND btrim(COALESCE(merchant, '')) <> ''
+     GROUP BY lower(regexp_replace(btrim(merchant), '\\s+', ' ', 'g'))
+     ORDER BY COUNT(*) DESC, name
+     LIMIT $4`,
+    [userId, start, end, MAX_KNOWN_MERCHANTS],
+  );
+  return rows.map((r) => r.name);
+}
+
 export function listExpenses(userId: string, month: string) {
   const [start, end] = monthRange(month);
   return query<Expense>(

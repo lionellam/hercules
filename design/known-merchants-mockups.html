@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Known Merchants</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root { --page: #ececea; --page-text: #18181b; --page-muted: #5f5f66; --page-card: #fafaf9; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--page); color: var(--page-text); font-family: Inter, -apple-system, system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  main { max-width: 1260px; margin: 0 auto; padding: 36px 16px 80px; }
+  h1 { font-size: 28px; letter-spacing: -0.02em; margin: 0 0 8px; }
+  .lead { color: var(--page-muted); max-width: 820px; line-height: 1.55; margin: 0 0 10px; font-size: 15px; }
+  h2 { font-size: 20px; letter-spacing: -0.01em; margin: 48px 0 6px; }
+  .frames { display: flex; flex-wrap: wrap; gap: 30px 26px; align-items: flex-start; margin-top: 18px; }
+  figure { margin: 0; max-width: 100%; }
+  figcaption { max-width: 340px; font-size: 13px; color: var(--page-muted); margin-top: 12px; line-height: 1.5; }
+  figcaption b { color: var(--page-text); }
+  .phone { width: 340px; max-width: 100%; height: 680px; border-radius: 30px; overflow: hidden; border: 1px solid rgba(0,0,0,.08);
+           box-shadow: 0 1px 2px rgba(0,0,0,.06), 0 10px 28px rgba(0,0,0,.08); }
+  .notes { margin-top: 56px; background: var(--page-card); border-radius: 16px; padding: 22px 26px; max-width: 880px; }
+  .notes h2 { margin: 0 0 10px; font-size: 18px; }
+  .notes ul { padding-left: 20px; line-height: 1.6; font-size: 14.5px; }
+  .notes li { margin-bottom: 4px; }
+
+  /* App tokens and styles, from web/app/globals.css */
+  .app { --bg: #fff; --surface: #fff; --text: #18181b; --muted: #71717a; --line: #e7e7e4; --accent: #18181b; --accent-text: #fff; --soft: #f4f4f5; --switch-off: #d4d4d8;
+         background: var(--bg); color: var(--text); font-size: 15px; position: relative; height: 100%; display: flex; flex-direction: column; }
+  .app.dark { --bg: #18181b; --surface: #18181b; --text: #f4f4f5; --muted: #a1a1aa; --line: #27272a; --accent: #f4f4f5; --accent-text: #18181b; --soft: #27272a; --switch-off: #3f3f46; }
+  .app .top { padding: 30px 20px 16px; border-bottom: 1px solid var(--line); }
+  .app .back { color: var(--muted); font-size: 14px; font-weight: 500; margin: -6px 0 8px; }
+  .app h3 { font-size: 28px; font-weight: 700; letter-spacing: -0.02em; }
+  .app .intro { color: var(--muted); font-size: 13.5px; line-height: 1.5; margin-top: 8px; }
+  .app .scroll { flex: 1; overflow: hidden; padding: 0 20px; display: flex; flex-direction: column; }
+  .app .tx { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+  .app .t { font-weight: 500; }
+  .app .d { color: var(--muted); font-size: 13px; margin-top: 2px; line-height: 1.4; }
+  .app .tabbar { display: flex; border-top: 1px solid var(--line); padding: 8px 0 18px; background: var(--bg); }
+  .app .tabbar span { flex: 1; text-align: center; font-size: 11px; color: var(--muted); }
+  .app .tabbar span.on { color: var(--text); font-weight: 600; }
+  .app .new { outline: 2px dashed #1d4ed8; outline-offset: 3px; border-radius: 8px; }
+  .app .feat { display: flex; align-items: flex-start; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--line); }
+  .app .feat .tx .t { display: flex; align-items: center; gap: 6px; }
+  .app .tag { font-size: 10.5px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); border: 1px solid var(--line); border-radius: 5px; padding: 0 5px; }
+  .app .sw { width: 46px; height: 28px; border-radius: 14px; background: var(--switch-off); position: relative; flex-shrink: 0; margin-top: 2px; }
+  .app .sw::after { content: ''; position: absolute; top: 3px; left: 3px; width: 22px; height: 22px; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,.25); }
+  .app .sw.on { background: var(--accent); }
+  .app .sw.on::after { left: 21px; background: var(--accent-text); }
+  .app .reset { margin-top: 18px; align-self: flex-start; background: none; border: none; color: var(--muted); font: inherit; font-size: 14px; font-weight: 500; padding: 0; }
+
+  /* Log screen behind the review sheet */
+  .app .log { padding: 30px 20px 0; flex: 1; }
+  .app .log h3 { margin-bottom: 14px; }
+  .app .box { background: var(--soft); border-radius: 14px; height: 92px; padding: 12px 14px; color: var(--text); font-size: 16px; }
+  .app .parse { margin-top: 10px; height: 44px; border-radius: 12px; background: var(--accent); color: var(--accent-text); display: grid; place-items: center; font-weight: 600; opacity: .35; }
+  .app .backdrop { position: absolute; inset: 0; background: rgba(0,0,0,.4); display: flex; align-items: flex-end; }
+  .app .sheet { width: 100%; background: var(--surface); border-radius: 20px 20px 0 0; padding: 16px 20px 22px; }
+  .app .card-title { font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 12px; }
+  .app .raw { font-size: 13px; color: var(--muted); margin-bottom: 10px; font-style: italic; }
+  .app .amount { display: flex; align-items: baseline; gap: 6px; margin-bottom: 14px; }
+  .app .amount span { font-size: 16px; font-weight: 600; }
+  .app .amount b { font-size: 34px; font-weight: 700; }
+  .app .field { display: flex; justify-content: space-between; align-items: center; padding: 11px 0; border-top: 1px solid var(--line); gap: 12px; }
+  .app .field label { color: var(--muted); }
+  .app .field .v { font-weight: 500; display: flex; align-items: center; gap: 8px; }
+  .app .field .v.empty { color: var(--muted); font-weight: 400; }
+  .app .field .v::after { content: '✎'; color: var(--muted); font-size: 13px; }
+  .app .btn { height: 48px; border-radius: 12px; display: grid; place-items: center; font-weight: 600; font-size: 16px; }
+  .app .btn.primary { background: var(--accent); color: var(--accent-text); margin-top: 14px; }
+  .app .btn.ghost { color: var(--muted); }
+</style>
+</head>
+<body>
+<main>
+  <h1>Intelligent Merchant Selection</h1>
+  <p class="lead">An experimental feature. When switched on, parsing matches a shortened or differently written merchant name to one you've already used this month, so "ntuc" or "fairprice" comes back as "NTUC FairPrice". Phone size, light appearance unless marked. Dashed blue outlines mark what's new. As agreed, the review sheet itself doesn't change: only the name in the Merchant line does.</p>
+
+  <h2>1 · The switch, on Settings → Experimental features</h2>
+  <p class="lead">The first real entry on the page, replacing "Nothing to try right now". Off until switched on, on each device.</p>
+  <div class="frames">
+    <figure>
+      <div class="phone"><div class="app">
+        <div class="top">
+          <div class="back">‹ Settings</div>
+          <h3>Experimental features</h3>
+          <p class="intro">Features still being tried out. They may change or be removed. Switching one on or off takes effect straight away.</p>
+        </div>
+        <div class="scroll">
+          <div class="feat new"><span class="tx"><span class="t">Intelligent Merchant Selection</span><span class="d">Infer merchant names from current month's expenses.</span></span><span class="sw"></span></div>
+        </div>
+        <div class="tabbar"><span>Log</span><span>History</span><span>Summary</span><span class="on">Settings</span></div>
+      </div></div>
+      <figcaption><b>1a · After the update.</b> The new row, switched off. <i>Corrected after building: an earlier version of this mockup showed a "New" tag and "Turn all off", which the app's page doesn't have.</i></figcaption>
+    </figure>
+
+    <figure>
+      <div class="phone"><div class="app">
+        <div class="top">
+          <div class="back">‹ Settings</div>
+          <h3>Experimental features</h3>
+          <p class="intro">Features still being tried out. They may change or be removed. Switching one on or off takes effect straight away.</p>
+        </div>
+        <div class="scroll">
+          <div class="feat"><span class="tx"><span class="t">Intelligent Merchant Selection</span><span class="d">Infer merchant names from current month's expenses.</span></span><span class="sw on"></span></div>
+        </div>
+        <div class="tabbar"><span>Log</span><span>History</span><span>Summary</span><span class="on">Settings</span></div>
+      </div></div>
+      <figcaption><b>1b · Switched on.</b> Takes effect from the next Parse on this device.</figcaption>
+    </figure>
+
+    <figure>
+      <div class="phone"><div class="app dark">
+        <div class="top">
+          <div class="back">‹ Settings</div>
+          <h3>Experimental features</h3>
+          <p class="intro">Features still being tried out. They may change or be removed. Switching one on or off takes effect straight away.</p>
+        </div>
+        <div class="scroll">
+          <div class="feat"><span class="tx"><span class="t">Intelligent Merchant Selection</span><span class="d">Infer merchant names from current month's expenses.</span></span><span class="sw on"></span></div>
+        </div>
+        <div class="tabbar"><span>Log</span><span>History</span><span>Summary</span><span class="on">Settings</span></div>
+      </div></div>
+      <figcaption><b>1c · Dark appearance.</b> The same page.</figcaption>
+    </figure>
+  </div>
+
+  <h2>2 · The review sheet after Parse</h2>
+  <p class="lead">The same entry, "ntuc 45.20", parsed in a month where "NTUC FairPrice" has already been logged. The sheet is exactly as today; only the Merchant value differs.</p>
+  <div class="frames">
+    <figure>
+      <div class="phone"><div class="app">
+        <div class="log"><h3>Log</h3><div class="box">ntuc 45.20</div><div class="parse">Parse</div></div>
+        <div class="backdrop"><div class="sheet">
+          <div class="card-title">Review before saving</div>
+          <div class="raw">"ntuc 45.20"</div>
+          <div class="amount"><span>SGD</span><b>45.20</b></div>
+          <div class="field"><label>Category</label><span class="v">Groceries</span></div>
+          <div class="field"><label>Merchant</label><span class="v">ntuc</span></div>
+          <div class="field"><label>Date</label><span class="v">20 Nov 2026</span></div>
+          <div class="field"><label>Remarks</label><span class="v empty">Add remarks</span></div>
+          <div class="btn primary">Save expense</div>
+          <div class="btn ghost">Discard</div>
+        </div></div>
+      </div></div>
+      <figcaption><b>2a · Switch off (today).</b> The merchant comes back as typed, "ntuc", so this month now has two spellings of the same shop.</figcaption>
+    </figure>
+
+    <figure>
+      <div class="phone"><div class="app">
+        <div class="log"><h3>Log</h3><div class="box">ntuc 45.20</div><div class="parse">Parse</div></div>
+        <div class="backdrop"><div class="sheet">
+          <div class="card-title">Review before saving</div>
+          <div class="raw">"ntuc 45.20"</div>
+          <div class="amount"><span>SGD</span><b>45.20</b></div>
+          <div class="field"><label>Category</label><span class="v">Groceries</span></div>
+          <div class="field"><label>Merchant</label><span class="v new">NTUC FairPrice</span></div>
+          <div class="field"><label>Date</label><span class="v">20 Nov 2026</span></div>
+          <div class="field"><label>Remarks</label><span class="v empty">Add remarks</span></div>
+          <div class="btn primary">Save expense</div>
+          <div class="btn ghost">Discard</div>
+        </div></div>
+      </div></div>
+      <figcaption><b>2b · Switch on.</b> "ntuc" is matched to "NTUC FairPrice" from earlier this month. No note or label is added; the name can still be changed before saving, as today.</figcaption>
+    </figure>
+
+    <figure>
+      <div class="phone"><div class="app dark">
+        <div class="log"><h3>Log</h3><div class="box">sheng siong 18.90</div><div class="parse">Parse</div></div>
+        <div class="backdrop"><div class="sheet">
+          <div class="card-title">Review before saving</div>
+          <div class="raw">"sheng siong 18.90"</div>
+          <div class="amount"><span>SGD</span><b>18.90</b></div>
+          <div class="field"><label>Category</label><span class="v">Groceries</span></div>
+          <div class="field"><label>Merchant</label><span class="v">Sheng Siong</span></div>
+          <div class="field"><label>Date</label><span class="v">20 Nov 2026</span></div>
+          <div class="field"><label>Remarks</label><span class="v empty">Add remarks</span></div>
+          <div class="btn primary">Save expense</div>
+          <div class="btn ghost">Discard</div>
+        </div></div>
+      </div></div>
+      <figcaption><b>2c · Switch on, a new merchant (dark).</b> Not on this month's list, so it comes back as written, the way parsing works today. It isn't forced onto a similar-sounding name like "NTUC FairPrice".</figcaption>
+    </figure>
+  </div>
+
+  <div class="notes">
+    <h2>How it behaves</h2>
+    <ul>
+      <li><b>Which merchants:</b> those on your expenses dated in the current month. Names differing only in capitals or spaces count as one, using the spelling you've used most. At most the 50 you've used most often.</li>
+      <li><b>Nothing to match yet</b> (early in the month, or no merchants logged): parsing works exactly as with the switch off.</li>
+      <li><b>Only on the Log screen's Parse.</b> Editing an expense from History or the Today list is unchanged.</li>
+      <li><b>On each device:</b> switching it on on your phone doesn't switch it on on your computer.</li>
+      <li><b>Privacy:</b> while on, this month's merchant names are sent to the parsing model along with each entry.</li>
+    </ul>
+  </div>
+</main>
+</body>
+</html>

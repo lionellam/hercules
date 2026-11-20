@@ -9,6 +9,7 @@ import { NotIncluded, useHomeCurrency, useMoney } from "../currency";
 import { EditSheet, ExpenseRow } from "../expense-sheet";
 import { SkeletonBar, SkeletonRows, SlowNote } from "../loading";
 import ReviewCard, { type Fields } from "../review-card";
+import { useExperiment } from "../experiments";
 
 // Totals are added without currency conversion, as in Summary
 function TodayByCategory({ expenses }: { expenses: Expense[] }) {
@@ -65,6 +66,9 @@ export default function LogScreen({ categories, online, cache, onSaved }: { cate
   const home = useHomeCurrency();
   const todaysHome = todays.filter((e) => e.currency === home);
 
+  // Intelligent Merchant Selection, if switched on on this device (Architecture decision 40)
+  const knownMerchants = useExperiment("known-merchants");
+
   async function parse() {
     setBusy(true);
     setError("");
@@ -72,7 +76,7 @@ export default function LogScreen({ categories, online, cache, onSaved }: { cate
       const raw = text.trim();
       const r = await api<Fields & { category_id: number | null }>("/api/parse", {
         method: "POST",
-        body: JSON.stringify({ text: raw, today: localToday() }),
+        body: JSON.stringify({ text: raw, today: localToday(), ...(knownMerchants && { knownMerchants: true }) }),
       });
       setReviewDirty(false);
       setParsed({ raw, fields: { ...r, category_id: r.category_id ?? categories.at(-1)?.id ?? 0 } });

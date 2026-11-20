@@ -6,6 +6,13 @@ Versions follow [semantic versioning](https://semver.org): **major** for a chang
 
 ---
 
+## 1.5.0 — 20 November 2026
+
+**New (experimental)**
+- **Intelligent Merchant Selection**, in Settings → Experimental features. When it's on, Parse recognises shops you've already logged this month, so "ntuc" or "fairprice" comes back as "NTUC FairPrice". New shops come back as you typed them. It's off until you switch it on, on each device.
+
+---
+
 ## 1.4.1 — 16 November 2026
 
 **Improved**

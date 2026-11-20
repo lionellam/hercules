@@ -11,4 +11,11 @@ export type Experiment = {
   description: string; // one line
 };
 
-export const EXPERIMENTS: Experiment[] = [];
+export const EXPERIMENTS: Experiment[] = [
+  // Architecture decision 40: Parse matches merchant names to those already used this month
+  {
+    id: "known-merchants",
+    name: "Intelligent Merchant Selection",
+    description: "Infer merchant names from current month's expenses.",
+  },
+];
