@@ -1547,3 +1547,16 @@ Last updated: 20 November 2026
 ### Clean-up
 - Deleted the 4 `[TEST]` expenses and the 6 parse entries the tests created; no `[TEST]` rows remain in any account. Reset the experimental switch in the test browser, removed the demo account from the local allow-list, and signed the test browser back in to the owner's account, as it was before.
 - **Confirmed (20 November 2026):** after the deploy, the owner checked on their phone that Intelligent Merchant Selection works with 1.5.0.
+
+---
+
+## 20 November 2026 — Document Integrity Check After 1.5.0
+
+### What Was Done
+- At the owner's request, checked the documents after 1.5.0 (Intelligent Merchant Selection) and the user guide edits since 16 November. Version headers matched their last Version History rows; `web/package.json`, `CHANGELOG.md` and the Git tags (to v1.5.0, local and on GitHub) agreed; the worklog was dated. The user guide was unchanged since the privacy section's removal, its last Pages run succeeded and the live copy matched the repository. The owner decided the guide doesn't need to mention the experimental feature. The Charter and Project Plan were still accurate.
+- Four fixes, applied at the owner's request:
+  1. Architecture (v0.36), decision 37: notes the `merchants` timing step and the `merchants_sent` count added in 1.5.0, and that names are never logged.
+  2. Architecture, decision 4: notes that with Intelligent Merchant Selection on, this month's merchant names are sent to the model with each entry too (decision 40).
+  3. Test Plan (v1.24), Q-10: no longer marked "[when a feature is listed]", now that one always is; it uses Intelligent Merchant Selection, with "1 of 1 on" and "0 of 1 on", and checks merchants come back as typed when it's off.
+  4. `web/README.md`: the experimental features steps now say how to tell the server a switch is on (a flag in the request only when it's on, as with `knownMerchants`).
+- Documents only, so the app version stays at 1.5.0.

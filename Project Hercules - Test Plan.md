@@ -1,7 +1,7 @@
 # Project Hercules — Test Plan: Web App v1
 
 ```
-Version 1.23 · Draft
+Version 1.24 · Draft
 Last Reviewed: 20 November 2026
 Produced with AI Assistance (Claude Code)
 ```
@@ -34,6 +34,7 @@ Produced with AI Assistance (Claude Code)
 | 1.21 | 2026-11-16 | Lionel Lam | Experimental features: Q-02 updated; new Q-09 and Q-10 |
 | 1.22 | 2026-11-16 | Lionel Lam | New M-07 and M-08: loading placeholders and the slow-start note (1.4.1) |
 | 1.23 | 2026-11-20 | Lionel Lam | New B-15 to B-17: Intelligent Merchant Selection (1.5.0); Q-09 applies only when no feature is listed |
+| 1.24 | 2026-11-20 | Lionel Lam | Integrity check: Q-10 uses Intelligent Merchant Selection, now that a feature is always listed |
 
 ---
 
@@ -325,7 +326,7 @@ These need a look at the local database; ask Claude to run them.
 | Q-07 | Account | Look at the Account group | Your email address, and Sign out (see A-05). Summary no longer has a sign-out section at the bottom |
 | Q-08 | Version and last updated | Look at the bottom of Settings; compare with `CHANGELOG.md` and the latest deploy; then try a short window (for example a phone held sideways) | The line sits at the bottom of the screen, just above the tab bar (on a short window, after Sign out once scrolled). The version number matches the newest entry in the changelog (for example 1.0.0), followed by a short code for the exact version and the date and time of the latest deploy |
 | Q-09 | Experimental features, none **[when no feature is listed]** | Settings → look at the Experimental row, then tap **Experimental features**, then **‹ Settings** | The row reads "None right now". The page shows the heading, the note about features being tried out on this device only, and "Nothing to try right now"; "‹ Settings" returns to the list. Switching to another tab and back to Settings shows the list |
-| Q-10 | Experimental switch **[when a feature is listed]** | Open Experimental features and switch a feature on; check the feature appears; reload the page; then switch it off | The Settings row counts it (for example "1 of 1 on"). The feature appears straight away, is still on after the reload, and disappears when switched off. On another device or browser it is off |
+| Q-10 | Experimental switch | Open Experimental features and switch **Intelligent Merchant Selection** on; check it works (B-15); reload the page; then switch it off | The Settings row reads "1 of 1 on" (and "0 of 1 on" when off). The feature works straight away, is still on after the reload, and stops when switched off (merchants come back as typed, B-17). On another device or browser it is off |
 
 ### R. Downloading Expenses (CSV)
 
