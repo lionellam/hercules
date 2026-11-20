@@ -1590,3 +1590,5 @@ Last updated: 20 November 2026
 
 ### Clean-up
 - No expenses or parses were created. Removed the demo account from the local allow-list and signed the test browser back in to the owner's account, as it was before.
+- **After the deploy (20 November 2026):** the live sign-in page sent all four new headers, as well as HSTS, about 50 seconds after the push (S-09).
+- **Confirmed (20 November 2026):** after the deploy, the owner checked on their phone that the app works as before with 1.5.1.
