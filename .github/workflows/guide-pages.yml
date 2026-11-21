@@ -1,12 +1,14 @@
-# Publishes the user guide ("Project Hercules - How Hercules Works.html") to GitHub Pages as the site's home page,
-# and "Project Hercules - Screens at a Glance.html" beside it as screens.html.
-# Only these two pages are published; nothing else in the repository goes on the site.
+# Publishes three pages to GitHub Pages: the home page ("Project Hercules - Home Page.html") as index.html,
+# the user guide ("Project Hercules - How Hercules Works.html") as userguide.html, and
+# "Project Hercules - Screens at a Glance.html" as screens.html.
+# Only these three pages are published; nothing else in the repository goes on the site.
 name: Publish user guide
 
 on:
   push:
     branches: [main]
     paths:
+      - "Project Hercules - Home Page.html"
       - "Project Hercules - How Hercules Works.html"
       - "Project Hercules - Screens at a Glance.html"
       - ".github/workflows/guide-pages.yml"
@@ -32,7 +34,8 @@ jobs:
       - name: Prepare site
         run: |
           mkdir _site
-          cp "Project Hercules - How Hercules Works.html" _site/index.html
+          cp "Project Hercules - Home Page.html" _site/index.html
+          cp "Project Hercules - How Hercules Works.html" _site/userguide.html
           cp "Project Hercules - Screens at a Glance.html" _site/screens.html
           touch _site/.nojekyll
       - uses: actions/configure-pages@v5

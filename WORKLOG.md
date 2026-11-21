@@ -1640,3 +1640,17 @@ Last updated: 21 November 2026
 
 ### Slips
 - The first draft had three details the app doesn't show, caught while previewing and fixed before showing the owner: a highlight on a newly saved row, the currency list in the wrong order, and text left in the Log box after saving a foreign-currency expense. Lesson: check each drawing against the code, not memory.
+
+---
+
+## 21 November 2026 — GitHub Pages Home Page
+
+### What Was Done
+- The owner asked for the user guide to have its own page, `userguide.html`, at the same level as `screens.html`. Options set out: a small home page at `/hercules/` linking to both (recommended), a redirect from `/hercules/` to the guide, or nothing there (old links would break). The owner chose the home page, mockup first.
+- Mockup `design/pages-home-mockups.html`: the name Hercules, one line on what it does, and two cards with small drawings of the app, "User guide" and "Screens at a glance". The owner's changes: no link to the app itself (it's invite-only), and no footer line, as it added nothing for the reader.
+- Added `Project Hercules - Home Page.html` (the approved mockup without its light/dark preview switch). It follows the device's light or dark setting.
+- `.github/workflows/guide-pages.yml` now publishes the home page as `index.html`, the guide as `userguide.html` and the screens as `screens.html`. Links updated in both READMEs and in the Screens page's footer; CLAUDE.md describes the three pages. Old links to `/hercules/` now reach the home page, one tap from the guide.
+- Documents: Test Plan v1.26 (S-06 now checks the home page and its two cards). Documents only, so the app version stays at 1.5.2.
+
+### Checks
+- The mockup was previewed in the browser pane on a wide screen, in dark and at phone width, with no sideways scrolling. Two fixes after the first look: the guide card's drawing moved up so the review card shows, and the Screens card's drawings were moved in on phones so neither is cut off.

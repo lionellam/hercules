@@ -2,7 +2,7 @@
 
 How changes to Hercules are made, so every session follows the same routine on any machine. The repository is public: nothing in this file, or anything committed, may contain email addresses (other than the placeholders `demo@example.com` and `you@gmail.com`), secrets or personal details.
 
-Key documents, all at the repository root: Specification, Architecture (decision record), Test Plan, Project Charter, Project Plan, Go-Live Checklist, `WORKLOG.md`, `CHANGELOG.md`, the user guide `Project Hercules - How Hercules Works.html`, and `Project Hercules - Screens at a Glance.html` (every screen as a captioned mockup). The app is in `web/` (see `web/README.md`).
+Key documents, all at the repository root: Specification, Architecture (decision record), Test Plan, Project Charter, Project Plan, Go-Live Checklist, `WORKLOG.md`, `CHANGELOG.md`, the user guide `Project Hercules - How Hercules Works.html`, `Project Hercules - Screens at a Glance.html` (every screen as a captioned mockup), and `Project Hercules - Home Page.html` (the GitHub Pages home page linking to both). The app is in `web/` (see `web/README.md`).
 
 ## Ground rules
 
@@ -47,7 +47,7 @@ Key documents, all at the repository root: Specification, Architecture (decision
 
 ## The user guide
 
-`Project Hercules - How Hercules Works.html`, published to GitHub Pages by `.github/workflows/guide-pages.yml` when it changes on `main`.
+`Project Hercules - How Hercules Works.html`, published to GitHub Pages as `userguide.html` by `.github/workflows/guide-pages.yml` when it changes on `main`. The site's home page (`index.html`) is `Project Hercules - Home Page.html`, with a card for each of the two pages.
 
 The same workflow publishes `Project Hercules - Screens at a Glance.html` as `screens.html` beside it: every screen drawn as a mockup with a one-line caption, for sharing and screenshots. It follows the same content rules, and its drawings show the app's real wording. When a screen's look or wording changes, update its drawing there too.
 
@@ -65,7 +65,7 @@ When asked for a "document integrity check":
 2. Check each document's version header against the last row of its Version History.
 3. Check `web/package.json`, `CHANGELOG.md` and the Git tags (local and on GitHub) agree.
 4. Check the Specification, Architecture, Test Plan, Charter and Project Plan all describe the app as it is now: search for wording left from earlier versions, and check new features appear in each relevant document (feature lists, Settings, scope).
-5. Check the user guide and Screens at a Glance follow the content rules, and that both live Pages copies match the repository.
+5. Check the user guide and Screens at a Glance follow the content rules, and that the live Pages copies (home page, guide and screens) match the repository.
 6. Check the READMEs and that `WORKLOG.md` is dated.
 
 Report findings as a numbered list with proposed fixes, apply them only when asked, then record the check and its fixes in the worklog. Documents-only fixes don't change the app version.
