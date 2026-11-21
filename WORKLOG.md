@@ -1623,3 +1623,20 @@ Last updated: 21 November 2026
 ### Clean-up
 - Deleted the 2 `[TEST]` expenses, the `zz-test-` category and the 1 parse entry the tests created; none remain in any account. Removed the demo account from the local allow-list and signed the test browser back in to the owner's account, as it was before.
 - **Confirmed (21 November 2026):** after the deploy, the owner checked on their phone that the app works as before with 1.5.2.
+
+---
+
+## 21 November 2026 — Screens at a Glance
+
+### What Was Done
+- The owner asked for a page of drawn mockups (not screenshots), like the user guide's, showing every screen in Hercules with a short caption on what's happening. It's for giving people a feel for the app, taking screenshots to share, and as material for promotion or other documents. It doesn't replace the user guide.
+- Added `Project Hercules - Screens at a Glance.html`: 32 screens in nine sections (signing in, logging an expense, fixing and deleting, History, Summary, Settings, Categories & budgets, Currency, Experimental features). Each screen is numbered (for example 2.4) so it can be referred to. Two switches at the top redraw every screen in light or dark and hide the captions for clean screenshots. It uses the guide's styles, and its wording was checked against the app's code (for example the confirmation sheets, the currency list order and the empty states).
+- Published beside the guide at `screens.html` (the owner's choice, over a private claude.ai link or keeping it local): `.github/workflows/guide-pages.yml` now copies it into the site and runs when it changes. README and CLAUDE.md mention it; the document integrity check now covers it.
+- Follows the guide's content rules: the owner isn't named, no competitor apps, nothing on recovering deleted expenses beyond Undo, and only the placeholder `you@gmail.com`.
+- Documents only, so the app version stays at 1.5.2.
+
+### Checks
+- Previewed in the browser pane at desktop width (three screens to a row), in dark and at phone width (one to a row, no sideways scrolling). No errors from the page itself.
+
+### Slips
+- The first draft had three details the app doesn't show, caught while previewing and fixed before showing the owner: a highlight on a newly saved row, the currency list in the wrong order, and text left in the Log box after saving a foreign-currency expense. Lesson: check each drawing against the code, not memory.
