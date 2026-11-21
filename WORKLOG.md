@@ -1701,3 +1701,16 @@ Last updated: 21 November 2026
 
 ### Checks
 - Previewed in the browser pane: a dark page with light screens and a light page with dark screens both drew correctly, the switch showed which option was on, and the page didn't scroll sideways at a narrow width.
+
+---
+
+## 21 November 2026 — Screens at a Glance: Owner's Captions
+
+### What Was Done
+- The owner rewrote all 32 captions in a Word document (column "Proposed Rewrite"), and asked for them to replace the page's captions. The bold follows the document: each caption's first sentence, and the names of sections and controls shown in the drawing (for example **Parse**, **Review before saving** and **CSV**), which the owner bolded to point readers to them in the picture. CLAUDE.md now records this, so later captions follow it; 2.7's note on currency conversion is on its own line. The owner's wording is kept; only curly apostrophes were made straight to match the rest of the page, and one double space removed. Documents only, so the app version stays at 1.5.3.
+
+### Checks
+- All 32 captions were replaced, one each. Previewed in the browser pane at desktop width: the longer captions fit under their phones, and the page doesn't scroll sideways.
+
+### Slips
+- The first pass bolded only each caption's first sentence and missed the other bold words in the document (2.1, 2.2, 2.4, 2.5, 2.6, 5.1 and 5.4). The owner spotted it; the captions were reapplied using the document's own bold. Lesson: carry over a document's formatting as well as its words.
