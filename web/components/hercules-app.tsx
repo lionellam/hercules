@@ -17,6 +17,8 @@ type Tab = "log" | "history" | "summary" | "settings";
 
 export default function HerculesApp({ email, defaultCurrency }: { email: string; defaultCurrency: string }) {
   const [tab, setTab] = useState<Tab>("log");
+  // The Log screen's typed text, held here so it survives switching tabs (memory only; Architecture decision 23)
+  const [logText, setLogText] = useState("");
   const cache = useApiCache();
   const categories = useCached<Category[]>(cache, "/api/categories") ?? [];
   // Known from the page at sign-in, then kept up to date from the server after a change in Settings
@@ -36,7 +38,7 @@ export default function HerculesApp({ email, defaultCurrency }: { email: string;
     <HomeCurrency.Provider value={homeCurrency}>
     <UndoContext.Provider value={undoBar.showUndo}>
       <main className="app">
-        {tab === "log" && <LogScreen categories={categories} online={online} cache={cache} onSaved={cache.reloadAll} />}
+        {tab === "log" && <LogScreen categories={categories} online={online} cache={cache} onSaved={cache.reloadAll} text={logText} setText={setLogText} />}
         {tab === "history" && <HistoryScreen categories={categories} online={online} cache={cache} onChanged={cache.reloadAll} />}
         {tab === "summary" && <SummaryScreen cache={cache} categories={categories} />}
         {tab === "settings" && <SettingsScreen email={email} categories={categories} online={online} cache={cache} onChanged={cache.reloadAll} />}

@@ -45,9 +45,22 @@ function TodayByCategory({ expenses }: { expenses: Expense[] }) {
   );
 }
 
-export default function LogScreen({ categories, online, cache, onSaved }: { categories: Category[]; online: boolean; cache: ApiCache; onSaved: () => void }) {
+export default function LogScreen({
+  categories,
+  online,
+  cache,
+  onSaved,
+  text,
+  setText,
+}: {
+  categories: Category[];
+  online: boolean;
+  cache: ApiCache;
+  onSaved: () => void;
+  text: string;
+  setText: (t: string) => void;
+}) {
   const money = useMoney();
-  const [text, setText] = useState("");
   const [parsed, setParsed] = useState<{ raw: string; fields: Fields } | null>(null);
   const [reviewDirty, setReviewDirty] = useState(false);
   const [askDiscard, setAskDiscard] = useState(false);
@@ -112,7 +125,7 @@ export default function LogScreen({ categories, online, cache, onSaved }: { cate
           <p className="sub">{today}</p>
           <h1>Log an expense</h1>
         </div>
-        {!online && <p className="offline">You&apos;re offline. Your text is kept — parse it when you&apos;re back online.</p>}
+        {!online && <p className="offline">You&apos;re offline. Parsing of expenses is not available. Please try again later.</p>}
         <div className="input-wrap">
           <textarea
             ref={box}

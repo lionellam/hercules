@@ -1,7 +1,7 @@
 # Project Hercules — Test Plan: Web App v1
 
 ```
-Version 1.26 · Draft
+Version 1.27 · Draft
 Last Reviewed: 21 November 2026
 Produced with AI Assistance (Claude Code)
 ```
@@ -37,6 +37,7 @@ Produced with AI Assistance (Claude Code)
 | 1.24 | 2026-11-20 | Lionel Lam | Integrity check: Q-10 uses Intelligent Merchant Selection, now that a feature is always listed |
 | 1.25 | 2026-11-20 | Lionel Lam | New A-11 and S-09: security headers (1.5.1) |
 | 1.26 | 2026-11-21 | Lionel Lam | S-06: the GitHub Pages site now has a home page linking to the user guide (moved to `userguide.html`) and Screens at a Glance (`screens.html`) |
+| 1.27 | 2026-11-21 | Lionel Lam | B-18: typed text stays when switching tabs; O-01: new offline message, and the text stays when switching tabs offline |
 
 ---
 
@@ -119,6 +120,7 @@ For each run, note the date, the device and browser, whether it was the local or
 | B-12 | Typed text is kept | Save `[TEST] dinner with the team 30`, then open it from Today | The card shows the original text in italics at the top: "[TEST] dinner with the team 30" |
 | B-13 | Text length limit | Paste text longer than 500 characters into the box | The box stops accepting text at 500 characters |
 | B-14 | Clearing the box | With the box empty, look for an ×; then type some text and tap the **×** at the top right of the box | No × while the box is empty. With text, the × appears; tapping it empties the box without asking, the cursor stays in the box, Parse dims, and the × disappears until you type again |
+| B-18 | Text kept when switching tabs | Type `[TEST] kopi 1.80` without parsing, open History, then tap **Log** again. Then tap **×**, switch tabs and come back. Then type again and reload the page | The text is still in the box after switching tabs. After **×**, the box stays empty when you come back. After a reload, the box is empty |
 | B-15 | Intelligent Merchant Selection matches a known merchant **[Claude]** | Save `[TEST] groceries 20` with the merchant changed to "NTUC FairPrice", dated this month. Switch **Intelligent Merchant Selection** on (Settings → Experimental features). Parse `[TEST] ntuc 45.20`, then `[TEST] fairprice 12` | Both review sheets show the merchant "NTUC FairPrice", which can still be changed before saving. Nothing else on the sheet looks different |
 | B-16 | Intelligent Merchant Selection leaves new merchants alone **[Claude]** | With the switch on and "NTUC FairPrice" saved this month, parse `[TEST] sheng siong 18.90` | The merchant is "Sheng Siong" (as written), not "NTUC FairPrice" |
 | B-17 | Intelligent Merchant Selection switched off **[Claude]** | Switch it off, then parse `[TEST] ntuc 45.20` | The merchant comes back as typed ("ntuc" or "NTUC"), as before the feature. The server log's parse timing line has no `merchants` step or `merchants_sent` count; with the switch on (B-15) it has both, and never the names |
@@ -299,7 +301,7 @@ To set up I-01 to I-05: create a `zz-test-` category with a $300 budget and log 
 
 | ID | Test | Steps | Expected result |
 |---|---|---|---|
-| O-01 | Offline | Turn on airplane mode, open the Log screen and type something | "You're offline. Your text is kept — parse it when you're back online." Parse and Save are dimmed. Back online, Parse works and the text is still there |
+| O-01 | Offline | Turn on airplane mode, open the Log screen and type something. Switch to History and back to Log | "You're offline. Parsing of expenses is not available. Please try again later." Parse and Save are dimmed. The text is still in the box after switching tabs. Back online, Parse works and the text is still there |
 | O-02 | Daily parse limit | Locally, parse 100 `[TEST]` expenses within 24 hours (or ask Claude to set up the limit), then parse once more | "Daily limit of 100 entries reached. Please try again tomorrow." The typed text stays in the box |
 | O-03 | Category limit | Locally, with 50 active categories, add another | "That name is already in use, or you've reached the limit of 50 categories." |
 | O-04 | Stale screen | Delete an expense on one device, then try to save an edit to it on another device that still shows it | "This expense or its category is no longer available. Please refresh and try again." |

@@ -1,8 +1,8 @@
 # Project Hercules — Specification Sheet: "Log an Expense" Flow
 
 ```
-Version 0.53 · Draft 
-Last Reviewed: 20 November 2026
+Version 0.54 · Draft 
+Last Reviewed: 21 November 2026
 Produced with AI Assistance (Claude Code)
 ```
 
@@ -63,6 +63,7 @@ Produced with AI Assistance (Claude Code)
 | 0.51 | 2026-11-16 | Lionel Lam | Experimental features page in Settings, with switches remembered on the device; it starts with no features (Sections 4.4 and 4.7) |
 | 0.52 | 2026-11-16 | Lionel Lam | Loading placeholders on Log, History and Summary, with a note when loading is slow (process flow step 8) |
 | 0.53 | 2026-11-20 | Lionel Lam | First experimental feature, Intelligent Merchant Selection: Parse matches merchant names to those used this month (step 3, Sections 4.7, 5.1, 5.3 and 6) |
+| 0.54 | 2026-11-21 | Lionel Lam | The Log screen's typed text is kept when switching tabs while the app is open (step 1); new offline message (Section 8) |
 
 ---
 
@@ -100,7 +101,7 @@ This spec exists to align the team before the process flow diagram (UPN) and fea
 
 ## 4. Process Flow (Narrative)
 
-1. **User enters expense** — free text, e.g. *"spent $12 on lunch at McDonald's yesterday"*. The heading and text input stay fixed at the top of the Log screen while the content below scrolls, so a new expense can be entered from anywhere in the list. Once there is text in the box, an "×" button at its top right clears it in one tap, without asking. Directly below the input, this section also shows today's total spend (counting only the default currency; other currencies are listed under it as not included, Section 4.6)
+1. **User enters expense** — free text, e.g. *"spent $12 on lunch at McDonald's yesterday"*. The heading and text input stay fixed at the top of the Log screen while the content below scrolls, so a new expense can be entered from anywhere in the list. Once there is text in the box, an "×" button at its top right clears it in one tap, without asking. Text typed but not yet saved stays in the box when switching to another tab and back, online or offline, until it is cleared with the "×" or the expense is saved. It is held only while the app is open, and is never stored on the device, so closing or reloading the app, or signing out, clears it. Directly below the input, this section also shows today's total spend (counting only the default currency; other currencies are listed under it as not included, Section 4.6)
 2. **Application fetches active categories** — before calling the language model, the application queries the Category table for the user's active categories and injects the list into the prompt. This is an application-side step; no AI is involved.
 3. **Language model parses input** — the AI step. Produces structured fields (amount, category, merchant, date, etc.) from the raw text, returned via structured outputs so the response is always valid JSON in the expected shape. The currency is returned only when the text names one; otherwise the application uses the default currency from Settings (Section 4.6). For category, the language model is instructed to return exactly one name from the injected category list, or "Other" if nothing fits. No free-text category invention. With the experimental **Intelligent Merchant Selection** switched on, the application also injects the merchant names from the current month's expenses, and the model returns a listed name when the text clearly refers to it (Section 4.7).
 4. **Application resolves `category_id`** — the returned category name is matched via exact lookup against the Category table. If the name doesn't match, the application falls back to the category named "Other", which always sorts last and can't be renamed (Section 5.2). No fuzzy matching required.
@@ -366,7 +367,7 @@ Carried forward, not yet resolved:
 - Shared or collaborative visibility between user accounts
 - Receipt photo / OCR capture
 - Bank/account sync or import
-- Offline expense logging (the app shows an offline message and keeps the typed text)
+- Offline expense logging (Parse needs the cloud model, so while offline the Log screen shows "You're offline. Parsing of expenses is not available. Please try again later." and keeps the typed text in the box)
 - Multi-currency conversion
 - Permanently deleting categories (retired categories are kept)
 - Allow-list administration screen

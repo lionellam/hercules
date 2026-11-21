@@ -1655,3 +1655,26 @@ Last updated: 21 November 2026
 
 ### Checks
 - The mockup was previewed in the browser pane on a wide screen, in dark and at phone width, with no sideways scrolling. Two fixes after the first look: the guide card's drawing moved up so the review card shows, and the Screens card's drawings were moved in on phones so neither is cut off.
+
+---
+
+## 21 November 2026 — Version 1.5.3: Log Text Kept Across Tabs
+
+### What Was Done
+- The owner noticed that text typed on the Log screen was lost on switching to another tab and back, and that the offline message ("Your text is kept — parse it when you're back online.") promised more than the app did.
+- Options set out: hold the text in the app's memory (A), in session storage (B, unreliable in the iPhone home-screen app once closed), in local storage (C, also survives reopening the app), or in a cookie (not recommended: sent to the server with every request). Local storage was recommended as the fullest fix. The owner chose A, to keep what is retained to a minimum; surviving a closed app isn't needed for a small quality-of-life change.
+- The typed text is now held by the app rather than the Log screen (`web/components/hercules-app.tsx`, passed to `web/components/screens/log.tsx`), so it's still there after switching tabs, online or offline. It clears with the ×, after saving, on closing or reloading the app, and on signing out (which reloads the page). Nothing is written to the device.
+- The offline message is now the owner's wording: "You're offline. Parsing of expenses is not available. Please try again later." It explains that Parse needs the internet, as it sends the text to the cloud model.
+- The owner agreed to skip the mockup, as the only visible change was wording they gave exactly.
+- Documents: Specification v0.54 (step 1 and Section 8), Architecture v0.40 (decision 23 update), Test Plan v1.27 (new B-18; O-01 updated). Screens at a Glance screen 2.8 redrawn with the new message and caption. The user guide doesn't mention the offline message, so it's unchanged. Version 1.5.3 (patch) with a CHANGELOG entry.
+
+### Checks
+- Tested locally on the demo account (confirmed first). B-18: `[TEST] kopi 1.80` typed without parsing was still in the box after History → Log; after ×, the box stayed empty after switching tabs; after a reload, the box was empty. O-01 (offline simulated in the browser): the new message showed, the text was still there after History → Log, and Parse was dimmed; back online, the message went and Parse worked again. The browser's local storage held only the theme choice, and session storage was empty.
+- Type-check, lint (the one known warning) and a production build passed.
+- Not tested: an actual airplane-mode check on a phone.
+
+### Slips
+- While updating the Test Plan, the new Version History row was first placed after test S-06 (its wording matched the anchor used), and was moved into the Version History table before testing. Lesson: anchor on a line that appears only once.
+
+### Clean-up
+- No expenses were saved and nothing was parsed, so there were no `[TEST]` rows or parse entries to delete. The demo account was removed from the local allow-list, and the test browser was signed back in to the owner's local account.

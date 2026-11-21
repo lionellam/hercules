@@ -6,6 +6,14 @@ Versions follow [semantic versioning](https://semver.org): **major** for a chang
 
 ---
 
+## 1.5.3 — 21 November 2026
+
+**Improved**
+- What you've typed on the Log screen now stays in the box when you switch to another tab and come back, online or offline, until you clear it with the × or save the expense. It's kept only while the app is open, not stored on your device.
+- Clearer offline message: "You're offline. Parsing of expenses is not available. Please try again later."
+
+---
+
 ## 1.5.2 — 21 November 2026
 
 **Improved**
