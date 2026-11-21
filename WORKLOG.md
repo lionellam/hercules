@@ -1726,3 +1726,24 @@ Last updated: 21 November 2026
 
 ### Checks
 - Previewed in the browser pane at desktop width (three in a row), tablet width (768 pixels) and phone width (375 pixels), in dark, with no sideways scrolling. At tablet width the third card first sat alone beside an empty space; it now spans the row.
+
+---
+
+## 21 November 2026 — GitHub Pages: Owner's Wording, and "App Screens"
+
+### What Was Done
+- The owner shortened the wording on two GitHub Pages files: the home page's three card descriptions ("How to use Hercules.", "Every screen in Hercules.", "Application source code and documentation.") and Screens at a Glance's title, heading, intro and the Settings, Currency and Experimental features section intros. The page is now titled "Hercules Smart Expense Tracker — App Screens".
+- Reviewed with the owner before committing; their choices:
+  1. The small label above the screens page heading reads "HERCULES · APP SCREENS", to match the new heading (it still said "SCREENS AT A GLANCE").
+  2. The home page card is titled "App screens", so the card and the page it opens share a name.
+  3. An em dash in the new title and heading ("Tracker — App Screens"), the style used elsewhere, instead of a hyphen.
+  4. The user guide's tab title and heading are fully capitalised, "How Hercules Smart Expense Tracker Works", to match the screens page. This reverses the 16 November change to a lowercase "works", at the owner's request. The guide's Updated date is now 21 November 2026.
+  5. The README names the page "App screens" / "App Screens" in its three mentions.
+- Left as they are: the file name `Project Hercules - Screens at a Glance.html` and its published address `screens.html` (renaming would break links and the Pages workflow), and internal records (CLAUDE.md, the worklog, design mockups).
+- Pages and documents only, so the app version stays at 1.5.3.
+
+### Checks
+- Previewed the home page, App Screens and the user guide locally: the card titles and descriptions, the screens page's tab title, label, heading and intro, and the guide's tab title, heading and Updated date all read as intended.
+
+### Follow-up
+- The Test Plan's S-06 still says the second card opens "Screens at a Glance"; update it to "App Screens" at the next document integrity check.
