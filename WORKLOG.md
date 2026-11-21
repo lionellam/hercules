@@ -1714,3 +1714,15 @@ Last updated: 21 November 2026
 
 ### Slips
 - The first pass bolded only each caption's first sentence and missed the other bold words in the document (2.1, 2.2, 2.4, 2.5, 2.6, 5.1 and 5.4). The owner spotted it; the captions were reapplied using the document's own bold. Lesson: carry over a document's formatting as well as its words.
+
+---
+
+## 21 November 2026 — Home Page: Source Code Card
+
+### What Was Done
+- The owner asked for the GitHub Pages home page to link to the GitHub repository as well. Mockup `design/pages-home-github-mockups.html` showed two layouts: a third card the same size as the other two, with a drawing of the repository's files (A), or a slimmer card across the width under the two (B, recommended to keep the guide and screens in front). The owner chose A.
+- `Project Hercules - Home Page.html` now has three cards in a row on wide screens: User guide, Screens at a glance, and **Source code** ("How Hercules is built: the app's code, with its specification, design decisions and test plan." → View on GitHub). The cards are a little shorter, and the Screens card's drawings moved in to fit. On tablets the first two sit side by side with the third across the width beneath; on phones they stack.
+- Documents: Test Plan v1.28 (S-06 checks the third card). README and CLAUDE.md describe the third card. Documents only, so the app version stays at 1.5.3.
+
+### Checks
+- Previewed in the browser pane at desktop width (three in a row), tablet width (768 pixels) and phone width (375 pixels), in dark, with no sideways scrolling. At tablet width the third card first sat alone beside an empty space; it now spans the row.

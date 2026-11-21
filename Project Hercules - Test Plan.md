@@ -1,7 +1,7 @@
 # Project Hercules — Test Plan: Web App v1
 
 ```
-Version 1.27 · Draft
+Version 1.28 · Draft
 Last Reviewed: 21 November 2026
 Produced with AI Assistance (Claude Code)
 ```
@@ -38,6 +38,7 @@ Produced with AI Assistance (Claude Code)
 | 1.25 | 2026-11-20 | Lionel Lam | New A-11 and S-09: security headers (1.5.1) |
 | 1.26 | 2026-11-21 | Lionel Lam | S-06: the GitHub Pages site now has a home page linking to the user guide (moved to `userguide.html`) and Screens at a Glance (`screens.html`) |
 | 1.27 | 2026-11-21 | Lionel Lam | B-18: typed text stays when switching tabs; O-01: new offline message, and the text stays when switching tabs offline |
+| 1.28 | 2026-11-21 | Lionel Lam | S-06: the home page has a third card, linking to the source code on GitHub |
 
 ---
 
@@ -384,7 +385,7 @@ A quick check on the live app after each deploy. Use your own account, and remov
 | S-03 | Log and remove a test expense | Parse `[TEST] coffee 1.00` → **Save expense** → it appears under Today → open it → Delete → confirm. The expense disappears and the totals return to what they were |
 | S-04 | Summary figures | This month's total and pace notes look right for your spending |
 | S-05 | Signed-out data check | In a private browser window, open `/api/expenses?month=` with this month (for example `2026-11`) on the live address | `{"error":"Not signed in"}` |
-| S-06 | User guide and screens | Open https://lionellam.github.io/hercules/, then each of its two cards | The home page loads; its cards open the user guide (`userguide.html`) and Screens at a Glance (`screens.html`) |
+| S-06 | User guide, screens and source code | Open https://lionellam.github.io/hercules/, then each of its three cards | The home page loads; its cards open the user guide (`userguide.html`), Screens at a Glance (`screens.html`) and the repository on GitHub |
 | S-07 | Version | Settings → look at the bottom, above the tab bar | After a release, the version matches the newest entry in `CHANGELOG.md`, the short code matches the latest commit, and "Last updated" is the time of this deploy |
 | S-08 | CSV download | Summary → **CSV** on this month; open the file. In the iPhone home-screen app, the share sheet opens instead: choose **Save to Files**, then open the file | The file downloads (or saves to Files), and its Amount column adds up to this month's total on Summary |
 | S-09 | Security headers | On the live address, check the response headers as in A-11 (or `curl -sI` the address) | The four headers from A-11 are there, as well as `Strict-Transport-Security` |

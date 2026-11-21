@@ -2,7 +2,7 @@
 
 How changes to Hercules are made, so every session follows the same routine on any machine. The repository is public: nothing in this file, or anything committed, may contain email addresses (other than the placeholders `demo@example.com` and `you@gmail.com`), secrets or personal details.
 
-Key documents, all at the repository root: Specification, Architecture (decision record), Test Plan, Project Charter, Project Plan, Go-Live Checklist, `WORKLOG.md`, `CHANGELOG.md`, the user guide `Project Hercules - How Hercules Works.html`, `Project Hercules - Screens at a Glance.html` (every screen as a captioned mockup), and `Project Hercules - Home Page.html` (the GitHub Pages home page linking to both). The app is in `web/` (see `web/README.md`).
+Key documents, all at the repository root: Specification, Architecture (decision record), Test Plan, Project Charter, Project Plan, Go-Live Checklist, `WORKLOG.md`, `CHANGELOG.md`, the user guide `Project Hercules - How Hercules Works.html`, `Project Hercules - Screens at a Glance.html` (every screen as a captioned mockup), and `Project Hercules - Home Page.html` (the GitHub Pages home page linking to both, and to the source code on GitHub). The app is in `web/` (see `web/README.md`).
 
 ## Ground rules
 
@@ -47,7 +47,7 @@ Key documents, all at the repository root: Specification, Architecture (decision
 
 ## The user guide
 
-`Project Hercules - How Hercules Works.html`, published to GitHub Pages as `userguide.html` by `.github/workflows/guide-pages.yml` when it changes on `main`. The site's home page (`index.html`) is `Project Hercules - Home Page.html`, with a card for each of the two pages.
+`Project Hercules - How Hercules Works.html`, published to GitHub Pages as `userguide.html` by `.github/workflows/guide-pages.yml` when it changes on `main`. The site's home page (`index.html`) is `Project Hercules - Home Page.html`, with a card for each of the two pages and a third for the source code on GitHub.
 
 The same workflow publishes `Project Hercules - Screens at a Glance.html` as `screens.html` beside it: every screen drawn as a mockup with a one-line caption, for sharing and screenshots. It follows the same content rules, and its drawings show the app's real wording. When a screen's look or wording changes, update its drawing there too. Each caption starts with a short bold title; within the caption, bold also marks the name of a section or control shown in the drawing (for example **Parse** or **Today by category**), to point the reader to it in the picture.
 

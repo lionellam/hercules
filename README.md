@@ -15,7 +15,7 @@ The app is invite-only: sign-in is with Google, for invited email addresses only
 | [`design/`](design/) | Design mockups made while planning changes |
 | [How Hercules Works](Project%20Hercules%20-%20How%20Hercules%20Works.html) | Source of the user guide, with its pictures drawn as mockups in the page itself, published to GitHub Pages as `userguide.html` by [`.github/workflows/guide-pages.yml`](.github/workflows/guide-pages.yml) |
 | [Screens at a Glance](Project%20Hercules%20-%20Screens%20at%20a%20Glance.html) | Every screen drawn as a mockup with a one-line caption, for showing people what Hercules looks like; published beside the guide as `screens.html` |
-| [Home Page](Project%20Hercules%20-%20Home%20Page.html) | The GitHub Pages home page, linking to the user guide and Screens at a Glance |
+| [Home Page](Project%20Hercules%20-%20Home%20Page.html) | The GitHub Pages home page, linking to the user guide, Screens at a Glance and this repository |
 
 ## Project documents
 
