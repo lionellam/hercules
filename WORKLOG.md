@@ -1691,3 +1691,13 @@ Last updated: 21 November 2026
 - The home page, user guide and Screens at a Glance follow the content rules (the owner's GitHub username appears only in the guide's web address), and the live copies of all three matched the repository. The guide doesn't mention the offline message or switching tabs, so 1.5.3 needs no guide update.
 - Both READMEs link to `userguide.html` and `screens.html`; the worklog is dated.
 - Documents only, so the app version stays at 1.5.3.
+
+---
+
+## 21 November 2026 — Screens at a Glance: Background Switch
+
+### What Was Done
+- At the owner's request, Screens at a Glance has a third switch, **Background** (Light or Dark), beside **Screens** and **Captions**, so screenshots can show a light or dark phone on either a light or dark page. It starts as the device's own light or dark setting. Documents only, so the app version stays at 1.5.3.
+
+### Checks
+- Previewed in the browser pane: a dark page with light screens and a light page with dark screens both drew correctly, the switch showed which option was on, and the page didn't scroll sideways at a narrow width.
