@@ -1679,3 +1679,15 @@ Last updated: 21 November 2026
 ### Clean-up
 - No expenses were saved and nothing was parsed, so there were no `[TEST]` rows or parse entries to delete. The demo account was removed from the local allow-list, and the test browser was signed back in to the owner's local account.
 - **Confirmed (21 November 2026):** after the deploy, the owner checked on their phone that typed text on the Log screen stays when switching tabs and back with 1.5.3, and that the new offline message shows.
+
+---
+
+## 21 November 2026 — Document Integrity Check After 1.5.3
+
+### What Was Done
+- At the owner's request, checked the documents after 1.5.2, Screens at a Glance, the GitHub Pages home page, 1.5.3 and the owner's wording in Architecture decision 23. No fixes were needed.
+- Version headers matched their last Version History rows (Specification 0.54, Architecture 0.40, Test Plan 1.27, Charter 0.15, Project Plan 0.15; the Go-Live Checklist has only a "Last updated" date and is unchanged). `web/package.json`, `CHANGELOG.md` and the Git tags (to v1.5.3, local and on GitHub) agreed.
+- No wording was left from before 1.5.3: the old offline message appears only in the worklog and mockups, and decision 15 and the Specification's out-of-scope list match the app. No document links to the guide's old address.
+- The home page, user guide and Screens at a Glance follow the content rules (the owner's GitHub username appears only in the guide's web address), and the live copies of all three matched the repository. The guide doesn't mention the offline message or switching tabs, so 1.5.3 needs no guide update.
+- Both READMEs link to `userguide.html` and `screens.html`; the worklog is dated.
+- Documents only, so the app version stays at 1.5.3.
