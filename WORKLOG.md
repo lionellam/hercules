@@ -1794,3 +1794,4 @@ Last updated: 21 November 2026
 
 ### Clean-up
 - The test scripts and trial copies of the parser are in Claude's scratch folder only; nothing was added to the repository and no data was saved.
+- **Confirmed (21 November 2026):** after the deploy, the owner checked on their phone that, with Intelligent Merchant Selection switched on, a new merchant such as "Groceries from Sheng Siong at $7" now comes back in the review sheet with 1.5.4.
