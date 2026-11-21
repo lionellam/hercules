@@ -26,6 +26,14 @@ Key documents, all at the repository root: Specification, Architecture (decision
 9. **After pushing an app change:** tag it (`git tag -a vX.Y.Z -m "Version X.Y.Z"`), push the tag, and check the tag is on GitHub.
 10. **After the owner checks on their phone:** when they confirm, offer to add a line to that version's worklog entry: `- **Confirmed (D Month YYYY):** after the deploy, the owner checked on their phone that …`, then commit only when asked.
 
+## Experimental features
+
+Experimental features (Settings → Experimental features, Architecture decision 39) are kept separate from the rest of the app, so changing one can't cause a regression elsewhere.
+
+- **A change to an experimental feature stays inside that feature's own code**: the parts that run only when its switch is on (for Intelligent Merchant Selection: `merchantRule` in `web/lib/parser.ts`, `monthMerchants` in `web/lib/expenses.ts`, and the `knownMerchants` flag). If a change would need to touch code that also runs with the switch off, discuss it with the owner first.
+- **Before committing, prove the switch-off path is unchanged** and say how in the worklog. For a change to what's sent to the language model, build the full prompt with the switch off from both the old and new code and check they are identical, character for character.
+- **Test with realistic sizes**, not only the smallest case (for example, a full list of 50 known merchants as well as one), and compare against the switch-off result.
+
 ## Database changes
 
 - The schema is `web/db/schema.sql`. Changes must be additive and safe to re-run (`IF NOT EXISTS`).

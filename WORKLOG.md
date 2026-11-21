@@ -1759,3 +1759,38 @@ Last updated: 21 November 2026
 
 ### Checks
 - Locally, each link ends 23 pixels from the bottom of its card at 1,280 pixels wide (all three level), 800 pixels (two cards in a row, then the third across the row) and 390 pixels (one per row), with no sideways scrolling and no errors.
+
+---
+
+## 21 November 2026 — Version 1.5.4: Intelligent Merchant Selection Keeps New Merchants
+
+### What Was Done
+- The owner found that, with the experimental **Intelligent Merchant Selection** switched on, "Groceries from Sheng Siong at $7" came back with no merchant. Sheng Siong was a new merchant, not on the month's list.
+- Reproduced by calling the app's parser and the language model directly from a script in Claude's scratch folder (nothing saved, no account used), with made-up lists of known merchants. With 4 to 15 known merchants, Sheng Siong was always kept; with 20 it was dropped in 4 of 6 runs; with 30 or 50, in every run. "Lunch at Fish Soup Stall $6" was mostly kept, so the wording of the text matters as well as the list's length. B-16 didn't catch it because only one merchant was saved when it was run.
+- Cause: the rule told the model to use a listed name when the text matches, "otherwise follow the merchant instruction below as usual". With a long list, the model treated the list as the only merchants allowed and returned none.
+- The fix, in `merchantRule` in `web/lib/parser.ts` only: the list is introduced as not complete and for matching spellings only; a merchant not on the list is named as it would be without the list; and the model must never return no merchant just because it isn't listed.
+- Documents: Architecture 0.41 (decision 40 updated; a Known Gaps follow-up for shared words) and Test Plan 1.29 (new B-19). The Specification already describes this behaviour ("returns the merchant as written, or none, as when the switch is off"), so it is unchanged.
+- CLAUDE.md has a new **Experimental features** section, at the owner's request: changes to an experimental feature stay inside that feature's own code, the switch-off path is proved unchanged before committing, and tests use realistic sizes.
+- Version 1.5.4 (a fix), with a CHANGELOG entry.
+
+### Options Considered
+1. **Return a new merchant exactly as typed.** Fixed the bug, but lost the tidying the model does with the switch off ("dintaifung" stayed "dintaifung"). The owner set it aside.
+2. **Hybrid (chosen by the owner):** keep "not a complete list" and "never no merchant", and name a new merchant as without the list, so it is tidied ("Din Tai Fung").
+3. A version that first found the merchant as typed and then checked the list was tried and dropped: it made matching worse ("yakun" stayed "yakun" in up to all 20 runs).
+4. Widening the list to last month's merchants was discussed and set aside by the owner before the bug was found.
+
+### Tests
+- Hybrid against the earlier rule, 10 runs per case with 20 and 50 known merchants: new merchants (Sheng Siong in two wordings, Prime Supermarket, Fish Soup Stall) were kept in every run, against as few as 0 of 10 before; untidy new merchants were tidied ("dintaifung" → "Din Tai Fung", "sheng siong" → "Sheng Siong") in every run; known names (ntuc, fairprice, yakun, toastbox, oldchangkee) matched in every run, as before; "Bus fare $2" had no merchant in every run.
+- B-19 on the final code, 10 runs each: with 50 known merchants, Sheng Siong, Prime Supermarket and Din Tai Fung kept every time, "ntuc" → "NTUC FairPrice", "Bus fare" no merchant. With the switch off, the same as before ("ntuc" → "NTUC").
+- **Switch-off path unchanged:** the full prompt with the switch off, built from the code before and after the change, is identical character for character (5 inputs). The only lines changed are the two inside `merchantRule`, which is added only when the switch is on and there are merchants this month. The parse route is the only caller of the parser.
+- `npx tsc --noEmit` passed, `npx eslint .` passed with the one known warning, and `npm run build` passed.
+- Not run: an end-to-end parse in the app on the demo account. The parse route and Log screen are unchanged; only the prompt text changed, and that was tested directly against the model.
+
+### Known Gap
+- A different business that shares a word with a listed merchant can still be given the listed name: "ntuc health dental 80" came back as "NTUC FairPrice" in every run with both the earlier and the new rule, and "cold stone ice cream" as "Cold Storage" in 1 of 10 runs with the new rule. Left as a separate follow-up at the owner's request (Architecture Known Gaps).
+
+### Slips
+- In one round, "dintaifung" was counted as a failure for the new rule with 20 known merchants, but Din Tai Fung wasn't on that list, so returning it as typed was what that rule asked for. Spotted before reporting; later rounds left Din Tai Fung off the list on purpose. Lesson: check each expected answer against the list actually used.
+
+### Clean-up
+- The test scripts and trial copies of the parser are in Claude's scratch folder only; nothing was added to the repository and no data was saved.

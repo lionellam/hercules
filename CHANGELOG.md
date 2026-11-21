@@ -6,6 +6,13 @@ Versions follow [semantic versioning](https://semver.org): **major** for a chang
 
 ---
 
+## 1.5.4 — 21 November 2026
+
+**Fixed**
+- With the experimental **Intelligent Merchant Selection** switched on, a merchant you haven't used this month (for example "Groceries from Sheng Siong at $7") could come back with no merchant once many merchants were already used. New merchants are now kept, and tidied as they are with the switch off. With the switch off, nothing has changed.
+
+---
+
 ## 1.5.3 — 21 November 2026
 
 **Improved**
