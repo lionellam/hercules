@@ -1651,6 +1651,7 @@ Last updated: 21 November 2026
 - Added `Project Hercules - Home Page.html` (the approved mockup without its light/dark preview switch). It follows the device's light or dark setting.
 - `.github/workflows/guide-pages.yml` now publishes the home page as `index.html`, the guide as `userguide.html` and the screens as `screens.html`. Links updated in both READMEs and in the Screens page's footer; CLAUDE.md describes the three pages. Old links to `/hercules/` now reach the home page, one tap from the guide.
 - Documents: Test Plan v1.26 (S-06 now checks the home page and its two cards). Documents only, so the app version stays at 1.5.2.
+- **Follow-up (21 November 2026):** at the owner's request, the home page's opening line was replaced with the user guide's opening paragraph ("Hercules is an intelligent expense tracker…"), as more appealing to new readers.
 
 ### Checks
 - The mockup was previewed in the browser pane on a wide screen, in dark and at phone width, with no sideways scrolling. Two fixes after the first look: the guide card's drawing moved up so the review card shows, and the Screens card's drawings were moved in on phones so neither is cut off.
