@@ -1747,3 +1747,15 @@ Last updated: 21 November 2026
 
 ### Follow-up
 - The Test Plan's S-06 still says the second card opens "Screens at a Glance"; update it to "App Screens" at the next document integrity check.
+
+---
+
+## 21 November 2026 — GitHub Pages Home Page: Links Line Up at the Bottom of Each Card
+
+### What Was Done
+- At the owner's request, the green link in each of the home page's three cards ("Read the guide", "See the screens", "View on GitHub") now sits at the bottom of its card. Before, each link followed its description, so the Source code card's two-line description put its link lower than the others. The text area now fills the card and the link is pushed to its bottom, with the same 12-pixel minimum gap above it as before.
+- A small visible change: the local preview was reviewed with the owner in place of a separate mockup page.
+- Pages only, so the app version stays at 1.5.3.
+
+### Checks
+- Locally, each link ends 23 pixels from the bottom of its card at 1,280 pixels wide (all three level), 800 pixels (two cards in a row, then the third across the row) and 390 pixels (one per row), with no sideways scrolling and no errors.
