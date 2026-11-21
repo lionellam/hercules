@@ -1678,3 +1678,4 @@ Last updated: 21 November 2026
 
 ### Clean-up
 - No expenses were saved and nothing was parsed, so there were no `[TEST]` rows or parse entries to delete. The demo account was removed from the local allow-list, and the test browser was signed back in to the owner's local account.
+- **Confirmed (21 November 2026):** after the deploy, the owner checked on their phone that typed text on the Log screen stays when switching tabs and back with 1.5.3, and that the new offline message shows.
