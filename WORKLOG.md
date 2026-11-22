@@ -1933,3 +1933,11 @@ Last updated: 22 November 2026
 
 ### Checks
 - No email addresses in the changes; outside past records, "App Screens" no longer appears.
+
+---
+
+## 22 November 2026 — User Guide: Quick Answers Removed
+
+### What Was Done
+- At the owner's request, the user guide's **Quick answers** section is deleted: its heading, all its questions and answers, its Contents entry, and the three `dl.faq` style rules only it used. (The owner first commented it out, then chose to delete it, since commented-out text still shows in the public page source.) The guide now ends after "Categories & budgets".
+- Nothing else linked to `#faq`. Pages only, so the app version stays at 1.5.4.

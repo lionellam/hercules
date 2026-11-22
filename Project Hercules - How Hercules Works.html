@@ -279,9 +279,6 @@ html { scroll-behavior: smooth; }
 .m .m-cancel { text-align: center; color: var(--m-muted); font-weight: 600; font-size: 12.5px; padding: 9px 0 0; }
 .m .m-undo { margin: 18px 12px 10px; background: var(--m-bar); color: var(--m-bg); border-radius: 10px; padding: 9px 12px; display: flex; justify-content: space-between; font-size: 12px; box-shadow: 0 4px 14px rgba(0,0,0,.18); }
 .m .m-undo b { text-decoration: underline; text-underline-offset: 2px; }
-dl.faq { margin: 18px 0; display: grid; gap: 4px; max-width: 72ch; }
-dl.faq dt { font-weight: 700; margin-top: 14px; }
-dl.faq dd { margin: 2px 0 0; color: var(--ink-2); }
 /* Light / Dark switch, the same on all four pages: top right, beside the way home. The choice is remembered across the pages */
 .topbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 0 0 18px; min-height: 32px; }
 .topbar.solo { justify-content: flex-end; }
@@ -322,7 +319,6 @@ dl.faq dd { margin: 2px 0 0; color: var(--ink-2); }
       <li><a href="#pace">Spending pace</a></li>
       <li><a href="#settings">Settings</a></li>
       <li><a href="#categories">Categories &amp; budgets</a></li>
-      <li><a href="#faq">Quick answers</a></li>
     </ol>
   </nav>
 
@@ -694,24 +690,6 @@ dl.faq dd { margin: 2px 0 0; color: var(--ink-2); }
         <figcaption><b>Categories &amp; budgets.</b> Budgets are optional. Tap a category to rename it, change its budget or retire it. Retired categories wait under <b>Retired</b> at the bottom.</figcaption>
       </figure>
     </div>
-
-    <h2 id="faq">Quick answers</h2>
-    <dl class="faq">
-      <dt>The AI returned the wrong category or date.</dt>
-      <dd>Change it on the review card before you save. If it's already saved, tap the expense to edit it.</dd>
-      <dt>I wrote "tues" and it picked next Tuesday.</dt>
-      <dd>Check the date on the review card. Writing "last Tuesday" or the date itself, like "3 Nov", avoids this.</dd>
-      <dt>I can't find an expense I logged.</dt>
-      <dd>It's filed under its own date. In History, go to the month of that date. If it's dated a different day, it won't be in Today.</dd>
-      <dt>Can I get back an expense I deleted?</dt>
-      <dd>Only by tapping <b>Undo</b> in the few seconds after deleting. After that it can't be brought back in the app, so check before you confirm.</dd>
-      <dt>Why does a category say "over pace" on the 2nd of the month?</dt>
-      <dd>Only two days' worth of budget is expected so far, so one purchase can be ahead. It usually settles as the month goes on.</dd>
-      <dt>It says I've reached the daily limit.</dt>
-      <dd>You can parse 100 expenses in 24 hours. Try again later; anything you've typed stays in the box.</dd>
-      <dt>The app is slow to open after a while.</dt>
-      <dd>After a quiet spell the database takes a moment to wake up. While it does, grey placeholders show where your expenses will appear, and if it takes more than a few seconds a short note says so. It's quick again straight after.</dd>
-    </dl>
 
   </main>
 </div>
