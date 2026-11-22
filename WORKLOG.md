@@ -1960,6 +1960,7 @@ Last updated: 22 November 2026
 
 ### Slip
 - The first local build failed: the local `node_modules` still had Next.js 16.4.3, although `package.json` pins 16.4.6 since 1.5.1 (probably installed on another machine), and Next's security reminder ended the build with an error. `npm ci` brought it to 16.4.6 and the build passed. Lesson: after pulling a dependency change, run `npm ci` in `web/`.
+- **Confirmed (22 November 2026):** after the deploy, the owner checked on their phone that Settings shows version **1.5.5**, short code **368d6aa** and "Last updated" at the 1.5.5 release time on 22 Nov 2026. After the documents-only push `6853273`, which Vercel reported as "Canceled by Ignored Build Step", all three were unchanged, so S-07 and S-11 passed.
 
 ---
 
