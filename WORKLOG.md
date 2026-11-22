@@ -1909,3 +1909,12 @@ Last updated: 22 November 2026
 
 ### Checks
 - No email addresses in the changes; the guide's "Updated" date is 22 November 2026.
+
+---
+
+## 22 November 2026 — User Guide and App Screens: Wording Fixes
+
+### What Was Done
+- User guide, deleting: "dialog will asks you to confirm the deletion" → "dialog asks you to confirm by tapping **Delete expense**". This names the dialog's confirm button (`expense-sheet.tsx` `confirmLabel="Delete expense"`), so it matches the Undo caption; the card's own button stays **Delete** (`review-card.tsx`).
+- App Screens, sign-in intro: "whitelisted beforehand, i.e., added to an allow-list" → "added to an allow-list beforehand", matching "allow-list" on Expense Flow.
+- Pages only, so the app version stays at 1.5.4.
