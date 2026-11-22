@@ -2025,3 +2025,4 @@ Last updated: 22 November 2026
 
 ### Clean-up
 - Deleted the 2 test expenses and 2 parse entries the tests created; no `[TEST]` rows remain; the demo account's default currency is unchanged (SGD); removed demo@example.com from the local allow-list; signed the test browser out (it was signed out before); stopped the local database and dev server. The test scripts were temporary files, deleted after each run.
+- **Confirmed (22 November 2026):** after the deploy, the owner checked on their phone that Settings shows version **1.5.6**, short code **1898ab9** and "Last updated" on 22 Nov 2026; that Experimental features reads "Infer merchant names from this month's and last month's expenses."; and, with Intelligent Merchant Selection on, that a merchant used in October but not yet in November came back in the review card with its listed name, discarded without saving (B-20 on real data).
