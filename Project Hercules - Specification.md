@@ -1,8 +1,8 @@
 # Project Hercules — Specification Sheet: "Log an Expense" Flow
 
 ```
-Version 0.54 · Draft 
-Last Reviewed: 21 November 2026
+Version 0.55 · Draft 
+Last Reviewed: 22 November 2026
 Produced with AI Assistance (Claude Code)
 ```
 
@@ -64,6 +64,7 @@ Produced with AI Assistance (Claude Code)
 | 0.52 | 2026-11-16 | Lionel Lam | Loading placeholders on Log, History and Summary, with a note when loading is slow (process flow step 8) |
 | 0.53 | 2026-11-20 | Lionel Lam | First experimental feature, Intelligent Merchant Selection: Parse matches merchant names to those used this month (step 3, Sections 4.7, 5.1, 5.3 and 6) |
 | 0.54 | 2026-11-21 | Lionel Lam | The Log screen's typed text is kept when switching tabs while the app is open (step 1); new offline message (Section 8) |
+| 0.55 | 2026-11-22 | Lionel Lam | Settings' "Last updated" changes only when the app itself changes, not for document updates |
 
 ---
 
@@ -187,7 +188,7 @@ Settings is the fourth tab, with a gear icon, after Log, History and Summary. It
 - **Appearance:** System, Light or Dark. System follows the device's setting. The choice is saved on that device only. This replaces the sun or moon icon that was at the top of every screen.
 - **Experimental:** **Experimental features**, showing how many are switched on (for example "1 of 3 on"), or "None right now" when there are none. It opens the Experimental features page (Section 4.7).
 - **Account:** the email address signed in with, and **Sign out**, which moves here from the bottom of Summary and asks for confirmation first (Section 4.2).
-- **At the bottom of the screen,** just above the tab bar: the app's version number and the date and time it was last updated, meaning when the version running was built and deployed. On a screen too short to show everything, it follows Sign out and is reached by scrolling.
+- **At the bottom of the screen,** just above the tab bar: the app's version number and the date and time it was last updated, meaning when the version running was built and deployed. Updates to documents alone don't rebuild the app, so they don't change it. On a screen too short to show everything, it follows Sign out and is reached by scrolling.
 
 Opening the Settings tab always shows the Settings list, even if Categories & budgets, Currency or Experimental features was open when you left it.
 

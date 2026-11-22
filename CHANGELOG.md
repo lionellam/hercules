@@ -6,6 +6,13 @@ Versions follow [semantic versioning](https://semver.org): **major** for a chang
 
 ---
 
+## 1.5.5 — 22 November 2026
+
+**Fixed**
+- **Last updated** at the bottom of Settings now changes only when the app itself changes. Before, updating the user guide or other documents rebuilt the app unchanged, so the date (and the short code beside the version) moved even though nothing in the app was new.
+
+---
+
 ## 1.5.4 — 21 November 2026
 
 **Fixed**

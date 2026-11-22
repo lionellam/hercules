@@ -1941,3 +1941,22 @@ Last updated: 22 November 2026
 ### What Was Done
 - At the owner's request, the user guide's **Quick answers** section is deleted: its heading, all its questions and answers, its Contents entry, and the three `dl.faq` style rules only it used. (The owner first commented it out, then chose to delete it, since commented-out text still shows in the public page source.) The guide now ends after "Categories & budgets".
 - Nothing else linked to `#faq`. Pages only, so the app version stays at 1.5.4.
+
+---
+
+## 22 November 2026 — 1.5.5: Vercel Builds Only When the App Changes
+
+### What Was Done
+- The owner asked whether the app's "Last updated" date matched the changelog. It didn't: the changelog's newest version, 1.5.4, is dated 21 November, but Settings showed about 4:13 pm on 22 November with the short code `141efc8` (removing the guide's Quick answers), not the 1.5.4 commit `e2aea21`. "Last updated" is the build time (`NEXT_PUBLIC_APP_BUILT_AT` in `web/next.config.ts`), and Vercel was rebuilding on every push to `main`: each of the day's GitHub Pages pushes (`75d2b04`, `c8b44d8`, `141efc8` and others) shows a successful Vercel deploy of the unchanged app. Worked out from GitHub's commit statuses; the live app itself wasn't opened.
+- Options set out: (1) skip builds when nothing under `web/` changed (recommended); (2) show the release date instead of the build time; (3) leave it. **The owner chose 1.**
+- `web/vercel.json` gets an ignored build step: `git diff --quiet ${VERCEL_GIT_PREVIOUS_SHA:-HEAD^} HEAD -- .` (run in `web/`, comparing with the last successful deploy, or the previous commit if Vercel gives none). No change under `web/` → skipped; a change, or a comparison that can't be made → builds.
+- Documents: Architecture 0.43 (new decision 42), Specification 0.55 ("Last updated" doesn't change for document updates), Test Plan 1.33 (new S-11).
+- A patch release, **1.5.5** (`npm version patch`), with a changelog entry. This commit changes `web/`, so it builds, and Settings will then show 1.5.5 dated 22 November, matching the changelog.
+
+### Checks
+- The rule, run locally in `web/` against real commits: 1.5.4 → `141efc8` (documents only) exit 0, skip; `75d2b04` → `c8b44d8` exit 0, skip; the 1.5.4 release commit against its parent exit 1, build; an unknown commit exit 128, build.
+- `npx tsc --noEmit` passed, `npx eslint .` gave the one known warning, `npm run build` passed.
+- Not tested: Vercel's own run of the step, which can only be seen after pushing (S-11 at the next documents-only push). No screenshot, as nothing on screen changes apart from the version line.
+
+### Slip
+- The first local build failed: the local `node_modules` still had Next.js 16.4.3, although `package.json` pins 16.4.6 since 1.5.1 (probably installed on another machine), and Next's security reminder ended the build with an error. `npm ci` brought it to 16.4.6 and the build passed. Lesson: after pulling a dependency change, run `npm ci` in `web/`.

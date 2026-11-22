@@ -1,7 +1,7 @@
 # Project Hercules — Test Plan: Web App v1
 
 ```
-Version 1.32 · Draft
+Version 1.33 · Draft
 Last Reviewed: 22 November 2026
 Produced with AI Assistance (Claude Code)
 ```
@@ -43,6 +43,7 @@ Produced with AI Assistance (Claude Code)
 | 1.30 | 2026-11-22 | Lionel Lam | S-06: four cards (Expense flow added), shown two by two, and a link back to the home page at the top of each page; the screens page is called App Screens |
 | 1.31 | 2026-11-22 | Lionel Lam | New S-10: the same Light / Dark switch at the top of all four GitHub Pages, remembered across them; App Screens' drawing switch is called App theme |
 | 1.32 | 2026-11-22 | Lionel Lam | S-06, S-10: the screens page is now called Application Screens |
+| 1.33 | 2026-11-22 | Lionel Lam | New S-11: a documents-only push doesn't rebuild the app, so Settings' version line stays the same (1.5.5) |
 
 ---
 
@@ -395,6 +396,7 @@ A quick check on the live app after each deploy. Use your own account, and remov
 | S-08 | CSV download | Summary → **CSV** on this month; open the file. In the iPhone home-screen app, the share sheet opens instead: choose **Save to Files**, then open the file | The file downloads (or saves to Files), and its Amount column adds up to this month's total on Summary |
 | S-09 | Security headers | On the live address, check the response headers as in A-11 (or `curl -sI` the address) | The four headers from A-11 are there, as well as `Strict-Transport-Security` |
 | S-10 | Light and dark on the GitHub Pages | Open https://lionellam.github.io/hercules/ and choose **Dark** with the switch at the top right. Open each card, reload one page, then choose **Light** on any page and go back to the home page. On Application Screens, use **App theme** in the bar | Every page has the same **Light / Dark** switch at the top right, on the row with **← Hercules home** (alone on the home page). The first time, it matches the device's setting. Dark stays on as you move between pages and after the reload; choosing Light on any page carries to the others. **App theme** changes only the drawings, not the page |
+| S-11 | Documents-only push | After the next push that changes only documents (nothing under `web/`), look at the commit's Vercel check on GitHub, then Settings → the bottom | Vercel reports the build as skipped (ignored build step), not deployed. Settings still shows the same version, short code and "Last updated" as before the push |
 
 The test expense from S-03 stays in the database as a deleted record. That's harmless, but it can be removed by Lionel if wanted.
 
