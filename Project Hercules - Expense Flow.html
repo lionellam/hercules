@@ -205,7 +205,7 @@ const STEPS = [
     exp: "<b>Intelligent Merchant Selection on?</b> Also sends this month's merchant names, with an instruction to use a listed name when the text refers to one.",
     note: "<b>Claude couldn't read it?</b> “The model could not parse this expense”. <b>Couldn't reach Claude?</b> “Parsing failed. Please try rephrasing.” Nothing is saved.",
     ask: { lane: 4, label: "1 request", text: "Claude Haiku reads the text and returns the amount, currency, category, merchant, date and remarks.", exp: "With the merchant names: a shop already used this month comes back spelt as listed, for example “ntuc” as “NTUC FairPrice”." } },
-  { lane: 2, title: "Fill in and check the result", body: "If no currency was named, uses the default currency from Settings. A date that isn't real becomes today. Matches the category to one of the person's own, otherwise Other. Then replies to the client side." },
+  { lane: 2, title: "Check and complete Claude's answer", body: "The server-side application checks Claude's answer before responding to the client. <b>Currency:</b> if the text named none, uses the person's default currency, read with the account in step 4 (set in Settings → Currency). <b>Date:</b> a date that isn't real becomes today. <b>Category:</b> matched by name to one of the categories read in step 6, otherwise Other. <b>The merchant, amount and remarks</b> are passed on as Claude gave them." },
   { lane: 1, title: "Show “Review before saving”", body: "The details appear in a sheet over the Log screen. Nothing is saved yet." },
   { phase: "2 · Save" },
   { lane: 0, title: "Check and save", body: "Change any detail if needed, then tap <b>Save expense</b>.",

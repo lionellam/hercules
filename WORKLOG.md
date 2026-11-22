@@ -1882,3 +1882,15 @@ Last updated: 22 November 2026
 
 ### Checks
 - Locally, the diagram draws with no errors; "queries the database" appears four times and "asks the database" no longer does.
+
+---
+
+## 22 November 2026 — Expense Flow: Step 8 Says What It Checks
+
+### What Was Done
+- The owner found step 8, "Fill in and check the result", ambiguous: fill in what, where the default currency comes from, and what process it is. Checked against the code and explained: it is the server's own code checking and completing Claude's answer before replying (no AI, no database query). The currency comes from `resolveCurrency` (a plain "$" counts as the default if that's a dollar currency, otherwise US dollars; USD is only kept if the text says US dollars); the default currency is the `users.default_currency` column, already read with the account in step 4; an impossible date becomes today; the category is matched by name to the categories read in step 6, otherwise Other. The merchant, amount and remarks pass through unchanged: with Intelligent Merchant Selection on, the merchant's spelling is settled by Claude in step 7, not checked by the server.
+- Rewritten with the owner, who chose the first sentence and to keep it simple (no "$" detail, no separate "Then replies" ending): title **"Check and complete Claude's answer"**; text "The server-side application checks Claude's answer before responding to the client. Currency: … Date: … Category: … The merchant, amount and remarks are passed on as Claude gave them."
+- Pages only, so the app version stays at 1.5.4.
+
+### Checks
+- Locally, the diagram draws with no errors, step 8 shows the new title and text, and its "step 4" and "step 6" references are "Check the account" and "Read the categories". Nothing else used the old title.
