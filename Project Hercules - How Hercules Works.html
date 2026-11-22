@@ -302,7 +302,7 @@ dl.faq dd { margin: 2px 0 0; color: var(--ink-2); }
     <div class="topbar"><a class="home-link" href="./">← Hercules home</a><div class="theme-switch" role="group" aria-label="Light or dark page"><button type="button" data-theme-choice="light">Light</button><button type="button" data-theme-choice="dark">Dark</button></div></div>
     <p class="eyebrow">HERCULES · USER GUIDE</p>
     <h1>How Hercules Smart Expense Tracker Works</h1>
-    <p class="lede">Hercules is an intelligent expense tracker web application that is powered by a large language model which is used to interpret how you might log your expense in natural language, and saves your expenses with only a few convenient taps.</p>
+    <p class="lede">Hercules is an intelligent expense tracker web application that is powered by AI, which is used to interpret how you might log your expense in natural language, and saves your expenses with only a few convenient taps.</p>
     <div class="meta">
       <span><b>Works on:</b> phone, tablet and computer</span>
       <span><b>Updated:</b> 22 November 2026</span>
@@ -432,7 +432,7 @@ dl.faq dd { margin: 2px 0 0; color: var(--ink-2); }
 
     <h2 id="fix">Editing and deleting expense records</h2>
     <p>Tap on any expense item in the <b>Log</b> or <b>History</b> screens to open it. Make the necessary changes in the <b>Edit expense</b> card, then tap the <b>Save</b> button. Updated expense items will show an <b>edited</b> tag.</p>
-    <p>To delete, open the expense, and in the <b>Edit expense</b> card, tap the <b>Delete</b> button. The <b>Delete this expense?</b> dialog asks you to confirm by tapping <b>Delete expense</b>. After deleting, a notification toast with an <b>Undo</b> button appears at the bottom for about five seconds. Tap it to undo the deletion.</p>
+    <p>To delete an existing expense record, tap on an expense item, and in the <b>Edit expense</b> card that slides in from the bottom, tap on the <b>Delete</b> button. The <b>Delete this expense?</b> confirmation dialog will appear. To delete, tap on the <b>Delete expense</b> button. After deleting, a <b>notification toast</b> will appear at the bottom of the screen for about five seconds. Tapping on <b>Undo</b> reverses the deletion.</p>
     <div class="figure-row pair">
       <figure>
         <div class="phone"><div class="m" style="position:relative">
@@ -519,7 +519,7 @@ dl.faq dd { margin: 2px 0 0; color: var(--ink-2); }
             <div class="item"><div><div class="nm"><mark>Grab</mark></div><div class="c">Transport</div></div><div class="a">7.50</div></div>
           </div>
         </div></div>
-        <figcaption><b>Searching.</b> In this example, entering the search term "grab" filters expenses for the month matching this term, highlights the matches, and even sums up these matching expenses.</figcaption>
+        <figcaption><b>Searching.</b> In this example, entering the search term "grab" filters expense items for the month matching this term, highlights the matches, and even sums up these matching expenses.</figcaption>
       </figure>
     </div>
 
@@ -564,7 +564,7 @@ dl.faq dd { margin: 2px 0 0; color: var(--ink-2); }
             </div>
             </div>
         </div></div>
-        <figcaption><b>Summary, for the current month.</b> Tapping on the <b>CSV</b> button downloads the month's expenses to-date. In this example, Food &amp; Dining is open to show its burn-up chart.</figcaption>
+        <figcaption><b>Summary for the current month.</b> Tapping on the <b>CSV</b> button downloads the month's expenses to-date. In this example, Food &amp; Dining is open to show its burn-up chart.</figcaption>
       </figure>
       <figure>
         <div class="phone"><div class="m">
@@ -600,7 +600,7 @@ dl.faq dd { margin: 2px 0 0; color: var(--ink-2); }
       </tbody>
     </table></div>
     <p>After the note you'll see what's left, and roughly how much a day you can spend for the rest of the month, for example "$290.00 left, about $12.61/day".</p>
-    <div class="callout"><b>A big payment early in the month isn't overspending.</b> If you pay all of your rent on the 1st, it shows "Budget used", not "over pace". Early in the month, a single purchase can also show as over pace, because only a few days' worth of budget is expected so far. It evens out as the month goes on.</div>
+    <div class="callout"><b>A big payment early in the month isn't overspending.</b> For example, if you pay all of your rent on the 1st day of the month, it shows "Budget used", and not "over pace". Early in the month, a single large purchase may result in that category being flagged as "over pace"; this is normal and expected behavior.</div>
     <p><b>The burn-up chart.</b> Tap a budgeted category to open its chart. The solid line is your running total, stepping up on each day you spent. The dashed line is the budget spread evenly across the month, and the upright line is today. If the solid line is above the dashed one, you're over pace. Touch or drag across the chart to see any day's figures, or open <b>Daily figures</b> underneath for the same numbers in a table.</p>
 
     <h2 id="settings">Settings</h2>
@@ -632,7 +632,7 @@ dl.faq dd { margin: 2px 0 0; color: var(--ink-2); }
           </div>
           <div class="tabs"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>Log</span><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg>History</span><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 20V10M12 20V4M18 20v-6"/></svg>Summary</span><span class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>Settings</span></div>
         </div></div>
-        <figcaption><b>Settings.</b> Categories &amp; budgets, Currency and Experimental features each open their own page; tap "‹ Settings" there to come back.</figcaption>
+        <figcaption><b>Settings.</b> Categories &amp; budgets, Currency and Experimental features each open their own screen; tap "‹ Settings" to return to the <b>Settings</b> screen.</figcaption>
       </figure>
       <figure>
         <div class="phone"><div class="m" style="position:relative">
@@ -656,7 +656,7 @@ dl.faq dd { margin: 2px 0 0; color: var(--ink-2); }
             <div class="m-cancel">Cancel</div>
           </div>
         </div></div>
-        <figcaption><b>Signing out asks first.</b> Tap <b>Cancel</b>, or anywhere outside, to stay signed in.</figcaption>
+        <figcaption><b>Sign out confirmation.</b> Tap <b>Cancel</b>, or anywhere outside, to stay signed in.</figcaption>
       </figure>
     </div>
 
@@ -697,7 +697,7 @@ dl.faq dd { margin: 2px 0 0; color: var(--ink-2); }
 
     <h2 id="faq">Quick answers</h2>
     <dl class="faq">
-      <dt>Claude picked the wrong category or date.</dt>
+      <dt>The AI returned the wrong category or date.</dt>
       <dd>Change it on the review card before you save. If it's already saved, tap the expense to edit it.</dd>
       <dt>I wrote "tues" and it picked next Tuesday.</dt>
       <dd>Check the date on the review card. Writing "last Tuesday" or the date itself, like "3 Nov", avoids this.</dd>

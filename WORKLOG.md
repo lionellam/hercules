@@ -1918,3 +1918,18 @@ Last updated: 22 November 2026
 - User guide, deleting: "dialog will asks you to confirm the deletion" → "dialog asks you to confirm by tapping **Delete expense**". This names the dialog's confirm button (`expense-sheet.tsx` `confirmLabel="Delete expense"`), so it matches the Undo caption; the card's own button stays **Delete** (`review-card.tsx`).
 - App Screens, sign-in intro: "whitelisted beforehand, i.e., added to an allow-list" → "added to an allow-list beforehand", matching "allow-list" on Expense Flow.
 - Pages only, so the app version stays at 1.5.4.
+
+---
+
+## 22 November 2026 — GitHub Pages: Owner's Wording, and "Application Screens"
+
+### What Was Done
+- The owner edited three GitHub Pages files:
+  - **Home page:** heading "Hercules" → **"Project Hercules"**; the intro says "powered by AI" instead of "a large language model" (the user guide's intro too).
+  - **User guide:** the deleting paragraph walks through each tap; the early-payment callout, and the Searching, Summary, Settings and sign-out captions are reworded; the quick answer "Claude picked the wrong category or date" → "The AI returned the wrong category or date" (tense fixed with the owner).
+  - **App Screens → Application Screens:** label and heading renamed; the footer drops "Drawings of Hercules, not screenshots".
+- At the owner's request, the rename was carried everywhere the page is named: its tab title, the home page card ("Application screens") and comment, the README (three mentions), CLAUDE.md (two), and the Test Plan's S-06 and S-10 (Test Plan 1.32). Past worklog entries, earlier version-history rows and the design mockups keep the old name, as records. The guide's "History and Summary app screens" means the app's screens, not this page, so it stays.
+- Pages only, so the app version stays at 1.5.4.
+
+### Checks
+- No email addresses in the changes; outside past records, "App Screens" no longer appears.
