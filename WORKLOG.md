@@ -1976,3 +1976,17 @@ Last updated: 22 November 2026
   3. User guide: the style comment no longer mentions quick answers.
   4. CLAUDE.md (Database changes): "every push to `main` deploys" → "every push to `main` that changes `web/` deploys", since 1.5.5. The same fix to `web/README.md` (Schema changes) is made but held locally, by the owner's choice: it's inside `web/`, so pushing it would rebuild the unchanged app and move Settings' "Last updated" and short code again. It goes out with the next app release.
 - Documents only, so the app version stays at 1.5.5. Nothing under `web/` is pushed, so this push is the first check of S-11: Vercel should skip the build.
+
+---
+
+## 22 November 2026 — User Guide: Pictures of Editing an Expense
+
+### What Was Done
+- The owner asked for pictures after the first paragraph of "Editing and deleting expense records", so readers can see the **Edit expense** card. Mockup `design/guide-edit-expense-mockups.html` showed the guide with two options: one picture of the Edit expense card (A), or two side by side, History with the tapped expense outlined, then the Edit expense card (B, recommended, as it follows the paragraph's steps and matches the delete pictures below). The owner chose B.
+- The Edit expense card is drawn from the app's own card (`review-card.tsx`, `expense-sheet.tsx`): the original text, the amount with the currency picker, Category, Merchant, Date and Remarks, and **Delete**, **Cancel** and **Save**.
+- Captions are the owner's: "**Tap an expense item** in the **Log** or **History** screens to open it in the **Edit expense** card. Expenses you've changed show an **edited** tag." and "**Edit expense.** Change any field, then tap on the **Save** button. Tap on the **Delete** button to delete the expense item." (the full stop bold, at the owner's request, as in the guide's other captions).
+- Three style rules added for the pictures (the red Delete button, the gap before Cancel and Save, and the outline on the tapped expense). The guide's "Updated" date was already 22 November 2026.
+- Documents only, so the app version stays at 1.5.5. The held `web/README.md` fix stays out of this commit, so Vercel shouldn't rebuild.
+
+### Checks
+- Previewed locally at 1,280 pixels (side by side) and 375 pixels (stacked), in dark, with no sideways scrolling.
