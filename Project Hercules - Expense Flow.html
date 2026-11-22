@@ -148,7 +148,7 @@ table.stops { width: 100%; min-width: 620px; border-collapse: collapse; font-siz
       <thead><tr><th>Step</th><th>When</th><th>What the person sees</th></tr></thead>
       <tbody>
         <tr><td>2</td><td>No internet</td><td><b>Parse</b> can't be tapped, and “You're offline. Parsing of expenses is not available. Please try again later.” shows. The text stays in the box.</td></tr>
-        <tr><td>4</td><td>Not signed in, or the account isn't active or invited</td><td>They're taken to the sign-in page.</td></tr>
+        <tr><td>4</td><td>Not signed in, or the account isn't active or on the allow-list</td><td>They're taken to the sign-in page.</td></tr>
         <tr><td>5</td><td>The text is empty or over 500 characters, or the date isn't real</td><td>“Please enter an expense.”</td></tr>
         <tr><td>5</td><td>100 parses in the last 24 hours</td><td>“Daily limit of 100 entries reached. Please try again tomorrow.”</td></tr>
         <tr><td>7</td><td>Claude can't make sense of the text</td><td>“The model could not parse this expense”</td></tr>
@@ -156,7 +156,7 @@ table.stops { width: 100%; min-width: 620px; border-collapse: collapse; font-siz
         <tr><td>10</td><td>No internet</td><td><b>Save expense</b> can't be tapped.</td></tr>
         <tr><td>10</td><td>No amount, or an amount of 0 or less</td><td>“Please enter an amount.” Nothing is sent.</td></tr>
         <tr><td>10</td><td><b>Discard</b>, or tapping outside the sheet</td><td>If a detail was changed, “Discard your edits?” asks first. The sheet closes and the text stays in the box.</td></tr>
-        <tr><td>12</td><td>No longer signed in, or the account isn't active or invited</td><td>They're taken to the sign-in page.</td></tr>
+        <tr><td>12</td><td>No longer signed in, or the account isn't active or on the allow-list</td><td>They're taken to the sign-in page.</td></tr>
         <tr><td>12</td><td>A detail isn't valid</td><td>“Please check the amount and fields.”</td></tr>
         <tr><td>13</td><td>The chosen category isn't one of the person's active categories</td><td>“Unknown category”</td></tr>
       </tbody>
@@ -188,14 +188,14 @@ const GROUPS = [
 // ask: a request the step sends to a service (lane 3 database, lane 4 Claude) and the reply it waits for.
 const STEPS = [
   { phase: "1 · Parse" },
-  { lane: 0, title: "Type the expense", body: "For example <code>Coffee at Ya Kun $4.50</code>, then tap <b>Parse</b>." },
-  { lane: 1, title: "Send the text to the server side", body: "Sends the typed text and today's date, as set on the phone.",
+  { lane: 0, title: "Type out your expense in natural language", body: "For example <code>Coffee at Ya Kun $4.50</code>, then tap the <b>Parse</b> button." },
+  { lane: 1, title: "Send the text input to the server side", body: "Sends the typed-out text and today's date, as set on the phone.",
     note: "<b>Offline?</b> Nothing is sent. The screen shows “Parsing of expenses is not available”, and the text stays in the box." },
-  { lane: 2, title: "Check the sign-in", body: "Reads the sign-in sent with the request. No database needed: it's protected with the app's secret key, so it can't be forged." },
-  { lane: 2, title: "Check the account", body: "Asks the database whether the account is active and its email is on the invitation list.",
-    note: "<b>Not signed in, or not invited?</b> The person is taken to the sign-in page.",
-    ask: { lane: 3, label: "2 queries", text: "Returns the account, then whether the email is invited." } },
-  { lane: 2, title: "Check the text and the daily limit", body: "First checks the request: the text must be 1 to 500 characters long, and the date must be a real date. Then asks the database how many times this person has tapped Parse in the last 24 hours. If the count is under 100, this parse can go ahead, and the database stores a record of it: which person and what time, but not the text they typed. That record counts towards the limit even if parsing fails later.",
+  { lane: 2, title: "Check the sign-in", body: "Reads the sign-in sent with the request." },
+  { lane: 2, title: "Check the account", body: "Queries the database to check whether the account is active, and if the email address is on the allow-list.",
+    note: "<b>Not signed in, or not on the allow-list?</b> The person is taken back to the sign-in page.",
+    ask: { lane: 3, label: "2 queries", text: "Returns the account status, and whether the email is on the allow-list." } },
+  { lane: 2, title: "Check the input text and the daily limit", body: "First checks the request: the text must be 1 to 500 characters long, and the date must be a real date. Then asks the database how many times this person has tapped Parse in the last 24 hours. If the count is under 100, this parse can go ahead, and the database stores a record of it: which person and what time, but not the text they typed. That record counts towards the limit even if parsing fails later.",
     note: "<b>Text not valid?</b> “Please enter an expense.” <b>100 already?</b> “Daily limit of 100 entries reached. Please try again tomorrow.”",
     ask: { lane: 3, label: "2 queries", text: "Returns the count, then stores the new parse record." } },
   { lane: 2, title: "Read the categories", body: "Asks the database for the person's expense categories, such as Food &amp; Dining or Transport, so Claude can file the expense under one of them. Categories the person has retired in Settings are left out.",
@@ -213,7 +213,7 @@ const STEPS = [
   { lane: 1, title: "Send the details to the server side", body: "Sends the details from the sheet, the original typed text, and whether any detail was changed." },
   { lane: 2, title: "Check the sign-in and details", body: "Checks the sign-in and the account again, then that the amount, currency, date and other details are valid.",
     note: "<b>Something invalid?</b> “Please check the amount and fields.” Nothing is saved.",
-    ask: { lane: 3, label: "2 queries", text: "Returns the account, then whether the email is invited." } },
+    ask: { lane: 3, label: "2 queries", text: "Returns the account, then whether the email is on the allow-list." } },
   { lane: 2, title: "Save the expense", body: "Asks whether the chosen category belongs to the person, then adds the expense with the original typed text, tagged <b>edited</b> if any detail was changed in the sheet. Then replies to the client side.",
     note: "<b>Category no longer active?</b> “Unknown category”. Nothing is saved.",
     ask: { lane: 3, label: "2 queries", text: "Confirms the category, then stores the new expense." } },

@@ -1851,3 +1851,18 @@ Last updated: 22 November 2026
 - Locally: with nothing saved, the switch shows the device's setting (dark here) and stores nothing. Choosing Light on the home page was remembered; the user guide, App Screens and Expense Flow opened in Light with the switch on the same row as "← Hercules home"; Light held after reloading Expense Flow; choosing Dark there carried back to the home page. On App Screens, **App theme** changed only the drawings, not the page or the saved choice.
 - At 360 pixels wide, the top row fits on all four pages with no sideways scrolling. No errors.
 - Clean-up: the saved choice was removed from the test browser.
+
+---
+
+## 22 November 2026 — Expense Flow: Owner's Wording in the Parse Steps, and "Allow-List" Throughout
+
+### What Was Done
+- The owner reworded the first steps of "1 · Parse" on the Expense Flow page: "Type out your expense in natural language" (tap the **Parse** button), the client sending "the typed-out text", a shorter "Check the sign-in" ("Reads the sign-in sent with the request."), "Check the account" querying whether the email is on the allow-list, and "Check the input text and the daily limit".
+- Reviewed with the owner before committing; their choices:
+  1. The client step's title is "Send the text input to the server side", an instruction like the other step titles (it had become "Sends…").
+  2. One term, "allow-list" (hyphenated, as in Architecture decision 2 and the Specification), instead of "whitelisted" alongside "allow list". The page's other mentions of "invited" (the "What can go wrong" table's rows 4 and 12, and the account check when saving) also say "on the allow-list" now.
+  3. The sign-in check keeps the owner's shorter text, without the line on why it needs no database (it's protected by the app's secret key).
+- Pages only, so the app version stays at 1.5.4.
+
+### Checks
+- Locally, the diagram draws with no errors; the page says "allow-list" six times and no longer says "whitelist" or "invited".
