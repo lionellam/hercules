@@ -1960,3 +1960,19 @@ Last updated: 22 November 2026
 
 ### Slip
 - The first local build failed: the local `node_modules` still had Next.js 16.4.3, although `package.json` pins 16.4.6 since 1.5.1 (probably installed on another machine), and Next's security reminder ended the build with an error. `npm ci` brought it to 16.4.6 and the build passed. Lesson: after pulling a dependency change, run `npm ci` in `web/`.
+
+---
+
+## 22 November 2026 — Document Integrity Check After 1.5.5
+
+### What Was Done
+- At the owner's request, checked the documents after everything since the last check (1.5.3): Screens at a Glance's switch and captions, the home page cards, 1.5.4, the Expense Flow diagram and its wording, the shared Light / Dark switch, the owner's guide and Application Screens wording, the rename to Application Screens, the removal of Quick answers, and 1.5.5.
+- Version headers matched their last Version History rows (Specification 0.55, Architecture 0.43, Test Plan 1.33, Charter 0.15, Project Plan 0.15; the Go-Live Checklist has only a "Last updated" date and is unchanged). `web/package.json` (1.5.5), `CHANGELOG.md` (24 entries) and the Git tags (24, local and on GitHub; v1.5.4 and v1.5.5 on the same commits in both) agreed. 1.5.5 appears in Architecture decision 42, the Specification's Settings section and Test Plan S-11.
+- No old wording left in current documents ("Fixing and deleting", "What to type", "Quick answers", "whitelist", "App Screens" appear only in past records). The note in the 21 November entry, that S-06 still said "Screens at a Glance", is resolved.
+- The guide, Application Screens and Expense Flow follow the content rules (the owner's GitHub username appears only in web addresses; no competitor apps; deleted expenses come back only with Undo; only the `you@gmail.com` placeholder). The guide's "Updated" date is 22 November 2026. The live home page, guide, screens and flow pages matched the repository. The README links all three pages; the worklog is dated.
+- Fixes, approved by the owner:
+  1. CLAUDE.md, integrity check step 5: "Screens at a Glance" → "Application Screens" (the two mentions of the file name stay).
+  2. Expense Flow: label and code comment "1.5.4" → "1.5.5" (the flow itself didn't change in 1.5.5).
+  3. User guide: the style comment no longer mentions quick answers.
+  4. CLAUDE.md (Database changes): "every push to `main` deploys" → "every push to `main` that changes `web/` deploys", since 1.5.5. The same fix to `web/README.md` (Schema changes) is made but held locally, by the owner's choice: it's inside `web/`, so pushing it would rebuild the unchanged app and move Settings' "Last updated" and short code again. It goes out with the next app release.
+- Documents only, so the app version stays at 1.5.5. Nothing under `web/` is pushed, so this push is the first check of S-11: Vercel should skip the build.

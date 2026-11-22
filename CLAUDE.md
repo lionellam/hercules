@@ -38,7 +38,7 @@ Experimental features (Settings → Experimental features, Architecture decision
 
 - The schema is `web/db/schema.sql`. Changes must be additive and safe to re-run (`IF NOT EXISTS`).
 - Locally: `npm run db:local` (local Postgres on port 5433), then `npm run db:migrate`.
-- **Production (Neon) must be changed before pushing code that needs it**, because every push to `main` deploys at once. The simplest route: Vercel → hercules → Storage → hercules-db → Open in Neon → SQL Editor (project hercules-db, branch main, database neondb). Type the statement in; the owner clicks Run. Then run a read-only check that the change is there.
+- **Production (Neon) must be changed before pushing code that needs it**, because every push to `main` that changes `web/` deploys at once. The simplest route: Vercel → hercules → Storage → hercules-db → Open in Neon → SQL Editor (project hercules-db, branch main, database neondb). Type the statement in; the owner clicks Run. Then run a read-only check that the change is there.
 
 ## Testing
 
@@ -76,7 +76,7 @@ When asked for a "document integrity check":
 2. Check each document's version header against the last row of its Version History.
 3. Check `web/package.json`, `CHANGELOG.md` and the Git tags (local and on GitHub) agree.
 4. Check the Specification, Architecture, Test Plan, Charter, Project Plan and the Expense Flow diagram all describe the app as it is now: search for wording left from earlier versions, and check new features appear in each relevant document (feature lists, Settings, scope).
-5. Check the user guide, Screens at a Glance and Expense Flow follow the content rules, and that the live Pages copies (home page, guide, screens and flow) match the repository.
+5. Check the user guide, Application Screens and Expense Flow follow the content rules, and that the live Pages copies (home page, guide, screens and flow) match the repository.
 6. Check the READMEs and that `WORKLOG.md` is dated.
 
 Report findings as a numbered list with proposed fixes, apply them only when asked, then record the check and its fixes in the worklog. Documents-only fixes don't change the app version.
