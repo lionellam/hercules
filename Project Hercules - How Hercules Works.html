@@ -315,8 +315,8 @@ dl.faq dd { margin: 2px 0 0; color: var(--ink-2); }
       <li><a href="#about">What Hercules is, and what makes it different</a></li>
       <li><a href="#start">Getting started with Hercules</a></li>
       <li><a href="#log">How to record an expense</a></li>
-      <li><a href="#writing">What to type</a></li>
-      <li><a href="#fix">Fixing and deleting</a></li>
+      <li><a href="#writing">Natural language inputs</a></li>
+      <li><a href="#fix">Editing and deleting expense records</a></li>
       <li><a href="#history">History</a></li>
       <li><a href="#summary">Summary</a></li>
       <li><a href="#pace">Spending pace</a></li>
@@ -350,7 +350,7 @@ dl.faq dd { margin: 2px 0 0; color: var(--ink-2); }
       <li><span><b>Type out your expense</b> in the <b>Log your expense</b> text box, in your own words.</span></li>
       <li class="ai"><span><b>Tap Parse.</b><span class="tag-ai">AI</span> Haiku*, the language model that reads your text, picks out the amount, category, merchant and date.</span></li>
       <li><span><b>Check the review card.</b> It opens over the Log screen. Every field can be changed: tap the amount, pick a different category, fix the date, or add a remark.</span></li>
-      <li><span><b>Tap Save expense.</b> The expense appears straight away under <b>Today</b>, and in History and Summary.</span></li>
+      <li><span><b>Tap Save expense.</b> The expense appears straight away under <b>Today</b>, and in History and Summary app screens.</span></li>
     </ol>
     <p>*Note: You may choose your own language model to perform the natural language parsing. However, do note that the parsing performance may vary.</p>
 
@@ -379,7 +379,7 @@ dl.faq dd { margin: 2px 0 0; color: var(--ink-2); }
             <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>Settings</span>
           </div>
         </div></div>
-        <figcaption><b>Log.</b> Type out your expense in natural language, and tap Parse.</figcaption>
+        <figcaption><b>Log.</b> Type out your expense in natural language, and tap the <b>Parse</b> button.</figcaption>
       </figure>
       <figure>
         <div class="phone"><div class="m" style="position:relative;min-height:540px">
@@ -407,12 +407,13 @@ dl.faq dd { margin: 2px 0 0; color: var(--ink-2); }
             <div class="m-cancel">Discard</div>
           </div>
         </div></div>
-        <figcaption><b>Human in the loop.</b> Preview your expense and make corrections if required, before saving it.</figcaption>
+        <figcaption><b>Human in the loop.</b> Preview your expense and make corrections in the <b>Review before saving</b> sheet if required, before saving it.</figcaption>
       </figure>
     </div>
 
-    <h2 id="writing">What to type</h2>
-    <p>Type out your expense just the way you'd say it. Include the amount, and anything else that helps: where, what for, and when, if it wasn't today. For example:</p>
+    <h2 id="writing">Natural language inputs</h2>
+    <p>Type out your expense just the way you'd say it. Include the amount, and any supporting details, such as (but not necessarily limited to) the merchant/retailer where the purchase was made, reason for the purchase, and date of transaction, if applicable. </p>
+    <p>For example:</p>
     <div class="table-wrap"><table>
       <thead><tr><th>You type</th><th>Amount</th><th>Category</th><th>Merchant</th><th>Date</th></tr></thead>
       <tbody>
@@ -429,9 +430,9 @@ dl.faq dd { margin: 2px 0 0; color: var(--ink-2); }
       <li><b>Remarks:</b> useful details that don't fit elsewhere, such as "dinner with mum and dad", or "from the bake sale", go into Remarks.</li>
     </ul>
 
-    <h2 id="fix">Fixing and deleting</h2>
-    <p>Tap any expense, in the Today list or in History, to open it. Change what you need and tap <b>Save</b>. Expenses you've changed from what Claude suggested show a small <b>edited</b> tag.</p>
-    <p>To delete, open the expense and tap <b>Delete</b>. The app shows which expense it is and asks you to confirm. After deleting, an <b>Undo</b> bar appears at the bottom for about five seconds. Tap it to bring the expense back.</p>
+    <h2 id="fix">Editing and deleting expense records</h2>
+    <p>Tap on any expense item in the <b>Log</b> or <b>History</b> screens to open it. Make the necessary changes in the <b>Edit expense</b> card, then tap the <b>Save</b> button. Updated expense items will show an <b>edited</b> tag.</p>
+    <p>To delete, open the expense, and in the <b>Edit expense</b> card, tap the <b>Delete</b> button. The <b>Delete this expense?</b> dialog will asks you to confirm the deletion. After deleting, a notification toast with an <b>Undo</b> button appears at the bottom for about five seconds. Tap it to undo the deletion.</p>
     <div class="figure-row pair">
       <figure>
         <div class="phone"><div class="m" style="position:relative">
@@ -452,7 +453,7 @@ dl.faq dd { margin: 2px 0 0; color: var(--ink-2); }
             <div class="m-cancel">Cancel</div>
           </div>
         </div></div>
-        <figcaption><b>Deleting asks first</b>, showing the expense so you can be sure it's the right one.</figcaption>
+        <figcaption><b>Delete confirmation</b>, before removing the expense record.</figcaption>
       </figure>
       <figure>
         <div class="phone"><div class="m" style="position:relative">
@@ -474,14 +475,13 @@ dl.faq dd { margin: 2px 0 0; color: var(--ink-2); }
             <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>Settings</span>
           </div>
         </div></div>
-        <figcaption><b>Then offers Undo</b> for about five seconds, in case you tapped by mistake.</figcaption>
+        <figcaption><b>A notification toast</b> appears for about five seconds, offering the option to undo the delete, in case you tapped the <b>Delete expense</b> button by mistake.</figcaption>
       </figure>
     </div>
-    <p>If you close an expense or category you've changed without saving, by tapping Cancel or tapping outside it, the app asks before throwing your changes away.</p>
 
     <h2 id="history">History</h2>
-    <p>History lists every expense month by month, newest first, grouped by day. Use the arrows beside the month to go back to earlier months. Tap any expense to edit or delete it.</p>
-    <p><b>Searching.</b> Type in the search box below the month to find expenses in that month. The list narrows with each letter, and shows how many match and what they add up to. You can search by merchant, category, the words you typed, remarks or amount, such as "grab" or "14.20". Tap × to clear it. Changing the month or leaving History clears the search too.</p>
+    <p>The History screen lists every expense recorded by month, and grouped by day. Use the arrows beside the month to go back to earlier months. Tap any expense to edit or delete it.</p>
+    <p><b>Searching.</b> Type in the search box to search for expenses recorded for the month.</p>
     <div class="figure-row pair">
       <figure>
         <div class="phone"><div class="m">
@@ -500,7 +500,7 @@ dl.faq dd { margin: 2px 0 0; color: var(--ink-2); }
             <div class="item"><div><div class="nm">Polyclinic</div><div class="c">Health &amp; Medical</div></div><div class="a">45.00</div></div>
           </div>
         </div></div>
-        <figcaption><b>History.</b> Grouped by day. "edited" marks expenses you changed from what Claude suggested.</figcaption>
+        <figcaption><b>History.</b> Expenses are grouped by day.</figcaption>
       </figure>
       <figure>
         <div class="phone"><div class="m">
@@ -519,7 +519,7 @@ dl.faq dd { margin: 2px 0 0; color: var(--ink-2); }
             <div class="item"><div><div class="nm"><mark>Grab</mark></div><div class="c">Transport</div></div><div class="a">7.50</div></div>
           </div>
         </div></div>
-        <figcaption><b>Searching.</b> Typing "grab" narrows the month to matching expenses, highlights the matches, and shows how many there are and their total. Tap × to clear.</figcaption>
+        <figcaption><b>Searching.</b> In this example, entering the search term "grab" filters expenses for the month matching this term, highlights the matches, and even sums up these matching expenses.</figcaption>
       </figure>
     </div>
 
@@ -527,10 +527,10 @@ dl.faq dd { margin: 2px 0 0; color: var(--ink-2); }
     <p>The <b>Summary</b> page shows the amount that you have spent for the current month-to-date, as well as that of the previous month.</p>
     <ul class="plain">
       <li><b>The total</b> spent so far in the current month.</li>
-      <li><b>Total spent per category</b>, indicates the amount spent by expense category.</li>
+      <li><b>Category</b> indicates the amount spent by expense category.</li>
       <li><b>Share of spend</b>, a pie chart showing the distribution of your spending for the month.</li>
-      <li><b>Spending pace</b>, shown only for the current month, only for expense categories with a defined budget. More information in the next section.</li>
-      <li><b>Export your expenses</b>, by tapping the <b>CSV</b> button beside the total to export that month's expenses as a CSV file, which can be opened in Excel, Numbers or Google Sheets.</li>
+      <li><b>Spending pace</b>, shown only for the current month, and only for expense categories with a defined budget. More information in the next section.</li>
+      <li><b>Export your expenses</b>, by tapping on the <b>CSV</b> button. This will export that month's expenses as a CSV file.</li>
     </ul>
     <div class="figure-row pair">
       <figure>
@@ -564,7 +564,7 @@ dl.faq dd { margin: 2px 0 0; color: var(--ink-2); }
             </div>
             </div>
         </div></div>
-        <figcaption><b>Summary, this month.</b> <b>CSV</b> beside the total downloads the month's expenses. The marker on each budgeted bar shows the amount expected by today. Food &amp; Dining is open to show its burn-up chart.</figcaption>
+        <figcaption><b>Summary, for the current month.</b> Tapping on the <b>CSV</b> button downloads the month's expenses to-date. In this example, Food &amp; Dining is open to show its burn-up chart.</figcaption>
       </figure>
       <figure>
         <div class="phone"><div class="m">
@@ -582,13 +582,13 @@ dl.faq dd { margin: 2px 0 0; color: var(--ink-2); }
             <div class="m-pie"><svg viewBox="0 0 100 100" role="img" aria-label="Share of spend pie chart"><path d="M50 50 L50.00 0.00 A50 50 0 1 1 13.97 84.67 Z" fill="var(--m-pie-1)"/><path d="M50 50 L13.97 84.67 A50 50 0 0 1 6.04 26.18 Z" fill="var(--m-pie-2)"/><path d="M50 50 L6.04 26.18 A50 50 0 0 1 19.35 10.49 Z" fill="var(--m-pie-3)"/><path d="M50 50 L19.35 10.49 A50 50 0 0 1 30.20 4.09 Z" fill="var(--m-pie-4)"/><path d="M50 50 L30.20 4.09 A50 50 0 0 1 38.27 1.40 Z" fill="var(--m-pie-5)"/><path d="M50 50 L38.27 1.40 A50 50 0 0 1 50.00 0.00 Z" fill="var(--m-pie-rest)"/></svg><ul><li><span class="sw" style="background:var(--m-pie-1)"></span><span class="nm">Rent</span><span class="pct">63%</span></li><li><span class="sw" style="background:var(--m-pie-2)"></span><span class="nm">Shopping</span><span class="pct">20%</span></li><li><span class="sw" style="background:var(--m-pie-3)"></span><span class="nm">Food &amp; Dining</span><span class="pct">7%</span></li><li><span class="sw" style="background:var(--m-pie-4)"></span><span class="nm">Entertainment</span><span class="pct">4%</span></li><li><span class="sw" style="background:var(--m-pie-5)"></span><span class="nm">Utilities</span><span class="pct">3%</span></li><li><span class="sw" style="background:var(--m-pie-rest)"></span><span class="nm">Everything else (3)</span><span class="pct">4%</span></li></ul></div>
           </div>
         </div></div>
-        <figcaption><b>Further down.</b> The total stays at the top as you scroll. Each budgeted category shows its pace, and Share of spend shows where the money went.</figcaption>
+        <figcaption><b>Share of spend</b> is a representation of your expenses by categories, in a pie chart, broken down by percentage of total spend.</figcaption>
       </figure>
     </div>
 
     <h2 id="pace">Spending pace</h2>
-    <p>Pace answers one question: <b>am I spending faster than my budget allows?</b> It assumes you spread each budget evenly over the month. With a $500 food budget in a 30-day month, that's about $16.67 a day, so by day 7 you'd expect to have spent about $116.67.</p>
-    <p>The small upright marker on each budgeted bar shows that expected amount for today. If your bar has gone past the marker, you're ahead of pace. The note under the bar tells you which of these applies:</p>
+    <p>The Spending pace answers one question: <b>am I spending ahead of, or below my budgeted rate?</b> It assumes you spread each budget evenly over the course of the month. For example, with a $500 food budget in a 30-day month, that's about $16.67 a day, so by day 7 you'd expect to have spent about $116.67.</p>
+    <p>The small upright marker on each budgeted bar shows that expected amount for that day. If your bar has extended past the marker, you're ahead of your spending pace. The note under the bar tells you which of these applies:</p>
     <div class="table-wrap"><table>
       <thead><tr><th>Note</th><th>What it means</th></tr></thead>
       <tbody>

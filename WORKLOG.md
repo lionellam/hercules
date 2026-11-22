@@ -1894,3 +1894,18 @@ Last updated: 22 November 2026
 
 ### Checks
 - Locally, the diagram draws with no errors, step 8 shows the new title and text, and its "step 4" and "step 6" references are "Check the account" and "Read the categories". Nothing else used the old title.
+
+---
+
+## 22 November 2026 — User Guide and App Screens: Owner's Wording
+
+### What Was Done
+- The owner rewrote parts of the user guide (How Hercules Works) directly in the page:
+  - Sections renamed: "What to type" → **"Natural language inputs"**, "Fixing and deleting" → **"Editing and deleting expense records"** (Contents updated to match).
+  - Recording, editing, deleting, History, Summary and Spending pace text reworded to name the screens, cards, buttons and the notification toast; several captions rewritten.
+  - Removed: the note about the app asking before discarding unsaved changes, the detail on how History search narrows and clears, and the list of spreadsheet apps that open the CSV.
+- On App Screens, the owner renamed "Signing in" → **"Signing in to Hercules"** and "Fixing and deleting" → **"Editing and deleting expense records"**, and rewrote the intros for sections 1–3 (sign-in now explains the allow-list).
+- Pages only, so the app version stays at 1.5.4.
+
+### Checks
+- No email addresses in the changes; the guide's "Updated" date is 22 November 2026.
