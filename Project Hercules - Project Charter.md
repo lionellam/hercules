@@ -1,8 +1,8 @@
 **Natural Language Expense & Budget Tracker**
 
 ```
-Version 0.15 · Draft
-Last Reviewed: 20 November 2026
+Version 0.16 · Draft
+Last Reviewed: 22 November 2026
 Produced with AI Assistance (Claude Code)
 ```
 
@@ -25,6 +25,7 @@ Produced with AI Assistance (Claude Code)
 | 0.13 | 2026-11-13 | Lionel Lam | Integrity check: the currency non-goal reflects that other currencies are shown separately, not added in |
 | 0.14 | 2026-11-14 | Lionel Lam | Accuracy review: milestones place category management and the CSV download under Phase 4, and budgets, spending pace and History search under Phase 3; the User data model includes the default currency |
 | 0.15 | 2026-11-20 | Lionel Lam | Integrity check: the security question is marked addressed (Architecture decision 41); merchant names are also sent to the model when Intelligent Merchant Selection is on |
+| 0.16 | 2026-11-22 | Lionel Lam | Constraints: Intelligent Merchant Selection sends this month's and last month's merchant names (1.5.6) |
 
 ---
 
@@ -106,7 +107,7 @@ Friction of maintaining an up-to-date expense and budget log can be due to the f
 - How to handle multi-item entries in a single input?
 - ~~Finalize the fixed category taxonomy~~ — *Resolved: categories are per-user and extensible; new users are seeded with a starter list. See spec for details.*
 - ~~Containerize the app, or run natively on the home server?~~ — *Resolved: hosted on Vercel; self-hosting is a non-goal for now.*
-- Expense text is sent to a cloud model provider (Anthropic) for parsing, and, with the experimental Intelligent Merchant Selection on, the current month's merchant names — accepted, on the basis that API data is not used for training
+- Expense text is sent to a cloud model provider (Anthropic) for parsing, and, with the experimental Intelligent Merchant Selection on, this month's and last month's merchant names — accepted, on the basis that API data is not used for training
 - Dependency on third-party services (Anthropic, Vercel, Neon, Google)
 - Users need a Google account to sign in
 - ~~Security risks — how do we protect user data and API keys adequately?~~ — *Addressed (20 November 2026): a security review found access checks, database queries and secret handling sound; security headers and a framework update followed in 1.5.1 (Architecture decision 41). Two low-priority hardening items are set aside.*

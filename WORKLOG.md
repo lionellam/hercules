@@ -2003,3 +2003,25 @@ Last updated: 22 November 2026
 
 ### Checks
 - At 1,280 pixels: the home page intro spans exactly the cards' width (two lines instead of four); the guide's intro spans exactly the reading column beside Contents (three lines instead of four), and body paragraphs are unchanged. At 375 pixels neither page changes or scrolls sideways.
+
+---
+
+## 22 November 2026 — 1.5.6: Intelligent Merchant Selection Uses Last Month Too
+
+### What Was Done
+- The owner revisited a follow-up: widening Intelligent Merchant Selection's list to last month's merchants (discussed and set aside during 1.5.4). Reason: early in a month the list is short or empty, so on 1 December "ntuc" would no longer match "NTUC FairPrice".
+- Options set out: (1) this month and last month by calendar (recommended), or the last 60 days; (2) the 50 used most across both months (recommended), or this month's names first. **The owner chose both recommendations**, and the Settings description "Infer merchant names from this month's and last month's expenses."
+- Mockup `design/merchant-two-months-mockups.html` (Settings → Experimental features, now and proposed), approved by the owner.
+- Documents: Specification 0.56 (step 3, Sections 4.7, 5.1 and 6), Architecture 0.44 (decision 40 updated), Test Plan 1.34 (new B-20), Charter 0.16 (the privacy constraint), Expense Flow (three mentions, and its label now 1.5.6), and Application Screens' drawing of the description.
+- Code, inside the feature's own code: `monthMerchants` in `web/lib/expenses.ts` now reads from the first day of last month to the end of this month (same grouping, ranking and cap of 50; `shiftDays` added to that file's imports); the list's heading in `merchantRule` says "used this month or last month"; the description in `web/lib/experiments.ts`. The parse route is unchanged.
+- Version **1.5.6** (patch), with a changelog entry. The `web/README.md` wording fix held from the integrity check goes out with it.
+
+### Tests
+- **Switch-off path unchanged:** the full prompt with the switch off, built from the code before and after, is identical character for character (5 inputs). With the switch on, the only line that differs is the list's heading.
+- **The query**, on the local database with labelled rows on the demo account: for November it returned this month's and October's merchants, with "ZzTest Mart" from October and "zztest   mart " from November grouped as one, and left out September, a deleted expense and December; for October it included September; for January 2027 it included December 2026 (the turn of the year).
+- **Against the language model**, 50 known merchants, 5 runs each: "ntuc" → NTUC FairPrice and "yakun" → Ya Kun every time; Sheng Siong and Din Tai Fung (not listed) kept every time; "Bus fare $2" no merchant every time. "swensens" (not listed) came back as "Swensen's"; with the switch off it came back as "Swensens" 4 times and "Swensen's" once, so that's the usual tidying, not a forced match. B-20's expected result allows either spelling. The known gap is unchanged: "ntuc health dental 80" → NTUC FairPrice in 5 of 5, as in 1.5.4.
+- **B-20 in the local app**, signed in as demo@example.com (confirmed through `/api/auth/session` first): with "NTUC FairPrice" saved in October and "Swensens" in September, parsing "ntuc 45.20" on 22 November returned NTUC FairPrice and "swensens 9" returned "Swensen's"; the parse timing log showed `merchants_sent=1` (September not sent). The Experimental features page shows the new description, on two lines.
+- `npx tsc --noEmit` passed, `npx eslint .` gave the one known warning, `npm run build` passed.
+
+### Clean-up
+- Deleted the 2 test expenses and 2 parse entries the tests created; no `[TEST]` rows remain; the demo account's default currency is unchanged (SGD); removed demo@example.com from the local allow-list; signed the test browser out (it was signed out before); stopped the local database and dev server. The test scripts were temporary files, deleted after each run.

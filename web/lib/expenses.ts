@@ -1,6 +1,6 @@
 import "server-only";
 import { z } from "zod";
-import { isRealDate, monthRange } from "./dates";
+import { isRealDate, monthRange, shiftDays } from "./dates";
 import { query } from "./db";
 import type { Category, Expense, SummaryRow } from "./types";
 
@@ -111,11 +111,13 @@ async function ownsCategory(userId: string, categoryId: number) {
   return rows.length > 0;
 }
 
-// Intelligent Merchant Selection (Architecture decision 40): this month's merchants, counting names that differ only in
-// capitals or spaces as one and keeping the spelling used most; at most the 50 most-used
+// Intelligent Merchant Selection (Architecture decision 40): merchants on this month's and last month's expenses (`month`
+// and the calendar month before it), counting names that differ only in capitals or spaces as one and keeping the
+// spelling used most; at most the 50 used most across both months
 export const MAX_KNOWN_MERCHANTS = 50;
 export async function monthMerchants(userId: string, month: string) {
-  const [start, end] = monthRange(month);
+  const [start] = monthRange(shiftDays(`${month}-01`, -1).slice(0, 7));
+  const [, end] = monthRange(month);
   const rows = await query<{ name: string }>(
     `SELECT mode() WITHIN GROUP (ORDER BY regexp_replace(btrim(merchant), '\\s+', ' ', 'g')) AS name
      FROM expenses

@@ -32,7 +32,7 @@ To use the real parser locally, add an Anthropic API key to `.env.local`.
 
 Scripts read `.env.local`. To run one against production, pass the URL for that command only: `DATABASE_URL="<neon url>" npm run db:migrate`.
 
-**Schema changes:** when `db/schema.sql` changes, run the migration against Neon *before* pushing the code that relies on it. Every push to `main` deploys straight away, and migrations only add, so the live app keeps working in the meantime.
+**Schema changes:** when `db/schema.sql` changes, run the migration against Neon *before* pushing the code that relies on it. Every push to `main` that changes `web/` deploys straight away, and migrations only add, so the live app keeps working in the meantime.
 
 ## Releasing a new version
 

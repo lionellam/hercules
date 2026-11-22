@@ -6,6 +6,13 @@ Versions follow [semantic versioning](https://semver.org): **major** for a chang
 
 ---
 
+## 1.5.6 — 22 November 2026
+
+**Improved**
+- The experimental **Intelligent Merchant Selection** now learns merchant names from last month's expenses as well as this month's, so it can match them from the first day of a new month. For example, on 1 December, typing "ntuc" still comes back as "NTUC FairPrice" if you used it in November. Its description in Settings → Experimental features now reads "Infer merchant names from this month's and last month's expenses." With the switch off, nothing has changed.
+
+---
+
 ## 1.5.5 — 22 November 2026
 
 **Fixed**

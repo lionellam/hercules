@@ -27,7 +27,7 @@ function merchantRule(knownMerchants: string[]) {
   if (!knownMerchants.length) return "";
   return `
 
-Merchants the user has already used this month (for matching spellings only; this is not a complete list, and the user often buys from merchants not on it):
+Merchants the user has already used this month or last month (for matching spellings only; this is not a complete list, and the user often buys from merchants not on it):
 ${knownMerchants.map((m) => `- ${m}`).join("\n")}
 
 - For "merchant": if the input refers to one of the merchants above, even shortened, in different capitals, run together without spaces or only in part (for example "ntuc" or "fairprice" for "NTUC FairPrice"), return that merchant exactly as listed. If the merchant is not on the list, give its name as you would without the list (see the merchant instruction below). The list only corrects spellings: never return null because a merchant is not on it.`;

@@ -12,10 +12,10 @@ export type Experiment = {
 };
 
 export const EXPERIMENTS: Experiment[] = [
-  // Architecture decision 40: Parse matches merchant names to those already used this month
+  // Architecture decision 40: Parse matches merchant names to those already used this month or last month
   {
     id: "known-merchants",
     name: "Intelligent Merchant Selection",
-    description: "Infer merchant names from current month's expenses.",
+    description: "Infer merchant names from this month's and last month's expenses.",
   },
 ];
