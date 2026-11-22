@@ -1866,3 +1866,19 @@ Last updated: 22 November 2026
 
 ### Checks
 - Locally, the diagram draws with no errors; the page says "allow-list" six times and no longer says "whitelist" or "invited".
+
+---
+
+## 22 November 2026 — Expense Flow: "Queries" for the Database Throughout
+
+### What Was Done
+- The owner asked whether "asks the database" should become "requests", balancing everyday language against technical terms. Discussed first: "request" already means two other things on the page (what the phone sends to the server, and the call to Claude, labelled "1 request"), so "requests from the database" would overload it, while "queries" is the precise word, matches step 4 ("Queries the database…") and the "1 query" / "2 queries" labels beside each database box, and suits the one deliberately technical page. The owner chose "queries" for all four database mentions:
+  - Step 5: "Then queries the database for how many times this person has tapped Parse…"
+  - Step 6: "Queries the database for the person's expense categories…"
+  - Step 6's experimental note: "Also queries the merchant names on this month's expenses…"
+  - Save the expense: "Queries the database to check whether the chosen category belongs to the person…"
+- "Ask Claude to read the expense" keeps "ask": Claude is a language model you put a question to, and its box already says "1 request".
+- Pages only, so the app version stays at 1.5.4.
+
+### Checks
+- Locally, the diagram draws with no errors; "queries the database" appears four times and "asks the database" no longer does.
