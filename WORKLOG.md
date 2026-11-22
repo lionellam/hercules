@@ -1820,3 +1820,16 @@ Last updated: 22 November 2026
 - Every step, query count and message in the diagram was checked against the code (the parse and expense routes, `currentUser`, `claimParse`, `getCategories`, `monthMerchants`, `createExpense`, the Log screen and review sheet).
 - Previewed locally: the home page at 1,280 pixels (two by two, each card's link 23 pixels from its bottom edge) and 390 pixels (one column, no sideways scrolling); the "← Hercules home" link at the top of the guide, App Screens and Expense flow, in the accent colour, pointing to the site's home (`./`).
 - Not yet checked: the live pages, which follow the push.
+
+---
+
+## 22 November 2026 — User Guide on Narrow Screens: Contents Below the Heading
+
+### What Was Done
+- At the owner's request, on narrow screens (960 pixels wide or less) the user guide's Contents box now comes after the heading area, below the "Works on / Updated" line, instead of above everything. The horizontal rule that separated the heading from the guide now sits below Contents, so it separates Contents from the guide.
+- How: the heading area (home link, label, title, introduction, "Works on / Updated") moved from inside `<main>` to just before the Contents `<nav>`, and grid placement puts Contents in the left column beside the heading and guide on wide screens, and stacks heading, Contents, guide on narrow ones. On narrow screens the heading's bottom border is removed and the guide gets a top border instead. Screen readers now meet the title before the contents. No text changed.
+- A small visible change: reviewed with the owner in the local preview in place of a separate mockup page. Pages only, so the app version stays at 1.5.4.
+
+### Checks
+- Wide (1,280 pixels): every measured position matches the page before the change (heading and Contents at y=40, first section at y=482, page height 10,952 pixels), and Contents still stays in view while scrolling. Removing the heading's bottom margin on wide screens was needed for this: as a separate grid item its 8-pixel margin no longer merged with the first section heading's.
+- Narrow (800 and 390 pixels): heading, then Contents 28 pixels below "Works on / Updated", then the rule 28 pixels below Contents, then the guide. No sideways scrolling and no errors.

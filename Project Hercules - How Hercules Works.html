@@ -42,7 +42,11 @@ body { margin: 0; }
 * { box-sizing: border-box; }
 body { background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 17px; line-height: 1.6;
        padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); -webkit-font-smoothing: antialiased; }
-.wrap { max-width: 1180px; margin: 0 auto; padding-block: 40px 96px; display: grid; grid-template-columns: 210px minmax(0, 1fr); gap: 56px; }
+.wrap { max-width: 1180px; margin: 0 auto; padding-block: 40px 96px; display: grid; grid-template-columns: 210px minmax(0, 1fr); column-gap: 56px; }
+/* Wide screens: Contents runs down the left beside the heading and the guide. Narrow screens stack heading, Contents, guide */
+.wrap > header.hero { grid-column: 2; grid-row: 1; margin-bottom: 0; }
+.wrap > nav.toc { grid-column: 1; grid-row: 1 / span 2; }
+.wrap > main { grid-column: 2; grid-row: 2; }
 nav.toc { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 24px); align-self: start; font-size: 14.5px; }
 nav.toc p { font-family: var(--font-display); font-weight: 700; margin: 0 0 10px; font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-2); }
 nav.toc ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
@@ -212,7 +216,11 @@ footer { margin-top: 72px; padding-top: 18px; border-top: 1px solid var(--rule);
 
 @media (max-width: 960px) {
   .wrap { grid-template-columns: minmax(0, 1fr); gap: 0; }
-  nav.toc { position: static; border: 1px solid var(--rule); border-radius: 12px; background: var(--paper); padding: 14px 16px; margin-bottom: 24px; }
+  .wrap > header.hero, .wrap > nav.toc, .wrap > main { grid-column: 1; grid-row: auto; }
+  /* The rule moves from under the heading to under Contents, so it separates Contents from the guide */
+  .wrap > header.hero { border-bottom: none; padding-bottom: 0; }
+  .wrap > main { border-top: 1px solid var(--rule); }
+  nav.toc { position: static; border: 1px solid var(--rule); border-radius: 12px; background: var(--paper); padding: 14px 16px; margin: 28px 0; }
   nav.toc ol { grid-template-columns: 1fr 1fr; column-gap: 16px; }
   nav.toc li.part { grid-column: 1 / -1; }
 }
@@ -278,6 +286,17 @@ dl.faq dd { margin: 2px 0 0; color: var(--ink-2); }
 </head>
 <body>
 <div class="wrap">
+  <header class="hero" id="overview">
+    <a class="home-link" href="./">← Hercules home</a>
+    <p class="eyebrow">HERCULES · USER GUIDE</p>
+    <h1>How Hercules Smart Expense Tracker Works</h1>
+    <p class="lede">Hercules is an intelligent expense tracker web application that is powered by a large language model which is used to interpret how you might log your expense in natural language, and saves your expenses with only a few convenient taps.</p>
+    <div class="meta">
+      <span><b>Works on:</b> phone, tablet and computer</span>
+      <span><b>Updated:</b> 22 November 2026</span>
+    </div>
+  </header>
+
   <nav class="toc" aria-label="Contents">
     <p>Contents</p>
     <ol>
@@ -296,16 +315,6 @@ dl.faq dd { margin: 2px 0 0; color: var(--ink-2); }
   </nav>
 
   <main>
-    <header class="hero" id="overview">
-      <a class="home-link" href="./">← Hercules home</a>
-      <p class="eyebrow">HERCULES · USER GUIDE</p>
-      <h1>How Hercules Smart Expense Tracker Works</h1>
-      <p class="lede">Hercules is an intelligent expense tracker web application that is powered by a large language model which is used to interpret how you might log your expense in natural language, and saves your expenses with only a few convenient taps.</p>
-      <div class="meta">
-        <span><b>Works on:</b> phone, tablet and computer</span>
-        <span><b>Updated:</b> 22 November 2026</span>
-      </div>
-    </header>
 
     <h2 id="about">What Hercules is, and what makes it different</h2>
     <p><b>Logging your expenses should be a seamless affair.</b> Instead of painstakingly populating a set of fields for every purchase, you type it the way you'd say it, such as "had coffee at Starbucks for $4.90", and Hercules takes care of the rest. Hercules then keeps your spending organised by day, month and category, and tracks it against any monthly budgets you set.</p>
