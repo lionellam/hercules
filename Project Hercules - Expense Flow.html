@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Expense Flow</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Source+Sans+3:wght@400;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* Expense Flow: a swimlane diagram of logging an expense (version 1.5.4), published to GitHub Pages as flow.html */
+:root {
+  --bg: #f7f8f6; --paper: #ffffff; --ink: #16191d; --ink-2: #4a5058; --rule: #dfe3df;
+  --accent: #1d6b52; --accent-soft: #e3efe9; --line: #8a948f;
+  --warn: #8a5a12; --warn-soft: #fbf1df; --exp: #5b4bb5; --exp-soft: #eeebfa;
+  --lane-a: #f1f4f2; --lane-b: #fafbfa;
+  --font-display: "Bricolage Grotesque", "Avenir Next", system-ui, sans-serif;
+  --font-body: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #111416; --paper: #181c1f; --ink: #e9ece9; --ink-2: #a9b0b5; --rule: #2a3034;
+    --accent: #6cc9a4; --accent-soft: #1d2c27; --line: #6d7773;
+    --warn: #e6b56a; --warn-soft: #2c2416; --exp: #a99cf0; --exp-soft: #221f36;
+    --lane-a: #15191b; --lane-b: #121517; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #111416; --paper: #181c1f; --ink: #e9ece9; --ink-2: #a9b0b5; --rule: #2a3034;
+  --accent: #6cc9a4; --accent-soft: #1d2c27; --line: #6d7773;
+  --warn: #e6b56a; --warn-soft: #2c2416; --exp: #a99cf0; --exp-soft: #221f36;
+  --lane-a: #15191b; --lane-b: #121517; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 16px; line-height: 1.5;
+       -webkit-font-smoothing: antialiased; }
+.wrap { max-width: 1240px; margin: 0 auto; padding: 40px 16px 56px; }
+/* The way back to the home page, at the top of the page */
+.home-link { display: inline-flex; align-items: center; gap: 6px; margin: 0 0 18px; color: var(--accent); font-weight: 600; font-size: 15px; text-decoration: none; }
+.home-link:hover, .home-link:focus-visible { text-decoration: underline; text-underline-offset: 3px; }
+.eyebrow { font-family: var(--font-mono); font-size: 12.5px; color: var(--accent); letter-spacing: .04em; margin: 0 0 10px; }
+h1 { font-family: var(--font-display); font-size: clamp(32px, 5vw, 46px); line-height: 1.05; margin: 0 0 12px; letter-spacing: -0.02em; }
+.lede { color: var(--ink-2); font-size: 18px; max-width: 70ch; margin: 0 0 12px; }
+.lede:last-of-type { margin-bottom: 22px; }
+.top { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+.legend { display: flex; flex-wrap: wrap; gap: 8px 18px; font-size: 14px; color: var(--ink-2); }
+.legend span { display: inline-flex; align-items: center; gap: 7px; white-space: nowrap; }
+.sw { width: 18px; height: 12px; border-radius: 3px; display: inline-block; flex: none; }
+.sw.sw-step { background: var(--paper); border: 1px solid var(--rule); }
+.sw-call { width: 26px; height: 14px; flex: none; fill: none; stroke: var(--line); stroke-width: 1.4; }
+.sw.warn { background: var(--warn-soft); border: 1px solid var(--warn); }
+.sw.exp { background: var(--exp-soft); border: 1.5px dashed var(--exp); }
+.pill { display: inline-flex; border: 1px solid var(--rule); border-radius: 999px; padding: 3px; background: var(--paper); }
+.pill button { font: inherit; font-size: 13.5px; border: 0; background: none; color: var(--ink-2); padding: 4px 12px; border-radius: 999px; cursor: pointer; }
+.pill button[aria-pressed="true"] { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+
+/* The diagram scrolls sideways inside its frame on narrow screens; the page itself never does */
+.frame { overflow-x: auto; border: 1px solid var(--rule); border-radius: 16px; background: var(--paper); }
+.diagram { position: relative; display: grid; grid-template-columns: repeat(5, minmax(170px, 1fr)); min-width: 900px; }
+.lane-bg { grid-row: 1 / -1; }
+.lane-bg:nth-of-type(odd) { background: var(--lane-a); }
+.lane-bg:nth-of-type(even) { background: var(--lane-b); }
+.lane-bg + .lane-bg { border-left: 1px solid var(--rule); }
+.group { grid-row: 1; z-index: 3; padding: 12px 14px 0; background: var(--paper); }
+.group span { display: block; padding-bottom: 7px; border-bottom: 2px solid var(--accent); font-family: var(--font-mono); font-size: 11.5px;
+              letter-spacing: .06em; text-transform: uppercase; color: var(--accent); }
+.group + .group { border-left: 1px solid var(--rule); }
+.head { grid-row: 2; position: sticky; top: 0; z-index: 3; padding: 14px 14px 12px; border-bottom: 1px solid var(--rule);
+        background: color-mix(in srgb, var(--paper) 92%, transparent); backdrop-filter: blur(6px); }
+.head b { display: block; font-family: var(--font-display); font-size: 18px; font-weight: 700; line-height: 1.2; }
+.head small { color: var(--ink-2); font-size: 13px; }
+.head + .head { border-left: 1px solid var(--rule); }
+.phase { grid-column: 1 / -1; z-index: 2; display: flex; align-items: center; gap: 10px; padding: 18px 14px 4px;
+         font-family: var(--font-mono); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--accent); }
+.phase::after { content: ""; flex: 1; border-top: 1px solid var(--rule); }
+.cell { z-index: 2; padding: 12px 12px; display: flex; }
+.step { position: relative; width: 100%; background: var(--paper); border: 1px solid var(--rule); border-radius: 12px; padding: 10px 12px 11px;
+        box-shadow: 0 1px 2px rgb(0 0 0 / .05); }
+.num { position: absolute; top: -9px; left: 10px; font-family: var(--font-mono); font-size: 11.5px; font-weight: 500; background: var(--accent); color: var(--paper);
+       border-radius: 999px; padding: 0 7px; line-height: 18px; }
+.step h3 { margin: 2px 0 3px; font-size: 15.5px; line-height: 1.3; }
+.step p { margin: 0; font-size: 14px; color: var(--ink-2); line-height: 1.45; }
+.step code { font-family: var(--font-mono); font-size: 12.5px; color: var(--ink); }
+.expnote { margin-top: 8px; background: var(--exp-soft); border: 1.5px dashed var(--exp); border-radius: 6px; padding: 5px 8px; font-size: 13px; line-height: 1.4; }
+.expnote b { color: var(--exp); }
+.tag { display: block; font-family: var(--font-mono); font-size: 10.5px; letter-spacing: .05em; text-transform: uppercase; color: var(--exp); margin-bottom: 2px; }
+.reply-cell { align-items: center; }
+.reply { width: calc(100% - 28px); margin-left: auto; background: var(--paper); border: 1px solid var(--rule); border-radius: 10px; padding: 7px 10px 8px; font-size: 13px; line-height: 1.4; color: var(--ink-2); }
+.rlabel { display: block; font-family: var(--font-mono); font-size: 10.5px; letter-spacing: .05em; text-transform: uppercase; color: var(--accent); margin-bottom: 2px; }
+.rexp { display: block; margin-top: 5px; padding-top: 5px; border-top: 1.5px dashed var(--exp); color: var(--exp); }
+svg.arrows path.call { stroke-width: 1.3; stroke-dasharray: 4 3; }
+.note { margin-top: 8px; background: var(--warn-soft); border-left: 3px solid var(--warn); border-radius: 6px; padding: 5px 8px; font-size: 13px; line-height: 1.4; color: var(--ink); }
+.note b { color: var(--warn); }
+svg.arrows { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; overflow: visible; }
+svg.arrows path { fill: none; stroke: var(--line); stroke-width: 1.6; }
+svg.arrows marker path { stroke: none; fill: var(--line); }
+.sub { font-family: var(--font-display); font-size: 24px; margin: 34px 0 4px; letter-spacing: -0.01em; }
+.subnote { color: var(--ink-2); margin: 0 0 12px; }
+.tablewrap { overflow-x: auto; border: 1px solid var(--rule); border-radius: 14px; background: var(--paper); }
+table.stops { width: 100%; min-width: 620px; border-collapse: collapse; font-size: 14.5px; }
+.stops th { text-align: left; font-family: var(--font-mono); font-size: 11.5px; font-weight: 500; letter-spacing: .05em; text-transform: uppercase; color: var(--ink-2);
+            padding: 10px 14px; border-bottom: 1px solid var(--rule); }
+.stops td { padding: 9px 14px; border-top: 1px solid var(--rule); vertical-align: top; }
+.stops tbody tr:first-child td { border-top: 0; }
+.stops td:first-child { width: 56px; font-family: var(--font-mono); color: var(--accent); }
+.stops td:nth-child(2) { width: 36%; color: var(--ink-2); }
+.foot { margin-top: 22px; display: grid; gap: 10px 28px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); font-size: 15px; color: var(--ink-2); }
+.foot h2 { font-size: 15px; color: var(--ink); margin: 0 0 4px; }
+.foot p { margin: 0; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="home-link" href="./">← Hercules home</a>
+  <p class="eyebrow">HERCULES · HOW IT WORKS · VERSION 1.5.4</p>
+  <h1>Logging an expense</h1>
+  <p class="lede">This swimlane diagram shows what normally happens when someone logs an expense in Hercules, from typing it on the Log screen to seeing it saved.</p>
+  <p class="lede">Each column, or lane, belongs to one part of Hercules: the person using the app, the app on their phone (client side), the app online (server side), the database where expenses are stored, and Claude, the AI that reads what was typed. Read it from top to bottom. Each step sits in the lane of whoever does it, and the arrows show what happens next.</p>
+  <p class="lede">Amber notes show where the flow can stop. Purple notes show what changes when the experimental Intelligent Merchant Selection is switched on.</p>
+
+  <div class="top">
+    <div class="legend" aria-label="Legend">
+      <span><i class="sw sw-step"></i>A step</span>
+      <span><i class="sw warn"></i>What happens if something goes wrong</span>
+      <span><i class="sw exp"></i>Only when an experimental feature is switched on</span>
+      <span><svg class="sw-call" viewBox="0 0 26 14" aria-hidden="true"><path d="M1,4 H22 M18,1 L22,4 L18,7 M25,10 H4 M8,7 L4,10 L8,13"/></svg>A request and the reply it waits for</span>
+    </div>
+    <span class="pill" role="group" aria-label="Page background">
+      <button type="button" data-page="light">Light</button><button type="button" data-page="dark">Dark</button>
+    </span>
+  </div>
+
+  <div class="frame">
+    <div class="diagram" id="diagram"></div>
+  </div>
+
+  <h2 class="sub">What can go wrong</h2>
+  <p class="subnote">Where the flow can stop, and what the person sees. In every case, nothing is saved.</p>
+  <div class="tablewrap">
+    <table class="stops">
+      <thead><tr><th>Step</th><th>When</th><th>What the person sees</th></tr></thead>
+      <tbody>
+        <tr><td>2</td><td>No internet</td><td><b>Parse</b> can't be tapped, and “You're offline. Parsing of expenses is not available. Please try again later.” shows. The text stays in the box.</td></tr>
+        <tr><td>4</td><td>Not signed in, or the account isn't active or invited</td><td>They're taken to the sign-in page.</td></tr>
+        <tr><td>5</td><td>The text is empty or over 500 characters, or the date isn't real</td><td>“Please enter an expense.”</td></tr>
+        <tr><td>5</td><td>100 parses in the last 24 hours</td><td>“Daily limit of 100 entries reached. Please try again tomorrow.”</td></tr>
+        <tr><td>7</td><td>Claude can't make sense of the text</td><td>“The model could not parse this expense”</td></tr>
+        <tr><td>7</td><td>Claude can't be reached, or something else fails</td><td>“Parsing failed. Please try rephrasing.”</td></tr>
+        <tr><td>10</td><td>No internet</td><td><b>Save expense</b> can't be tapped.</td></tr>
+        <tr><td>10</td><td>No amount, or an amount of 0 or less</td><td>“Please enter an amount.” Nothing is sent.</td></tr>
+        <tr><td>10</td><td><b>Discard</b>, or tapping outside the sheet</td><td>If a detail was changed, “Discard your edits?” asks first. The sheet closes and the text stays in the box.</td></tr>
+        <tr><td>12</td><td>No longer signed in, or the account isn't active or invited</td><td>They're taken to the sign-in page.</td></tr>
+        <tr><td>12</td><td>A detail isn't valid</td><td>“Please check the amount and fields.”</td></tr>
+        <tr><td>13</td><td>The chosen category isn't one of the person's active categories</td><td>“Unknown category”</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="foot">
+    <div><h2>What's kept</h2><p>Parsing doesn't save the expense; only <b>Save expense</b> does, along with the original typed text. For the daily limit, each parse is recorded with who made it and when, never the text.</p></div>
+    <div><h2>What Claude sees</h2><p>The typed text, the person's category names and today's date. With Intelligent Merchant Selection on, also the merchant names from this month's expenses, but not the rest of those expenses. Never the person's name or email.</p></div>
+    <div><h2>Where each part runs</h2><p>The Hercules app is one codebase in two sides: the client side runs in the browser on the person's phone, and the server side runs on Vercel. It relies on two outside services: the database (Postgres, hosted on Neon) and Claude Haiku, Anthropic's language model.</p></div>
+  </div>
+</div>
+
+<script>
+// Lanes, left to right
+const LANES = [
+  ["Person", "on their phone"],
+  ["Client side", "Log screen, in the phone's browser"],
+  ["Server side", "on Vercel"],
+  ["Database", "Postgres on Neon"],
+  ["Claude", "Anthropic's language model"],
+];
+// Group headings above the lanes: [label, first lane, last lane]
+const GROUPS = [
+  ["Hercules app", 1, 2],
+  ["Services Hercules uses", 3, 4],
+];
+// Steps, top to bottom. lane: 0–4. phase starts a labelled band. exp is a note about an experimental feature.
+// ask: a request the step sends to a service (lane 3 database, lane 4 Claude) and the reply it waits for.
+const STEPS = [
+  { phase: "1 · Parse" },
+  { lane: 0, title: "Type the expense", body: "For example <code>Coffee at Ya Kun $4.50</code>, then tap <b>Parse</b>." },
+  { lane: 1, title: "Send the text to the server side", body: "Sends the typed text and today's date, as set on the phone.",
+    note: "<b>Offline?</b> Nothing is sent. The screen shows “Parsing of expenses is not available”, and the text stays in the box." },
+  { lane: 2, title: "Check the sign-in", body: "Reads the sign-in sent with the request. No database needed: it's protected with the app's secret key, so it can't be forged." },
+  { lane: 2, title: "Check the account", body: "Asks the database whether the account is active and its email is on the invitation list.",
+    note: "<b>Not signed in, or not invited?</b> The person is taken to the sign-in page.",
+    ask: { lane: 3, label: "2 queries", text: "Returns the account, then whether the email is invited." } },
+  { lane: 2, title: "Check the text and the daily limit", body: "First checks the request: the text must be 1 to 500 characters long, and the date must be a real date. Then asks the database how many times this person has tapped Parse in the last 24 hours. If the count is under 100, this parse can go ahead, and the database stores a record of it: which person and what time, but not the text they typed. That record counts towards the limit even if parsing fails later.",
+    note: "<b>Text not valid?</b> “Please enter an expense.” <b>100 already?</b> “Daily limit of 100 entries reached. Please try again tomorrow.”",
+    ask: { lane: 3, label: "2 queries", text: "Returns the count, then stores the new parse record." } },
+  { lane: 2, title: "Read the categories", body: "Asks the database for the person's expense categories, such as Food &amp; Dining or Transport, so Claude can file the expense under one of them. Categories the person has retired in Settings are left out.",
+    exp: "<b>Intelligent Merchant Selection on?</b> Also asks for the merchant names on this month's expenses, at most the 50 used most.",
+    ask: { lane: 3, label: "1 query", text: "Returns the categories.", exp: "+1 query: returns the merchant names." } },
+  { lane: 2, title: "Ask Claude to read the expense", body: "Sends the typed text, the category names and today's date.",
+    exp: "<b>Intelligent Merchant Selection on?</b> Also sends this month's merchant names, with an instruction to use a listed name when the text refers to one.",
+    note: "<b>Claude couldn't read it?</b> “The model could not parse this expense”. <b>Couldn't reach Claude?</b> “Parsing failed. Please try rephrasing.” Nothing is saved.",
+    ask: { lane: 4, label: "1 request", text: "Claude Haiku reads the text and returns the amount, currency, category, merchant, date and remarks.", exp: "With the merchant names: a shop already used this month comes back spelt as listed, for example “ntuc” as “NTUC FairPrice”." } },
+  { lane: 2, title: "Fill in and check the result", body: "If no currency was named, uses the default currency from Settings. A date that isn't real becomes today. Matches the category to one of the person's own, otherwise Other. Then replies to the client side." },
+  { lane: 1, title: "Show “Review before saving”", body: "The details appear in a sheet over the Log screen. Nothing is saved yet." },
+  { phase: "2 · Save" },
+  { lane: 0, title: "Check and save", body: "Change any detail if needed, then tap <b>Save expense</b>.",
+    note: "<b>Discard instead?</b> The sheet closes, nothing is saved, and the text stays in the box." },
+  { lane: 1, title: "Send the details to the server side", body: "Sends the details from the sheet, the original typed text, and whether any detail was changed." },
+  { lane: 2, title: "Check the sign-in and details", body: "Checks the sign-in and the account again, then that the amount, currency, date and other details are valid.",
+    note: "<b>Something invalid?</b> “Please check the amount and fields.” Nothing is saved.",
+    ask: { lane: 3, label: "2 queries", text: "Returns the account, then whether the email is invited." } },
+  { lane: 2, title: "Save the expense", body: "Asks whether the chosen category belongs to the person, then adds the expense with the original typed text, tagged <b>edited</b> if any detail was changed in the sheet. Then replies to the client side.",
+    note: "<b>Category no longer active?</b> “Unknown category”. Nothing is saved.",
+    ask: { lane: 3, label: "2 queries", text: "Confirms the category, then stores the new expense." } },
+  { lane: 1, title: "Confirm", body: "Shows “Saved”, empties the box, and reloads Today, History and Summary so the new expense appears." },
+];
+
+const d = document.getElementById("diagram");
+const el = (tag, cls, html) => { const e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; };
+
+// Column stripes and sticky lane headings
+LANES.forEach((_, i) => { const bg = el("div", "lane-bg"); bg.style.gridColumn = i + 1; d.append(bg); });
+const g0 = el("div", "group empty"); g0.style.gridColumn = 1; d.append(g0);
+GROUPS.forEach(([label, a, b]) => { const g = el("div", "group", `<span>${label}</span>`); g.style.gridColumn = `${a + 1} / ${b + 2}`; d.append(g); });
+LANES.forEach(([name, sub], i) => { const h = el("div", "head", `<b>${name}</b><small>${sub}</small>`); h.style.gridColumn = i + 1; d.append(h); });
+
+let row = 3, n = 0;
+const cards = [];
+for (const s of STEPS) {
+  if (s.phase) { const p = el("div", "phase", s.phase); p.style.gridRow = row++; d.append(p); continue; }
+  const cell = el("div", "cell");
+  cell.style.gridRow = row;
+  cell.style.gridColumn = s.lane + 1;
+  const card = el("div", "step",
+    `<span class="num">${++n}</span><h3>${s.title}</h3><p>${s.body}</p>${s.exp ? `<div class="expnote"><span class="tag">Experimental</span>${s.exp}</div>` : ""}${s.note ? `<div class="note">${s.note}</div>` : ""}`);
+  cell.append(card);
+  d.append(cell);
+  let reply = null;
+  if (s.ask) {
+    const rc = el("div", "cell reply-cell");
+    rc.style.gridRow = row;
+    rc.style.gridColumn = s.ask.lane + 1;
+    reply = el("div", "reply", `<span class="rlabel">${s.ask.label}</span>${s.ask.text}${s.ask.exp ? `<span class="rexp">${s.ask.exp}</span>` : ""}`);
+    rc.append(reply);
+    d.append(rc);
+  }
+  row++;
+  cards.push({ card, reply });
+}
+
+// Arrows: from each step down to the next, and each request out to a service with its reply back
+const NS = "http://www.w3.org/2000/svg";
+const svg = document.createElementNS(NS, "svg");
+svg.setAttribute("class", "arrows");
+svg.innerHTML = `<defs>
+  <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z"/></marker>
+  <marker id="ahr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z"/></marker>
+</defs>`;
+d.append(svg);
+
+function line(dAttr, cls, marker) {
+  const path = document.createElementNS(NS, "path");
+  path.setAttribute("class", cls);
+  path.setAttribute("d", dAttr);
+  path.setAttribute("marker-end", `url(#${marker})`);
+  svg.append(path);
+}
+function draw() {
+  svg.querySelectorAll("path.link, path.call").forEach((p) => p.remove());
+  const box = d.getBoundingClientRect();
+  for (let i = 0; i < cards.length; i++) {
+    const a = cards[i].card.getBoundingClientRect();
+    if (cards[i].reply) {
+      const r = cards[i].reply.getBoundingClientRect();
+      const x1 = a.right - box.left, x2 = r.left - box.left, y = r.top + r.height / 2 - box.top;
+      line(`M${x1},${y - 6} H${x2 - 1}`, "call", "ahr");  // request out
+      line(`M${x2},${y + 6} H${x1 + 1}`, "call", "ahr");  // reply back
+    }
+    if (i === cards.length - 1) continue;
+    const b = cards[i + 1].card.getBoundingClientRect();
+    const x1 = a.left + a.width / 2 - box.left, y1 = a.bottom - box.top;
+    const x2 = b.left + b.width / 2 - box.left, y2 = b.top - box.top - 1;
+    const mid = y1 + (y2 - y1) / 2;
+    line(Math.abs(x1 - x2) < 1 ? `M${x1},${y1} V${y2}` : `M${x1},${y1} V${mid} H${x2} V${y2}`, "link", "ah");
+  }
+}
+new ResizeObserver(draw).observe(d);
+document.fonts?.ready.then(draw);
+
+// Light or dark page, starting from the device's setting
+const root = document.documentElement;
+const buttons = document.querySelectorAll("[data-page]");
+function setPage(mode) {
+  root.dataset.theme = mode;
+  buttons.forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.page === mode)));
+}
+buttons.forEach((b) => b.addEventListener("click", () => setPage(b.dataset.page)));
+setPage(matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+</script>
+</body>
+</html>

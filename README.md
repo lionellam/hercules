@@ -2,7 +2,7 @@
 
 A private expense tracker for family and close friends. You type an expense the way you'd say it ("lunch at Ya Kun 4.50"), Claude picks out the amount, category, merchant and date, and you check and save it. Hercules then totals your spending by day, month and category, and tracks it against any monthly budgets you set.
 
-**User guide:** [How Hercules Works](https://lionellam.github.io/hercules/userguide.html) · **App screens:** [every screen, drawn](https://lionellam.github.io/hercules/screens.html) · both linked from the [home page](https://lionellam.github.io/hercules/)
+**User guide:** [How Hercules Works](https://lionellam.github.io/hercules/userguide.html) · **App screens:** [every screen, drawn](https://lionellam.github.io/hercules/screens.html) · **Expense flow:** [logging an expense, step by step](https://lionellam.github.io/hercules/flow.html) · all linked from the [home page](https://lionellam.github.io/hercules/)
 
 The app is invite-only: sign-in is with Google, for invited email addresses only.
 
@@ -15,7 +15,8 @@ The app is invite-only: sign-in is with Google, for invited email addresses only
 | [`design/`](design/) | Design mockups made while planning changes |
 | [How Hercules Works](Project%20Hercules%20-%20How%20Hercules%20Works.html) | Source of the user guide, with its pictures drawn as mockups in the page itself, published to GitHub Pages as `userguide.html` by [`.github/workflows/guide-pages.yml`](.github/workflows/guide-pages.yml) |
 | [App Screens](Project%20Hercules%20-%20Screens%20at%20a%20Glance.html) | Every screen drawn as a mockup with a one-line caption, for showing people what Hercules looks like; published beside the guide as `screens.html` |
-| [Home Page](Project%20Hercules%20-%20Home%20Page.html) | The GitHub Pages home page, linking to the user guide, App Screens and this repository |
+| [Expense Flow](Project%20Hercules%20-%20Expense%20Flow.html) | A swimlane diagram of logging an expense: who does each step, every request to the database and to Claude, and where the flow can stop; published as `flow.html` |
+| [Home Page](Project%20Hercules%20-%20Home%20Page.html) | The GitHub Pages home page, linking to the user guide, App Screens, Expense flow and this repository |
 
 ## Project documents
 

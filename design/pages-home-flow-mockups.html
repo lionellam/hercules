@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Home Page with Expense Flow</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Source+Sans+3:wght@400;600;700&family=JetBrains+Mono:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* Mockup: the GitHub Pages home page with a fourth card, Expense flow (flow.html). Option A two by two (chosen by the owner, 22 November 2026), option B four across.
+   Below the page: the proposed "← Hercules home" link at the top of the user guide, App Screens and Expense flow pages. */
+body { margin: 0; }
+:root {
+  --bg: #f7f8f6; --paper: #ffffff; --ink: #16191d; --ink-2: #4a5058; --rule: #dfe3df;
+  --accent: #1d6b52; --accent-soft: #e3efe9; --frame: #d8ddd9;
+  --font-display: "Bricolage Grotesque", "Avenir Next", system-ui, sans-serif;
+  --font-body: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #111416; --paper: #181c1f; --ink: #e9ece9; --ink-2: #a9b0b5; --rule: #2a3034;
+    --accent: #6cc9a4; --accent-soft: #1d2c27; --frame: #2f363a; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #111416; --paper: #181c1f; --ink: #e9ece9; --ink-2: #a9b0b5; --rule: #2a3034;
+  --accent: #6cc9a4; --accent-soft: #1d2c27; --frame: #2f363a; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 17px; line-height: 1.6;
+       padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); -webkit-font-smoothing: antialiased; }
+.wrap { max-width: 920px; margin: 0 auto; padding-block: 72px 72px; min-height: 100dvh; display: flex; flex-direction: column; }
+.eyebrow { font-family: var(--font-mono); font-size: 12.5px; color: var(--accent); letter-spacing: .04em; margin: 0 0 14px; }
+h1 { font-family: var(--font-display); font-size: clamp(40px, 7vw, 64px); line-height: 1.02; margin: 0 0 16px; font-weight: 700; letter-spacing: -0.02em; }
+.lede { font-size: 20px; color: var(--ink-2); line-height: 1.5; margin: 0; max-width: 54ch; }
+
+.cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; margin-top: 44px; }
+body.optB .wrap { max-width: 1200px; }
+body.optB .cards { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+body.optB .card .art { height: 190px; }
+body.optB .card h2 { font-size: 20px; }
+body.optB .back-ph { left: calc(50% - 150px); }
+body.optB .front-ph { left: calc(50% - 40px); }
+a.card { display: flex; flex-direction: column; text-decoration: none; color: inherit; background: var(--paper); border: 1px solid var(--rule); border-radius: 18px; overflow: hidden;
+         transition: border-color .15s, transform .15s, box-shadow .15s; }
+a.card:hover, a.card:focus-visible { border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 10px 28px rgba(0,0,0,.08); outline: none; }
+.card .art { height: 210px; background: var(--accent-soft); position: relative; overflow: hidden; }
+.card .txt { padding: 18px 22px 22px; flex: 1; display: flex; flex-direction: column; }
+.card h2 { font-family: var(--font-display); font-size: 22px; margin: 0 0 4px; font-weight: 700; letter-spacing: -0.015em; }
+.card p { margin: 0; color: var(--ink-2); font-size: 16px; line-height: 1.5; }
+/* The link sits at the bottom of each card, so all three line up whatever the description's length */
+.card .go { display: inline-block; align-self: flex-start; margin-top: auto; padding-top: 12px; color: var(--accent); font-weight: 600; font-size: 15px; }
+.back-ph { left: calc(50% - 136px); top: 40px; transform: rotate(-4deg); }
+.front-ph { left: calc(50% - 22px); top: 22px; transform: rotate(3deg); }
+/* Two in a row on tablets (option B too) */
+@media (max-width: 860px) { .cards, body.optB .cards { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } }
+@media (max-width: 640px) {
+  .back-ph { left: calc(50% - 168px); }
+  .front-ph { left: calc(50% - 36px); }
+  .wrap { padding-block: 44px 40px; }
+  .cards, body.optB .cards { grid-template-columns: minmax(0, 1fr); }
+  .lede { font-size: 18px; }
+}
+@media (prefers-reduced-motion: reduce) { a.card { transition: none; } a.card:hover { transform: none; } }
+
+
+/* The third card: a drawing of the repository's files */
+.repo-win { position: absolute; left: 50%; top: 34px; transform: translateX(-50%) rotate(-2deg); width: 230px; background: var(--paper); border: 1px solid var(--frame); border-radius: 12px; box-shadow: 0 10px 26px rgba(0,0,0,.12); font: 11px/1.3 var(--font-mono); color: var(--ink); overflow: hidden; }
+.repo-win .hd { display: flex; gap: 5px; align-items: center; padding: 8px 10px; border-bottom: 1px solid var(--rule); color: var(--ink-2); }
+.repo-win .hd i { width: 7px; height: 7px; border-radius: 50%; background: var(--rule); display: inline-block; }
+.repo-win .hd span { margin-left: 6px; }
+.repo-win .row { display: flex; gap: 8px; align-items: center; padding: 6px 10px; border-bottom: 1px solid var(--rule); }
+.repo-win .row:last-child { border-bottom: none; }
+.repo-win svg { width: 13px; height: 13px; flex: none; color: var(--accent); }
+
+/* The flow card: a small swimlane drawing */
+.flow-win { position: absolute; left: 50%; top: 30px; transform: translateX(-50%) rotate(-2deg); width: 236px; background: var(--paper); border: 1px solid var(--frame); border-radius: 12px; box-shadow: 0 10px 26px rgba(0,0,0,.12); overflow: hidden; }
+.flow-win .hd { display: flex; gap: 5px; align-items: center; padding: 8px 10px; border-bottom: 1px solid var(--rule); color: var(--ink-2); font: 11px/1.3 var(--font-mono); }
+.flow-win .hd i { width: 7px; height: 7px; border-radius: 50%; background: var(--rule); display: inline-block; }
+.flow-win .hd span { margin-left: 6px; }
+.flow-win svg { display: block; width: 100%; height: auto; }
+.flow-win .lane { fill: var(--accent-soft); opacity: .55; }
+.flow-win .lbl { fill: var(--ink-2); font: 8px var(--font-mono); }
+.flow-win .box { fill: var(--paper); stroke: var(--rule); stroke-width: 1; }
+.flow-win .box.k { stroke: var(--accent); }
+.flow-win .bar { fill: var(--ink); opacity: .55; }
+.flow-win .ln { fill: none; stroke: var(--ink-2); stroke-width: 1; opacity: .7; }
+.flow-win .ln.d { stroke-dasharray: 3 2; }
+
+/* Mockup only */
+.mock-bar { position: fixed; top: 12px; right: 12px; z-index: 10; display: flex; flex-wrap: wrap; max-width: calc(100vw - 24px); gap: 4px; background: #16191d; color: #fff; border-radius: 999px; padding: 4px; font: 12px var(--font-mono); }
+.mock-bar button { font: inherit; background: none; border: none; color: #fff; padding: 4px 10px; border-radius: 999px; cursor: pointer; opacity: .7; }
+.mock-bar button[aria-pressed="true"] { background: #fff; color: #16191d; opacity: 1; }
+.mock-bar .sep { width: 1px; background: #4a5058; margin: 2px 4px; }
+.mock-note { max-width: 920px; margin: 0 auto; padding: 0 0 18px; font: 12.5px/1.5 var(--font-mono); color: var(--ink-2); }
+.tops { max-width: 920px; margin: 0 auto 72px; display: grid; gap: 16px; }
+.tops h3 { font: 12.5px var(--font-mono); color: var(--ink-2); letter-spacing: .04em; margin: 0 0 6px; }
+.top-demo { background: var(--bg); border: 1px dashed var(--frame); border-radius: 14px; padding: 18px 22px 20px; }
+.top-demo .t { font-family: var(--font-display); font-size: 30px; line-height: 1.05; margin: 0; font-weight: 700; letter-spacing: -0.02em; }
+
+/* Proposed: the way back to the home page, at the top of each page */
+.home-link { display: inline-flex; align-items: center; gap: 6px; margin: 0 0 18px; color: var(--accent); font-weight: 600; font-size: 15px; text-decoration: none; }
+.home-link:hover, .home-link:focus-visible { text-decoration: underline; text-underline-offset: 3px; }
+
+/* Small drawn phones in the cards: the app's own tokens, shown at half size */
+.ph { position: absolute; width: 240px; border-radius: 22px; border: 1px solid var(--frame); overflow: hidden; box-shadow: 0 10px 26px rgba(0,0,0,.12); }
+.m { --m-bg: #fff; --m-text: #18181b; --m-muted: #71717a; --m-line: #e7e7e4; --m-soft: #f4f4f5; --m-bar: #18181b; --m-bad: #b91c1c;
+     background: var(--m-bg); color: var(--m-text); font-family: Inter, -apple-system, system-ui, sans-serif; font-size: 11px; line-height: 1.35; padding: 16px 14px 14px; min-height: 320px; position: relative; }
+.m.dark { --m-bg: #18181b; --m-text: #f4f4f5; --m-muted: #a1a1aa; --m-line: #27272a; --m-soft: #27272a; --m-bar: #f4f4f5; --m-bad: #f87171; }
+.m .sub { color: var(--m-muted); font-size: 9.5px; }
+.m h5 { font-size: 18px; font-weight: 700; letter-spacing: -0.02em; margin: 0; }
+.m .input { background: var(--m-soft); border-radius: 10px; padding: 8px 9px; margin-top: 10px; font-size: 11.5px; min-height: 54px; display: flex; flex-direction: column; justify-content: space-between; }
+.m .btn { align-self: flex-end; background: var(--m-bar); color: var(--m-bg); border-radius: 7px; padding: 4px 10px; font-weight: 600; font-size: 10px; }
+.m .sheet { position: absolute; left: 0; right: 0; bottom: 0; background: var(--m-bg); border-radius: 16px 16px 0 0; padding: 12px 14px 14px; box-shadow: 0 -6px 22px rgba(0,0,0,.16); }
+.m .k { font-size: 8.5px; font-weight: 600; color: var(--m-muted); letter-spacing: .06em; margin-bottom: 6px; }
+.m .amt { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
+.m .amt span { font-size: 11px; background: var(--m-soft); border-radius: 5px; padding: 2px 5px; vertical-align: 5px; margin-right: 4px; }
+.m .f { display: flex; justify-content: space-between; padding: 6px 0; border-top: 1px solid var(--m-line); font-size: 10.5px; }
+.m .f span:first-child { color: var(--m-muted); }
+.m .save { margin-top: 8px; background: var(--m-bar); color: var(--m-bg); border-radius: 8px; text-align: center; padding: 6px 0; font-weight: 600; font-size: 10.5px; }
+.m .scrim { position: absolute; inset: 0; background: rgba(0,0,0,.18); }
+.m .big { font-size: 22px; font-weight: 700; letter-spacing: -0.02em; margin-top: 2px; }
+.m .cat { margin-top: 10px; }
+.m .ct { display: flex; justify-content: space-between; font-size: 10px; margin-bottom: 4px; }
+.m .ct i { font-style: normal; color: var(--m-muted); }
+.m .tr { height: 4px; background: var(--m-soft); border-radius: 2px; overflow: hidden; }
+.m .fl { height: 100%; background: var(--m-bar); }
+.m .fl.over { background: var(--m-bad); }
+.m .pace { font-size: 9px; color: var(--m-muted); margin-top: 3px; }
+.m .pace b { color: var(--m-text); }
+.m .it { display: flex; justify-content: space-between; padding: 7px 0; border-bottom: 1px solid var(--m-line); font-size: 11px; }
+.m .it i { font-style: normal; display: block; color: var(--m-muted); font-size: 9px; }
+.m .it b { font-weight: 600; }
+
+</style>
+</head>
+<body>
+<div class="mock-bar" role="group" aria-label="Mockup options">
+  <button type="button" data-o="A" aria-pressed="true">A · two by two</button><button type="button" data-o="B" aria-pressed="false">B · four across</button><span class="sep"></span>
+  <button type="button" data-t="light">Light</button><button type="button" data-t="dark">Dark</button>
+</div>
+<div class="wrap">
+  <header>
+    <p class="eyebrow">HERCULES · SMART EXPENSE TRACKER</p>
+    <h1>Hercules</h1>
+    <p class="lede">Hercules is an intelligent expense tracker web application that is powered by a large language model which is used to interpret how you might log your expense in natural language, and saves your expenses with only a few convenient taps.</p>
+  </header>
+
+  <div class="cards">
+    <a class="card" href="userguide.html">
+      <div class="art">
+        <div class="ph" style="left:50%;top:-78px;transform:translateX(-50%)">
+          <div class="m">
+            <div class="sub">Saturday, 7 November</div>
+            <h5>Log an expense</h5>
+            <div class="input">Lunch at Ya Kun for $4.50<span class="btn">Parse</span></div>
+            <div class="scrim"></div>
+            <div class="sheet">
+              <div class="k">REVIEW BEFORE SAVING</div>
+              <div class="amt"><span>SGD ▾</span>4.50</div>
+              <div class="f"><span>Category</span><span>Food &amp; Dining</span></div>
+              <div class="f"><span>Merchant</span><span>Ya Kun</span></div>
+              <div class="f"><span>Date</span><span>07/11/2026</span></div>
+              <div class="save">Save expense</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="txt">
+        <h2>User guide</h2>
+        <p>How to use Hercules.</p>
+        <span class="go">Read the guide →</span>
+      </div>
+    </a>
+
+    <a class="card" href="screens.html">
+      <div class="art">
+        <div class="ph back-ph">
+          <div class="m">
+            <h5>Summary</h5>
+            <div class="sub" style="margin-top:8px">Spent so far this month</div>
+            <div class="big">$3,184.40</div>
+            <div class="cat"><div class="ct"><span>Food &amp; Dining</span><span><b>210.00</b> <i>of 500.00</i></span></div><div class="tr"><div class="fl" style="width:42%"></div></div><div class="pace"><b>$93.33 over pace</b> · $290.00 left</div></div>
+            <div class="cat"><div class="ct"><span>Entertainment</span><span><b>128.00</b> <i>of 100.00</i></span></div><div class="tr"><div class="fl over" style="width:100%"></div></div></div>
+            <div class="cat"><div class="ct"><span>Transport</span><span><b>30.00</b> <i>of 150.00</i></span></div><div class="tr"><div class="fl" style="width:20%"></div></div><div class="pace"><b>On pace</b> · $120.00 left</div></div>
+          </div>
+        </div>
+        <div class="ph front-ph">
+          <div class="m dark">
+            <h5>History</h5>
+            <div class="sub" style="margin:8px 0 2px">SAT, 7 NOV</div>
+            <div class="it"><span>Toast Box<i>Food &amp; Dining</i></span><b>30.00</b></div>
+            <div class="it"><span>MRT<i>Transport</i></span><b>9.50</b></div>
+            <div class="sub" style="margin:8px 0 2px">FRI, 6 NOV</div>
+            <div class="it"><span>Golden Village<i>Entertainment</i></span><b>80.00</b></div>
+            <div class="it"><span>Saizeriya<i>Food &amp; Dining</i></span><b>35.00</b></div>
+          </div>
+        </div>
+      </div>
+      <div class="txt">
+        <h2>App screens</h2>
+        <p>Every screen in Hercules.</p>
+        <span class="go">See the screens →</span>
+      </div>
+    </a>
+    <a class="card" href="flow.html">
+      <div class="art">
+        <div class="flow-win">
+          <div class="hd"><i></i><i></i><i></i><span>Logging an expense</span></div>
+          <svg viewBox="0 0 236 150" aria-hidden="true">
+            <rect class="lane" x="0" y="0" width="59" height="150"/><rect class="lane" x="118" y="0" width="59" height="150"/>
+            <text class="lbl" x="6" y="12">Person</text><text class="lbl" x="65" y="12">Client</text><text class="lbl" x="124" y="12">Server</text><text class="lbl" x="183" y="12">Data</text>
+            <path class="ln" d="M29,38 V46 H88 V52"/><path class="ln" d="M88,68 V74 H147 V80"/><path class="ln" d="M147,96 V104"/><path class="ln" d="M147,120 V126 H88 V130"/>
+            <path class="ln d" d="M172,88 H186"/><path class="ln d" d="M186,92 H172"/><path class="ln d" d="M172,112 H186"/><path class="ln d" d="M186,116 H172"/>
+            <rect class="box" x="6" y="22" width="47" height="16" rx="4"/><rect class="bar" x="11" y="28" width="30" height="3" rx="1.5"/>
+            <rect class="box" x="65" y="52" width="47" height="16" rx="4"/><rect class="bar" x="70" y="58" width="26" height="3" rx="1.5"/>
+            <rect class="box" x="124" y="80" width="47" height="16" rx="4"/><rect class="bar" x="129" y="86" width="32" height="3" rx="1.5"/>
+            <rect class="box" x="124" y="104" width="47" height="16" rx="4"/><rect class="bar" x="129" y="110" width="24" height="3" rx="1.5"/>
+            <rect class="box" x="187" y="82" width="43" height="12" rx="3"/><rect class="box" x="187" y="106" width="43" height="12" rx="3"/>
+            <rect class="box k" x="65" y="130" width="47" height="16" rx="4"/><rect class="bar" x="70" y="136" width="20" height="3" rx="1.5"/>
+          </svg>
+        </div>
+      </div>
+      <div class="txt">
+        <h2>Expense flow</h2>
+        <p>Follow one expense through Hercules, step by step.</p>
+        <span class="go">See the flow →</span>
+      </div>
+    </a>
+    <a class="card" href="https://github.com/lionellam/hercules">
+      <div class="art">
+        <div class="repo-win">
+          <div class="hd"><i></i><i></i><i></i><span>hercules</span></div>
+          <div class="row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M3 6.5A1.5 1.5 0 0 1 4.5 5H9l2 2h8.5A1.5 1.5 0 0 1 21 8.5v9a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 17.5z"/></svg>web</div>
+          <div class="row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M3 6.5A1.5 1.5 0 0 1 4.5 5H9l2 2h8.5A1.5 1.5 0 0 1 21 8.5v9a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 17.5z"/></svg>design</div>
+          <div class="row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M6 3h8l4 4v14H6zM14 3v4h4"/></svg>README.md</div>
+          <div class="row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M6 3h8l4 4v14H6zM14 3v4h4"/></svg>Specification.md</div>
+          <div class="row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M6 3h8l4 4v14H6zM14 3v4h4"/></svg>Architecture.md</div>
+          <div class="row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M6 3h8l4 4v14H6zM14 3v4h4"/></svg>CHANGELOG.md</div>
+        </div>
+      </div>
+      <div class="txt">
+        <h2>Source code</h2>
+        <p>Application source code and documentation.</p>
+        <span class="go">View on GitHub →</span>
+      </div>
+    </a>
+  </div>
+
+</div>
+
+<p class="mock-note">MOCKUP · BELOW: THE WAY BACK TO THE HOME PAGE, AT THE TOP OF EACH OTHER PAGE</p>
+<div class="tops">
+  <div><h3>USER GUIDE (userguide.html)</h3>
+    <div class="top-demo"><a class="home-link" href="index.html">← Hercules home</a><p class="eyebrow">HERCULES · USER GUIDE</p><p class="t">How Hercules Smart Expense Tracker Works</p></div></div>
+  <div><h3>APP SCREENS (screens.html)</h3>
+    <div class="top-demo"><a class="home-link" href="index.html">← Hercules home</a><p class="eyebrow">HERCULES · APP SCREENS</p><p class="t">Hercules Smart Expense Tracker — App Screens</p></div></div>
+  <div><h3>EXPENSE FLOW (flow.html)</h3>
+    <div class="top-demo"><a class="home-link" href="index.html">← Hercules home</a><p class="eyebrow">HERCULES · HOW IT WORKS · VERSION 1.5.4</p><p class="t">Logging an expense</p></div></div>
+</div>
+
+<script>
+// Mockup only: option A or B
+document.querySelectorAll("[data-o]").forEach((b) => b.addEventListener("click", () => {
+  document.body.classList.toggle("optB", b.dataset.o === "B");
+  document.querySelectorAll("[data-o]").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+}));
+// Mockup only: preview in light or dark, starting from the device's setting
+function setT(t) { document.documentElement.dataset.theme = t; document.querySelectorAll("[data-t]").forEach((x) => x.setAttribute("aria-pressed", String(x.dataset.t === t))); }
+document.querySelectorAll("[data-t]").forEach((b) => b.addEventListener("click", () => setT(b.dataset.t)));
+setT(matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+</script>
+</body>
+</html>

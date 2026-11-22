@@ -4,7 +4,7 @@
 Maintained by: Lionel Lam Song Poh, James Wong
 Purpose: Record of work done, decisions made, challenges encountered, and assumptions held —
 to serve as a lessons learned reference for current and future contributors.
-Last updated: 21 November 2026
+Last updated: 22 November 2026
 ```
 
 ---
@@ -1795,3 +1795,28 @@ Last updated: 21 November 2026
 ### Clean-up
 - The test scripts and trial copies of the parser are in Claude's scratch folder only; nothing was added to the repository and no data was saved.
 - **Confirmed (21 November 2026):** after the deploy, the owner checked on their phone that, with Intelligent Merchant Selection switched on, a new merchant such as "Groceries from Sheng Siong at $7" now comes back in the review sheet with 1.5.4.
+
+---
+
+## 22 November 2026 — Expense Flow Diagram, Published, and a Way Home From Every Page
+
+### What Was Done
+- **A swimlane diagram of logging an expense**, made with the owner over several rounds, now published to GitHub Pages as `flow.html` from `Project Hercules - Expense Flow.html`. Five lanes: Person, the app's client side (in the phone's browser) and server side (on Vercel), grouped as "Hercules app", and the database and Claude, grouped as "Services Hercules uses". Fourteen steps in two bands, Parse and Save; every request from the server side to the database or Claude is drawn with its reply and the number of queries; amber notes show where the flow can stop and purple dashed notes show what Intelligent Merchant Selection adds; a "What can go wrong" table under the diagram gives each stopping point and its exact message.
+- **The home page has a fourth card, Expense flow** ("Follow one expense through Hercules, step by step."), with a small drawn swimlane. The four cards are two by two on computers and tablets and one column on phones.
+- **Every published page now starts with "← Hercules home"**, linking back to the home page: the user guide (its Updated date is now 22 November 2026), App Screens and Expense flow.
+- The Pages workflow publishes the fourth page. Architecture 0.42 links the diagram from Section 2; Test Plan 1.30 updates S-06 (four cards, the home links, and the "App Screens" name noted as a follow-up on 21 November); README and CLAUDE.md list the page, and the document integrity check now covers it.
+- CLAUDE.md records that this page is deliberately technical, so the general-reader rule doesn't apply to it while the other content rules do, and that it must be updated when the logging flow changes.
+- Pages and documents only, so the app version stays at 1.5.4.
+
+### The Owner's Choices
+- **Wording:** the owner preferred the original, technical version to a plainer "Version B" (deleted), with ambiguous lines rewritten: the daily-limit step, the categories step, and the introduction, which now describes the diagram itself.
+- **Client and server sides:** the owner pointed out that "Hercules app" and "Hercules server" were both the app; the lanes became Client side and Server side under one "Hercules app" heading (option A of three).
+- **Requests and replies:** the owner pointed out that the database doesn't start anything; the server-side steps now show each request and its reply.
+- **Clutter:** after an integrity review found 4 inaccuracies and 5 missing cases, the owner chose to keep the main notes on the cards and add the detail as a table; they undid a change that shortened the notes to one line, to keep them readable with their context.
+- **Experimental feature:** steps 6 and 7 separate what happens with Intelligent Merchant Selection on from the normal flow.
+- **Where to file it:** published, linked from a new home page card, rather than kept in the repository only. Two by two (option A) chosen over four across; mockup in `design/pages-home-flow-mockups.html`.
+
+### Checks
+- Every step, query count and message in the diagram was checked against the code (the parse and expense routes, `currentUser`, `claimParse`, `getCategories`, `monthMerchants`, `createExpense`, the Log screen and review sheet).
+- Previewed locally: the home page at 1,280 pixels (two by two, each card's link 23 pixels from its bottom edge) and 390 pixels (one column, no sideways scrolling); the "← Hercules home" link at the top of the guide, App Screens and Expense flow, in the accent colour, pointing to the site's home (`./`).
+- Not yet checked: the live pages, which follow the push.

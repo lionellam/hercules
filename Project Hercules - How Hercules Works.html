@@ -51,6 +51,9 @@ nav.toc a { color: var(--ink-2); text-decoration: none; display: block; padding:
 nav.toc a:hover, nav.toc a:focus-visible { color: var(--accent); border-left-color: var(--accent); outline: none; }
 main { min-width: 0; }
 header.hero { padding-bottom: 28px; border-bottom: 1px solid var(--rule); margin-bottom: 8px; }
+/* The way back to the home page, at the top of the page */
+.home-link { display: inline-flex; align-items: center; gap: 6px; margin: 0 0 18px; color: var(--accent); font-weight: 600; font-size: 15px; text-decoration: none; }
+.home-link:hover, .home-link:focus-visible { text-decoration: underline; text-underline-offset: 3px; }
 .eyebrow { font-family: var(--font-mono); font-size: 12.5px; color: var(--accent); letter-spacing: .04em; margin: 0 0 14px; }
 h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; letter-spacing: -0.015em; }
 h1 { font-size: clamp(36px, 6vw, 56px); line-height: 1.05; margin: 0 0 18px; font-weight: 700; }
@@ -294,12 +297,13 @@ dl.faq dd { margin: 2px 0 0; color: var(--ink-2); }
 
   <main>
     <header class="hero" id="overview">
+      <a class="home-link" href="./">← Hercules home</a>
       <p class="eyebrow">HERCULES · USER GUIDE</p>
       <h1>How Hercules Smart Expense Tracker Works</h1>
       <p class="lede">Hercules is an intelligent expense tracker web application that is powered by a large language model which is used to interpret how you might log your expense in natural language, and saves your expenses with only a few convenient taps.</p>
       <div class="meta">
         <span><b>Works on:</b> phone, tablet and computer</span>
-        <span><b>Updated:</b> 21 November 2026</span>
+        <span><b>Updated:</b> 22 November 2026</span>
       </div>
     </header>
 

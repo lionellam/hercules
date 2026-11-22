@@ -1,7 +1,8 @@
-# Publishes three pages to GitHub Pages: the home page ("Project Hercules - Home Page.html") as index.html,
-# the user guide ("Project Hercules - How Hercules Works.html") as userguide.html, and
-# "Project Hercules - Screens at a Glance.html" as screens.html.
-# Only these three pages are published; nothing else in the repository goes on the site.
+# Publishes four pages to GitHub Pages: the home page ("Project Hercules - Home Page.html") as index.html,
+# the user guide ("Project Hercules - How Hercules Works.html") as userguide.html,
+# "Project Hercules - Screens at a Glance.html" as screens.html, and
+# "Project Hercules - Expense Flow.html" as flow.html.
+# Only these four pages are published; nothing else in the repository goes on the site.
 name: Publish user guide
 
 on:
@@ -11,6 +12,7 @@ on:
       - "Project Hercules - Home Page.html"
       - "Project Hercules - How Hercules Works.html"
       - "Project Hercules - Screens at a Glance.html"
+      - "Project Hercules - Expense Flow.html"
       - ".github/workflows/guide-pages.yml"
   workflow_dispatch:
 
@@ -37,6 +39,7 @@ jobs:
           cp "Project Hercules - Home Page.html" _site/index.html
           cp "Project Hercules - How Hercules Works.html" _site/userguide.html
           cp "Project Hercules - Screens at a Glance.html" _site/screens.html
+          cp "Project Hercules - Expense Flow.html" _site/flow.html
           touch _site/.nojekyll
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3

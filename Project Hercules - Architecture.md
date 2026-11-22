@@ -1,8 +1,8 @@
 # Project Hercules — Architecture: Web App v1
 
 ```
-Version 0.41 · Draft
-Last Reviewed: 21 November 2026
+Version 0.42 · Draft
+Last Reviewed: 22 November 2026
 Produced with AI Assistance (Claude Code)
 ```
 
@@ -51,6 +51,7 @@ Produced with AI Assistance (Claude Code)
 | 0.39 | 2026-11-21 | Lionel Lam | Decision 37: the parse timing helper has its own file (1.5.2, a tidy-up with no change in behaviour) |
 | 0.40 | 2026-11-21 | Lionel Lam | Decision 23: the Log screen's typed text is kept in memory across tab switches (1.5.3) |
 | 0.41 | 2026-11-21 | Lionel Lam | Decision 40: Intelligent Merchant Selection no longer drops new merchants when many merchants are known; Known Gaps: a follow-up for names sharing a word with a listed merchant (1.5.4) |
+| 0.42 | 2026-11-22 | Lionel Lam | Section 2: a link to the Expense Flow swimlane diagram, published on GitHub Pages as `flow.html` |
 
 ---
 
@@ -89,6 +90,8 @@ Record the architecture of the Project Hercules web app (Phase 2 — Web App v1)
 
  Separate, local only:  Python CLI → Phi-4 via Ollama → SQLite
 ```
+
+For the step-by-step view of logging an expense (who does each step, every request to the database and to Claude, and where the flow can stop), see the [Expense Flow](Project%20Hercules%20-%20Expense%20Flow.html) swimlane diagram, also published as [flow.html](https://lionellam.github.io/hercules/flow.html).
 
 The language model is called only to parse a single expense into structured fields. All other logic — sign-in checks, validation, storage, retrieval, edits, and usage limits — is deterministic application code, in line with the Specification's AI boundary.
 

@@ -32,6 +32,9 @@ body { background: var(--bg); color: var(--ink); font-family: var(--font-body); 
        padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); -webkit-font-smoothing: antialiased; }
 .wrap { max-width: 1040px; margin: 0 auto; padding-block: 40px 96px; }
 header.hero { padding-bottom: 26px; border-bottom: 1px solid var(--rule); }
+/* The way back to the home page, at the top of the page */
+.home-link { display: inline-flex; align-items: center; gap: 6px; margin: 0 0 18px; color: var(--accent); font-weight: 600; font-size: 15px; text-decoration: none; }
+.home-link:hover, .home-link:focus-visible { text-decoration: underline; text-underline-offset: 3px; }
 .eyebrow { font-family: var(--font-mono); font-size: 12.5px; color: var(--accent); letter-spacing: .04em; margin: 0 0 14px; }
 h1, h2 { font-family: var(--font-display); text-wrap: balance; letter-spacing: -0.015em; }
 h1 { font-size: clamp(36px, 6vw, 54px); line-height: 1.05; margin: 0 0 16px; font-weight: 700; }
@@ -260,6 +263,7 @@ html { scroll-behavior: smooth; }
 
 <div class="wrap">
   <header class="hero">
+    <a class="home-link" href="./">← Hercules home</a>
     <p class="eyebrow">HERCULES · APP SCREENS</p>
     <h1>Hercules Smart Expense Tracker — App Screens</h1>
     <p class="lede">A quick look at every screen in Hercules.</p>
