@@ -51,9 +51,6 @@ h1 { font-family: var(--font-display); font-size: clamp(32px, 5vw, 46px); line-h
 .sw-call { width: 26px; height: 14px; flex: none; fill: none; stroke: var(--line); stroke-width: 1.4; }
 .sw.warn { background: var(--warn-soft); border: 1px solid var(--warn); }
 .sw.exp { background: var(--exp-soft); border: 1.5px dashed var(--exp); }
-.pill { display: inline-flex; border: 1px solid var(--rule); border-radius: 999px; padding: 3px; background: var(--paper); }
-.pill button { font: inherit; font-size: 13.5px; border: 0; background: none; color: var(--ink-2); padding: 4px 12px; border-radius: 999px; cursor: pointer; }
-.pill button[aria-pressed="true"] { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
 
 /* The diagram scrolls sideways inside its frame on narrow screens; the page itself never does */
 .frame { overflow-x: auto; border: 1px solid var(--rule); border-radius: 16px; background: var(--paper); }
@@ -108,11 +105,23 @@ table.stops { width: 100%; min-width: 620px; border-collapse: collapse; font-siz
 .foot { margin-top: 22px; display: grid; gap: 10px 28px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); font-size: 15px; color: var(--ink-2); }
 .foot h2 { font-size: 15px; color: var(--ink); margin: 0 0 4px; }
 .foot p { margin: 0; }
+/* Light / Dark switch, the same on all four pages: top right, beside the way home. The choice is remembered across the pages */
+.topbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 0 0 18px; min-height: 32px; }
+.topbar.solo { justify-content: flex-end; }
+.topbar .home-link { margin: 0; }
+.theme-switch { display: inline-flex; flex: none; border: 1px solid var(--rule); border-radius: 999px; padding: 3px; background: var(--paper); }
+.theme-switch button { font: inherit; font-size: 13.5px; line-height: 1.4; border: 0; background: none; color: var(--ink-2); padding: 4px 12px; border-radius: 999px; cursor: pointer; }
+.theme-switch button[aria-pressed="true"] { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+.theme-switch button:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
 </style>
+<script>
+/* Apply a remembered light or dark choice before the page is drawn; with none, the device's setting applies */
+(function () { try { var t = localStorage.getItem("hercules-pages-theme"); if (t === "light" || t === "dark") document.documentElement.dataset.theme = t; } catch (e) {} })();
+</script>
 </head>
 <body>
 <div class="wrap">
-  <a class="home-link" href="./">← Hercules home</a>
+  <div class="topbar"><a class="home-link" href="./">← Hercules home</a><div class="theme-switch" role="group" aria-label="Light or dark page"><button type="button" data-theme-choice="light">Light</button><button type="button" data-theme-choice="dark">Dark</button></div></div>
   <p class="eyebrow">HERCULES · HOW IT WORKS · VERSION 1.5.4</p>
   <h1>Logging an expense</h1>
   <p class="lede">This swimlane diagram shows what normally happens when someone logs an expense in Hercules, from typing it on the Log screen to seeing it saved.</p>
@@ -126,9 +135,6 @@ table.stops { width: 100%; min-width: 620px; border-collapse: collapse; font-siz
       <span><i class="sw exp"></i>Only when an experimental feature is switched on</span>
       <span><svg class="sw-call" viewBox="0 0 26 14" aria-hidden="true"><path d="M1,4 H22 M18,1 L22,4 L18,7 M25,10 H4 M8,7 L4,10 L8,13"/></svg>A request and the reply it waits for</span>
     </div>
-    <span class="pill" role="group" aria-label="Page background">
-      <button type="button" data-page="light">Light</button><button type="button" data-page="dark">Dark</button>
-    </span>
   </div>
 
   <div class="frame">
@@ -286,15 +292,26 @@ function draw() {
 new ResizeObserver(draw).observe(d);
 document.fonts?.ready.then(draw);
 
-// Light or dark page, starting from the device's setting
-const root = document.documentElement;
-const buttons = document.querySelectorAll("[data-page]");
-function setPage(mode) {
-  root.dataset.theme = mode;
-  buttons.forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.page === mode)));
-}
-buttons.forEach((b) => b.addEventListener("click", () => setPage(b.dataset.page)));
-setPage(matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+</script>
+<script>
+/* Light / Dark switch: shows the page's current look, and remembers a choice for all four pages */
+(function () {
+  var root = document.documentElement, dark = matchMedia("(prefers-color-scheme: dark)");
+  var buttons = document.querySelectorAll("[data-theme-choice]");
+  function show() {
+    var now = root.dataset.theme || (dark.matches ? "dark" : "light");
+    buttons.forEach(function (b) { b.setAttribute("aria-pressed", String(b.dataset.themeChoice === now)); });
+  }
+  buttons.forEach(function (b) {
+    b.addEventListener("click", function () {
+      root.dataset.theme = b.dataset.themeChoice;
+      try { localStorage.setItem("hercules-pages-theme", b.dataset.themeChoice); } catch (e) {}
+      show();
+    });
+  });
+  dark.addEventListener("change", show);
+  show();
+})();
 </script>
 </body>
 </html>

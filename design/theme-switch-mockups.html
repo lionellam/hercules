@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Light and Dark Switch on the GitHub Pages</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Source+Sans+3:wght@400;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* Mockup: one Light | Dark switch, in the same place on all four GitHub Pages (home, user guide, App Screens, Expense Flow) */
+:root { --page: #ececea; --page-text: #18181b; --page-muted: #5f5f66; }
+* { box-sizing: border-box; margin: 0; }
+body { background: var(--page); color: var(--page-text); font-family: "Source Sans 3", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+main { max-width: 1320px; margin: 0 auto; padding: 36px 16px 80px; }
+h1.t { font-family: "Bricolage Grotesque", system-ui, sans-serif; font-size: 30px; letter-spacing: -0.02em; margin-bottom: 8px; }
+h2.t { font-family: "Bricolage Grotesque", system-ui, sans-serif; font-size: 21px; margin: 44px 0 6px; }
+.intro p, .lead { color: var(--page-muted); max-width: 880px; line-height: 1.55; margin-bottom: 10px; font-size: 16px; }
+.intro b, .lead b { color: var(--page-text); }
+.row { display: flex; flex-wrap: wrap; gap: 26px; align-items: flex-start; margin-top: 16px; }
+figure { margin: 0; }
+figcaption { font-size: 13.5px; color: var(--page-muted); margin-top: 10px; max-width: 640px; line-height: 1.5; }
+figcaption b { color: var(--page-text); }
+.new { outline: 2px dashed #1d4ed8; outline-offset: 3px; border-radius: 999px; }
+
+/* The pages' own tokens, light and dark */
+.pg { --bg: #f7f8f6; --paper: #ffffff; --ink: #16191d; --ink-2: #4a5058; --rule: #dfe3df; --accent: #1d6b52; --accent-soft: #e3efe9;
+      background: var(--bg); color: var(--ink); border-radius: 14px; overflow: hidden; border: 1px solid rgba(0,0,0,.08);
+      box-shadow: 0 1px 2px rgba(0,0,0,.06), 0 10px 28px rgba(0,0,0,.08); font-family: "Source Sans 3", system-ui, sans-serif; }
+.pg.dark { --bg: #111416; --paper: #181c1f; --ink: #e9ece9; --ink-2: #a9b0b5; --rule: #2a3034; --accent: #6cc9a4; --accent-soft: #1d2c27; }
+.desk { width: 640px; max-width: 100%; height: 330px; }
+.mob { width: 300px; height: 330px; border-radius: 26px; }
+.pg .in { padding: 22px 26px; }
+.mob .in { padding: 22px 16px; }
+
+/* The new top row: way home on the left, the switch on the right */
+.toprow { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; min-height: 30px; }
+.toprow.solo { justify-content: flex-end; }
+.home { color: var(--accent); font-weight: 600; font-size: 14px; white-space: nowrap; }
+.pill { display: inline-flex; border: 1px solid var(--rule); border-radius: 999px; padding: 3px; background: var(--paper); flex: none; }
+.pill span { font-size: 12.5px; color: var(--ink-2); padding: 3px 11px; border-radius: 999px; }
+.pill span.on { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+.eyebrow { font-family: "JetBrains Mono", monospace; font-size: 11px; color: var(--accent); letter-spacing: .04em; margin-bottom: 8px; }
+.h { font-family: "Bricolage Grotesque", system-ui, sans-serif; font-weight: 700; letter-spacing: -0.02em; line-height: 1.05; margin-bottom: 10px; }
+.desk .h { font-size: 30px; } .mob .h { font-size: 24px; }
+.ld { color: var(--ink-2); font-size: 13.5px; line-height: 1.45; }
+.ph { height: 9px; border-radius: 5px; background: var(--rule); margin-top: 8px; }
+
+/* Page-specific bits, for context */
+.guide { display: grid; grid-template-columns: 120px 1fr; gap: 22px; }
+.toc { font-size: 11px; color: var(--ink-2); line-height: 1.9; }
+.toc b { display: block; font-size: 10px; letter-spacing: .08em; color: var(--ink-2); margin-bottom: 2px; }
+.cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 16px; }
+.mob .cards { grid-template-columns: 1fr 1fr; }
+.card { height: 74px; border: 1px solid var(--rule); border-radius: 10px; background: var(--paper); }
+.bar { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; font-size: 12px; color: var(--ink-2); margin-top: 12px; }
+.bar .pill span.solid { background: var(--ink); color: var(--bg); font-weight: 600; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 12px; font-size: 11.5px; color: var(--ink-2); margin-top: 12px; }
+.legend i { display: inline-block; width: 14px; height: 9px; border-radius: 3px; border: 1px solid var(--rule); background: var(--paper); margin-right: 5px; vertical-align: -1px; }
+.gone { text-decoration: line-through; opacity: .6; }
+</style>
+</head>
+<body>
+<main>
+  <div class="intro">
+    <h1 class="t">Light and dark switch on the GitHub Pages</h1>
+    <p>One <b>Light | Dark</b> switch, the same on all four pages: the home page, the user guide, App Screens and Expense Flow. It works like the one on Expense Flow today: it starts from the device's setting, and the selected option shows in the soft green. New: the choice is <b>remembered</b> in the browser, so picking Dark on one page keeps the others dark too, until it's changed.</p>
+    <p><b>Placement (option A, desktop and phone):</b> the top of the page, on the same row as "← Hercules home": the way home on the left, the switch on the right. The home page has no way home, so the switch sits alone at the top right. Dashed blue outlines mark the switch.</p>
+  </div>
+
+  <h2 class="t">Home page</h2>
+  <p class="lead">Before: no switch; it only followed the device.</p>
+  <div class="row" id="home"></div>
+
+  <h2 class="t">User guide</h2>
+  <p class="lead">Before: no switch. On wide screens the switch sits in the right-hand column, so it stays clear of Contents on the left.</p>
+  <div class="row" id="guide"></div>
+
+  <h2 class="t">App Screens</h2>
+  <p class="lead">Before: "Background: Light | Dark" in the control bar. That control moves to the top row as the standard switch. <b>App theme</b> (renamed from "Screens": shows the screens in the app's light or dark theme) and <b>Captions</b> stay in the bar, since they're only for this page.</p>
+  <div class="row" id="screens"></div>
+
+  <h2 class="t">Expense Flow</h2>
+  <p class="lead">Before: the switch sat beside the legend above the diagram. It moves up to the top row, like the other pages; the legend keeps the row to itself.</p>
+  <div class="row" id="flow"></div>
+</main>
+<script>
+const pill = (dark) => `<span class="pill new"><span class="${dark ? "" : "on"}">Light</span><span class="${dark ? "on" : ""}">Dark</span></span>`;
+const topRow = (home, dark) => `<div class="toprow${home ? "" : " solo"}">${home ? '<span class="home">← Hercules home</span>' : ""}${pill(dark)}</div>`;
+const frame = (kind, dark, inner, cap) => `<figure><div class="pg ${kind} ${dark ? "dark" : ""}"><div class="in">${inner}</div></div><figcaption>${cap}</figcaption></figure>`;
+
+const pages = {
+  home: (k, d) => `${topRow(false, d)}<div class="eyebrow">HERCULES · SMART EXPENSE TRACKER</div><div class="h">Hercules</div>
+      <div class="ld">Hercules is an intelligent expense tracker web application that is powered by a large language model…</div>
+      <div class="cards"><div class="card"></div><div class="card"></div><div class="card"></div><div class="card"></div></div>`,
+  guide: (k, d) => k === "desk"
+    ? `<div class="guide"><div class="toc"><b>CONTENTS</b>What Hercules is…<br>Getting started<br>How to record…<br>What to type<br>Fixing and deleting<br>History<br>Summary</div>
+        <div>${topRow(true, d)}<div class="eyebrow">HERCULES · USER GUIDE</div><div class="h">How Hercules Smart Expense Tracker Works</div>
+        <div class="ld">Hercules is an intelligent expense tracker web application…</div><div class="ph"></div><div class="ph" style="width:70%"></div></div></div>`
+    : `${topRow(true, d)}<div class="eyebrow">HERCULES · USER GUIDE</div><div class="h">How Hercules Smart Expense Tracker Works</div>
+        <div class="ld">Hercules is an intelligent expense tracker web application…</div><div class="ph"></div>`,
+  screens: (k, d) => `${topRow(true, d)}<div class="eyebrow">HERCULES · APP SCREENS</div><div class="h">Hercules Smart Expense Tracker — App Screens</div>
+      <div class="ld">A quick look at every screen in Hercules.</div>
+      <div class="bar"><span class="new" style="border-radius:8px;padding:0 4px">App theme <span class="pill"><span class="solid">Light</span><span>Dark</span></span></span>
+        <span class="gone">Background</span><span>Captions <span class="pill"><span class="solid">On</span><span>Off</span></span></span></div>`,
+  flow: (k, d) => `${topRow(true, d)}<div class="eyebrow">HERCULES · HOW IT WORKS · VERSION 1.5.4</div><div class="h">Logging an expense</div>
+      <div class="ld">This swimlane diagram shows what normally happens when someone logs an expense…</div>
+      <div class="legend"><span><i></i>A step</span><span><i style="background:#fbf1df"></i>If something goes wrong</span><span><i style="background:#eeebfa"></i>Experimental</span></div>`,
+};
+const caps = {
+  home: ["Desktop, light. The switch alone at the top right, above the label.", "Desktop, dark. Dark is selected.", "Phone. Same place, top right.", "Phone, dark."],
+  guide: ["Desktop, light. The top row is in the reading column; Contents keeps the left column.", "Desktop, dark.", "Phone. Way home on the left, switch on the right; Contents comes further down, after the heading.", "Phone, dark."],
+  screens: ["Desktop, light. The standard switch at the top; the bar keeps App theme (renamed from Screens) and Captions (Background, struck through, is removed).", "Desktop, dark.", "Phone.", "Phone, dark."],
+  flow: ["Desktop, light. The switch moves up from beside the legend.", "Desktop, dark.", "Phone.", "Phone, dark."],
+};
+for (const id of Object.keys(pages)) {
+  document.getElementById(id).innerHTML = [
+    frame("desk", false, pages[id]("desk", false), `<b>${caps[id][0].split(".")[0]}.</b>${caps[id][0].slice(caps[id][0].indexOf(".") + 1)}`),
+    frame("desk", true, pages[id]("desk", true), `<b>${caps[id][1].split(".")[0]}.</b>${caps[id][1].slice(caps[id][1].indexOf(".") + 1)}`),
+    frame("mob", false, pages[id]("mob", false), `<b>${caps[id][2].split(".")[0]}.</b>${caps[id][2].slice(caps[id][2].indexOf(".") + 1)}`),
+    frame("mob", true, pages[id]("mob", true), `<b>${caps[id][3].split(".")[0]}.</b>${caps[id][3].slice(caps[id][3].indexOf(".") + 1)}`),
+  ].join("");
+}
+</script>
+</body>
+</html>

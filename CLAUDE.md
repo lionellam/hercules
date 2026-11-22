@@ -64,6 +64,7 @@ The workflow also publishes `Project Hercules - Expense Flow.html` as `flow.html
 - **Audience:** the guide is for a general reader. Keep it short and plain: explain what people need to use the app, avoid technical terms and fine detail they'd skim past (exact figures, edge cases, how it works inside), and keep the owner's wording when they've edited it by hand.
 - **Content rules:** never name the owner ("the app owner" only where needed, such as asking for an invitation); never name competitor apps; never offer or hint at recovering deleted expenses beyond Undo; update the "Updated" date.
 - **Pictures are HTML mockups drawn in the page, not screenshots.** When the app's look changes, edit the mockup to match.
+- **Light and dark switch:** every page (home, user guide, App Screens, Expense Flow) has the same **Light / Dark** switch at the right of its top row, beside "← Hercules home" (alone on the home page). It starts from the device's setting, and a choice is remembered in the browser under `hercules-pages-theme`, so it carries across all four pages. Give any new page the same switch.
 - **Show the owner a preview before committing** a guide change.
 - **After pushing, check it's live** before saying so: the workflow run succeeded (`gh run list --workflow guide-pages.yml`) and the live page shows the change. If a run fails on a temporary GitHub error, re-run it.
 

@@ -1833,3 +1833,21 @@ Last updated: 22 November 2026
 ### Checks
 - Wide (1,280 pixels): every measured position matches the page before the change (heading and Contents at y=40, first section at y=482, page height 10,952 pixels), and Contents still stays in view while scrolling. Removing the heading's bottom margin on wide screens was needed for this: as a separate grid item its 8-pixel margin no longer merged with the first section heading's.
 - Narrow (800 and 390 pixels): heading, then Contents 28 pixels below "Works on / Updated", then the rule 28 pixels below Contents, then the guide. No sideways scrolling and no errors.
+
+---
+
+## 22 November 2026 — GitHub Pages: One Light / Dark Switch on All Four Pages
+
+### What Was Done
+- The owner noticed the four GitHub Pages handled light and dark differently: the home page and user guide had no switch (they only followed the device), App Screens had a "Background" control in its bar, and Expense Flow had a switch beside its legend. All four now have the same **Light / Dark** switch, working like Expense Flow's.
+- Options discussed with the owner, and their choices (mockups in `design/theme-switch-mockups.html`):
+  - Placement, desktop and phone: the right of the top row, beside "← Hercules home" (option A), rather than inside each page's heading area or a floating button. On the home page, which has no way home, it sits alone at the top right. On the user guide's wide layout the row sits in the reading column, clear of Contents.
+  - The choice is remembered: Expense Flow's switch reset on every reload, which would feel broken with a switch on every page. A choice is now kept in the browser under `hercules-pages-theme` and applied before the page is drawn, so it carries across all four pages; with none saved, the device's setting applies. Only the light or dark choice is stored.
+  - App Screens' drawing control, which switches the drawings between the app's light and dark themes, is renamed from "Screens" to **App theme**, so it isn't confused with the page switch. Its "Background" control is removed. Captions stays.
+- One look for the switch, Expense Flow's (selected option in the soft accent colour), with the same markup and script on each page. Expense Flow's old switch, its styles and script are removed.
+- Documents: Test Plan v1.31 (new S-10). CLAUDE.md records the standard switch so new pages get it. Pages only, so the app version stays at 1.5.4.
+
+### Checks
+- Locally: with nothing saved, the switch shows the device's setting (dark here) and stores nothing. Choosing Light on the home page was remembered; the user guide, App Screens and Expense Flow opened in Light with the switch on the same row as "← Hercules home"; Light held after reloading Expense Flow; choosing Dark there carried back to the home page. On App Screens, **App theme** changed only the drawings, not the page or the saved choice.
+- At 360 pixels wide, the top row fits on all four pages with no sideways scrolling. No errors.
+- Clean-up: the saved choice was removed from the test browser.
