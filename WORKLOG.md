@@ -1990,3 +1990,15 @@ Last updated: 22 November 2026
 
 ### Checks
 - Previewed locally at 1,280 pixels (side by side) and 375 pixels (stacked), in dark, with no sideways scrolling.
+
+---
+
+## 22 November 2026 — Home Page and User Guide: Intro Paragraphs Use the Full Width
+
+### What Was Done
+- The owner asked why the home page's intro paragraph ("Hercules is an intelligent…") didn't use the width of the content area. It was capped at about 54 characters per line (`.lede { max-width: 54ch; }`), a reading-length rule from when the page was built. Options: use the full width (recommended, as it's only a few lines and would line up with the cards), match Application Screens' 64 characters, or leave it. **The owner chose the full width**; the cap is removed.
+- The owner asked for the same on the user guide. There the intro fell under the cap on every paragraph and list item (`p, li { max-width: 68ch; }`). Options: the intro only (recommended), or every paragraph (body text would then run to about 110 characters a line). **The owner chose the intro only**: `.lede` gets `max-width: none`; body text keeps its 68-character cap.
+- Documents only, so the app version stays at 1.5.5. The held `web/README.md` fix stays out of this commit, so Vercel shouldn't rebuild.
+
+### Checks
+- At 1,280 pixels: the home page intro spans exactly the cards' width (two lines instead of four); the guide's intro spans exactly the reading column beside Contents (three lines instead of four), and body paragraphs are unchanged. At 375 pixels neither page changes or scrolls sideways.
