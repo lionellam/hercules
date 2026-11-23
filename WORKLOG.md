@@ -2094,3 +2094,19 @@ Last updated: 23 November 2026
 - The guide's text and captions outside the pictures are identical to before, character for character. The page's Light / Dark switch, the way home and Contents still work; no console errors.
 - At 390 pixels wide: 12 pictures 358 × 603 and Summary (5.1) 358 × 636, as on Application Screens; no sideways scrolling.
 - **Confirmed (23 November 2026):** after the deploy, the owner checked on their phone that the user guide's pictures match Application Screens, with their tab bars.
+
+---
+
+## 23 November 2026 — Version 1.5.7: Sign-in Screen Without the Note Under the Button
+
+### What Was Done
+- At the owner's request, the sign-in screen no longer shows the line under **Sign in with Google** ("Invite only. Your expenses are private to your account."). It went from `web/app/signin/page.tsx` with its now-unused `.fine` style; the "hasn't been invited" notice still shows when it applies.
+- Application Screens 1.1 and 1.2 drop the same line, so the drawings match the app (the user guide has no sign-in picture).
+- Test Plan 1.37 (A-01: no line under the button). The Specification never described the line, so it is unchanged. Version 1.5.7 (a small change), with a CHANGELOG entry.
+- A removal only, so the updated drawings and the local sign-in page served as the preview instead of a separate mockup.
+
+### Checks
+- Locally at 390 pixels: `/signin` shows the logo, name, tagline and **Sign in with Google**, with no line under it; with `?error=AccessDenied`, the "hasn't been invited" notice above the button, and still no line.
+- Application Screens 1.1 and 1.2 no longer contain the line; all 32 phones are still 603 tall.
+- `npx tsc --noEmit` passed, `npx eslint .` passed with the one known warning, and `npm run build` passed.
+- Not run on the demo account: the change is to the signed-out screen, which needs no account.

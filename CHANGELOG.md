@@ -6,6 +6,13 @@ Versions follow [semantic versioning](https://semver.org): **major** for a chang
 
 ---
 
+## 1.5.7 — 23 November 2026
+
+**Improved**
+- The sign-in screen is simpler: the line of small text under **Sign in with Google** is gone.
+
+---
+
 ## 1.5.6 — 22 November 2026
 
 **Improved**

@@ -21,7 +21,6 @@ export default function SignInPage({ searchParams }: PageProps<"/signin">) {
               Sign in with Google
             </button>
           </form>
-          <p className="fine">Invite only. Your expenses are private to your account.</p>
           {devLoginEnabled && (
             <form action={devSignIn} className="dev-form">
               <input name="email" type="email" placeholder="Dev login email" required />

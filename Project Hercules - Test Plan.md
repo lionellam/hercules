@@ -1,7 +1,7 @@
 # Project Hercules — Test Plan: Web App v1
 
 ```
-Version 1.36 · Draft
+Version 1.37 · Draft
 Last Reviewed: 23 November 2026
 Produced with AI Assistance (Claude Code)
 ```
@@ -47,6 +47,7 @@ Produced with AI Assistance (Claude Code)
 | 1.34 | 2026-11-22 | Lionel Lam | New B-20: Intelligent Merchant Selection matches a merchant used only last month, not one from two months ago (1.5.6) |
 | 1.35 | 2026-11-23 | Lionel Lam | New S-12: Application Screens' white screenshot view |
 | 1.36 | 2026-11-23 | Lionel Lam | S-12: every screen is the same size as you step through the white view |
+| 1.37 | 2026-11-23 | Lionel Lam | A-01: no line of text under the Sign in with Google button (1.5.7) |
 
 ---
 
@@ -99,7 +100,7 @@ For each run, note the date, the device and browser, whether it was the local or
 
 | ID | Test | Steps | Expected result |
 |---|---|---|---|
-| A-01 | Sign-in screen | Open the app while signed out | The Hercules sign-in screen shows "Sign in with Google" and "Invite only. Your expenses are private to your account." |
+| A-01 | Sign-in screen | Open the app while signed out | The Hercules sign-in screen shows "Sign in with Google", with no line of text under the button |
 | A-02 | Invited account signs in | Sign in with an allowed email address | The Log screen opens, showing today's date and "Log an expense" |
 | A-03 | Uninvited account is refused | Sign in with an email address that isn't on the allow-list | Back on the sign-in screen with "This account hasn't been invited. Ask the app owner to add your email address." |
 | A-04 | Removing access takes effect at once | While signed in on one device, remove that email address from the allow-list (`npm run allow -- remove <email>`), then reload the app | The sign-in screen appears; the person can't get back in. Add the address again afterwards |
