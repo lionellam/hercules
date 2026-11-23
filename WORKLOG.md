@@ -2060,6 +2060,7 @@ Last updated: 23 November 2026
 ### Checks
 - Previewed locally at 1,280 pixels: all 32 phones 300 × 603; no tab bar away from the bottom of its phone; the white view's zoom identical for screens 1.1, 2.4, 5.1 and 6.1 (1.343 at 1,280 × 900).
 - At 390 pixels wide, 31 phones are 358 × 603. 5.1 (Summary with the pace chart) is 636 tall there, because its chart grows with the drawing's width; this was already so before the change, and the white view always draws it at 300 wide, so it matches the others there.
+- **Confirmed (23 November 2026):** after the deploy, the owner checked on their phone that every Application Screens phone is the same size, including when stepping through the white screenshot view.
 
 ---
 
@@ -2073,6 +2074,7 @@ Last updated: 23 November 2026
 ### Checks
 - Compared the guide before and after, locally at 1,280 pixels: all 13 phones went to 603 tall (488, 515, 542, 553, 565, 575 and 601 before); every phone's text is identical; in each phone, every text item stayed at the same distance from the top, apart from those fixed to the bottom (the review sheet and other bottom sheets), which moved down with it; every tab bar sits at the bottom of its phone.
 - At 390 pixels wide, all 13 are 358 × 603, with no sideways scrolling.
+- **Confirmed (23 November 2026):** after the deploy, the owner checked on their phone that the user guide's phones are all the same size.
 
 ---
 
@@ -2091,3 +2093,4 @@ Last updated: 23 November 2026
 - Locally at 1,280 pixels: each of the 13 pictures identical to its Application Screens drawing (every text item's position, size and colour inside the phone); all 300 × 603; the 9 screens with a tab bar show all four tabs with the right one highlighted, and the 4 with a sheet or confirmation have none, as on Application Screens.
 - The guide's text and captions outside the pictures are identical to before, character for character. The page's Light / Dark switch, the way home and Contents still work; no console errors.
 - At 390 pixels wide: 12 pictures 358 × 603 and Summary (5.1) 358 × 636, as on Application Screens; no sideways scrolling.
+- **Confirmed (23 November 2026):** after the deploy, the owner checked on their phone that the user guide's pictures match Application Screens, with their tab bars.
