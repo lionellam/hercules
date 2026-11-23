@@ -65,7 +65,7 @@ The workflow also publishes `Project Hercules - Expense Flow.html` as `flow.html
 
 - **Audience:** the guide is for a general reader. Keep it short and plain: explain what people need to use the app, avoid technical terms and fine detail they'd skim past (exact figures, edge cases, how it works inside), and keep the owner's wording when they've edited it by hand.
 - **Content rules:** never name the owner ("the app owner" only where needed, such as asking for an invitation); never name competitor apps; never offer or hint at recovering deleted expenses beyond Undo; update the "Updated" date.
-- **Pictures are HTML mockups drawn in the page, not screenshots.** When the app's look changes, edit the mockup to match. Phones in the guide and on Application Screens are all the same height (`min-height: 603px` on `.phone`), so they look like one device; keep the two pages' values the same.
+- **Pictures are HTML mockups drawn in the page, not screenshots.** When the app's look changes, edit the mockup to match. The guide's pictures are copies of Application Screens drawings: each guide phone carries `data-screen="4.1"` (and so on) naming its source, and the guide uses the same drawing styles, icons and tab-bar script as Application Screens. When an Application Screens drawing changes, update its copy in the guide too, and when the guide needs a new picture, draw it on Application Screens first and copy it. All phones are the same height (`min-height: 603px` on `.phone`).
 - **Light and dark switch:** every page (home, user guide, Application Screens, Expense Flow) has the same **Light / Dark** switch at the right of its top row, beside "← Hercules home" (alone on the home page). It starts from the device's setting, and a choice is remembered in the browser under `hercules-pages-theme`, so it carries across all four pages. Give any new page the same switch.
 - **Show the owner a preview before committing** a guide change.
 - **After pushing, check it's live** before saying so: the workflow run succeeded (`gh run list --workflow guide-pages.yml`) and the live page shows the change. If a run fails on a temporary GitHub error, re-run it.
@@ -78,7 +78,7 @@ When asked for a "document integrity check":
 2. Check each document's version header against the last row of its Version History.
 3. Check `web/package.json`, `CHANGELOG.md` and the Git tags (local and on GitHub) agree.
 4. Check the Specification, Architecture, Test Plan, Charter, Project Plan and the Expense Flow diagram all describe the app as it is now: search for wording left from earlier versions, and check new features appear in each relevant document (feature lists, Settings, scope).
-5. Check the user guide, Application Screens and Expense Flow follow the content rules, and that the live Pages copies (home page, guide, screens and flow) match the repository.
+5. Check that each user guide picture (`data-screen`) is identical to its Application Screens drawing. Check the user guide, Application Screens and Expense Flow follow the content rules, and that the live Pages copies (home page, guide, screens and flow) match the repository.
 6. Check the READMEs and that `WORKLOG.md` is dated.
 
 Report findings as a numbered list with proposed fixes, apply them only when asked, then record the check and its fixes in the worklog. Documents-only fixes don't change the app version.

@@ -1,0 +1,804 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- MOCKUP (design/): the user guide with each picture replaced by the matching Application Screens drawing (data-screen). -->
+<title>How Hercules Smart Expense Tracker Works</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+body { margin: 0; }
+[hidden] { display: none !important; }
+/* Layout: a user guide in a reading column with a sticky contents rail on wide screens; app mockups sit in phone frames between the steps. */
+:root {
+  --bg: #f7f8f6;
+  --paper: #ffffff;
+  --ink: #16191d;
+  --ink-2: #4a5058;
+  --rule: #dfe3df;
+  --accent: #1d6b52;
+  --accent-soft: #e3efe9;
+  --warn: #9b2c1f;
+  --code-bg: #eef1ee;
+  --font-display: "Bricolage Grotesque", "Avenir Next", system-ui, sans-serif;
+  --font-body: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+  --frame: #d8ddd9;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #111416; --paper: #181c1f; --ink: #e9ece9; --ink-2: #a9b0b5; --rule: #2a3034;
+    --accent: #6cc9a4; --accent-soft: #1d2c27; --warn: #f08a7c; --code-bg: #1f2528; --frame: #2f363a;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #111416; --paper: #181c1f; --ink: #e9ece9; --ink-2: #a9b0b5; --rule: #2a3034;
+  --accent: #6cc9a4; --accent-soft: #1d2c27; --warn: #f08a7c; --code-bg: #1f2528; --frame: #2f363a;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 17px; line-height: 1.6;
+       padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); -webkit-font-smoothing: antialiased; }
+.wrap { max-width: 1180px; margin: 0 auto; padding-block: 40px 96px; display: grid; grid-template-columns: 210px minmax(0, 1fr); column-gap: 56px; }
+/* Wide screens: Contents runs down the left beside the heading and the guide. Narrow screens stack heading, Contents, guide */
+.wrap > header.hero { grid-column: 2; grid-row: 1; margin-bottom: 0; }
+.wrap > nav.toc { grid-column: 1; grid-row: 1 / span 2; }
+.wrap > main { grid-column: 2; grid-row: 2; }
+nav.toc { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 24px); align-self: start; font-size: 14.5px; }
+nav.toc p { font-family: var(--font-display); font-weight: 700; margin: 0 0 10px; font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-2); }
+nav.toc ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
+nav.toc li.part { margin-top: 14px; font-weight: 700; color: var(--ink); font-size: 13px; letter-spacing: .04em; text-transform: uppercase; }
+nav.toc a { color: var(--ink-2); text-decoration: none; display: block; padding: 3px 0 3px 10px; border-left: 2px solid transparent; }
+nav.toc a:hover, nav.toc a:focus-visible { color: var(--accent); border-left-color: var(--accent); outline: none; }
+main { min-width: 0; }
+header.hero { padding-bottom: 28px; border-bottom: 1px solid var(--rule); margin-bottom: 8px; }
+/* The way back to the home page, at the top of the page */
+.home-link { display: inline-flex; align-items: center; gap: 6px; margin: 0 0 18px; color: var(--accent); font-weight: 600; font-size: 15px; text-decoration: none; }
+.home-link:hover, .home-link:focus-visible { text-decoration: underline; text-underline-offset: 3px; }
+.eyebrow { font-family: var(--font-mono); font-size: 12.5px; color: var(--accent); letter-spacing: .04em; margin: 0 0 14px; }
+h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; letter-spacing: -0.015em; }
+h1 { font-size: clamp(36px, 6vw, 56px); line-height: 1.05; margin: 0 0 18px; font-weight: 700; }
+h2 { font-size: 30px; line-height: 1.15; margin: 64px 0 14px; font-weight: 700; scroll-margin-top: 24px; }
+h3 { font-size: 21px; margin: 36px 0 8px; font-weight: 500; scroll-margin-top: 24px; }
+.part-title { font-family: var(--font-mono); font-size: 13px; text-transform: uppercase; letter-spacing: .08em; color: var(--ink-2); margin: 80px 0 -40px; padding-top: 22px; border-top: 3px solid var(--ink); }
+p, li { max-width: 68ch; }
+.lede { font-size: 20px; color: var(--ink-2); line-height: 1.5; margin: 0 0 22px; max-width: none; }
+.meta { display: flex; flex-wrap: wrap; gap: 8px 22px; font-size: 14.5px; color: var(--ink-2); }
+.meta b { color: var(--ink); font-weight: 600; }
+a { color: var(--accent); }
+code, .mono { font-family: var(--font-mono); font-size: .86em; background: var(--code-bg); padding: 1px 5px; border-radius: 4px; }
+.formula { font-family: var(--font-mono); font-size: 15px; background: var(--accent-soft); color: var(--ink); padding: 14px 18px; border-radius: 10px; max-width: 68ch; overflow-x: auto; }
+.callout { border-left: 3px solid var(--accent); padding: 4px 0 4px 16px; margin: 20px 0; max-width: 68ch; color: var(--ink-2); }
+.callout b { color: var(--ink); }
+
+.principles { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; margin: 20px 0; }
+.principle { background: var(--paper); border: 1px solid var(--rule); border-radius: 12px; padding: 16px 18px; min-width: 0; }
+.principle h4 { font-family: var(--font-display); font-size: 17px; margin: 0 0 6px; font-weight: 700; }
+.principle p { margin: 0; color: var(--ink-2); font-size: 15.5px; line-height: 1.5; }
+
+.table-wrap { overflow-x: auto; margin: 18px 0; border: 1px solid var(--rule); border-radius: 12px; background: var(--paper); }
+table { border-collapse: collapse; width: 100%; font-size: 15px; }
+th, td { text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+th { font-family: var(--font-body); font-weight: 700; font-size: 13px; letter-spacing: .04em; text-transform: uppercase; color: var(--ink-2); background: var(--code-bg); }
+tr:last-child td { border-bottom: none; }
+td.num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.red { color: var(--warn); font-weight: 600; }
+
+.steps { list-style: none; padding: 0; margin: 22px 0; counter-reset: step; display: grid; gap: 14px; max-width: 72ch; }
+.steps li { counter-increment: step; display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 12px; max-width: none; }
+.steps li::before { content: counter(step); font-family: var(--font-mono); font-size: 13px; width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; background: var(--paper); border: 1px solid var(--rule); color: var(--ink-2); margin-top: 1px; }
+.steps li.ai::before { background: var(--accent); color: var(--paper); border-color: var(--accent); }
+.steps b { font-weight: 700; }
+.tag-ai { font-family: var(--font-mono); font-size: 11.5px; color: var(--accent); border: 1px solid var(--accent); border-radius: 4px; padding: 0 5px; margin-left: 6px; white-space: nowrap; }
+
+.boundary { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 18px 0; }
+.boundary > div { background: var(--paper); border: 1px solid var(--rule); border-radius: 12px; padding: 16px 18px; min-width: 0; }
+.boundary h4 { margin: 0 0 8px; font-family: var(--font-display); font-size: 16px; }
+.boundary .yes h4 { color: var(--accent); }
+.boundary ul { margin: 0; padding-left: 18px; color: var(--ink-2); font-size: 15.5px; }
+
+.decisions { display: grid; gap: 10px; margin: 16px 0 8px; }
+.decision { display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 12px; background: var(--paper); border: 1px solid var(--rule); border-radius: 12px; padding: 14px 16px; }
+.decision .n { font-family: var(--font-mono); font-size: 13px; color: var(--ink-2); padding-top: 3px; }
+.decision h4 { margin: 0 0 4px; font-size: 16.5px; font-weight: 700; font-family: var(--font-body); }
+.decision p { margin: 0; color: var(--ink-2); font-size: 15.5px; line-height: 1.5; }
+.decision.old { opacity: .7; }
+.decision.old h4 { text-decoration: line-through; }
+
+.figure-row { display: flex; flex-wrap: wrap; gap: 28px; align-items: flex-start; margin: 26px 0 10px; }
+figure { margin: 0; min-width: 0; }
+/* A pair of drawings: both phones share one row, so they're always the same height, with the captions underneath */
+.figure-row.pair { display: grid; grid-template-columns: repeat(auto-fill, 300px); gap: 28px; }
+.figure-row.pair > figure { display: grid; grid-template-rows: subgrid; grid-row: span 2; row-gap: 0; }
+figcaption { font-size: 14px; color: var(--ink-2); margin-top: 10px; max-width: 320px; line-height: 1.45; }
+figcaption b { color: var(--ink); }
+.diagram { overflow-x: auto; background: var(--paper); border: 1px solid var(--rule); border-radius: 12px; padding: 16px; margin: 20px 0; }
+.diagram svg { display: block; min-width: 640px; width: 100%; height: auto; }
+
+.costs { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; margin: 18px 0; }
+.cost { background: var(--paper); border: 1px solid var(--rule); border-radius: 12px; padding: 14px 16px; }
+.cost .v { font-family: var(--font-display); font-size: 24px; font-weight: 700; }
+.cost .k { font-size: 14px; color: var(--ink-2); }
+ul.plain { padding-left: 20px; }
+ul.plain li { margin-bottom: 6px; }
+footer { margin-top: 72px; padding-top: 18px; border-top: 1px solid var(--rule); font-size: 14px; color: var(--ink-2); }
+
+/* ---------- App mockups: copied from Application Screens (keep them the same; each phone's data-screen names its source) ---------- */
+/* Every phone is the same height, the tallest drawing's, so they look like one device on the page and in the white view;
+   the extra space goes to the screen's content, with the tab bar staying at the bottom. Raise it if a drawing grows taller */
+.phone { width: 300px; max-width: 100%; min-height: 603px; border-radius: 26px; border: 1px solid var(--frame); overflow: hidden; display: flex; flex-direction: column;
+         box-shadow: 0 1px 2px rgba(0,0,0,.05), 0 10px 26px rgba(0,0,0,.07); }
+.m { --m-bg: #fff; --m-text: #18181b; --m-muted: #71717a; --m-line: #e7e7e4; --m-soft: #f4f4f5; --m-edge: #8e8e96; --m-bar: #18181b; --m-bad: #b91c1c; --m-good: #15803d; --m-hl: #fde68a; --m-off: #d4d4d8;
+     --m-pie-1: #2a78d6; --m-pie-2: #eb6834; --m-pie-3: #1baf7a; --m-pie-4: #eda100; --m-pie-5: #e87ba4; --m-pie-rest: #a1a1aa; --m-g-border: #747775;
+     background: var(--m-bg); color: var(--m-text); font-family: Inter, -apple-system, system-ui, sans-serif; font-size: 13px; line-height: 1.35; color-scheme: light;
+     position: relative; flex: 1; display: flex; flex-direction: column; min-height: 560px; }
+.m.dark, body.mdark .m { --m-bg: #18181b; --m-text: #f4f4f5; --m-muted: #a1a1aa; --m-line: #27272a; --m-soft: #27272a; --m-edge: #71717a; --m-bar: #f4f4f5; --m-bad: #f87171; --m-good: #4ade80; --m-hl: #713f12; --m-off: #3f3f46;
+     --m-pie-1: #3987e5; --m-pie-2: #d95926; --m-pie-3: #199e70; --m-pie-4: #c98500; --m-pie-5: #d55181; --m-pie-rest: #71717a; --m-g-border: #8e918f; color-scheme: dark; }
+.m .fade { opacity: .35; }
+.m .top { padding: 20px 16px 12px; border-bottom: 1px solid var(--m-line); }
+.m .top.flat { border-bottom: none; }
+.m h5 { font-size: 22px; font-weight: 700; letter-spacing: -0.02em; margin: 0; }
+.m .sub { color: var(--m-muted); font-size: 11.5px; }
+.m .body { padding: 0 16px 16px; }
+.m .input { position: relative; background: var(--m-soft); border-radius: 12px; padding: 10px 11px 8px; margin-top: 12px; }
+.m .input .txt { font-size: 14px; min-height: 36px; padding-right: 24px; }
+.m .input .txt.ph { color: var(--m-muted); }
+.m .input .row { display: flex; justify-content: flex-end; }
+.m .mx { position: absolute; top: 9px; right: 9px; width: 17px; height: 17px; border-radius: 50%; background: var(--m-muted); color: var(--m-bg); display: grid; place-items: center; font-size: 11px; font-weight: 700; line-height: 1; }
+.m .btn { display: inline-grid; place-items: center; height: 32px; padding: 0 14px; border-radius: 9px; font-size: 12.5px; font-weight: 600; background: var(--m-bar); color: var(--m-bg); }
+.m .btn.ghost { background: none; color: var(--m-muted); }
+.m .btn.red { background: none; color: var(--m-bad); box-shadow: inset 0 0 0 1.2px var(--m-bad); }
+.m .btn.small { height: 26px; padding: 0 10px; font-size: 11px; background: var(--m-soft); color: var(--m-text); }
+.m .btn.dim { opacity: .35; }
+.m .spent { display: flex; justify-content: space-between; align-items: baseline; margin-top: 10px; color: var(--m-muted); font-size: 12px; }
+.m .spent b { color: var(--m-text); font-size: 13.5px; font-variant-numeric: tabular-nums; }
+.m .h { margin-top: 18px; font-size: 10.5px; color: var(--m-muted); font-weight: 600; letter-spacing: .05em; }
+.m .item { display: flex; justify-content: space-between; align-items: center; padding: 9px 0; border-bottom: 1px solid var(--m-line); }
+.m .item .nm { font-weight: 500; font-size: 13px; }
+.m .item .c { color: var(--m-muted); font-size: 11px; margin-top: 1px; }
+.m .item .a { font-weight: 600; font-variant-numeric: tabular-nums; }
+.m .edited { font-size: 9.5px; color: var(--m-muted); border: 1px solid var(--m-line); border-radius: 5px; padding: 0 4px; margin-left: 5px; }
+.m .day { font-size: 10px; font-weight: 600; color: var(--m-muted); letter-spacing: .06em; margin: 14px 0 2px; }
+.m .empty { color: var(--m-muted); font-size: 12px; margin-top: 8px; }
+.m .toast { color: var(--m-good); font-size: 12px; font-weight: 500; text-align: center; margin-top: 8px; }
+.m .offline { background: var(--m-soft); color: var(--m-muted); font-size: 11px; text-align: center; padding: 7px 8px; border-radius: 10px; margin-top: 12px; }
+.m .notice { background: var(--m-soft); font-size: 11.5px; padding: 9px 11px; border-radius: 10px; margin-bottom: 12px; text-align: left; }
+.m .cat { margin-top: 13px; }
+.m .cat.open { background: var(--m-soft); margin: 13px -10px 0; padding: 10px 10px 8px; border-radius: 12px; }
+.m .cat-top { display: flex; justify-content: space-between; gap: 8px; font-size: 12px; margin-bottom: 5px; align-items: baseline; }
+.m .cat-top .n { color: var(--m-muted); font-size: 10.5px; margin-left: 4px; }
+.m .cat-top strong { font-variant-numeric: tabular-nums; }
+.m .cat-top .chev { width: 11px; height: 11px; color: var(--m-muted); margin-left: 3px; vertical-align: -1px; }
+.m .of { color: var(--m-muted); font-weight: 400; }
+.m .meter { position: relative; }
+.m .track { height: 5px; background: var(--m-soft); border-radius: 3px; overflow: hidden; }
+.m .cat.open .track { background: var(--m-line); }
+.m .fill { height: 100%; background: var(--m-bar); border-radius: 3px; }
+.m .fill.over { background: var(--m-bad); }
+.m .tick { position: absolute; top: -3px; width: 2px; height: 11px; background: var(--m-text); transform: translateX(-1px); border-radius: 1px; box-shadow: 0 0 0 1.5px var(--m-bg); }
+.m .cat.open .tick { box-shadow: 0 0 0 1.5px var(--m-soft); }
+.m .pace { margin-top: 5px; font-size: 10.5px; color: var(--m-muted); }
+.m .pace b { color: var(--m-text); font-weight: 600; }
+.m .pace.bad, .m .pace.bad b { color: var(--m-bad); }
+.m .seg { display: flex; background: var(--m-soft); border-radius: 10px; padding: 3px; margin-top: 12px; }
+.m .seg span { flex: 1; text-align: center; padding: 6px 0; border-radius: 8px; font-size: 12px; color: var(--m-muted); }
+.m .seg span.on { background: var(--m-bg); color: var(--m-text); box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+.m .big { font-size: 26px; font-weight: 700; letter-spacing: -0.02em; margin-top: 2px; font-variant-numeric: tabular-nums; }
+.m .dayline { font-size: 11px; color: var(--m-muted); margin-top: 3px; }
+.m .dayline b { color: var(--m-text); }
+.m .chart { position: relative; margin: 10px -10px 0; }
+.m .chart svg { display: block; width: 100%; height: auto; overflow: visible; }
+.m .ctip { position: absolute; background: var(--m-bg); border: 1px solid var(--m-line); border-radius: 10px; padding: 6px 9px; font-size: 10.5px; line-height: 1.45; box-shadow: 0 4px 14px rgba(0,0,0,.1); }
+.m .ctip .k { color: var(--m-muted); }
+.m .daily { font-size: 11px; color: var(--m-muted); margin-top: 6px; }
+.m .month { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; font-weight: 600; font-size: 13px; }
+.m .month i { font-style: normal; background: var(--m-soft); width: 28px; height: 28px; border-radius: 8px; display: grid; place-items: center; color: var(--m-text); }
+.m .card-t { font-size: 10px; font-weight: 600; color: var(--m-muted); letter-spacing: .06em; margin-bottom: 8px; }
+.m .m-raw { color: var(--m-muted); font-size: 11px; font-style: italic; margin-bottom: 6px; }
+.m .amt { display: flex; align-items: baseline; gap: 5px; margin-bottom: 8px; }
+.m .amt .pick { font-weight: 600; background: var(--m-soft); border-radius: 6px; padding: 2px 6px; font-size: 13px; align-self: center; }
+.m .amt b { font-size: 26px; font-weight: 700; }
+.m .field { display: flex; justify-content: space-between; padding: 8px 0; border-top: 1px solid var(--m-line); font-size: 12.5px; }
+.m .field > span:first-child { color: var(--m-muted); }
+.m .field > span:last-child { font-weight: 500; }
+.m .field .ph { color: var(--m-muted); font-weight: 400; }
+.m .ico { width: 13px; height: 13px; color: var(--m-muted); margin-left: 6px; vertical-align: -2px; }
+.m .box { margin-top: 10px; }
+.m .box label { display: block; font-size: 11px; color: var(--m-muted); margin-bottom: 4px; }
+.m .box div { background: var(--m-soft); border-radius: 9px; padding: 8px 10px; font-size: 13px; }
+.m .box div.ph { color: var(--m-muted); }
+.m .acts { display: flex; justify-content: space-between; align-items: center; margin-top: 14px; }
+.m .acts .r { display: flex; gap: 4px; }
+.m .tabs { display: flex; border-top: 1px solid var(--m-line); padding: 7px 0 10px; margin-top: auto; background: var(--m-bg); }
+.m .tabs span { flex: 1; text-align: center; font-size: 9.5px; color: var(--m-muted); font-weight: 500; }
+.m .tabs span.on { color: var(--m-text); }
+.m .tabs svg { display: block; width: 18px; height: 18px; margin: 0 auto 2px; }
+.m .m-pie { display: flex; align-items: center; gap: 12px; margin-top: 10px; }
+.m .m-pie svg { flex: 0 0 92px; width: 92px; height: 92px; }
+.m .m-pie path { stroke: var(--m-bg); stroke-width: 1.5; }
+.m .m-pie ul { flex: 1; list-style: none; margin: 0; padding: 0; min-width: 0; }
+.m .m-pie li { display: flex; gap: 6px; align-items: center; font-size: 10.5px; padding: 1.5px 0; }
+.m .m-pie .sw { width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0; }
+.m .m-pie .nm { flex: 1; min-width: 0; }
+.m .m-pie .pct { color: var(--m-muted); font-variant-numeric: tabular-nums; }
+.m .signin { flex: 1; display: flex; flex-direction: column; justify-content: space-between; padding: 92px 22px 34px; text-align: center; }
+.m .logo { width: 52px; height: 52px; border-radius: 15px; background: var(--m-bar); color: var(--m-bg); display: grid; place-items: center; font-size: 24px; font-weight: 700; margin: 0 auto 14px; }
+.m .signin h6 { font-size: 24px; font-weight: 700; letter-spacing: -0.02em; margin: 0 0 4px; }
+.m .gbtn { height: 42px; border-radius: 12px; border: 1px solid var(--m-g-border); display: flex; align-items: center; justify-content: center; gap: 8px; font-weight: 500; font-size: 13.5px; }
+.m .fine { color: var(--m-muted); font-size: 10.5px; margin-top: 10px; }
+.m .cat-row { display: flex; justify-content: space-between; align-items: center; padding: 9px 0; border-bottom: 1px solid var(--m-line); font-size: 13px; }
+.m .cat-row > span:last-child { color: var(--m-muted); font-size: 11.5px; }
+.m .cat-row > span.set { color: var(--m-text); font-weight: 600; font-size: 13px; font-variant-numeric: tabular-nums; }
+.m .cat-row .c { color: var(--m-muted); font-size: 11px; }
+.m .mretired { display: flex; justify-content: space-between; padding: 14px 0 6px; border-bottom: 1px solid var(--m-line); font-size: 10px; font-weight: 600; color: var(--m-muted); letter-spacing: .06em; }
+.m .note { color: var(--m-muted); font-size: 10.5px; margin-top: 10px; }
+.m .msearch { display: flex; align-items: center; gap: 7px; margin-top: 10px; background: var(--m-soft); border-radius: 10px; height: 34px; padding: 0 8px 0 10px; font-size: 13px; }
+.m .msearch svg { width: 14px; height: 14px; color: var(--m-muted); flex-shrink: 0; }
+.m .msearch .q { flex: 1; }
+.m .msearch .q.ph { color: var(--m-muted); }
+.m .msearch .mx { position: static; }
+.m .mcount { display: flex; justify-content: space-between; color: var(--m-muted); font-size: 11.5px; margin-top: 12px; }
+.m .mcount b { color: var(--m-text); font-variant-numeric: tabular-nums; }
+.m mark { background: var(--m-hl); color: inherit; border-radius: 3px; padding: 0 1px; }
+.m .nores { text-align: center; padding: 48px 10px 0; color: var(--m-muted); font-size: 12px; }
+.m .nores b { display: block; color: var(--m-text); font-size: 13.5px; margin-bottom: 4px; }
+.m .back { color: var(--m-muted); font-size: 11.5px; font-weight: 500; margin-bottom: 4px; }
+.m .sh { font-size: 10px; font-weight: 600; color: var(--m-muted); letter-spacing: .06em; margin: 16px 0 4px; }
+.m .srow { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--m-line); }
+.m .srow .ic { width: 26px; height: 26px; border-radius: 8px; background: var(--m-soft); display: grid; place-items: center; flex-shrink: 0; }
+.m .srow .ic svg { width: 14px; height: 14px; }
+.m .srow .tx { flex: 1; min-width: 0; }
+.m .srow .t { font-weight: 500; font-size: 13px; }
+.m .srow .d { color: var(--m-muted); font-size: 10.5px; margin-top: 1px; }
+.m .srow .chev { color: var(--m-muted); font-size: 15px; }
+.m .srow.out .t { color: var(--m-bad); }
+.m .ver { text-align: center; color: var(--m-muted); font-size: 10px; margin-top: 18px; line-height: 1.6; }
+.m .mtotal { display: flex; justify-content: space-between; align-items: flex-end; gap: 8px; }
+.m .mcsv { display: inline-flex; align-items: center; gap: 4px; height: 26px; padding: 0 9px; border-radius: 8px; box-shadow: inset 0 0 0 1.2px var(--m-edge); font-size: 11px; font-weight: 600; margin-bottom: 4px; white-space: nowrap; }
+.m .mcsv svg { width: 12px; height: 12px; }
+.m .ni { position: relative; display: flex; align-items: center; gap: 5px; font-size: 11.5px; color: var(--m-muted); margin-top: 3px; }
+.m .ni .q { width: 14px; height: 14px; border-radius: 50%; border: 1.2px solid var(--m-muted); display: grid; place-items: center; font-size: 9px; font-weight: 700; }
+.m .ni .q.on { background: var(--m-text); border-color: var(--m-text); color: var(--m-bg); }
+.m .ni-tip { position: absolute; left: 0; top: calc(100% + 8px); z-index: 2; width: 220px; padding: 8px 11px; border-radius: 10px; background: var(--m-text); color: var(--m-bg); font-size: 11px; line-height: 1.4; }
+.m .ni-tip::before { content: ""; position: absolute; top: -4px; left: 147px; width: 9px; height: 9px; background: var(--m-text); transform: rotate(45deg); }
+.m .clist { margin-top: 4px; }
+.m .clist div { display: flex; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--m-line); font-size: 13px; }
+.m .clist b { width: 36px; font-weight: 600; }
+.m .clist span { flex: 1; }
+.m .clist .on span { font-weight: 600; }
+.m .xrow { display: flex; gap: 12px; align-items: flex-start; padding: 12px 0; border-bottom: 1px solid var(--m-line); }
+.m .xrow .t { font-weight: 600; font-size: 13px; }
+.m .xrow .d { color: var(--m-muted); font-size: 11px; margin-top: 2px; }
+.m .switch { position: relative; width: 40px; height: 24px; border-radius: 12px; background: var(--m-off); flex-shrink: 0; margin-left: auto; }
+.m .switch::after { content: ""; position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,.25); }
+.m .switch.on { background: var(--m-bar); }
+.m .switch.on::after { transform: translateX(16px); background: var(--m-bg); }
+.m .sk { height: 30px; border-radius: 8px; background: var(--m-soft); margin-top: 10px; }
+/* Sheets that slide up over the screen */
+.m .m-sheet { position: absolute; left: 0; right: 0; bottom: 0; z-index: 3; background: var(--m-bg); border-radius: 18px 18px 0 0; padding: 16px 16px 18px; box-shadow: 0 -6px 22px rgba(0,0,0,.16); }
+.m.dark .m-sheet, body.mdark .m .m-sheet { box-shadow: 0 -6px 22px rgba(0,0,0,.5); border-top: 1px solid var(--m-line); }
+.m .m-sheet.under { opacity: .5; bottom: 120px; transform: scale(.96); }
+.m .m-confirm-t { font-size: 15px; font-weight: 700; }
+.m .m-confirm-b { color: var(--m-muted); font-size: 11.5px; margin-top: 5px; }
+.m .m-confirm-b + .m-confirm-b { margin-top: 6px; }
+.m .m-ref { margin-top: 10px; border: 1px solid var(--m-line); border-radius: 10px; padding: 8px 10px; display: flex; justify-content: space-between; font-size: 12px; }
+.m .m-ref .c { color: var(--m-muted); font-size: 10.5px; margin-top: 1px; }
+.m .m-red { margin-top: 12px; background: var(--m-bad); color: #fff; border-radius: 10px; text-align: center; padding: 9px 0; font-weight: 600; font-size: 12.5px; }
+.m .m-save { margin-top: 12px; background: var(--m-bar); color: var(--m-bg); border-radius: 10px; text-align: center; padding: 9px 0; font-weight: 600; font-size: 12.5px; }
+.m .m-cancel { text-align: center; color: var(--m-muted); font-weight: 600; font-size: 12.5px; padding: 9px 0 0; }
+.m .m-undo { margin: auto 12px 10px; background: var(--m-bar); color: var(--m-bg); border-radius: 10px; padding: 9px 12px; display: flex; justify-content: space-between; font-size: 12px; box-shadow: 0 4px 14px rgba(0,0,0,.18); }
+.m .m-undo + .tabs { margin-top: 0; }
+.m .m-undo b { text-decoration: underline; text-underline-offset: 2px; }
+.m .scrim { position: absolute; inset: 0; background: rgba(0,0,0,.18); z-index: 2; }
+
+@media (max-width: 960px) {
+  .wrap { grid-template-columns: minmax(0, 1fr); gap: 0; }
+  .wrap > header.hero, .wrap > nav.toc, .wrap > main { grid-column: 1; grid-row: auto; }
+  /* The rule moves from under the heading to under Contents, so it separates Contents from the guide */
+  .wrap > header.hero { border-bottom: none; padding-bottom: 0; }
+  .wrap > main { border-top: 1px solid var(--rule); }
+  nav.toc { position: static; border: 1px solid var(--rule); border-radius: 12px; background: var(--paper); padding: 14px 16px; margin: 28px 0; }
+  nav.toc ol { grid-template-columns: 1fr 1fr; column-gap: 16px; }
+  nav.toc li.part { grid-column: 1 / -1; }
+}
+@media (max-width: 560px) {
+  body { font-size: 16px; }
+  .boundary { grid-template-columns: 1fr; }
+  nav.toc ol { grid-template-columns: 1fr; }
+  h2 { font-size: 26px; }
+  .phone { width: 100%; }
+  figcaption { max-width: none; }
+  .figure-row.pair { grid-template-columns: minmax(0, 1fr); }
+}
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+html { scroll-behavior: smooth; }
+/* Light / Dark switch, the same on all four pages: top right, beside the way home. The choice is remembered across the pages */
+.topbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 0 0 18px; min-height: 32px; }
+.topbar.solo { justify-content: flex-end; }
+.topbar .home-link { margin: 0; }
+.theme-switch { display: inline-flex; flex: none; border: 1px solid var(--rule); border-radius: 999px; padding: 3px; background: var(--paper); }
+.theme-switch button { font: inherit; font-size: 13.5px; line-height: 1.4; border: 0; background: none; color: var(--ink-2); padding: 4px 12px; border-radius: 999px; cursor: pointer; }
+.theme-switch button[aria-pressed="true"] { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+.theme-switch button:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+</style>
+<script>
+/* Apply a remembered light or dark choice before the page is drawn; with none, the device's setting applies */
+(function () { try { var t = localStorage.getItem("hercules-pages-theme"); if (t === "light" || t === "dark") document.documentElement.dataset.theme = t; } catch (e) {} })();
+</script>
+</head>
+<body>
+<!-- Icons used by the mockups -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-log" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-history" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h10"/></symbol>
+    <symbol id="i-summary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 20V10M12 20V4M18 20v-6"/></symbol>
+    <symbol id="i-settings" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></symbol>
+    <symbol id="i-pen" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></symbol>
+    <symbol id="i-cal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="16" rx="2.5"/><path d="M3 9.5h18M8 2.5v4M16 2.5v4"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></symbol>
+    <symbol id="i-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></symbol>
+    <symbol id="i-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></symbol>
+    <symbol id="i-chev-up" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 15l6-6 6 6"/></symbol>
+    <symbol id="i-tag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h7l9 9-6 6-9-9V5zM8 9h.01"/></symbol>
+    <symbol id="i-coin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="9" cy="9" r="6"/><path d="M15.5 9.5a6 6 0 1 1-6 6"/></symbol>
+    <symbol id="i-flask" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6M10 3v6L4.5 18.5A2 2 0 0 0 6.2 21.5h11.6a2 2 0 0 0 1.7-3L14 9V3M7 15h10"/></symbol>
+    <symbol id="i-user" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></symbol>
+    <symbol id="i-google" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.430 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.570-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.160 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></symbol>
+  </defs>
+</svg>
+<div class="wrap">
+  <header class="hero" id="overview">
+    <div class="topbar"><a class="home-link" href="./">← Hercules home</a><div class="theme-switch" role="group" aria-label="Light or dark page"><button type="button" data-theme-choice="light">Light</button><button type="button" data-theme-choice="dark">Dark</button></div></div>
+    <p class="eyebrow">HERCULES · USER GUIDE</p>
+    <h1>How Hercules Smart Expense Tracker Works</h1>
+    <p class="lede">Hercules is an intelligent expense tracker web application that is powered by AI, which is used to interpret how you might log your expense in natural language, and saves your expenses with only a few convenient taps.</p>
+    <div class="meta">
+      <span><b>Works on:</b> phone, tablet and computer</span>
+      <span><b>Updated:</b> 23 November 2026</span>
+    </div>
+  </header>
+
+  <nav class="toc" aria-label="Contents">
+    <p>Contents</p>
+    <ol>
+      <li><a href="#about">What Hercules is, and what makes it different</a></li>
+      <li><a href="#start">Getting started with Hercules</a></li>
+      <li><a href="#log">How to record an expense</a></li>
+      <li><a href="#writing">Natural language inputs</a></li>
+      <li><a href="#fix">Editing and deleting expense records</a></li>
+      <li><a href="#history">History</a></li>
+      <li><a href="#summary">Summary</a></li>
+      <li><a href="#pace">Spending pace</a></li>
+      <li><a href="#settings">Settings</a></li>
+      <li><a href="#categories">Categories &amp; budgets</a></li>
+    </ol>
+  </nav>
+
+  <main>
+
+    <h2 id="about">What Hercules is, and what makes it different</h2>
+    <p><b>Logging your expenses should be a seamless affair.</b> Instead of painstakingly populating a set of fields for every purchase, you type it the way you'd say it, such as "had coffee at Starbucks for $4.90", and Hercules takes care of the rest. Hercules then keeps your spending organised by day, month and category, and tracks it against any monthly budgets you set.</p>
+
+    <h3>Unique selling points</h3>
+    <div class="principles">
+      <div class="principle"><h4>Logging your expenses should be easy</h4><p>Most expense tracker apps make you go through the trouble of filling in a form to record your expenses. That friction is why expense logs fall behind. Hercules turns one line of everyday text into a complete record.</p></div>
+      <div class="principle"><h4>Negligible cost</h4><p>Many budgeting apps charge a recurring fee. By contrast, Hercules runs on the hosting service of your choice (which can be set up for a very low cost), and the AI it uses costs only a few cents a month.</p></div>
+      <div class="principle"><h4>Actionable budgets</h4><p>Rather than only telling you at the end of the month that you overspent, Summary shows mid-month whether each budget is on pace, and roughly what you can spend a day for the rest of the month.</p></div>
+    </div>
+
+    <h2 id="start">Getting started with Hercules</h2>
+    <ol class="steps">
+      <li><span><b>Launch the Hercules web app</b>, and tap <b>Sign in with Google</b>.</span></li>
+      <li><span><b>Optionally, add Hercules to your home screen</b> so it opens like an app.<br>iPhone (Safari): tap the Share button, then <b>Add to Home Screen</b>.<br>Android (Chrome): tap the ⋮ menu, then <b>Add to Home screen</b> or <b>Install app</b>.</span></li>
+      <li><span><b>Choose a light or dark theme</b> if you like. The app also follows your phone's setting; to change that, go to <b>Settings</b> → Appearance.</span></li>
+    </ol>
+
+    <h2 id="log">How to record an expense</h2>
+    <ol class="steps">
+      <li><span><b>Type out your expense</b> in the <b>Log your expense</b> text box, in your own words.</span></li>
+      <li class="ai"><span><b>Tap Parse.</b><span class="tag-ai">AI</span> Haiku*, the language model that reads your text, picks out the amount, category, merchant and date.</span></li>
+      <li><span><b>Check the review card.</b> It opens over the Log screen. Every field can be changed: tap the amount, pick a different category, fix the date, or add a remark.</span></li>
+      <li><span><b>Tap Save expense.</b> The expense appears straight away under <b>Today</b>, and in History and Summary app screens.</span></li>
+    </ol>
+    <p>*Note: You may choose your own language model to perform the natural language parsing. However, do note that the parsing performance may vary.</p>
+
+
+    <div class="figure-row pair">
+      <figure>
+        <div class="phone" data-screen="2.2"><div class="m">
+        <div class="top">
+          <div class="sub">Saturday, 7 November</div>
+          <h5>Log an expense</h5>
+          <div class="input"><div class="txt">Lunch at Ya Kun for $4.50</div><span class="mx">×</span><div class="row"><span class="btn">Parse</span></div></div>
+          <div class="spent"><span>Spent today</span><b>$39.50</b></div>
+        </div>
+        <div class="body">
+          <div class="h">TODAY</div>
+          <div class="item"><div><div class="nm">Toast Box</div><div class="c">Food &amp; Dining</div></div><div class="a">30.00</div></div>
+          <div class="item"><div><div class="nm">MRT</div><div class="c">Transport</div></div><div class="a">9.50</div></div>
+          <div class="h">TODAY BY CATEGORY</div>
+          <div class="cat"><div class="cat-top"><span>Food &amp; Dining<span class="n">1</span></span><strong>30.00</strong></div><div class="track"><div class="fill" style="width:100%"></div></div></div>
+          <div class="cat"><div class="cat-top"><span>Transport<span class="n">1</span></span><strong>9.50</strong></div><div class="track"><div class="fill" style="width:32%"></div></div></div>
+        </div>
+        <div class="tabs" data-on="log"></div>
+      </div></div>
+        <figcaption><b>Log.</b> Type out your expense in natural language, and tap the <b>Parse</b> button.</figcaption>
+      </figure>
+      <figure>
+        <div class="phone" data-screen="2.4"><div class="m">
+        <div class="fade">
+          <div class="top">
+            <div class="sub">Saturday, 7 November</div>
+            <h5>Log an expense</h5>
+            <div class="input"><div class="txt">Lunch at Ya Kun for $4.50</div><span class="mx">×</span><div class="row"><span class="btn dim">Parse</span></div></div>
+          </div>
+        </div>
+        <div class="scrim"></div>
+        <div class="m-sheet">
+          <div class="card-t">REVIEW BEFORE SAVING</div>
+          <div class="m-raw">“Lunch at Ya Kun for $4.50”</div>
+          <div class="amt"><span class="pick">SGD ▾</span><b>4.50</b></div>
+          <div class="field"><span>Category</span><span>Food &amp; Dining<svg class="ico"><use href="#i-pen"/></svg></span></div>
+          <div class="field"><span>Merchant</span><span>Ya Kun<svg class="ico"><use href="#i-pen"/></svg></span></div>
+          <div class="field"><span>Date</span><span>07/11/2026<svg class="ico"><use href="#i-cal"/></svg></span></div>
+          <div class="field"><span>Remarks</span><span><span class="ph">Optional</span><svg class="ico"><use href="#i-pen"/></svg></span></div>
+          <div class="m-save">Save expense</div>
+          <div class="m-cancel">Discard</div>
+        </div>
+      </div></div>
+        <figcaption><b>Human in the loop.</b> Preview your expense and make corrections in the <b>Review before saving</b> sheet if required, before saving it.</figcaption>
+      </figure>
+    </div>
+
+    <h2 id="writing">Natural language inputs</h2>
+    <p>Type out your expense just the way you'd say it. Include the amount, and any supporting details, such as (but not necessarily limited to) the merchant/retailer where the purchase was made, reason for the purchase, and date of transaction, if applicable. </p>
+    <p>For example:</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>You type</th><th>Amount</th><th>Category</th><th>Merchant</th><th>Date</th></tr></thead>
+      <tbody>
+        <tr><td>lunch at Ya Kun 4.50</td><td class="num">$4.50</td><td>Food &amp; Dining</td><td>Ya Kun</td><td>today</td></tr>
+        <tr><td>grab home 14.20 yesterday</td><td class="num">$14.20</td><td>Transport</td><td>Grab</td><td>yesterday</td></tr>
+        <tr><td>NTUC groceries $62.30 on 3 Nov</td><td class="num">$62.30</td><td>Groceries</td><td>NTUC</td><td>3 November</td></tr>
+        <tr><td>movie with the kids last Saturday 38</td><td class="num">$38.00</td><td>Entertainment</td><td>—</td><td>last Saturday</td></tr>
+      </tbody>
+    </table></div>
+    <ul class="plain">
+      <li><b>Dates:</b> no date means today. "Yesterday", "last Friday" and "3 Nov" all work.</li>
+      <li><b>Currency:</b> your default currency (Singapore dollars unless you change it in <b>Settings</b> → <b>Currency</b>) unless you name another, such as "450 baht" or "USD 120". A plain "$" means your default if it's a dollar currency (such as SGD or AUD), otherwise US dollars. To change the currency before saving, tap the code beside the amount, such as <b>SGD ▾</b>. Totals count only your default currency; others are shown beside them as "Not included", without converting.</li>
+      <li><b>Categories:</b> The language model chooses the best category from your own list of expense categories. If nothing fits, it uses <b>Other</b>. Refer to the <b>Categories & budgets</b> section for more details.</li>
+      <li><b>Remarks:</b> useful details that don't fit elsewhere, such as "dinner with mum and dad", or "from the bake sale", go into Remarks.</li>
+    </ul>
+
+    <h2 id="fix">Editing and deleting expense records</h2>
+    <p>Tap on any expense item in the <b>Log</b> or <b>History</b> screens to open it. Make the necessary changes in the <b>Edit expense</b> card, then tap the <b>Save</b> button. Updated expense items will show an <b>edited</b> tag.</p>
+    <div class="figure-row pair"><figure><div class="phone" data-screen="4.1"><div class="m">
+        <div class="top">
+          <h5>History</h5>
+          <div class="month"><i>‹</i><span>November 2026</span><i style="opacity:.35">›</i></div>
+          <div class="msearch"><svg><use href="#i-search"/></svg><span class="q ph">Search expenses</span></div>
+        </div>
+        <div class="body">
+          <div class="day">SAT, 7 NOV</div>
+          <div class="item"><div><div class="nm">Toast Box</div><div class="c">Food &amp; Dining</div></div><div class="a">30.00</div></div>
+          <div class="item"><div><div class="nm">MRT</div><div class="c">Transport</div></div><div class="a">9.50</div></div>
+          <div class="day">FRI, 6 NOV</div>
+          <div class="item"><div><div class="nm">Golden Village</div><div class="c">Entertainment<span class="edited">edited</span></div></div><div class="a">80.00</div></div>
+          <div class="item"><div><div class="nm">Saizeriya</div><div class="c">Food &amp; Dining</div></div><div class="a">35.00</div></div>
+          <div class="day">THU, 5 NOV</div>
+          <div class="item"><div><div class="nm">Polyclinic</div><div class="c">Health &amp; Medical</div></div><div class="a">45.00</div></div>
+        </div>
+        <div class="tabs" data-on="history"></div>
+      </div></div><figcaption><b>Tap an expense item</b> in the <b>Log</b> or <b>History</b> screens to open it in the <b>Edit expense</b> card. Expenses you've changed show an <b>edited</b> tag.</figcaption></figure><figure><div class="phone" data-screen="3.1"><div class="m">
+        <div class="fade">
+          <div class="top flat"><h5>History</h5><div class="month"><i>‹</i><span>November 2026</span><i style="opacity:.35">›</i></div></div>
+        </div>
+        <div class="scrim"></div>
+        <div class="m-sheet">
+          <div class="card-t">EDIT EXPENSE</div>
+          <div class="m-raw">“saizeriya dinner 35”</div>
+          <div class="amt"><span class="pick">SGD ▾</span><b>35.00</b></div>
+          <div class="field"><span>Category</span><span>Food &amp; Dining<svg class="ico"><use href="#i-pen"/></svg></span></div>
+          <div class="field"><span>Merchant</span><span>Saizeriya<svg class="ico"><use href="#i-pen"/></svg></span></div>
+          <div class="field"><span>Date</span><span>06/11/2026<svg class="ico"><use href="#i-cal"/></svg></span></div>
+          <div class="field"><span>Remarks</span><span>Dinner with Mum<svg class="ico"><use href="#i-pen"/></svg></span></div>
+          <div class="acts"><span class="btn red">Delete</span><span class="r"><span class="btn ghost">Cancel</span><span class="btn">Save</span></span></div>
+        </div>
+      </div></div><figcaption><b>Edit expense.</b> Change any field, then tap on the <b>Save</b> button. Tap on the <b>Delete</b> button to delete the expense item.</figcaption></figure></div>
+    <p>To delete an existing expense record, tap on an expense item, and in the <b>Edit expense</b> card that slides in from the bottom, tap on the <b>Delete</b> button. The <b>Delete this expense?</b> confirmation dialog will appear. To delete, tap on the <b>Delete expense</b> button. After deleting, a <b>notification toast</b> will appear at the bottom of the screen for about five seconds. Tapping on <b>Undo</b> reverses the deletion.</p>
+    <div class="figure-row pair">
+      <figure>
+        <div class="phone" data-screen="3.3"><div class="m">
+        <div class="fade">
+          <div class="top flat"><h5>History</h5><div class="month"><i>‹</i><span>November 2026</span><i style="opacity:.35">›</i></div></div>
+          <div class="body">
+            <div class="day">SAT, 7 NOV</div>
+            <div class="item"><div><div class="nm">Toast Box</div><div class="c">Food &amp; Dining</div></div><div class="a">30.00</div></div>
+            <div class="item"><div><div class="nm">MRT</div><div class="c">Transport</div></div><div class="a">9.50</div></div>
+          </div>
+        </div>
+        <div class="scrim"></div>
+        <div class="m-sheet">
+          <div class="m-confirm-t">Delete this expense?</div>
+          <div class="m-confirm-b">It will be removed from History and Summary.</div>
+          <div class="m-ref"><div><div>Saizeriya</div><div class="c">Food &amp; Dining · 6 Nov</div></div><b>35.00</b></div>
+          <div class="m-red">Delete expense</div>
+          <div class="m-cancel">Cancel</div>
+        </div>
+      </div></div>
+        <figcaption><b>Delete confirmation</b>, before removing the expense record.</figcaption>
+      </figure>
+      <figure>
+        <div class="phone" data-screen="3.4"><div class="m">
+        <div class="top flat"><h5>History</h5><div class="month"><i>‹</i><span>November 2026</span><i style="opacity:.35">›</i></div><div class="msearch"><svg><use href="#i-search"/></svg><span class="q ph">Search expenses</span></div></div>
+        <div class="body">
+          <div class="day">SAT, 7 NOV</div>
+          <div class="item"><div><div class="nm">Toast Box</div><div class="c">Food &amp; Dining</div></div><div class="a">30.00</div></div>
+          <div class="item"><div><div class="nm">MRT</div><div class="c">Transport</div></div><div class="a">9.50</div></div>
+          <div class="day">FRI, 6 NOV</div>
+          <div class="item"><div><div class="nm">Golden Village</div><div class="c">Entertainment</div></div><div class="a">80.00</div></div>
+          <div class="day">THU, 5 NOV</div>
+          <div class="item"><div><div class="nm">Polyclinic</div><div class="c">Health &amp; Medical</div></div><div class="a">45.00</div></div>
+        </div>
+        <div class="m-undo"><span>Expense deleted</span><b>Undo</b></div>
+        <div class="tabs" data-on="history"></div>
+      </div></div>
+        <figcaption><b>A notification toast</b> appears for about five seconds, offering the option to undo the delete, in case you tapped the <b>Delete expense</b> button by mistake.</figcaption>
+      </figure>
+    </div>
+
+    <h2 id="history">History</h2>
+    <p>The History screen lists every expense recorded by month, and grouped by day. Use the arrows beside the month to go back to earlier months. Tap any expense to edit or delete it.</p>
+    <p><b>Searching.</b> Type in the search box to search for expenses recorded for the month.</p>
+    <div class="figure-row pair">
+      <figure>
+        <div class="phone" data-screen="4.1"><div class="m">
+        <div class="top">
+          <h5>History</h5>
+          <div class="month"><i>‹</i><span>November 2026</span><i style="opacity:.35">›</i></div>
+          <div class="msearch"><svg><use href="#i-search"/></svg><span class="q ph">Search expenses</span></div>
+        </div>
+        <div class="body">
+          <div class="day">SAT, 7 NOV</div>
+          <div class="item"><div><div class="nm">Toast Box</div><div class="c">Food &amp; Dining</div></div><div class="a">30.00</div></div>
+          <div class="item"><div><div class="nm">MRT</div><div class="c">Transport</div></div><div class="a">9.50</div></div>
+          <div class="day">FRI, 6 NOV</div>
+          <div class="item"><div><div class="nm">Golden Village</div><div class="c">Entertainment<span class="edited">edited</span></div></div><div class="a">80.00</div></div>
+          <div class="item"><div><div class="nm">Saizeriya</div><div class="c">Food &amp; Dining</div></div><div class="a">35.00</div></div>
+          <div class="day">THU, 5 NOV</div>
+          <div class="item"><div><div class="nm">Polyclinic</div><div class="c">Health &amp; Medical</div></div><div class="a">45.00</div></div>
+        </div>
+        <div class="tabs" data-on="history"></div>
+      </div></div>
+        <figcaption><b>History.</b> Expenses are grouped by day.</figcaption>
+      </figure>
+      <figure>
+        <div class="phone" data-screen="4.2"><div class="m">
+        <div class="top">
+          <h5>History</h5>
+          <div class="month"><i>‹</i><span>November 2026</span><i style="opacity:.35">›</i></div>
+          <div class="msearch"><svg><use href="#i-search"/></svg><span class="q">grab</span><span class="mx">×</span></div>
+        </div>
+        <div class="body">
+          <div class="mcount"><span>3 results</span><b>$52.80</b></div>
+          <div class="day">SUN, 8 NOV</div>
+          <div class="item"><div><div class="nm"><mark>Grab</mark></div><div class="c">Transport</div></div><div class="a">26.40</div></div>
+          <div class="day">FRI, 6 NOV</div>
+          <div class="item"><div><div class="nm"><mark>Grab</mark></div><div class="c">Transport</div></div><div class="a">18.90</div></div>
+          <div class="day">MON, 2 NOV</div>
+          <div class="item"><div><div class="nm"><mark>Grab</mark></div><div class="c">Transport</div></div><div class="a">7.50</div></div>
+        </div>
+        <div class="tabs" data-on="history"></div>
+      </div></div>
+        <figcaption><b>Searching.</b> In this example, entering the search term "grab" filters expense items for the month matching this term, highlights the matches, and even sums up these matching expenses.</figcaption>
+      </figure>
+    </div>
+
+    <h2 id="summary">Summary</h2>
+    <p>The <b>Summary</b> page shows the amount that you have spent for the current month-to-date, as well as that of the previous month.</p>
+    <ul class="plain">
+      <li><b>The total</b> spent so far in the current month.</li>
+      <li><b>Category</b> indicates the amount spent by expense category.</li>
+      <li><b>Share of spend</b>, a pie chart showing the distribution of your spending for the month.</li>
+      <li><b>Spending pace</b>, shown only for the current month, and only for expense categories with a defined budget. More information in the next section.</li>
+      <li><b>Export your expenses</b>, by tapping on the <b>CSV</b> button. This will export that month's expenses as a CSV file.</li>
+    </ul>
+    <div class="figure-row pair">
+      <figure>
+        <div class="phone" data-screen="5.1"><div class="m">
+        <div class="top">
+          <h5>Summary</h5>
+          <div class="seg"><span class="on">November</span><span>October</span></div>
+          <div class="mtotal"><div><div style="margin-top:12px" class="sub">Spent so far this month</div><div class="big">$3,184.40</div></div><span class="mcsv"><svg><use href="#i-down"/></svg>CSV</span></div>
+          <div class="dayline"><b>Day 7 of 30</b> · Sat, 7 Nov</div>
+        </div>
+        <div class="body">
+          <div class="cat"><div class="cat-top"><span>Rent<span class="n">1</span></span><span><strong>2,000.00</strong> <span class="of">of 2,000.00</span><svg class="chev"><use href="#i-chev"/></svg></span></div><div class="meter"><div class="track"><div class="fill" style="width:100%"></div></div><div class="tick" style="left:23.3%"></div></div><div class="pace"><b>Budget used</b> · $0.00 left</div></div>
+          <div class="cat"><div class="cat-top"><span>Shopping<span class="n">1</span></span><strong>640.00</strong></div><div class="track"><div class="fill" style="width:32%"></div></div></div>
+          <div class="cat open"><div class="cat-top"><span>Food &amp; Dining<span class="n">7</span></span><span><strong>210.00</strong> <span class="of">of 500.00</span><svg class="chev"><use href="#i-chev-up"/></svg></span></div><div class="meter"><div class="track"><div class="fill" style="width:42%"></div></div><div class="tick" style="left:23.3%"></div></div><div class="pace"><b>$93.33 over pace</b> · $290.00 left, about $12.61/day</div>
+            <div class="chart"><svg viewBox="0 0 359 200" role="img" aria-label="Burn-up chart: $210 spent by 7 November against $116.67 expected">
+              <line x1="6" x2="353" y1="176" y2="176" stroke="var(--m-muted)" stroke-opacity=".5"/>
+              <line x1="6" x2="353" y1="36.7" y2="36.7" stroke="var(--m-muted)" stroke-opacity=".35"/>
+              <text x="353" y="31.7" text-anchor="end" font-size="10.5" fill="var(--m-muted)">Budget 500</text>
+              <line x1="6" y1="176" x2="353" y2="36.7" stroke="var(--m-muted)" stroke-width="1.5" stroke-dasharray="4 3"/>
+              <line x1="87" x2="87" y1="16" y2="176" stroke="var(--m-muted)" stroke-opacity=".7"/>
+              <text x="87" y="13" text-anchor="middle" font-size="10.5" fill="var(--m-muted)">Today</text>
+              <path d="M6 176 L17.6 176 L17.6 170.8 L29.1 170.8 L29.1 161.9 L40.7 161.9 L40.7 155 L52.3 155 L52.3 143.5 L63.8 143.5 L63.8 135.6 L75.4 135.6 L75.4 125.9 L87 125.9 L87 117.5 L87 176 Z" fill="var(--m-bar)" fill-opacity=".09"/>
+              <path d="M6 176 L17.6 176 L17.6 170.8 L29.1 170.8 L29.1 161.9 L40.7 161.9 L40.7 155 L52.3 155 L52.3 143.5 L63.8 143.5 L63.8 135.6 L75.4 135.6 L75.4 125.9 L87 125.9 L87 117.5" fill="none" stroke="var(--m-bar)" stroke-width="2" stroke-linejoin="round"/>
+              <text x="13.6" y="192" text-anchor="start" font-size="10.5" fill="var(--m-muted)">1 Nov</text>
+              <text x="121.7" y="192" text-anchor="middle" font-size="10.5" fill="var(--m-muted)">10</text>
+              <text x="237.3" y="192" text-anchor="middle" font-size="10.5" fill="var(--m-muted)">20</text>
+              <text x="353" y="192" text-anchor="end" font-size="10.5" fill="var(--m-muted)">30</text>
+              <circle cx="87" cy="117.5" r="4.5" fill="var(--m-bar)" stroke="var(--m-soft)" stroke-width="2"/>
+              <text x="96" y="110.5" text-anchor="start" font-size="11.5" font-weight="600" fill="var(--m-text)">$210.00</text>
+            </svg></div>
+          </div>
+        </div>
+        <div class="tabs" data-on="summary"></div>
+      </div></div>
+        <figcaption><b>Summary for the current month.</b> Tapping on the <b>CSV</b> button downloads the month's expenses to-date. In this example, Food &amp; Dining is open to show its burn-up chart.</figcaption>
+      </figure>
+      <figure>
+        <div class="phone" data-screen="5.3"><div class="m">
+        <div class="top">
+          <h5>Summary</h5>
+          <div class="seg"><span class="on">November</span><span>October</span></div>
+          <div class="mtotal"><div><div style="margin-top:12px" class="sub">Spent so far this month</div><div class="big">$3,184.40</div></div><span class="mcsv"><svg><use href="#i-down"/></svg>CSV</span></div>
+          <div class="dayline"><b>Day 7 of 30</b> · Sat, 7 Nov</div>
+        </div>
+        <div class="body">
+          <div class="cat"><div class="cat-top"><span>Food &amp; Dining<span class="n">7</span></span><span><strong>210.00</strong> <span class="of">of 500.00</span><svg class="chev"><use href="#i-chev"/></svg></span></div><div class="meter"><div class="track"><div class="fill" style="width:42%"></div></div><div class="tick" style="left:23.3%"></div></div><div class="pace"><b>$93.33 over pace</b> · $290.00 left, about $12.61/day</div></div>
+          <div class="cat"><div class="cat-top"><span>Entertainment<span class="n">2</span></span><span><strong>128.00</strong> <span class="of">of 100.00</span><svg class="chev"><use href="#i-chev"/></svg></span></div><div class="meter"><div class="track"><div class="fill over" style="width:100%"></div></div><div class="tick" style="left:23.3%"></div></div><div class="pace bad"><b>Over budget by $28.00</b></div></div>
+          <div class="cat"><div class="cat-top"><span>Transport<span class="n">3</span></span><span><strong>30.00</strong> <span class="of">of 150.00</span><svg class="chev"><use href="#i-chev"/></svg></span></div><div class="meter"><div class="track"><div class="fill" style="width:20%"></div></div><div class="tick" style="left:23.3%"></div></div><div class="pace"><b>On pace</b> · $120.00 left, about $5.22/day</div></div>
+          <div class="h" style="margin-top:20px">SHARE OF SPEND</div>
+          <div class="m-pie"><svg viewBox="0 0 100 100" role="img" aria-label="Share of spend pie chart"><path d="M50 50 L50.00 0.00 A50 50 0 1 1 13.97 84.67 Z" fill="var(--m-pie-1)"/><path d="M50 50 L13.97 84.67 A50 50 0 0 1 6.04 26.18 Z" fill="var(--m-pie-2)"/><path d="M50 50 L6.04 26.18 A50 50 0 0 1 19.35 10.49 Z" fill="var(--m-pie-3)"/><path d="M50 50 L19.35 10.49 A50 50 0 0 1 30.20 4.09 Z" fill="var(--m-pie-4)"/><path d="M50 50 L30.20 4.09 A50 50 0 0 1 38.27 1.40 Z" fill="var(--m-pie-5)"/><path d="M50 50 L38.27 1.40 A50 50 0 0 1 50.00 0.00 Z" fill="var(--m-pie-rest)"/></svg><ul><li><span class="sw" style="background:var(--m-pie-1)"></span><span class="nm">Rent</span><span class="pct">63%</span></li><li><span class="sw" style="background:var(--m-pie-2)"></span><span class="nm">Shopping</span><span class="pct">20%</span></li><li><span class="sw" style="background:var(--m-pie-3)"></span><span class="nm">Food &amp; Dining</span><span class="pct">7%</span></li><li><span class="sw" style="background:var(--m-pie-4)"></span><span class="nm">Entertainment</span><span class="pct">4%</span></li><li><span class="sw" style="background:var(--m-pie-5)"></span><span class="nm">Utilities</span><span class="pct">3%</span></li><li><span class="sw" style="background:var(--m-pie-rest)"></span><span class="nm">Everything else (3)</span><span class="pct">4%</span></li></ul></div>
+        </div>
+        <div class="tabs" data-on="summary"></div>
+      </div></div>
+        <figcaption><b>Share of spend</b> is a representation of your expenses by categories, in a pie chart, broken down by percentage of total spend.</figcaption>
+      </figure>
+    </div>
+
+    <h2 id="pace">Spending pace</h2>
+    <p>The Spending pace answers one question: <b>am I spending ahead of, or below my budgeted rate?</b> It assumes you spread each budget evenly over the course of the month. For example, with a $500 food budget in a 30-day month, that's about $16.67 a day, so by day 7 you'd expect to have spent about $116.67.</p>
+    <p>The small upright marker on each budgeted bar shows that expected amount for that day. If your bar has extended past the marker, you're ahead of your spending pace. The note under the bar tells you which of these applies:</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Note</th><th>What it means</th></tr></thead>
+      <tbody>
+        <tr><td><b>On pace</b></td><td>You're close to the expected amount, within 5% of the budget either way.</td></tr>
+        <tr><td><b>$X over pace</b></td><td>You've spent $X more than expected by today. You may want to slow down, but you're still within budget.</td></tr>
+        <tr><td><b>$X under pace</b></td><td>You've spent $X less than expected. There's room to spare.</td></tr>
+        <tr><td><b>Budget used</b></td><td>You've spent exactly the budget, for example rent paid in full.</td></tr>
+        <tr><td><span class="red">Over budget by $X</span></td><td>You've gone past the whole month's budget. This is the only note shown in red.</td></tr>
+      </tbody>
+    </table></div>
+    <p>After the note you'll see what's left, and roughly how much a day you can spend for the rest of the month, for example "$290.00 left, about $12.61/day".</p>
+    <div class="callout"><b>A big payment early in the month isn't overspending.</b> For example, if you pay all of your rent on the 1st day of the month, it shows "Budget used", and not "over pace". Early in the month, a single large purchase may result in that category being flagged as "over pace"; this is normal and expected behavior.</div>
+    <p><b>The burn-up chart.</b> Tap a budgeted category to open its chart. The solid line is your running total, stepping up on each day you spent. The dashed line is the budget spread evenly across the month, and the upright line is today. If the solid line is above the dashed one, you're over pace. Touch or drag across the chart to see any day's figures, or open <b>Daily figures</b> underneath for the same numbers in a table.</p>
+
+    <h2 id="settings">Settings</h2>
+    <p>The <b>Settings</b> tab, with the gear icon, holds the things you set once and rarely change:</p>
+    <ul class="plain">
+      <li><b>Categories &amp; budgets:</b> add, rename and retire categories, and set monthly budgets. See the next section.</li>
+      <li><b>Currency:</b> your default currency, used whenever what you type doesn't name one. Choose from 20 common currencies; tap one and it's saved. Totals and budgets count only your default currency, so they're never a mix. Expenses in other currencies are still listed, with their code (like "USD 12.50"), and shown under the total as "Not included"; tap the <b>?</b> beside it for a reminder why. Nothing is converted. Switching asks first; switching back restores your totals exactly. Changing it doesn't change past expenses.</li>
+      <li><b>Appearance:</b> <b>System</b> follows your phone's light or dark setting; <b>Light</b> or <b>Dark</b> keeps the app that way. Your choice is remembered on that device.</li>
+      <li><b>Experimental features:</b> new features still being tried out, each with a switch to turn it on or off. They may change or be removed. Switches are remembered on that device only, and everything starts off. When there's nothing to try, the page says so.</li>
+      <li><b>Account:</b> the email address you're signed in with, and <b>Sign out</b>, which asks you to confirm first.</li>
+      <li><b>Version:</b> at the bottom, the app's version number and when it was last updated. Handy to mention if you report a problem.</li>
+    </ul>
+    <div class="figure-row pair">
+      <figure>
+        <div class="phone" data-screen="6.1"><div class="m">
+        <div class="top"><h5>Settings</h5></div>
+        <div class="body">
+          <div class="sh">SPENDING</div>
+          <div class="srow"><span class="ic"><svg><use href="#i-tag"/></svg></span><span class="tx"><div class="t">Categories &amp; budgets</div><div class="d">14 categories · 5 with a budget</div></span><span class="chev">›</span></div>
+          <div class="srow"><span class="ic"><svg><use href="#i-coin"/></svg></span><span class="tx"><div class="t">Currency</div><div class="d">SGD · Singapore dollar</div></span><span class="chev">›</span></div>
+          <div class="sh">APPEARANCE</div>
+          <div class="seg"><span class="on">System</span><span>Light</span><span>Dark</span></div>
+          <div class="sh">EXPERIMENTAL</div>
+          <div class="srow"><span class="ic"><svg><use href="#i-flask"/></svg></span><span class="tx"><div class="t">Experimental features</div><div class="d">1 of 1 on</div></span><span class="chev">›</span></div>
+          <div class="sh">ACCOUNT</div>
+          <div class="srow"><span class="ic"><svg><use href="#i-user"/></svg></span><span class="tx"><div class="t">Signed in</div><div class="d">you@gmail.com</div></span></div>
+          <div class="srow out"><span class="tx"><div class="t">Sign out</div></span></div>
+          <div class="ver">Version X.Y.Z (abc1234)<br>Last updated DD Mon YYYY, HH:MM</div>
+        </div>
+        <div class="tabs" data-on="settings"></div>
+      </div></div>
+        <figcaption><b>Settings.</b> Categories &amp; budgets, Currency and Experimental features each open their own screen; tap "‹ Settings" to return to the <b>Settings</b> screen.</figcaption>
+      </figure>
+      <figure>
+        <div class="phone" data-screen="6.2"><div class="m">
+        <div class="top"><h5>Settings</h5></div>
+        <div class="body fade">
+          <div class="sh">SPENDING</div>
+          <div class="srow"><span class="tx"><div class="t">Categories &amp; budgets</div><div class="d">14 categories · 5 with a budget</div></span><span class="chev">›</span></div>
+          <div class="srow"><span class="tx"><div class="t">Currency</div><div class="d">SGD · Singapore dollar</div></span><span class="chev">›</span></div>
+          <div class="sh">APPEARANCE</div>
+          <div class="seg"><span class="on">System</span><span>Light</span><span>Dark</span></div>
+        </div>
+        <div class="scrim"></div>
+        <div class="m-sheet">
+          <div class="m-confirm-t">Sign out?</div>
+          <div class="m-confirm-b">You'll need to sign in with Google again to use Hercules on this device. Your expenses stay safe in your account.</div>
+          <div class="m-red">Sign out</div>
+          <div class="m-cancel">Cancel</div>
+        </div>
+      </div></div>
+        <figcaption><b>Sign out confirmation.</b> Tap <b>Cancel</b>, or anywhere outside, to stay signed in.</figcaption>
+      </figure>
+    </div>
+
+    <h2 id="categories">Categories &amp; budgets</h2>
+    <p>Everyone starts with 14 categories, from Food &amp; Dining to Travel, including <b>Other</b>. Go to <b>Settings</b> → <b>Categories &amp; budgets</b> to:</p>
+    <ul class="plain">
+      <li><b>Add a category:</b> tap <b>Add category</b>, give it a name, and optionally a monthly budget.</li>
+      <li><b>Rename it or change its budget:</b> tap the category. A new name shows on all its past expenses too.</li>
+      <li><b>Set a monthly budget</b> in your default currency (Singapore dollars unless you change it), or leave it blank. Budgets turn on the "x of budget" bars and spending pace on Summary.</li>
+      <li><b>Retire a category</b> you no longer use: open it and tap <b>Retire</b>. It stops being offered for new expenses, but past expenses keep it. After retiring, an Undo bar appears for a few seconds.</li>
+      <li><b>Bring one back:</b> retired categories are listed under <b>Retired</b> at the bottom. Tap <b>Restore</b>. Adding a category with the same name as a retired one also restores it.</li>
+    </ul>
+    <p><b>Other</b> is the catch-all and can't be renamed or retired. You can have up to 50 categories in use.</p>
+    <div class="figure-row">
+      <figure>
+        <div class="phone" data-screen="7.1"><div class="m">
+        <div class="top">
+          <div class="back">‹ Settings</div>
+          <h5>Categories &amp; budgets</h5>
+          <div class="sub" style="margin-top:3px">Monthly budgets are optional and in SGD.</div>
+          <div style="margin-top:10px"><span class="btn">Add category</span></div>
+        </div>
+        <div class="body">
+          <div class="cat-row"><span>Food &amp; Dining</span><span class="set">500.00</span></div>
+          <div class="cat-row"><span>Transport</span><span class="set">150.00</span></div>
+          <div class="cat-row"><span>Groceries</span><span class="set">400.00</span></div>
+          <div class="cat-row"><span>Entertainment</span><span class="set">100.00</span></div>
+          <div class="cat-row"><span>Utilities</span><span>No budget</span></div>
+          <div class="cat-row"><span>Health &amp; Medical</span><span>No budget</span></div>
+          <div class="cat-row"><span>Rent</span><span class="set">2,000.00</span></div>
+          <div class="cat-row"><span>Other</span><span>No budget</span></div>
+          <div class="mretired"><span>RETIRED (1)</span><span>SHOW</span></div>
+        </div>
+        <div class="tabs" data-on="settings"></div>
+      </div></div>
+        <figcaption><b>Categories &amp; budgets.</b> Budgets are optional. Tap a category to rename it, change its budget or retire it. Retired categories wait under <b>Retired</b> at the bottom.</figcaption>
+      </figure>
+    </div>
+
+  </main>
+</div>
+
+<script>
+/* Light / Dark switch: shows the page's current look, and remembers a choice for all four pages */
+(function () {
+  var root = document.documentElement, dark = matchMedia("(prefers-color-scheme: dark)");
+  var buttons = document.querySelectorAll("[data-theme-choice]");
+  function show() {
+    var now = root.dataset.theme || (dark.matches ? "dark" : "light");
+    buttons.forEach(function (b) { b.setAttribute("aria-pressed", String(b.dataset.themeChoice === now)); });
+  }
+  buttons.forEach(function (b) {
+    b.addEventListener("click", function () {
+      root.dataset.theme = b.dataset.themeChoice;
+      try { localStorage.setItem("hercules-pages-theme", b.dataset.themeChoice); } catch (e) {}
+      show();
+    });
+  });
+  dark.addEventListener("change", show);
+  show();
+})();
+</script>
+<script>
+// Tab bars: <div class="tabs" data-on="log"> becomes the four tabs with one highlighted
+const TABS = [["log", "Log"], ["history", "History"], ["summary", "Summary"], ["settings", "Settings"]];
+document.querySelectorAll(".tabs[data-on]").forEach((bar) => {
+  bar.innerHTML = TABS.map(([id, label]) =>
+    `<span${id === bar.dataset.on ? ' class="on"' : ""}><svg><use href="#i-${id}"/></svg>${label}</span>`).join("");
+});
+</script>
+</body>
+</html>

@@ -2073,3 +2073,21 @@ Last updated: 23 November 2026
 ### Checks
 - Compared the guide before and after, locally at 1,280 pixels: all 13 phones went to 603 tall (488, 515, 542, 553, 565, 575 and 601 before); every phone's text is identical; in each phone, every text item stayed at the same distance from the top, apart from those fixed to the bottom (the review sheet and other bottom sheets), which moved down with it; every tab bar sits at the bottom of its phone.
 - At 390 pixels wide, all 13 are 358 × 603, with no sideways scrolling.
+
+---
+
+## 23 November 2026 — User Guide: Pictures Copied From Application Screens
+
+### What Was Done
+- The owner noticed the guide's pictures were missing details, such as the tab bar. Compared with Application Screens: 5 of the guide's 13 drawings had no tab bar where the app shows one (History, Searching, Summary, Share of spend, Categories & budgets), and one had only the History tab. The guide's drawings were simplified sketches drawn separately, early on.
+- At the owner's choice (option A, over loading the drawings live from `screens.html`), every guide picture is now a copy of the matching Application Screens drawing: Log 2.2, Review before saving 2.4, Tap an expense item 4.1, Edit expense 3.1, Delete confirmation 3.3, Undo toast 3.4, History 4.1, Searching 4.2, Summary 5.1, Share of spend 5.3, Settings 6.1, Sign out 6.2, Categories & budgets 7.1. The guide takes Application Screens' drawing styles, icons and tab-bar script in place of its own; each phone carries `data-screen` naming its source. The guide's text and captions are unchanged.
+- CLAUDE.md: the guide's pictures are copies of Application Screens drawings (update the copy when the source changes; new guide pictures are drawn on Application Screens first), and the document integrity check now compares each `data-screen` picture with its source. Mockup: `design/guide-app-drawings-mockups.html`. Pages only; the app version stays at 1.5.6.
+
+### Differences From the Old Pictures
+- "Tap an expense item" and "History" now show the same picture (4.1); the old one marked a tapped expense.
+- Settings shows Experimental features "1 of 1 on" (6.1) instead of "None right now"; no caption refers to it.
+
+### Checks
+- Locally at 1,280 pixels: each of the 13 pictures identical to its Application Screens drawing (every text item's position, size and colour inside the phone); all 300 × 603; the 9 screens with a tab bar show all four tabs with the right one highlighted, and the 4 with a sheet or confirmation have none, as on Application Screens.
+- The guide's text and captions outside the pictures are identical to before, character for character. The page's Light / Dark switch, the way home and Contents still work; no console errors.
+- At 390 pixels wide: 12 pictures 358 × 603 and Summary (5.1) 358 × 636, as on Application Screens; no sideways scrolling.
