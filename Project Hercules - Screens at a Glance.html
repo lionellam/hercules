@@ -245,6 +245,35 @@ html { scroll-behavior: smooth; }
 .theme-switch button { font: inherit; font-size: 13.5px; line-height: 1.4; border: 0; background: none; color: var(--ink-2); padding: 4px 12px; border-radius: 999px; cursor: pointer; }
 .theme-switch button[aria-pressed="true"] { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
 .theme-switch button:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+
+/* ---------- White screenshot view: a phone alone on pure white, for screenshots (CLAUDE.md, Test Plan S-12) ---------- */
+.phone { position: relative; }
+.wv-open { position: absolute; top: 10px; right: 10px; z-index: 5; width: 32px; height: 32px; display: grid; place-items: center; border-radius: 9px;
+           border: 1px solid rgba(0,0,0,.12); background: rgba(255,255,255,.92); color: #18181b; cursor: pointer; opacity: 0; transition: opacity .15s;
+           box-shadow: 0 1px 3px rgba(0,0,0,.12); }
+.wv-open svg { width: 16px; height: 16px; }
+figure:hover .wv-open, .wv-open:focus-visible { opacity: 1; }
+@media (hover: none) { .wv-open { opacity: 1; } }
+.wv { position: fixed; inset: 0; z-index: 1000; background: #fff; display: none; align-items: center; justify-content: center; overflow: hidden; }
+.wv.open { display: flex; }
+.wv.idle { cursor: none; }
+.wv-stage { transform-origin: center center; }
+.wv-stage .phone { width: 300px; max-width: none; box-shadow: none; border-color: #d4d4d8; }
+.wv-ctl { position: absolute; display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; border: 1px solid #e4e4e7; background: #fff;
+          color: #18181b; cursor: pointer; transition: opacity .3s; box-shadow: 0 1px 4px rgba(0,0,0,.08); }
+.wv-ctl svg { width: 20px; height: 20px; }
+.wv-close { top: 16px; right: 16px; }
+.wv-prev { left: 16px; top: 50%; transform: translateY(-50%); }
+.wv-next { right: 16px; top: 50%; transform: translateY(-50%); }
+.wv-count { position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%); font: 13px var(--font-mono); color: #71717a; transition: opacity .3s; }
+.wv.idle .wv-ctl, .wv.idle .wv-count { opacity: 0; pointer-events: none; }
+html.wv-lock { overflow: hidden; }
+/* Narrow screens: the arrows sit below the phone, either side of the screen number, so they never cover it */
+@media (max-width: 600px) {
+  .wv-prev, .wv-next { top: auto; bottom: 16px; transform: none; }
+  .wv-count { bottom: 30px; }
+}
+@media (prefers-reduced-motion: reduce) { .wv-open, .wv-ctl, .wv-count { transition: none; } }
 </style>
 <script>
 /* Apply a remembered light or dark choice before the page is drawn; with none, the device's setting applies */
@@ -1030,6 +1059,83 @@ document.querySelectorAll("[data-cap]").forEach((b) => b.addEventListener("click
   });
   dark.addEventListener("change", show);
   show();
+})();
+</script>
+
+<div class="wv" id="wv" role="dialog" aria-modal="true" aria-label="Screenshot view">
+  <div class="wv-stage" id="wv-stage"></div>
+  <button type="button" class="wv-ctl wv-close" id="wv-close" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+  <button type="button" class="wv-ctl wv-prev" id="wv-prev" aria-label="Previous screen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button>
+  <button type="button" class="wv-ctl wv-next" id="wv-next" aria-label="Next screen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
+  <div class="wv-count" id="wv-count"></div>
+</div>
+<script>
+/* White screenshot view: open any phone alone on pure white */
+(function () {
+  var figs = Array.prototype.slice.call(document.querySelectorAll(".gallery > figure"));
+  var wv = document.getElementById("wv"), stage = document.getElementById("wv-stage"), count = document.getElementById("wv-count");
+  var at = -1, opener = null, idleTimer = null;
+  var icon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>';
+  figs.forEach(function (fig, i) {
+    var b = document.createElement("button");
+    b.type = "button"; b.className = "wv-open"; b.innerHTML = icon;
+    var no = fig.querySelector("figcaption .no");
+    b.setAttribute("aria-label", "Open screen " + (no ? no.textContent : i + 1) + " on white");
+    b.addEventListener("click", function () { opener = b; show(i); });
+    fig.querySelector(".phone").appendChild(b);
+  });
+  function fit() {
+    var p = stage.firstElementChild; if (!p) return;
+    stage.style.transform = "none";
+    var w = p.offsetWidth, h = p.offsetHeight;
+    // On narrow screens, leave room above for the close button and below for the arrows
+    var narrow = matchMedia("(max-width: 600px)").matches;
+    var room = narrow ? innerHeight - 160 : innerHeight * 0.9;
+    var scale = Math.min(room / h, (innerWidth * (narrow ? 0.9 : 0.86)) / w);
+    stage.style.transform = "scale(" + scale + ")";
+  }
+  function show(i) {
+    at = (i + figs.length) % figs.length;
+    var copy = figs[at].querySelector(".phone").cloneNode(true);
+    copy.querySelectorAll(".wv-open").forEach(function (b) { b.remove(); });
+    copy.querySelectorAll("[id]").forEach(function (el) { el.removeAttribute("id"); });
+    stage.replaceChildren(copy);
+    var no = figs[at].querySelector("figcaption .no");
+    count.textContent = (no ? no.textContent : at + 1) + "  ·  " + (at + 1) + " of " + figs.length;
+    wv.setAttribute("aria-label", "Screen " + (no ? no.textContent : at + 1) + " on white");
+    if (!wv.classList.contains("open")) {
+      wv.classList.add("open");
+      document.documentElement.classList.add("wv-lock");
+      document.getElementById("wv-close").focus();
+    }
+    fit(); wake();
+  }
+  function close() {
+    wv.classList.remove("open", "idle");
+    document.documentElement.classList.remove("wv-lock");
+    stage.replaceChildren();
+    clearTimeout(idleTimer);
+    if (opener) opener.focus();
+  }
+  // Controls fade after 2 seconds without movement, so they stay out of screenshots
+  function wake() {
+    wv.classList.remove("idle");
+    clearTimeout(idleTimer);
+    idleTimer = setTimeout(function () { wv.classList.add("idle"); }, 2000);
+  }
+  document.getElementById("wv-close").addEventListener("click", close);
+  document.getElementById("wv-prev").addEventListener("click", function () { show(at - 1); });
+  document.getElementById("wv-next").addEventListener("click", function () { show(at + 1); });
+  ["mousemove", "touchstart"].forEach(function (ev) { wv.addEventListener(ev, wake, { passive: true }); });
+  document.addEventListener("keydown", function (e) {
+    if (!wv.classList.contains("open")) return;
+    if (e.key === "Escape") { close(); }
+    else if (e.key === "ArrowRight") { show(at + 1); }
+    else if (e.key === "ArrowLeft") { show(at - 1); }
+    else { wake(); return; }
+    e.preventDefault();
+  });
+  addEventListener("resize", fit);
 })();
 </script>
 </body>

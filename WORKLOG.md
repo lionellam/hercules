@@ -4,7 +4,7 @@
 Maintained by: Lionel Lam Song Poh, James Wong
 Purpose: Record of work done, decisions made, challenges encountered, and assumptions held —
 to serve as a lessons learned reference for current and future contributors.
-Last updated: 22 November 2026
+Last updated: 23 November 2026
 ```
 
 ---
@@ -2026,3 +2026,19 @@ Last updated: 22 November 2026
 ### Clean-up
 - Deleted the 2 test expenses and 2 parse entries the tests created; no `[TEST]` rows remain; the demo account's default currency is unchanged (SGD); removed demo@example.com from the local allow-list; signed the test browser out (it was signed out before); stopped the local database and dev server. The test scripts were temporary files, deleted after each run.
 - **Confirmed (22 November 2026):** after the deploy, the owner checked on their phone that Settings shows version **1.5.6**, short code **1898ab9** and "Last updated" on 22 Nov 2026; that Experimental features reads "Infer merchant names from this month's and last month's expenses."; and, with Intelligent Merchant Selection on, that a merchant used in October but not yet in November came back in the review card with its listed name, discarded without saving (B-20 on real data).
+
+---
+
+## 23 November 2026 — Application Screens: White Screenshot View
+
+### What Was Done
+- At the owner's request, every drawing on Application Screens can open in a **white screenshot view**: the phone alone on a pure white background (`#FFFFFF`), sized to the window, with no caption or shadow, in the current **App theme**. It's for screenshots of app screens on white for presentation decks and other promotional documents.
+- Each phone has an expand button at its top right: shown on hover on a computer, always on touch screens. The view has a close button, next/previous arrows and the screen number; all three, and the mouse pointer, fade after 2 seconds without movement and come back when the mouse moves. Esc closes (focus returns to the button), and the arrow keys step through all 32 screens. On screens 600px wide or less, the arrows sit below the phone instead of beside it.
+- The phone is the page's own drawing, copied into the view and scaled to fit, so it stays sharp at any size. A new drawing gets the button automatically.
+- Documents: CLAUDE.md (Application Screens) and Test Plan 1.35 (new S-12). Pages only, so the app version stays at 1.5.6.
+
+### Options Considered
+- The owner chose the recommended option in each case: an expand button rather than clicking the phone itself; controls that fade rather than always showing; fitted to the window rather than actual size; next/previous rather than one screen at a time; no shadow. After the mockup (`design/screens-white-view-mockups.html`), the owner asked for the arrows to sit below the phone on narrow screens, as they overlapped its edges.
+
+### Checks
+- Previewed locally: 32 expand buttons; the view's background is white with the page in light and in dark; after 2 seconds the controls and pointer are hidden; → and Esc work; a dark phone on white with App theme Dark; at 390px wide the button shows without hovering and the arrows sit below the phone, with no sideways scrolling; no console errors.
