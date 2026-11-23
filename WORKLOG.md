@@ -2110,3 +2110,4 @@ Last updated: 23 November 2026
 - Application Screens 1.1 and 1.2 no longer contain the line; all 32 phones are still 603 tall.
 - `npx tsc --noEmit` passed, `npx eslint .` passed with the one known warning, and `npm run build` passed.
 - Not run on the demo account: the change is to the signed-out screen, which needs no account.
+- **Confirmed (23 November 2026):** after the deploy, the owner checked on their phone that the sign-in screen no longer shows the line under **Sign in with Google** with 1.5.7.
