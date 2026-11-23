@@ -2060,3 +2060,16 @@ Last updated: 23 November 2026
 ### Checks
 - Previewed locally at 1,280 pixels: all 32 phones 300 × 603; no tab bar away from the bottom of its phone; the white view's zoom identical for screens 1.1, 2.4, 5.1 and 6.1 (1.343 at 1,280 × 900).
 - At 390 pixels wide, 31 phones are 358 × 603. 5.1 (Summary with the pace chart) is 636 tall there, because its chart grows with the drawing's width; this was already so before the change, and the white view always draws it at 300 wide, so it matches the others there.
+
+---
+
+## 23 November 2026 — User Guide: Every Phone the Same Size
+
+### What Was Done
+- After Application Screens' phones were made one height, the owner asked whether the user guide matched. It didn't: its 13 drawings were all 300 pixels wide but 488 to 601 pixels tall (each side-by-side pair already matched; the pairs and the single Categories & budgets drawing differed).
+- At the owner's choice (option B, over leaving the guide as it was), every guide phone now has the same 603-pixel height as Application Screens (`min-height` on `.phone`, which is now a column so its screen takes the extra space; the pair-only rule that did this was folded in). Only the height changes: no wording, items or captions. The guide's Updated date is 23 November 2026.
+- CLAUDE.md (the user guide section) records that both pages' phones share the height. Pages only; the app version stays at 1.5.6.
+
+### Checks
+- Compared the guide before and after, locally at 1,280 pixels: all 13 phones went to 603 tall (488, 515, 542, 553, 565, 575 and 601 before); every phone's text is identical; in each phone, every text item stayed at the same distance from the top, apart from those fixed to the bottom (the review sheet and other bottom sheets), which moved down with it; every tab bar sits at the bottom of its phone.
+- At 390 pixels wide, all 13 are 358 × 603, with no sideways scrolling.

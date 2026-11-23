@@ -113,7 +113,7 @@ figure { margin: 0; min-width: 0; }
 /* A pair of drawings: both phones share one row, so they're always the same height, with the captions underneath */
 .figure-row.pair { display: grid; grid-template-columns: repeat(auto-fill, 300px); gap: 28px; }
 .figure-row.pair > figure { display: grid; grid-template-rows: subgrid; grid-row: span 2; row-gap: 0; }
-.figure-row.pair .phone { display: flex; flex-direction: column; }
+.phone > .m { flex: 1; }
 .figure-row.pair .phone > .m { flex: 1; display: flex; flex-direction: column; }
 .figure-row.pair .phone > .m > .tabs { margin-top: auto; }
 figcaption { font-size: 14px; color: var(--ink-2); margin-top: 10px; max-width: 320px; line-height: 1.45; }
@@ -130,7 +130,9 @@ ul.plain li { margin-bottom: 6px; }
 footer { margin-top: 72px; padding-top: 18px; border-top: 1px solid var(--rule); font-size: 14px; color: var(--ink-2); }
 
 /* ---------- App mockups: the real app's tokens, light theme, inside a phone frame ---------- */
-.phone { width: 300px; max-width: 100%; border-radius: 26px; border: 1px solid var(--frame); overflow: hidden; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,.05), 0 10px 26px rgba(0,0,0,.07); }
+/* Every phone is the same height as on Application Screens (603px), so the drawings look like one device; the screen's
+   content area takes the extra space, and anything at the bottom (tab bar, sheets) stays at the bottom */
+.phone { display: flex; flex-direction: column; min-height: 603px; width: 300px; max-width: 100%; border-radius: 26px; border: 1px solid var(--frame); overflow: hidden; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,.05), 0 10px 26px rgba(0,0,0,.07); }
 .m { --m-bg: #fff; --m-text: #18181b; --m-muted: #71717a; --m-line: #e7e7e4; --m-soft: #f4f4f5; --m-edge: #8e8e96; --m-bar: #18181b; --m-bad: #b91c1c; --m-good: #15803d;
      --m-pie-1: #2a78d6; --m-pie-2: #eb6834; --m-pie-3: #1baf7a; --m-pie-4: #eda100; --m-pie-5: #e87ba4; --m-pie-rest: #a1a1aa;
      background: var(--m-bg); color: var(--m-text); font-family: Inter, -apple-system, system-ui, sans-serif; font-size: 13px; line-height: 1.35; color-scheme: light; }
@@ -305,7 +307,7 @@ html { scroll-behavior: smooth; }
     <p class="lede">Hercules is an intelligent expense tracker web application that is powered by AI, which is used to interpret how you might log your expense in natural language, and saves your expenses with only a few convenient taps.</p>
     <div class="meta">
       <span><b>Works on:</b> phone, tablet and computer</span>
-      <span><b>Updated:</b> 22 November 2026</span>
+      <span><b>Updated:</b> 23 November 2026</span>
     </div>
   </header>
 
