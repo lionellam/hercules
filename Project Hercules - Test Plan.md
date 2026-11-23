@@ -1,7 +1,7 @@
 # Project Hercules — Test Plan: Web App v1
 
 ```
-Version 1.35 · Draft
+Version 1.36 · Draft
 Last Reviewed: 23 November 2026
 Produced with AI Assistance (Claude Code)
 ```
@@ -46,6 +46,7 @@ Produced with AI Assistance (Claude Code)
 | 1.33 | 2026-11-22 | Lionel Lam | New S-11: a documents-only push doesn't rebuild the app, so Settings' version line stays the same (1.5.5) |
 | 1.34 | 2026-11-22 | Lionel Lam | New B-20: Intelligent Merchant Selection matches a merchant used only last month, not one from two months ago (1.5.6) |
 | 1.35 | 2026-11-23 | Lionel Lam | New S-12: Application Screens' white screenshot view |
+| 1.36 | 2026-11-23 | Lionel Lam | S-12: every screen is the same size as you step through the white view |
 
 ---
 
@@ -400,7 +401,7 @@ A quick check on the live app after each deploy. Use your own account, and remov
 | S-09 | Security headers | On the live address, check the response headers as in A-11 (or `curl -sI` the address) | The four headers from A-11 are there, as well as `Strict-Transport-Security` |
 | S-10 | Light and dark on the GitHub Pages | Open https://lionellam.github.io/hercules/ and choose **Dark** with the switch at the top right. Open each card, reload one page, then choose **Light** on any page and go back to the home page. On Application Screens, use **App theme** in the bar | Every page has the same **Light / Dark** switch at the top right, on the row with **← Hercules home** (alone on the home page). The first time, it matches the device's setting. Dark stays on as you move between pages and after the reload; choosing Light on any page carries to the others. **App theme** changes only the drawings, not the page |
 | S-11 | Documents-only push | After the next push that changes only documents (nothing under `web/`), look at the commit's Vercel check on GitHub, then Settings → the bottom | Vercel reports the build as skipped (ignored build step), not deployed. Settings still shows the same version, short code and "Last updated" as before the push |
-| S-12 | White screenshot view on Application Screens | On a computer, open https://lionellam.github.io/hercules/screens.html, hover over a drawing and click the expand button at its top right. Wait 2 seconds without moving the mouse, then move it; press → and ←, then Esc. Set **App theme** to Dark and open one again. On a phone, tap a drawing's expand button | The phone opens alone on a pure white background, as large as the window allows, with no caption or shadow. After 2 seconds the ×, the arrows, the screen number and the pointer fade out, and come back when the mouse moves. → and ← step to the next and previous screens; Esc closes, back where you were. With App theme Dark, the phone is dark on white. On the phone, the button shows without hovering and the arrows sit below the drawing, not over it |
+| S-12 | White screenshot view on Application Screens | On a computer, open https://lionellam.github.io/hercules/screens.html, hover over a drawing and click the expand button at its top right. Wait 2 seconds without moving the mouse, then move it; press → and ←, then Esc. Set **App theme** to Dark and open one again. On a phone, tap a drawing's expand button | The phone opens alone on a pure white background, as large as the window allows, with no caption or shadow. After 2 seconds the ×, the arrows, the screen number and the pointer fade out, and come back when the mouse moves. → and ← step to the next and previous screens, each the same size as the last; Esc closes, back where you were. With App theme Dark, the phone is dark on white. On the phone, the button shows without hovering and the arrows sit below the drawing, not over it |
 
 The test expense from S-03 stays in the database as a deleted record. That's harmless, but it can be removed by Lionel if wanted.
 

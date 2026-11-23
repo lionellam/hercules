@@ -64,7 +64,9 @@ body.nocap .gallery > figure { grid-row: span 1; grid-template-rows: auto; }
 footer { margin-top: 56px; padding-top: 18px; border-top: 1px solid var(--rule); font-size: 14px; color: var(--ink-2); }
 
 /* ---------- App mockups: the real app's tokens, inside a phone frame ---------- */
-.phone { width: 300px; max-width: 100%; border-radius: 26px; border: 1px solid var(--frame); overflow: hidden; display: flex; flex-direction: column;
+/* Every phone is the same height, the tallest drawing's, so they look like one device on the page and in the white view;
+   the extra space goes to the screen's content, with the tab bar staying at the bottom. Raise it if a drawing grows taller */
+.phone { width: 300px; max-width: 100%; min-height: 603px; border-radius: 26px; border: 1px solid var(--frame); overflow: hidden; display: flex; flex-direction: column;
          box-shadow: 0 1px 2px rgba(0,0,0,.05), 0 10px 26px rgba(0,0,0,.07); }
 .m { --m-bg: #fff; --m-text: #18181b; --m-muted: #71717a; --m-line: #e7e7e4; --m-soft: #f4f4f5; --m-edge: #8e8e96; --m-bar: #18181b; --m-bad: #b91c1c; --m-good: #15803d; --m-hl: #fde68a; --m-off: #d4d4d8;
      --m-pie-1: #2a78d6; --m-pie-2: #eb6834; --m-pie-3: #1baf7a; --m-pie-4: #eda100; --m-pie-5: #e87ba4; --m-pie-rest: #a1a1aa; --m-g-border: #747775;

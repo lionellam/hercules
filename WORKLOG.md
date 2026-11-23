@@ -2043,3 +2043,20 @@ Last updated: 23 November 2026
 ### Checks
 - Previewed locally: 32 expand buttons; the view's background is white with the page in light and in dark; after 2 seconds the controls and pointer are hidden; → and Esc work; a dark phone on white with App theme Dark; at 390px wide the button shows without hovering and the arrows sit below the phone, with no sideways scrolling; no console errors.
 - **Confirmed (23 November 2026):** after the deploy, the owner checked on their phone that Application Screens' white screenshot view opens each drawing alone on white, with the arrows below the phone.
+
+---
+
+## 23 November 2026 — Application Screens: Every Phone the Same Size
+
+### What Was Done
+- The owner noticed that the phones changed size when stepping through the white screenshot view. The drawings were all 300 pixels wide but 562 to 603 pixels tall (21 at 562; 4.1–4.3 at 566; 2.4–2.6, 5.1–5.3 and 6.1–6.2 at 599–603), and the view fits each one to the window's height, so the shorter ones were enlarged up to about 7% more.
+- Every phone now has the same height, the tallest drawing's 603 pixels (`min-height` on `.phone`). The extra space goes to the screen's content, and the tab bar stays at the bottom, so the screens look like one device on the page and come out the same size in the white view.
+- Documents: CLAUDE.md (the height, and to raise it if a drawing grows taller) and Test Plan 1.36 (S-12: the same size as you step through). Pages only; the app version stays at 1.5.6.
+
+### Options Considered
+1. One zoom level for every screen in the white view only: the same width in screenshots, but the shorter phones still shorter. Set aside.
+2. Every phone the same height, on the page and in the view (chosen by the owner, recommended). Tried first in the browser on the live page, without changing it: every tab bar stayed at the bottom.
+
+### Checks
+- Previewed locally at 1,280 pixels: all 32 phones 300 × 603; no tab bar away from the bottom of its phone; the white view's zoom identical for screens 1.1, 2.4, 5.1 and 6.1 (1.343 at 1,280 × 900).
+- At 390 pixels wide, 31 phones are 358 × 603. 5.1 (Summary with the pace chart) is 636 tall there, because its chart grows with the drawing's width; this was already so before the change, and the white view always draws it at 300 wide, so it matches the others there.
