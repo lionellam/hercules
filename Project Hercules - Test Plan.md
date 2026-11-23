@@ -1,7 +1,7 @@
 # Project Hercules — Test Plan: Web App v1
 
 ```
-Version 1.38 · Draft
+Version 1.39 · Draft
 Last Reviewed: 23 November 2026
 Produced with AI Assistance (Claude Code)
 ```
@@ -49,6 +49,7 @@ Produced with AI Assistance (Claude Code)
 | 1.36 | 2026-11-23 | Lionel Lam | S-12: every screen is the same size as you step through the white view |
 | 1.37 | 2026-11-23 | Lionel Lam | A-01: no line of text under the Sign in with Google button (1.5.7) |
 | 1.38 | 2026-11-23 | Lionel Lam | B-17 and B-19: expected results describe what the tester sees, without referring to how the app worked before |
+| 1.39 | 2026-11-23 | Lionel Lam | C-11, Q-04, Q-07 and I-06: expected results describe what the tester sees, without referring to how the app worked before |
 
 ---
 
@@ -154,7 +155,7 @@ After Parse, the review card opens in a sheet over the Log screen. Its save butt
 | C-08 | Tapping outside without changes | Parse `[TEST] lunch 5.50` → tap the darkened area above the sheet | The sheet closes straight away, as with Discard. The typed text stays in the box and Parse can be tapped again. Nothing is saved |
 | C-09 | Tapping outside after a change | Parse, change the merchant → tap the darkened area | "Discard your edits?" appears. **Keep reviewing** returns to the sheet with the change; **Discard** closes it, the typed text stays, nothing is saved |
 | C-10 | Wider screens | In a window at least 768 pixels wide, parse `[TEST] lunch 5.50` | The review appears as a centred dialog over the darkened screen; tapping outside works as in C-08 |
-| C-11 | Edit sheet | Open a saved `[TEST]` expense from Today | The edit sheet has the same pencil and calendar icons as the review sheet. Its button still says **Save**, and Delete, Cancel and Save work as before |
+| C-11 | Edit sheet | Open a saved `[TEST]` expense from Today | The edit sheet has the same pencil and calendar icons as the review sheet. Its button says **Save**. Save keeps your changes; Cancel closes the sheet without saving (asking "Discard changes?" first if you changed something); Delete asks you to confirm |
 | C-12 | Date on iPhone **[Phone]** | On an iPhone, in Safari or the home-screen app, parse `[TEST] lunch 5.50`, then open a saved expense; tap the date on each | On both sheets the date sits flush right, lined up with the values above and below, with the calendar icon beside it. Tapping the date opens the date picker |
 | C-13 | Sheets slide away | On a phone, parse `[TEST] lunch 5.50` → **Discard**; parse again → tap outside; parse again → **Save expense**; open the saved expense → **Cancel**; open it again → **Delete** → **Delete expense** | Each time the sheet slides back down (about a fifth of a second) as the background lightens, then is gone. After Delete, both the confirmation and the edit sheet slide away together and Undo appears. Nothing stays on screen or blocks taps |
 | C-14 | Confirmation over a sheet | Parse, change the merchant → **Discard**; then **Keep reviewing** | "Discard your edits?" slides up over the review sheet, which stays still; **Keep reviewing** slides only the confirmation away |
@@ -242,7 +243,7 @@ Worked example for a **$300 budget on day 7 of a 30-day month**: expected $70.00
 | I-03 | Under pace | $50.00 | **$20.00 under pace** · $250.00 left, about $10.87/day |
 | I-04 | Budget used | $300.00 | **Budget used** · $0.00 left |
 | I-05 | Over budget | $320.00 | **Over budget by $20.00**, in red with a warning icon |
-| I-06 | Last day of the month | Any amount under budget, on the last day | "… left today" instead of "about $/day" |
+| I-06 | Last day of the month | Any amount under budget, on the last day | Shows "… left today", not the "about $…/day" shown on other days |
 | I-07 | Marker position | Any budgeted category | A small upright marker on the bar sits at the expected-by-today amount |
 | I-08 | Last month has no pace | Switch to last month | No markers or pace notes |
 
@@ -338,10 +339,10 @@ These need a look at the local database; ask Claude to run them.
 | Q-01 | Tab bar | Look at the tabs at the bottom | Log, History, Summary and **Settings** (a gear). There's no Categories tab |
 | Q-02 | Settings list | Open **Settings** | Groups for Spending (**Categories & budgets** and **Currency**), Appearance, Experimental (**Experimental features**) and Account, then the version and last-updated time |
 | Q-03 | Category count | Look at the Categories & budgets row; then add or retire a `zz-test-` category and look again | It shows the number of categories in use and how many have a budget, and updates after the change |
-| Q-04 | Opening and going back | Tap **Categories & budgets**, then **‹ Settings** | The Categories & budgets page opens, with the same list, Add category and Retired group as before; "‹ Settings" returns to the list |
+| Q-04 | Opening and going back | Tap **Categories & budgets**, then **‹ Settings** | The Categories & budgets page opens, showing your categories, **Add category** and the Retired group; **‹ Settings** returns to Settings |
 | Q-05 | Returning to Settings | Open Categories & budgets, switch to Log, then tap Settings | The Settings list shows, not Categories & budgets |
 | Q-06 | No theme icon on screens | Look at the top of Log, History and Summary | There's no sun or moon icon |
-| Q-07 | Account | Look at the Account group | Your email address, and Sign out (see A-05). Summary no longer has a sign-out section at the bottom |
+| Q-07 | Account | Look at the Account group | Your email address, and **Sign out** (see A-05). Sign out appears only here |
 | Q-08 | Version and last updated | Look at the bottom of Settings; compare with `CHANGELOG.md` and the latest deploy; then try a short window (for example a phone held sideways) | The line sits at the bottom of the screen, just above the tab bar (on a short window, after Sign out once scrolled). The version number matches the newest entry in the changelog (for example 1.0.0), followed by a short code for the exact version and the date and time of the latest deploy |
 | Q-09 | Experimental features, none **[when no feature is listed]** | Settings → look at the Experimental row, then tap **Experimental features**, then **‹ Settings** | The row reads "None right now". The page shows the heading, the note about features being tried out on this device only, and "Nothing to try right now"; "‹ Settings" returns to the list. Switching to another tab and back to Settings shows the list |
 | Q-10 | Experimental switch | Open Experimental features and switch **Intelligent Merchant Selection** on; check it works (B-15); reload the page; then switch it off | The Settings row reads "1 of 1 on" (and "0 of 1 on" when off). The feature works straight away, is still on after the reload, and stops when switched off (merchants come back as typed, B-17). On another device or browser it is off |

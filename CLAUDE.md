@@ -17,7 +17,7 @@ Key documents, all at the repository root: Specification, Architecture (decision
 
 1. **Discuss first.** For anything with choices, set out the options with a recommendation, and wait for the owner's decision.
 2. **Mockups before building** any visible change: an HTML page in `design/` (kept there), shown in the browser pane. Build only after the owner approves.
-3. **Documents before code.** Update the Specification, Architecture (new or updated decision), Test Plan (new or changed test cases), and the Charter or Project Plan if scope or features change. Each document changed gets its version bumped, a Version History row (author "Lionel Lam") and its Last Reviewed date.
+3. **Documents before code.** Update the Specification, Architecture (new or updated decision), Test Plan (new or changed test cases; write each expected result as what a tester sees now, never relative to an earlier version, such as "as before" or "no longer", since what changed belongs in the Version History, CHANGELOG and worklog), and the Charter or Project Plan if scope or features change. Each document changed gets its version bumped, a Version History row (author "Lionel Lam") and its Last Reviewed date.
 4. **Code.**
 5. **App version** (Architecture decision 34, semantic versioning): major for a fundamental or irreversible data change, minor for a new feature, patch for a fix or small tweak; documents-only changes don't bump. Run `npm version <major|minor|patch> --no-git-tag-version` in `web/` and add a plain-English `CHANGELOG.md` entry.
 6. **Test locally** (see Testing).
