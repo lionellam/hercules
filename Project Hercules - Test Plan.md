@@ -1,7 +1,7 @@
 # Project Hercules — Test Plan: Web App v1
 
 ```
-Version 1.37 · Draft
+Version 1.38 · Draft
 Last Reviewed: 23 November 2026
 Produced with AI Assistance (Claude Code)
 ```
@@ -48,6 +48,7 @@ Produced with AI Assistance (Claude Code)
 | 1.35 | 2026-11-23 | Lionel Lam | New S-12: Application Screens' white screenshot view |
 | 1.36 | 2026-11-23 | Lionel Lam | S-12: every screen is the same size as you step through the white view |
 | 1.37 | 2026-11-23 | Lionel Lam | A-01: no line of text under the Sign in with Google button (1.5.7) |
+| 1.38 | 2026-11-23 | Lionel Lam | B-17 and B-19: expected results describe what the tester sees, without referring to how the app worked before |
 
 ---
 
@@ -133,8 +134,8 @@ For each run, note the date, the device and browser, whether it was the local or
 | B-18 | Text kept when switching tabs | Type `[TEST] kopi 1.80` without parsing, open History, then tap **Log** again. Then tap **×**, switch tabs and come back. Then type again and reload the page | The text is still in the box after switching tabs. After **×**, the box stays empty when you come back. After a reload, the box is empty |
 | B-15 | Intelligent Merchant Selection matches a known merchant **[Claude]** | Save `[TEST] groceries 20` with the merchant changed to "NTUC FairPrice", dated this month. Switch **Intelligent Merchant Selection** on (Settings → Experimental features). Parse `[TEST] ntuc 45.20`, then `[TEST] fairprice 12` | Both review sheets show the merchant "NTUC FairPrice", which can still be changed before saving. Nothing else on the sheet looks different |
 | B-16 | Intelligent Merchant Selection leaves new merchants alone **[Claude]** | With the switch on and "NTUC FairPrice" saved this month, parse `[TEST] sheng siong 18.90` | The merchant is "Sheng Siong" (as written), not "NTUC FairPrice" |
-| B-17 | Intelligent Merchant Selection switched off **[Claude]** | Switch it off, then parse `[TEST] ntuc 45.20` | The merchant comes back as typed ("ntuc" or "NTUC"), as before the feature. The server log's parse timing line has no `merchants` step or `merchants_sent` count; with the switch on (B-15) it has both, and never the names |
-| B-19 | Intelligent Merchant Selection keeps new merchants when many are known **[Claude]** | Run by Claude against the parser itself, nothing saved: with the switch's merchant list holding 50 known merchants (none of them Sheng Siong, Prime Supermarket or Din Tai Fung), parse each of these 10 times: `Groceries from Sheng Siong at $7`, `Bought vegetables from Prime Supermarket $12`, `dintaifung dinner 48`, `ntuc 45.20`, `Bus fare $2`. Repeat with the switch off | Switch on: Sheng Siong, Prime Supermarket and Din Tai Fung come back in every run (never no merchant); `ntuc` comes back as "NTUC FairPrice"; `Bus fare` has no merchant. Switch off: the prompt is identical to before the change, and the results are as before the feature |
+| B-17 | Intelligent Merchant Selection switched off **[Claude]** | Switch it off, then parse `[TEST] ntuc 45.20` | The merchant comes back as typed ("ntuc" or "NTUC"), not changed to a merchant you've used before. The server log's parse timing line has no `merchants` step or `merchants_sent` count; with the switch on (B-15) it has both, and never the names |
+| B-19 | Intelligent Merchant Selection keeps new merchants when many are known **[Claude]** | Run by Claude against the parser itself, nothing saved: with the switch's merchant list holding 50 known merchants (none of them Sheng Siong, Prime Supermarket or Din Tai Fung), parse each of these 10 times: `Groceries from Sheng Siong at $7`, `Bought vegetables from Prime Supermarket $12`, `dintaifung dinner 48`, `ntuc 45.20`, `Bus fare $2`. Repeat with the switch off | Switch on: Sheng Siong, Prime Supermarket and Din Tai Fung come back in every run (never no merchant); `ntuc` comes back as "NTUC FairPrice"; `Bus fare` has no merchant. Switch off: the prompt has no list of known merchants, and each merchant comes back as typed |
 | B-20 | Intelligent Merchant Selection uses last month's merchants **[Claude]** | With nothing saved this month under the names below, save `[TEST] groceries 20` with the merchant changed to "NTUC FairPrice", dated in last month, and `[TEST] cake 15` with the merchant "Swensens", dated two months ago. Switch **Intelligent Merchant Selection** on, then parse `[TEST] ntuc 45.20` and `[TEST] swensens 9` | The first review sheet shows "NTUC FairPrice" (last month's merchant is on the list). The second shows the merchant as typed or tidied ("Swensens" or "Swensen's"), as with the switch off, never a listed name: two months ago is not on the list. The server log's `merchants_sent` count includes last month's merchant |
 
 ### C. The Review Card
