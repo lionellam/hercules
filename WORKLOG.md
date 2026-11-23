@@ -2042,3 +2042,4 @@ Last updated: 23 November 2026
 
 ### Checks
 - Previewed locally: 32 expand buttons; the view's background is white with the page in light and in dark; after 2 seconds the controls and pointer are hidden; → and Esc work; a dark phone on white with App theme Dark; at 390px wide the button shows without hovering and the arrows sit below the phone, with no sideways scrolling; no console errors.
+- **Confirmed (23 November 2026):** after the deploy, the owner checked on their phone that Application Screens' white screenshot view opens each drawing alone on white, with the arrows below the phone.
