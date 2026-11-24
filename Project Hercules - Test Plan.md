@@ -1,8 +1,8 @@
 # Project Hercules — Test Plan: Web App v1
 
 ```
-Version 1.39 · Draft
-Last Reviewed: 23 November 2026
+Version 1.40 · Draft
+Last Reviewed: 24 November 2026
 Produced with AI Assistance (Claude Code)
 ```
 
@@ -50,6 +50,7 @@ Produced with AI Assistance (Claude Code)
 | 1.37 | 2026-11-23 | Lionel Lam | A-01: no line of text under the Sign in with Google button (1.5.7) |
 | 1.38 | 2026-11-23 | Lionel Lam | B-17 and B-19: expected results describe what the tester sees, without referring to how the app worked before |
 | 1.39 | 2026-11-23 | Lionel Lam | C-11, Q-04, Q-07 and I-06: expected results describe what the tester sees, without referring to how the app worked before |
+| 1.40 | 2026-11-24 | Lionel Lam | A-01 and N-01 name the ship picture and icon; new A-12 (sign-in picture in light and dark), M-09 (browser tab icon) and S-13 (the icon on the phone after a release) |
 
 ---
 
@@ -102,7 +103,7 @@ For each run, note the date, the device and browser, whether it was the local or
 
 | ID | Test | Steps | Expected result |
 |---|---|---|---|
-| A-01 | Sign-in screen | Open the app while signed out | The Hercules sign-in screen shows "Sign in with Google". |
+| A-01 | Sign-in screen | Open the app while signed out | The Hercules sign-in screen shows the ship picture, "Hercules" and "Log expenses the way you'd say them.", and "Sign in with Google" at the bottom. |
 | A-02 | Invited account signs in | Sign in with an allowed email address | The Log screen opens, showing today's date and "Log an expense" |
 | A-03 | Uninvited account is refused | Sign in with an email address that isn't on the allow-list | Back on the sign-in screen with "This account hasn't been invited. Ask the app owner to add your email address." |
 | A-04 | Removing access takes effect at once | While signed in on one device, remove that email address from the allow-list (`npm run allow -- remove <email>`), then reload the app | The sign-in screen appears; the person can't get back in. Add the address again afterwards |
@@ -113,6 +114,7 @@ For each run, note the date, the device and browser, whether it was the local or
 | A-09 | Cancelling sign-out | Settings → **Sign out**, then **Cancel** (or tap outside the sheet) | The sheet closes and you stay signed in on Settings |
 | A-10 | Nothing carries over after sign-out | Open Settings, sign out, then sign in again on the same browser tab (or as a second test account, see A-07) | The app opens fresh on **Log**, showing only the signed-in person's data, not the tab or data from before |
 | A-11 | Security headers | Load the app and an API route (for example `/api/settings`), and look at the response headers in the browser's developer tools (Network) | Both carry `X-Frame-Options: DENY`, `Content-Security-Policy: frame-ancestors 'none'`, `X-Content-Type-Options: nosniff` and `Referrer-Policy: same-origin`. Opening the app inside a frame on another page shows nothing |
+| A-12 | Sign-in picture, light and dark | Open the app while signed out, with the device (or the browser) in light mode, then in dark mode | Light: the ship picture sits above "Hercules" on the white screen, with no visible edge. Dark: the picture sits on a white card with rounded corners. In both, nothing else on the screen moves or overlaps |
 
 ### B. Logging an Expense
 
@@ -301,12 +303,13 @@ To set up I-01 to I-05: create a `zz-test-` category with a $300 budget and log 
 | M-06 | No sideways scrolling | Check each screen at phone width | Nothing makes the page scroll sideways |
 | M-07 | Loading placeholders | Open the app after it has been closed for a while (or, locally, slow the expenses route down); on Log, then Summary, then History moved to an earlier month | While loading: grey placeholder rows (Log, History) or bars (Summary) with a soft shimmer, and a short grey bar instead of "Spent today" or the month's total. No "Nothing logged yet today.", "No expenses this month." or $0.00 until the data arrives; then the real content replaces the placeholders. The text box, Parse, month buttons and search still work |
 | M-08 | Slow-start note | As M-07, with loading taking more than 3 seconds | "Taking a little longer than usual. Hercules is starting up after a quiet spell." appears under the placeholders and goes when the data arrives. With Reduce Motion on, the placeholders don't shimmer |
+| M-09 | Browser tab icon | Open the app in a browser on a computer | The tab shows a small ship on white, with rounded corners |
 
 ### N. Phones
 
 | ID | Test | Steps | Expected result |
 |---|---|---|---|
-| N-01 | Add to home screen **[Phone]** | iPhone Safari: Share → Add to Home Screen. Android Chrome: ⋮ → Add to Home screen or Install app | A Hercules icon appears; it opens full-screen like an app |
+| N-01 | Add to home screen **[Phone]** | iPhone Safari: Share → Add to Home Screen. Android Chrome: ⋮ → Add to Home screen or Install app | The Hercules icon, a ship on a white background, appears; it opens full-screen like an app |
 | N-02 | No zooming on fields **[Phone]** | On an iPhone, open an expense and tap Merchant, Date, Remarks and Category, then a category's Name and Budget | The page stays at its normal size; no need to zoom back out |
 | N-03 | Pinch to zoom still works **[Phone]** | Pinch on any screen | The page zooms, and zooms back |
 | N-04 | Staying signed in **[Phone]** | Close the app and reopen it the next day | Still signed in (sign-in lasts up to 90 days) |
@@ -405,6 +408,7 @@ A quick check on the live app after each deploy. Use your own account, and remov
 | S-10 | Light and dark on the GitHub Pages | Open https://lionellam.github.io/hercules/ and choose **Dark** with the switch at the top right. Open each card, reload one page, then choose **Light** on any page and go back to the home page. On Application Screens, use **App theme** in the bar | Every page has the same **Light / Dark** switch at the top right, on the row with **← Hercules home** (alone on the home page). The first time, it matches the device's setting. Dark stays on as you move between pages and after the reload; choosing Light on any page carries to the others. **App theme** changes only the drawings, not the page |
 | S-11 | Documents-only push | After the next push that changes only documents (nothing under `web/`), look at the commit's Vercel check on GitHub, then Settings → the bottom | Vercel reports the build as skipped (ignored build step), not deployed. Settings still shows the same version, short code and "Last updated" as before the push |
 | S-12 | White screenshot view on Application Screens | On a computer, open https://lionellam.github.io/hercules/screens.html, hover over a drawing and click the expand button at its top right. Wait 2 seconds without moving the mouse, then move it; press → and ←, then Esc. Set **App theme** to Dark and open one again. On a phone, tap a drawing's expand button | The phone opens alone on a pure white background, as large as the window allows, with no caption or shadow. After 2 seconds the ×, the arrows, the screen number and the pointer fade out, and come back when the mouse moves. → and ← step to the next and previous screens, each the same size as the last; Esc closes, back where you were. With App theme Dark, the phone is dark on white. On the phone, the button shows without hovering and the arrows sit below the drawing, not over it |
+| S-13 | App icon on the phone | After a release that changes the icon: remove Hercules from the phone's home screen and add it again, as in N-01 (a phone keeps the icon Hercules was added with) | The home screen shows the ship icon; signing out shows the ship picture on the sign-in screen |
 
 The test expense from S-03 stays in the database as a deleted record. That's harmless, but it can be removed by Lionel if wanted.
 

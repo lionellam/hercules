@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import Image from "next/image";
 import { devLoginEnabled } from "@/auth";
 import { devSignIn, signInWithGoogle } from "@/app/actions";
 
@@ -7,7 +8,8 @@ export default function SignInPage({ searchParams }: PageProps<"/signin">) {
     <main className="app">
       <section className="screen signin">
         <div className="brand">
-          <div className="logo">H</div>
+          {/* The ship picture on a white card, seen as a card on the dark theme (Specification 4.8, Architecture decision 43) */}
+          <Image className="signin-art" src="/hercules-ship.png" alt="" width={180} height={180} preload />
           <h1>Hercules</h1>
           <p className="sub">Log expenses the way you&apos;d say them.</p>
         </div>

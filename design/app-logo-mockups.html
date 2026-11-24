@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mockup: Hercules App Logo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Source+Sans+3:wght@400;600;700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* Mockup: the owner's ship picture (logo-ship-source.webp, as supplied) as the app's icon (two crops) and on the sign-in screen (two placements).
+   Chosen by the owner: icon crop B, and sign-in 2 (large picture), on a white card on the dark screen. An archer picture was tried first and set aside. */
+:root { --page: #ececea; --text: #18181b; --muted: #5f5f66; --card: #f3f3f1; --rule: #dcdcd8; }
+* { box-sizing: border-box; margin: 0; }
+body { background: var(--page); color: var(--text); font-family: "Source Sans 3", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+main { max-width: 1180px; margin: 0 auto; padding: 36px 16px 80px; }
+h1.t { font-family: "Bricolage Grotesque", system-ui, sans-serif; font-size: 30px; letter-spacing: -0.02em; margin-bottom: 10px; }
+h2.t { font-family: "Bricolage Grotesque", system-ui, sans-serif; font-size: 21px; margin: 44px 0 6px; }
+p.lead { color: var(--muted); max-width: 860px; line-height: 1.55; margin-bottom: 10px; }
+p.lead b { color: var(--text); }
+.row { display: flex; flex-wrap: wrap; gap: 22px; margin-top: 16px; align-items: flex-start; }
+.card { background: var(--card); border-radius: 14px; padding: 20px; border: 1px solid rgba(0,0,0,.06); }
+figure { margin: 0; }
+.cap { font-size: 13.5px; color: var(--muted); margin-top: 12px; line-height: 1.5; max-width: 300px; }
+.cap b { color: var(--text); }
+
+/* The icon: the picture on white, scaled and positioned for each crop */
+.ic { display: block; background-color: #fff; background-image: url("logo-ship-source.webp"); background-repeat: no-repeat; flex: none; }
+.ic.a { background-size: 100% 100%; background-position: 0 0; }
+.ic.b { background-size: 132% 132%; background-position: 46% 50%; }
+.ic.old { background: #18181b; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-family: Inter, system-ui, sans-serif; }
+
+.sizes { display: flex; align-items: flex-end; gap: 22px; flex-wrap: wrap; }
+.sizes figure { display: flex; flex-direction: column; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); }
+.r180 { width: 180px; height: 180px; border-radius: 40px; }
+.r64 { width: 64px; height: 64px; border-radius: 14px; }
+.r32 { width: 32px; height: 32px; border-radius: 7px; }
+.r16 { width: 16px; height: 16px; border-radius: 3px; }
+.circle { width: 96px; height: 96px; border-radius: 50%; }
+.tab { display: inline-flex; align-items: center; gap: 8px; background: #fff; border: 1px solid var(--rule); border-bottom: 0; border-radius: 10px 10px 0 0; padding: 8px 14px; font-size: 13px; font-family: system-ui, sans-serif; }
+.tab .ic { width: 16px; height: 16px; border-radius: 3px; }
+
+.home { width: 300px; border-radius: 34px; padding: 34px 22px 30px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px 10px; }
+.home.light { background: #dfe6ee; } .home.dark { background: #15181d; }
+.app { display: flex; flex-direction: column; align-items: center; gap: 5px; font-size: 10.5px; font-family: -apple-system, system-ui, sans-serif; }
+.home.light .app { color: #1b1f24; } .home.dark .app { color: #e9ecef; }
+.app i, .app .ic { width: 54px; height: 54px; border-radius: 13px; display: block; }
+.home.light .app i { background: #b9c4cf; } .home.dark .app i { background: #343a42; }
+
+/* The sign-in screen, using the app's own colours and sizes (globals.css: .signin, .brand, .logo, .google-btn) */
+.phone { width: 300px; height: 620px; border-radius: 40px; border: 10px solid #111; overflow: hidden; font-family: Inter, system-ui, sans-serif; }
+.scr { height: 100%; display: flex; flex-direction: column; justify-content: space-between; padding: 0 18px 40px; }
+.scr.light { --bg: #ffffff; --text: #18181b; --muted: #71717a; --g-bg: #ffffff; --g-border: #747775; --g-text: #1f1f1f; }
+.scr.dark { --bg: #18181b; --text: #f4f4f5; --muted: #a1a1aa; --g-bg: #131314; --g-border: #8e918f; --g-text: #e3e3e3; }
+.scr { background: var(--bg); color: var(--text); }
+.brand { margin-top: 110px; text-align: center; }
+.brand.hero { margin-top: 70px; }
+.brand h1 { font-size: 26px; font-weight: 700; letter-spacing: -0.02em; }
+.brand .sub { color: var(--muted); font-size: 13px; margin-top: 4px; }
+.tile { width: 64px; height: 64px; border-radius: 18px; margin: 0 auto 20px; }
+.tile.old { font-size: 30px; }
+.scr.dark .tile.old { background: #f4f4f5; color: #18181b; }
+.art.card { border-radius: 28px; padding: 0; border: 0; }
+.art { width: 190px; height: 190px; margin: 0 auto 14px; background: #fff url("logo-ship-source.webp") center / 92% no-repeat; }
+.gbtn { height: 48px; border-radius: 14px; border: 1px solid var(--g-border); background: var(--g-bg); color: var(--g-text); font-size: 15px; font-weight: 500; display: flex; align-items: center; justify-content: center; gap: 10px; }
+.new { outline: 2px dashed #1d4ed8; outline-offset: 4px; }
+</style>
+</head>
+<body>
+<main>
+  <h1 class="t">Hercules app logo</h1>
+  <p class="lead"><b>Chosen: icon crop B, and sign-in 2 with the white card on the dark screen.</b></p>
+  <p class="lead">Your ship picture as Hercules's identity: as the <b>app icon</b> (home screen, Android and the browser tab), and on the <b>sign-in screen</b>, in place of the black square with the white <b>H</b>.</p>
+
+  <h2 class="t">App icon</h2>
+  <p class="lead"><b>A. Whole picture:</b> as supplied, on its white background. <b>B. Ship close-up:</b> zoomed in on the ship and the waves under it, leaving out most of the stars and the outer spray, so the ship is larger at small sizes. The current icon is first, for comparison.</p>
+  <div class="row"><div class="card"><div class="sizes">
+    <figure><span class="ic old r64" style="font-size:32px">H</span>Today</figure>
+    <figure><span class="ic a r180"></span>A · 180 px, iPhone</figure>
+    <figure><span class="ic b r180"></span>B · 180 px, iPhone</figure>
+  </div></div></div>
+  <div class="row" id="icons"></div>
+
+  <h2 class="t">Sign-in screen</h2>
+  <p class="lead"><b>1. Small tile:</b> the icon (crop B) takes the place of the "H" square, at the same 64 px size and rounding; everything else stays where it is. In dark mode it shows as a white tile. <b>2. Large picture:</b> the whole ship picture, about three times larger, above "Hercules", so the picture itself welcomes people. It sits on a white rounded card: on the light screen the card can't be seen; on the dark screen it shows as a white card. Dashed blue outlines mark what changes.</p>
+  <div class="row" id="signin"></div>
+</main>
+<script>
+const others = ["Photos", "Maps", "Notes", "Clock", "Weather", "Mail", "Camera"];
+const home = (crop, mode) => `<div class="home ${mode}">${others.slice(0, 5).map((n) => `<div class="app"><i></i>${n}</div>`).join("")}
+  <div class="app"><span class="ic ${crop}"></span>Hercules</div>${others.slice(5).map((n) => `<div class="app"><i></i>${n}</div>`).join("")}</div>`;
+const sizes = (crop) => `<div class="card"><div class="sizes">
+    <figure><span class="ic ${crop} circle"></span>Android, round</figure>
+    <figure><span class="ic ${crop} r64"></span>64 px</figure>
+    <figure><span class="ic ${crop} r32"></span>32 px</figure>
+    <figure><span class="ic ${crop} r16"></span>16 px</figure>
+  </div><div style="margin-top:18px"><span class="tab"><span class="ic ${crop}"></span>Hercules</span></div>
+  <p class="cap"><b>${crop.toUpperCase()}. Small sizes.</b> ${crop === "a" ? "At 32 px and below the ship is a small brown shape and the stars disappear." : "At 32 px and below the sails and hull still read as a ship."}</p></div>`;
+document.getElementById("icons").innerHTML = ["a", "b"].map((c) => sizes(c)).join("") +
+  `<figure>${home("b", "light")}<p class="cap"><b>B on a light home screen.</b></p></figure>
+   <figure>${home("b", "dark")}<p class="cap"><b>B on a dark home screen.</b> The white tile stands out.</p></figure>`;
+
+const google = `<div class="gbtn"><svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>Sign in with Google</div>`;
+const words = `<h1>Hercules</h1><div class="sub">Log expenses the way you'd say them.</div>`;
+const screen = (mode, kind) => {
+  const mark = kind === "today" ? `<div class="tile ic old">H</div>`
+    : kind === "tile" ? `<div class="tile ic b new"></div>`
+    : kind === "herocard" ? `<div class="art card new"></div>`
+    : `<div class="art new"></div>`;
+  return `<div class="phone"><div class="scr ${mode}"><div class="brand ${kind.startsWith("hero") ? "hero" : ""}">${mark}${words}</div>${google}</div></div>`;
+};
+const shots = [
+  ["light", "today", "<b>Today, light.</b> For comparison."],
+  ["light", "tile", "<b>1. Small tile, light.</b> The icon replaces the H square."],
+  ["dark", "tile", "<b>1. Small tile, dark.</b> A white tile on the dark screen."],
+  ["light", "herocard", "<b>2. Large picture, light.</b> The ship above the name; the white card blends into the screen."],
+  ["dark", "herocard", "<b>2. Large picture, dark.</b> The picture on a white rounded card."],
+];
+document.getElementById("signin").innerHTML = shots.map(([m, k, c]) => `<figure>${screen(m, k)}<p class="cap">${c}</p></figure>`).join("");
+</script>
+</body>
+</html>

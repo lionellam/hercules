@@ -6,6 +6,14 @@ Versions follow [semantic versioning](https://semver.org): **major** for a chang
 
 ---
 
+## 1.6.0 — 24 November 2026
+
+**New**
+- Hercules has its own picture: a sailing ship under the stars. It's the app's icon on the home screen and in the browser tab, and it welcomes you on the sign-in screen, in place of the black square with an "H". In dark mode, the picture on the sign-in screen sits on a white card.
+- If Hercules is already on your phone's home screen, it keeps its old icon until you remove it and add it to the home screen again.
+
+---
+
 ## 1.5.7 — 23 November 2026
 
 **Improved**

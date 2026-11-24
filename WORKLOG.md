@@ -4,7 +4,7 @@
 Maintained by: Lionel Lam Song Poh, James Wong
 Purpose: Record of work done, decisions made, challenges encountered, and assumptions held —
 to serve as a lessons learned reference for current and future contributors.
-Last updated: 23 November 2026
+Last updated: 24 November 2026
 ```
 
 ---
@@ -2111,3 +2111,24 @@ Last updated: 23 November 2026
 - `npx tsc --noEmit` passed, `npx eslint .` passed with the one known warning, and `npm run build` passed.
 - Not run on the demo account: the change is to the signed-out screen, which needs no account.
 - **Confirmed (23 November 2026):** after the deploy, the owner checked on their phone that the sign-in screen no longer shows the line under **Sign in with Google** with 1.5.7.
+
+## 24 November 2026 — Version 1.6.0: Hercules's Own Picture
+
+### What Was Done
+- At the owner's request, Hercules has an identity: the owner's ship picture (a sailing ship drawn in fine lines, with stars above and the sea below) is the app icon and is on the sign-in screen, in place of the black square with an "H".
+- **Icons:** fixed image files cut from the picture (kept as supplied in `design/logo-ship-source.webp`), all a close-up of the ship (a 776-pixel square from the 1,024-pixel picture): `web/app/icon.png` (64 pixels, rounded corners, the browser tab), `web/app/apple-icon.png` (180, iPhone home screen) and `web/public/pwa-icon-192.png` and `pwa-icon-512.png`, now named in the manifest. The code that drew the "H" (`web/lib/app-icon.tsx`, `web/app/icon.tsx`, `web/app/apple-icon.tsx` and the `/pwa-icon/[size]` route) is removed.
+- **Sign-in screen:** the whole picture, `web/public/hercules-ship.png` (540 pixels), shown at 180 pixels through Next.js's `Image` on a white card with rounded corners (`.signin-art`), with an empty `alt` as it is decoration. The name and tagline start higher (`.brand` margin 10vh instead of 18vh) to make room.
+- **Application Screens** 1.1 and 1.2 draw the sign-in screen with the same picture (embedded in the page, as only the page itself is published), on its white card; the drawing's top padding is 56 pixels instead of 92, like the app. The user guide has no sign-in picture.
+- Documents: Specification 0.57 (new Section 4.8), Architecture 0.45 (new decision 43), Test Plan 1.40 (A-01 and N-01 updated; new A-12, M-09 and S-13). Version 1.6.0 (a new feature), with a CHANGELOG entry.
+
+### Options and the Owner's Choices
+- Mockups in `design/app-logo-mockups.html`. An archer picture was tried first; the owner chose the ship instead.
+- Icon: the whole picture, or a close-up of the ship. The owner chose the close-up, which still reads as a ship at 32 pixels and below, where the whole picture shrinks to a small brown shape.
+- Sign-in: a small tile in place of the "H", or a large picture. The owner chose the large picture. For the dark theme, a see-through version (the white background removed) was tried: its dark blues and fine lines faded into the dark screen, so the owner chose the white card.
+
+### Checks
+- Locally, signed out (no account needed): `/signin` at 375 and 390 pixels wide shows the ship above "Hercules" and the tagline, with **Sign in with Google** at the bottom. Light: the card can't be seen against the white. Dark: a white card with rounded corners. With `?error=AccessDenied`, the "hasn't been invited" notice shows above the button and nothing overlaps. At 1,280 pixels, dark, the screen stays centred.
+- The page links `/icon.png` (64×64) and `/apple-icon.png` (180×180); the manifest names `/pwa-icon-192.png` and `/pwa-icon-512.png`. All four and `/hercules-ship.png` return 200 as `image/png`; the old `/pwa-icon/192` returns 404.
+- Application Screens 1.1 and 1.2 show the ship in both App themes (a white card on Dark); all 32 phones are still 603 tall.
+- `npx tsc --noEmit` passed, `npx eslint .` passed with the one known warning, and `npm run build` passed (after clearing stale route types for the removed `/pwa-icon` route from `web/.next/dev`).
+- Not tested here: the icon on a real phone's home screen. Phones keep the icon Hercules was added with, so checking it needs Hercules removed from the home screen and added again (Test Plan S-13).

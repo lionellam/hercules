@@ -1,8 +1,8 @@
 # Project Hercules — Specification Sheet: "Log an Expense" Flow
 
 ```
-Version 0.56 · Draft 
-Last Reviewed: 22 November 2026
+Version 0.57 · Draft 
+Last Reviewed: 24 November 2026
 Produced with AI Assistance (Claude Code)
 ```
 
@@ -66,6 +66,7 @@ Produced with AI Assistance (Claude Code)
 | 0.54 | 2026-11-21 | Lionel Lam | The Log screen's typed text is kept when switching tabs while the app is open (step 1); new offline message (Section 8) |
 | 0.55 | 2026-11-22 | Lionel Lam | Settings' "Last updated" changes only when the app itself changes, not for document updates |
 | 0.56 | 2026-11-22 | Lionel Lam | Intelligent Merchant Selection uses this month's and last month's merchants, not this month's only (step 3, Sections 4.7, 5.1 and 6) |
+| 0.57 | 2026-11-24 | Lionel Lam | New Section 4.8: the ship picture as the app icon and on the sign-in screen, in place of the "H" square |
 
 ---
 
@@ -258,6 +259,14 @@ A page for trying out features that are built and deployed but not yet switched 
 - **Adding and removing features:** each feature is added to the list in the code with its own name and description. When a feature is ready for everyone, its switch is removed and it is simply part of the app (a normal release); when one is dropped, its code and switch are removed. A saved switch for a feature no longer in the list is ignored.
 - **Features listed now:**
   - **Intelligent Merchant Selection** ("Infer merchant names from this month's and last month's expenses."): when on, each Parse also gives the language model the merchant names already on this month's and last month's expenses (the month of today's date on the device, and the calendar month before it), and the model returns the name exactly as listed when the text clearly refers to one of them, even shortened, in different capitals or only in part (for example "ntuc" or "fairprice" for "NTUC FairPrice"). Otherwise it returns the merchant as written, or none, as when the switch is off; it doesn't force an unrelated merchant onto the list. Names that differ only in capitals or spaces count as one, using the spelling used most often across the two months; the list holds at most the 50 merchants used most across both. With no merchants in either month, parsing works as with the switch off. The review sheet looks the same; only the merchant it shows can differ, and it can be changed before saving as usual. Only Parse on the Log screen uses it. While it's on, this month's and last month's merchant names are sent to the language model with each entry.
+
+### 4.8 App Icon and Sign-in Picture
+
+Hercules's picture is a sailing ship drawn in fine lines, with stars above it and the sea below.
+
+- **Sign-in screen:** the whole picture, 180 pixels square on a white card with rounded corners, sits above "Hercules" and "Log expenses the way you'd say them.". On the light theme the card can't be told apart from the white screen; on the dark theme it shows as a white card. The picture is decoration only: screen readers skip it and read "Hercules" next.
+- **App icon:** a close-up of the same picture (the ship and the waves under it, leaving out most of the stars), on white. It's the icon on the home screen (180 pixels on iPhone; 192 and 512 pixels for Android and installed apps) and, with rounded corners, in the browser tab (64 pixels).
+- **Phones keep their icon:** a phone that already has Hercules on its home screen keeps the icon it was added with. Removing Hercules from the home screen and adding it again shows the current icon.
 
 ## 5. Data Model (Draft)
 
