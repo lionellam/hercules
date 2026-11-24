@@ -2132,3 +2132,4 @@ Last updated: 24 November 2026
 - Application Screens 1.1 and 1.2 show the ship in both App themes (a white card on Dark); all 32 phones are still 603 tall.
 - `npx tsc --noEmit` passed, `npx eslint .` passed with the one known warning, and `npm run build` passed (after clearing stale route types for the removed `/pwa-icon` route from `web/.next/dev`).
 - Not tested here: the icon on a real phone's home screen. Phones keep the icon Hercules was added with, so checking it needs Hercules removed from the home screen and added again (Test Plan S-13).
+- **Confirmed (24 November 2026):** after the deploy, the owner checked on their phone that Settings shows version 1.6.0; that after signing out, the sign-in screen shows the ship picture above "Hercules"; and that after Hercules was removed from the home screen and added again, its icon is the ship.
