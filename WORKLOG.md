@@ -2222,6 +2222,9 @@ Last updated: 25 November 2026
 - Application Screens (32 phones) and the user guide (13) previewed: every phone is 613 tall, and the guide's 5.1 is identical to Application Screens' 5.1.
 - `npx tsc --noEmit` passed, `npx eslint .` passed with the one known warning, and `npm run build` passed.
 - Not tested here: a real phone, and wider screens (tablet and computer), where Summary shows the pie chart beside the list.
+- **Publishing the Pages:** the guide-pages run failed twice at the deploy step ("No artifacts named github-pages were found"), although the upload step had succeeded about a second earlier; GitHub's status page showed no problems. It was a timing problem on GitHub's side, so the run was re-run as `CLAUDE.md` says; the third attempt succeeded, and the live user guide and Application Screens matched the repository.
+- **Afterwards:** at the owner's request, H-12's expected result was shortened to leave out what the user doesn't need telling (Test Plan 1.44). The owner chose to keep the phones at 613 pixels rather than shorten drawing 5.1.
+- **Confirmed (25 November 2026):** after the deploy, the owner checked on their phone that Settings shows version 1.7.0, that on Summary a category without a budget shows "Budget not set for this category" with no bar, and that its bubble's link slides up the category's Edit category card.
 
 ### Clean-up
 - Deleted the `[TEST]` expense and the `zz-test-nobudget` category the tests created, directly in the local database; none remain. No parse entries were created. The demo account was removed from the allow-list and the test browser signed out, as it was before.
