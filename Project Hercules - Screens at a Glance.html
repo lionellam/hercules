@@ -193,6 +193,8 @@ footer { margin-top: 56px; padding-top: 18px; border-top: 1px solid var(--rule);
 .m .srow .d { color: var(--m-muted); font-size: 10.5px; margin-top: 1px; }
 .m .srow .chev { color: var(--m-muted); font-size: 15px; }
 .m .srow.out .t { color: var(--m-bad); }
+.m .srow.out { justify-content: center; }
+.m .srow.out .tx { flex: none; }
 .m .ver { text-align: center; color: var(--m-muted); font-size: 10px; margin-top: 18px; line-height: 1.6; }
 .m .mtotal { display: flex; justify-content: space-between; align-items: flex-end; gap: 8px; }
 .m .mcsv { display: inline-flex; align-items: center; gap: 4px; height: 26px; padding: 0 9px; border-radius: 8px; box-shadow: inset 0 0 0 1.2px var(--m-edge); font-size: 11px; font-weight: 600; margin-bottom: 4px; white-space: nowrap; }
@@ -861,8 +863,8 @@ html.wv-lock { overflow: hidden; }
         <div class="scrim"></div>
         <div class="m-sheet">
           <div class="card-t">ADD CATEGORY</div>
-          <div class="box"><label>Name</label><div>Pets</div></div>
-          <div class="box"><label>Monthly budget (SGD)</label><div>120</div></div>
+          <div class="field"><span>Name</span><span>Pets<svg class="ico"><use href="#i-pen"/></svg></span></div>
+          <div class="field"><span>Monthly budget (SGD)</span><span>120<svg class="ico"><use href="#i-pen"/></svg></span></div>
           <div class="acts"><span></span><span class="r"><span class="btn ghost">Cancel</span><span class="btn">Save</span></span></div>
         </div>
       </div></div>
@@ -879,8 +881,8 @@ html.wv-lock { overflow: hidden; }
         <div class="scrim"></div>
         <div class="m-sheet">
           <div class="card-t">EDIT CATEGORY</div>
-          <div class="box"><label>Name</label><div>Entertainment</div></div>
-          <div class="box"><label>Monthly budget (SGD)</label><div>100.00</div></div>
+          <div class="field"><span>Name</span><span>Entertainment<svg class="ico"><use href="#i-pen"/></svg></span></div>
+          <div class="field"><span>Monthly budget (SGD)</span><span>100.00<svg class="ico"><use href="#i-pen"/></svg></span></div>
           <div class="acts"><span class="btn red">Retire</span><span class="r"><span class="btn ghost">Cancel</span><span class="btn">Save</span></span></div>
         </div>
       </div></div>

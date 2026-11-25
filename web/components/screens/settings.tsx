@@ -148,7 +148,7 @@ export default function SettingsScreen({ email, categories, online, cache, onCha
           <span className="d">{email}</span>
         </span>
       </div>
-      <button className="settings-row danger" onClick={() => setConfirmSignOut(true)}>
+      <button className="settings-row danger center" onClick={() => setConfirmSignOut(true)}>
         <span className="settings-text"><span className="t">Sign out</span></span>
       </button>
 

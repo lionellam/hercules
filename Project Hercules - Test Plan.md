@@ -1,8 +1,8 @@
 # Project Hercules — Test Plan: Web App v1
 
 ```
-Version 1.40 · Draft
-Last Reviewed: 24 November 2026
+Version 1.41 · Draft
+Last Reviewed: 25 November 2026
 Produced with AI Assistance (Claude Code)
 ```
 
@@ -51,6 +51,7 @@ Produced with AI Assistance (Claude Code)
 | 1.38 | 2026-11-23 | Lionel Lam | B-17 and B-19: expected results describe what the tester sees, without referring to how the app worked before |
 | 1.39 | 2026-11-23 | Lionel Lam | C-11, Q-04, Q-07 and I-06: expected results describe what the tester sees, without referring to how the app worked before |
 | 1.40 | 2026-11-24 | Lionel Lam | A-01 and N-01 name the ship picture and icon; new A-12 (sign-in picture in light and dark), M-09 (browser tab icon) and S-13 (the icon on the phone after a release) |
+| 1.41 | 2026-11-25 | Lionel Lam | Q-07 says Sign out is centred; K-08 says Other's Name has no pencil; new K-09 (pencils on the category sheet) |
 
 ---
 
@@ -273,7 +274,8 @@ To set up I-01 to I-05: create a `zz-test-` category with a $300 budget and log 
 | K-05 | Rename | Rename `zz-test-pets` to `zz-test-animals` | The new name shows in the list, and on every past expense in that category in History and Summary |
 | K-06 | Budget validation | Set a budget of 0, or of "abc" | "Enter a budget above zero, or leave it blank." |
 | K-07 | Remove a budget | Clear a test category's budget → Save | It shows "No budget"; Summary no longer shows "of budget" for it |
-| K-08 | Other can't be renamed or retired | Open **Other** | The name can't be edited; there's no Retire button; the note says it can't be renamed or retired. The budget can still be changed |
+| K-08 | Other can't be renamed or retired | Open **Other** | The name can't be edited and has no pencil; there's no Retire button; the note says it can't be renamed or retired. The budget can still be changed, and has a pencil |
+| K-09 | Pencils on the category sheet | Open a category's edit sheet, tap the pencil beside **Name**, then the pencil beside **Monthly budget**; then do the same on **Add category** | A pencil shows to the right of each value. Tapping a pencil puts the cursor in that box, with the keyboard open on a phone |
 
 ### L. Retiring and Restoring Categories
 
@@ -345,7 +347,7 @@ These need a look at the local database; ask Claude to run them.
 | Q-04 | Opening and going back | Tap **Categories & budgets**, then **‹ Settings** | The Categories & budgets page opens, showing your categories, **Add category** and the Retired group; **‹ Settings** returns to Settings |
 | Q-05 | Returning to Settings | Open Categories & budgets, switch to Log, then tap Settings | The Settings list shows, not Categories & budgets |
 | Q-06 | No theme icon on screens | Look at the top of Log, History and Summary | There's no sun or moon icon |
-| Q-07 | Account | Look at the Account group | Your email address, and **Sign out** (see A-05). Sign out appears only here |
+| Q-07 | Account | Look at the Account group | Your email address, and **Sign out**, in red and centred in its row (see A-05). Sign out appears only here |
 | Q-08 | Version and last updated | Look at the bottom of Settings; compare with `CHANGELOG.md` and the latest deploy; then try a short window (for example a phone held sideways) | The line sits at the bottom of the screen, just above the tab bar (on a short window, after Sign out once scrolled). The version number matches the newest entry in the changelog (for example 1.0.0), followed by a short code for the exact version and the date and time of the latest deploy |
 | Q-09 | Experimental features, none **[when no feature is listed]** | Settings → look at the Experimental row, then tap **Experimental features**, then **‹ Settings** | The row reads "None right now". The page shows the heading, the note about features being tried out on this device only, and "Nothing to try right now"; "‹ Settings" returns to the list. Switching to another tab and back to Settings shows the list |
 | Q-10 | Experimental switch | Open Experimental features and switch **Intelligent Merchant Selection** on; check it works (B-15); reload the page; then switch it off | The Settings row reads "1 of 1 on" (and "0 of 1 on" when off). The feature works straight away, is still on after the reload, and stops when switched off (merchants come back as typed, B-17). On another device or browser it is off |

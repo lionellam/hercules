@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sign Out and Category Pencils</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root { --page: #ececea; --page-text: #18181b; --page-muted: #5f5f66; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--page); color: var(--page-text); font-family: Inter, -apple-system, system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  main { max-width: 1460px; margin: 0 auto; padding: 36px 16px 80px; }
+  h1 { font-size: 28px; letter-spacing: -0.02em; margin: 0 0 8px; }
+  h2 { font-size: 18px; margin: 40px 0 4px; }
+  .lead { color: var(--page-muted); max-width: 860px; line-height: 1.55; margin: 0 0 10px; font-size: 15px; }
+  .lead b { color: var(--page-text); }
+  .frames { display: flex; flex-wrap: wrap; gap: 30px 26px; align-items: flex-start; margin-top: 18px; }
+  figure { margin: 0; max-width: 100%; }
+  figcaption { max-width: 340px; font-size: 13px; color: var(--page-muted); margin-top: 12px; line-height: 1.5; }
+  figcaption b { color: var(--page-text); }
+  .phone { width: 340px; max-width: 100%; height: 600px; border-radius: 30px; overflow: hidden; border: 1px solid rgba(0,0,0,.08);
+           box-shadow: 0 1px 2px rgba(0,0,0,.06), 0 10px 28px rgba(0,0,0,.08); }
+
+  /* App tokens and styles, from web/app/globals.css */
+  .app { --bg: #fff; --text: #18181b; --muted: #71717a; --line: #e7e7e4; --accent: #18181b; --accent-text: #fff; --soft: #f4f4f5; --bad: #dc2626;
+         background: var(--bg); color: var(--text); font-size: 15px; position: relative; height: 100%; display: flex; flex-direction: column; overflow: hidden; padding: 0 20px; }
+  .app.dark { --bg: #18181b; --text: #f4f4f5; --muted: #a1a1aa; --line: #27272a; --accent: #f4f4f5; --accent-text: #18181b; --soft: #27272a; --bad: #f87171; }
+  .app h3 { font-size: 28px; font-weight: 700; letter-spacing: -0.02em; margin-top: 30px; }
+  .settings-h { color: var(--muted); font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; margin: 24px 0 6px; }
+  .row { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--line); }
+  .icon { width: 34px; height: 34px; border-radius: 10px; background: var(--soft); display: grid; place-items: center; flex-shrink: 0; }
+  .icon svg { width: 18px; height: 18px; }
+  .txt { flex: 1; display: flex; flex-direction: column; }
+  .t { font-weight: 500; }
+  .d { color: var(--muted); font-size: 13px; margin-top: 2px; }
+  .chev { color: var(--muted); font-size: 20px; }
+  .danger .t { color: var(--bad); }
+  .row.center { justify-content: center; }
+  .row.center .txt { flex: none; align-items: center; }
+  .pill-wrap { padding: 18px 0 4px; display: flex; justify-content: center; }
+  .pill { border: 1px solid var(--line); border-radius: 12px; padding: 11px 36px; color: var(--bad); font-weight: 600; }
+  .version { margin-top: auto; padding: 28px 0 22px; color: var(--muted); font-size: 12.5px; text-align: center; line-height: 1.6; }
+  .tabs { display: flex; justify-content: space-around; border-top: 1px solid var(--line); margin: 0 -20px; padding: 10px 0 18px; color: var(--muted); font-size: 11px; }
+  .tabs b { color: var(--text); font-weight: 600; }
+  /* Thumb zone: the comfortable reach of each thumb on a held phone */
+  .thumb { position: absolute; bottom: -60px; width: 260px; height: 260px; border-radius: 50%; border: 2px dashed rgba(29,78,216,.35); pointer-events: none; }
+  .thumb.l { left: -110px; } .thumb.r { right: -110px; }
+
+  /* Categories behind the sheet */
+  .catrow { display: flex; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid var(--line); opacity: .5; }
+  .scrim { position: absolute; inset: 0; background: rgba(0,0,0,.45); z-index: 4; }
+  .sheet { position: absolute; left: 0; right: 0; bottom: 0; z-index: 5; background: var(--bg); border-radius: 20px 20px 0 0; padding: 14px 20px 24px; }
+  .card-title { font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; margin: 4px 0 6px; }
+  .field { display: flex; justify-content: space-between; align-items: center; padding: 11px 0; border-top: 1px solid var(--line); gap: 12px; }
+  .field label { color: var(--muted); }
+  .field .v { display: inline-flex; align-items: center; gap: 8px; font-weight: 500; }
+  .field .v.ph { color: var(--muted); font-weight: 400; }
+  .field .v.off { color: var(--muted); }
+  .ico { width: 16px; height: 16px; color: var(--muted); flex-shrink: 0; }
+  .sub { color: var(--muted); font-size: 13px; margin-top: 8px; line-height: 1.45; }
+  .btn { height: 44px; padding: 0 18px; border-radius: 12px; border: none; font: inherit; font-size: 15px; font-weight: 600; background: var(--accent); color: var(--accent-text); }
+  .btn.ghost { background: transparent; color: var(--muted); }
+  .btn.red { background: transparent; color: var(--bad); padding-left: 0; }
+  .acts { display: flex; justify-content: space-between; align-items: center; margin-top: 14px; }
+  .acts .r { display: flex; gap: 6px; }
+  .new { outline: 2px dashed #1d4ed8; outline-offset: 2px; border-radius: 4px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Centred Sign out, and pencils on the category sheet</h1>
+  <p class="lead">Two small changes. Dashed blue outlines mark what's new; the dashed circles on the Settings frames show roughly where each thumb reaches comfortably when holding the phone in one hand.</p>
+
+  <h2>1. Sign out, centred</h2>
+  <p class="lead"><b>Option A (recommended):</b> the same red "Sign out" row, with its text centred. The whole row stays tappable, edge to edge, so it's easy to hit with either thumb, and it still looks like the rows above it. <b>Option B:</b> a centred, outlined red button. It stands out more as a separate action, but it's a smaller target and a new style the app doesn't use elsewhere in Settings.</p>
+  <div class="frames" id="signout"></div>
+
+  <h2>2. Pencils on the Edit category sheet</h2>
+  <p class="lead">A pencil to the right of the Name and Monthly budget values, as on the review and edit expense sheets. Tapping the pencil puts the cursor in that box, as it does there. <b>The built-in "Other" category</b> can't be renamed, so its Name shows no pencil (its budget still can be changed). <b>Add category</b> gets the same pencils.</p>
+  <div class="frames" id="category"></div>
+</main>
+
+<script>
+const PENCIL = '<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>';
+const PERSON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 5-6 8-6s6.5 2 8 6"/></svg>';
+const FLASK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 2 3h10a2 2 0 0 0 2-3l-5-9V3"/></svg>';
+
+function settings(kind, dark) {
+  const signout = {
+    today: '<div class="row danger"><span class="txt"><span class="t">Sign out</span></span></div>',
+    a: '<div class="row danger center new"><span class="txt"><span class="t">Sign out</span></span></div>',
+    b: '<div class="pill-wrap"><span class="pill new">Sign out</span></div>',
+  }[kind];
+  return `<div class="app${dark ? ' dark' : ''}">
+    <h3>Settings</h3>
+    <p class="settings-h">Features</p>
+    <div class="row"><span class="icon">${FLASK}</span><span class="txt"><span class="t">Experimental features</span><span class="d">None on</span></span><span class="chev">›</span></div>
+    <p class="settings-h">Account</p>
+    <div class="row"><span class="icon">${PERSON}</span><span class="txt"><span class="t">Signed in</span><span class="d">demo@example.com</span></span></div>
+    ${signout}
+    <p class="version">Version 1.6.0<br>Last updated 24 Nov 2026</p>
+    <div class="tabs"><span>Log</span><span>History</span><span>Summary</span><span>Categories</span><b>Settings</b></div>
+    ${kind !== 'today' ? '<span class="thumb l"></span><span class="thumb r"></span>' : ''}
+  </div>`;
+}
+
+function category(kind, dark) {
+  const p = (on) => on ? `<span class="new" style="display:inline-flex">${PENCIL}</span>` : '';
+  const other = kind === 'other', pen = kind !== 'today', add = kind === 'add';
+  const name = add ? '<span class="v ph">e.g. Pets' : other ? '<span class="v off">Other' : '<span class="v">Groceries';
+  const budget = add ? '<span class="v ph">Optional' : other ? '<span class="v ph">Optional' : '<span class="v">400';
+  return `<div class="app${dark ? ' dark' : ''}">
+    <h3>Categories</h3>
+    <div style="margin-top:14px">${['Dining','Groceries','Transport','Shopping','Other'].map(c => `<div class="catrow"><span>${c}</span><span>—</span></div>`).join('')}</div>
+    <div class="scrim"></div>
+    <div class="sheet">
+      <div class="card-title">${add ? 'Add category' : 'Edit category'}</div>
+      <div class="field"><label>Name</label>${name}${p(pen && !other)}</span></div>
+      <div class="field"><label>Monthly budget (SGD)</label>${budget}${p(pen)}</span></div>
+      ${other ? '<p class="sub">The built-in "Other" category can\'t be renamed or retired.</p>' : ''}
+      <div class="acts"><div>${!add && !other ? '<button class="btn red">Retire</button>' : ''}</div>
+        <div class="r"><button class="btn ghost">Cancel</button><button class="btn">Save</button></div></div>
+    </div>
+  </div>`;
+}
+
+const fig = (html, cap) => `<figure><div class="phone">${html}</div><figcaption>${cap}</figcaption></figure>`;
+document.getElementById('signout').innerHTML = [
+  fig(settings('today'), '<b>Today:</b> Sign out sits at the left edge, a stretch for the right thumb.'),
+  fig(settings('a'), '<b>Option A (recommended):</b> the row\'s text centred; the full-width row is the tap target.'),
+  fig(settings('a', true), '<b>Option A, dark theme.</b>'),
+  fig(settings('b'), '<b>Option B:</b> a centred outlined button.'),
+].join('');
+document.getElementById('category').innerHTML = [
+  fig(category('today'), '<b>Today:</b> nothing shows that Name and Monthly budget can be tapped.'),
+  fig(category('edit'), '<b>Proposed:</b> pencils on Name and Monthly budget.'),
+  fig(category('edit', true), '<b>Proposed, dark theme.</b>'),
+  fig(category('other'), '<b>"Other":</b> no pencil on Name, which can\'t be changed; the budget keeps its pencil.'),
+  fig(category('add'), '<b>Add category:</b> the same pencils.'),
+].join('');
+</script>
+</body>
+</html>

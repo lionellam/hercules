@@ -128,6 +128,9 @@ textarea::placeholder { color: var(--muted); }
                 color: inherit; font: inherit; text-align: left; cursor: pointer; }
 .settings-row.static { cursor: default; }
 .settings-row.danger .t { color: var(--bad); }
+/* Sign out: centred in its full-width row, within reach of either thumb */
+.settings-row.center { justify-content: center; }
+.settings-row.center .settings-text { flex: none; align-items: center; }
 .settings-icon { width: 34px; height: 34px; border-radius: 10px; background: var(--soft); display: grid; place-items: center; flex-shrink: 0; }
 .settings-icon svg { width: 18px; height: 18px; }
 .settings-text { flex: 1; min-width: 0; display: flex; flex-direction: column; }

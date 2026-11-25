@@ -6,6 +6,14 @@ Versions follow [semantic versioning](https://semver.org): **major** for a chang
 
 ---
 
+## 1.6.1 — 25 November 2026
+
+**Improved**
+- **Sign out** in Settings now sits in the middle of its row, so it's easy to reach with either thumb.
+- The **Edit category** and **Add category** cards show a pencil beside the name and the monthly budget, as the expense cards do, so it's clear you can tap them to make changes. The built-in "Other" category can't be renamed, so its name has no pencil.
+
+---
+
 ## 1.6.0 — 24 November 2026
 
 **New**

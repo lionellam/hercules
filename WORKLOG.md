@@ -4,7 +4,7 @@
 Maintained by: Lionel Lam Song Poh, James Wong
 Purpose: Record of work done, decisions made, challenges encountered, and assumptions held —
 to serve as a lessons learned reference for current and future contributors.
-Last updated: 24 November 2026
+Last updated: 25 November 2026
 ```
 
 ---
@@ -2133,3 +2133,32 @@ Last updated: 24 November 2026
 - `npx tsc --noEmit` passed, `npx eslint .` passed with the one known warning, and `npm run build` passed (after clearing stale route types for the removed `/pwa-icon` route from `web/.next/dev`).
 - Not tested here: the icon on a real phone's home screen. Phones keep the icon Hercules was added with, so checking it needs Hercules removed from the home screen and added again (Test Plan S-13).
 - **Confirmed (24 November 2026):** after the deploy, the owner checked on their phone that Settings shows version 1.6.0; that after signing out, the sign-in screen shows the ship picture above "Hercules"; and that after Hercules was removed from the home screen and added again, its icon is the ship.
+
+---
+
+## 25 November 2026 — Version 1.6.1: Sign Out Centred, and Pencils on the Category Sheet
+
+### What Was Done
+- At the owner's request, two small changes to make the app easier to use with one hand and to show what can be changed.
+- **Sign out centred:** the red **Sign out** row in Settings keeps its full width, so the whole row can still be tapped, but its text is now centred (`.settings-row.center` in `web/app/globals.css`), within reach of either thumb.
+- **Pencils on the category sheet:** the Edit category and Add category sheets show a pencil to the right of the Name and Monthly budget values, the same icon as on the review and edit expense sheets (`PencilIcon` is now exported from `web/components/review-card.tsx` and used in `web/components/screens/categories.tsx`). Each pencil is a label for its box, so tapping it puts the cursor there. The Name of the built-in "Other" category has no pencil, as it can't be renamed; its budget keeps one.
+- **Application Screens:** 6.1 (Settings) shows Sign out centred; 7.2 (Add category) and 7.3 (Edit category) are redrawn as the app's rows, with the pencils, instead of a label above a grey box, so they match the app. The user guide's copy of 6.1 gets the same change.
+- Documents: Specification 0.58 (Sections 4.4 and 5.2), Architecture 0.46 (decisions 33 and 38 updated), Test Plan 1.41 (Q-07 and K-08 updated; new K-09). Version 1.6.1 (a small tweak), with a CHANGELOG entry.
+
+### Options and the Owner's Choices
+- Mockups in `design/signout-category-pencil-mockups.html`.
+- Sign out: the same row with its text centred (A), or a centred outlined red button (B). The owner chose A: a full-width target that keeps the Settings row style. B was a smaller target in a style Settings doesn't use elsewhere.
+- The owner agreed to leave the pencil off the Name of "Other".
+
+### Checks
+- On the demo account (confirmed with `/api/auth/session`), at 375 pixels wide:
+  - Settings: the Sign out row spans 20 to 355 pixels and its text is centred at 187.5, the row's centre, in the dark theme; the red text and confirmation are unchanged.
+  - Edit category (Groceries): pencils beside Name and Monthly budget; tapping the budget pencil focused the budget box and the name pencil the name box. Checked in dark and light.
+  - Other: no pencil beside Name; the budget has one. Add category: pencils beside both.
+  - Each sheet was closed with Cancel, with nothing changed, so no data was created.
+- Application Screens and the user guide previewed locally: Sign out is centred in both drawings of 6.1; 7.2 and 7.3 show the pencils.
+- `npx tsc --noEmit` passed, `npx eslint .` passed with the one known warning, and `npm run build` passed (after clearing stale route types for the `/pwa-icon` route, removed in 1.6.0, from `web/.next/dev`).
+- Not tested here: a real phone, and the keyboard opening when a pencil is tapped there (Test Plan K-09).
+
+### Clean-up
+- The local database wasn't running, so it was started with `npm run db:local` for the tests. The demo account was removed from the allow-list afterwards, and the test browser was signed out, as it was before. No test data was created.

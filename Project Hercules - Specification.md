@@ -1,8 +1,8 @@
 # Project Hercules — Specification Sheet: "Log an Expense" Flow
 
 ```
-Version 0.57 · Draft 
-Last Reviewed: 24 November 2026
+Version 0.58 · Draft 
+Last Reviewed: 25 November 2026
 Produced with AI Assistance (Claude Code)
 ```
 
@@ -67,6 +67,7 @@ Produced with AI Assistance (Claude Code)
 | 0.55 | 2026-11-22 | Lionel Lam | Settings' "Last updated" changes only when the app itself changes, not for document updates |
 | 0.56 | 2026-11-22 | Lionel Lam | Intelligent Merchant Selection uses this month's and last month's merchants, not this month's only (step 3, Sections 4.7, 5.1 and 6) |
 | 0.57 | 2026-11-24 | Lionel Lam | New Section 4.8: the ship picture as the app icon and on the sign-in screen, in place of the "H" square |
+| 0.58 | 2026-11-25 | Lionel Lam | Sign out is centred in its row, within easy reach of either thumb (Section 4.4); a pencil beside the Name and Monthly budget on the Edit category and Add category sheets, except the Name of "Other" (Section 5.2) |
 
 ---
 
@@ -189,7 +190,7 @@ Settings is the fourth tab, with a gear icon, after Log, History and Summary. It
 - **Spending:** **Categories & budgets**, with the number of categories in use and how many have a budget (for example "14 categories · 5 with a budget"). Tapping it opens the Categories & budgets page, which works exactly as the Categories tab did (see the Category notes in Section 5), with "‹ Settings" at the top to go back. Below it, **Currency** shows the default currency (for example "SGD · Singapore dollar") and opens the Currency page (Section 4.6).
 - **Appearance:** System, Light or Dark. System follows the device's setting. The choice is saved on that device only. This replaces the sun or moon icon that was at the top of every screen.
 - **Experimental:** **Experimental features**, showing how many are switched on (for example "1 of 3 on"), or "None right now" when there are none. It opens the Experimental features page (Section 4.7).
-- **Account:** the email address signed in with, and **Sign out**, which moves here from the bottom of Summary and asks for confirmation first (Section 4.2).
+- **Account:** the email address signed in with, and **Sign out**, which moves here from the bottom of Summary and asks for confirmation first (Section 4.2). Sign out is centred in its full-width row, so either thumb can reach it.
 - **At the bottom of the screen,** just above the tab bar: the app's version number and the date and time it was last updated, meaning when the version running was built and deployed. Updates to documents alone don't rebuild the app, so they don't change it. On a screen too short to show everything, it follows Sign out and is reached by scrolling.
 
 Opening the Settings tab always shows the Settings list, even if Categories & budgets, Currency or Experimental features was open when you left it.
@@ -306,6 +307,8 @@ Per-user and extensible — this is a **user preference**, not a global constant
 | `monthly_budget` | number (optional) | The category's current monthly budget in the user's default currency; empty means no budget. Only the current amount is kept, so past months' budgets are not recorded |
 
 **Preset behavior:** each new user is seeded with their own copy of the starter list — Food & Dining, Transport, Groceries, Entertainment, Utilities, Health & Medical, Household, Shopping, Rent, Clothes, Education, Professional Development, Travel — plus an **"Other"** catch-all. The Categories & budgets page, opened from Settings (Section 4.4), adds and renames categories and sets their monthly budgets; its heading and add button stay fixed at the top while the list scrolls. Names must be unique for the user regardless of capitalisation, with a limit of 50 active categories per user. "Other" cannot be renamed or retired and stays last in the list, because the application falls back to it by name.
+
+**The category sheet:** Edit category and Add category show a pencil beside the Name and the Monthly budget, as on the review and edit expense sheets, so it's clear both can be changed; tapping the pencil puts the cursor in that box. The Name of "Other" has no pencil, as it can't be renamed.
 
 **Retiring a category:** any category except "Other" can be retired from its edit sheet, after a confirmation. A retired category is never deleted from the database. It is no longer offered for new expenses or to the language model, but past expenses keep it and show its name in History, the Today list and Summary. Its budget is kept but not tracked while it is retired, so any spending in it this month shows as a plain bar without a pace note. An existing expense in a retired category can still be opened and saved; the edit sheet shows the category as "*name* (retired)" and also offers the active categories, but a retired category can't be chosen for any other expense. Retired categories are listed in a collapsed "Retired" group at the bottom of the Categories & budgets page, each with a Restore button that brings it back with its budget. They can't be renamed until restored. Adding a category whose name matches a retired one (regardless of capitalisation) restores that category, with the budget entered, instead of creating a new one. Restoring counts towards the 50-category limit.
 
