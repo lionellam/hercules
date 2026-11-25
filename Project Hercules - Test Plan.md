@@ -1,7 +1,7 @@
 # Project Hercules — Test Plan: Web App v1
 
 ```
-Version 1.43 · Draft
+Version 1.44 · Draft
 Last Reviewed: 25 November 2026
 Produced with AI Assistance (Claude Code)
 ```
@@ -54,6 +54,7 @@ Produced with AI Assistance (Claude Code)
 | 1.41 | 2026-11-25 | Lionel Lam | Q-07 says Sign out is centred; K-08 says Other's Name has no pencil; new K-09 (pencils on the category sheet) |
 | 1.42 | 2026-11-25 | Lionel Lam | K-01 and K-03 name the line under the heading and the "Set amount" placeholder; T-10 updated to match |
 | 1.43 | 2026-11-25 | Lionel Lam | Summary without budgets: H-02 and H-05 updated; new H-11 to H-14 (the bubble, setting a budget from Summary, retired categories, past months) |
+| 1.44 | 2026-11-25 | Lionel Lam | H-12 wording shortened |
 
 ---
 
@@ -235,7 +236,7 @@ Use a month with several expenses, such as one filled with sample data.
 | H-09 | Future-dated expense | Save a `[TEST]` expense dated later this month | It counts towards this month's total and pace straight away |
 | H-10 | Total stays in place | On a phone held upright (and on a tablet or computer), scroll Summary down to the pie chart, on this month and last month | The heading, month switcher, total, **CSV** button and (this month) day line stay at the top, with a thin line below them; the categories scroll underneath. **CSV** still works while scrolled |
 | H-11 | The "Budget not set" bubble | Tap the words "Budget not set for this category" (not the "i"); tap elsewhere; then tap the "i" | Each tap opens a bubble below the line: "The budget for this category can be set in Settings › Categories & budgets." and the link **Set a budget for [category]**; the "i" is dark while it's open. Tapping elsewhere closes it |
-| H-12 | Setting a budget from Summary | Make a `zz-test-` category with no budget and log a `[TEST]` expense in it; on Summary, open its bubble and tap **Set a budget for zz-test-…**; then **Cancel**; open it again, enter 100 and **Save** | The category's Edit category card slides up over Summary, with no box selected and the keyboard closed. Cancel closes it. After Save, the card closes and the row shows a bar, "of 100.00", a marker and a pace note, without leaving Summary |
+| H-12 | Setting a budget from Summary | Make a `zz-test-` category with no budget and log a `[TEST]` expense in it; on Summary, open its bubble and tap **Set a budget for zz-test-…**; then **Cancel**; open it again, enter 100 and **Save** | The category's Edit category card slides up over Summary. Cancel closes it. After Save, the card closes and the row shows a bar, "of 100.00", a marker and a pace note, without leaving Summary |
 | H-13 | Retired category | Retire the `zz-test-` category from H-12 while it has spending this month | On Summary its row shows its name, number and amount only: no bar and no "Budget not set" line |
 | H-14 | Past months | Switch to last month | Every category shows its name, number and amount only, with no bars and no "Budget not set" lines |
 
