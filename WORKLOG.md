@@ -2187,6 +2187,7 @@ Last updated: 25 November 2026
   - Each sheet was closed with Cancel, so no data was created. Saving a category without a budget (K-03) was not run, to avoid leaving a test category.
 - Application Screens (32 phones) and the user guide (13) previewed locally: the new line shows, and every phone is still 603 tall.
 - `npx tsc --noEmit` passed, `npx eslint .` passed with the one known warning, and `npm run build` passed.
+- **Confirmed (25 November 2026):** after the deploy, the owner checked on their phone that Settings shows version 1.6.2, that Categories & budgets reads "Manage your expense categories and category budgets." under its heading, and that a category without a budget shows "Set amount" in its budget box.
 
 ### Clean-up
 - The demo account was removed from the allow-list and the test browser signed out, as it was before. No test data was created.
