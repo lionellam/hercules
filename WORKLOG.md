@@ -2159,6 +2159,7 @@ Last updated: 25 November 2026
 - Application Screens and the user guide previewed locally: Sign out is centred in both drawings of 6.1; 7.2 and 7.3 show the pencils.
 - `npx tsc --noEmit` passed, `npx eslint .` passed with the one known warning, and `npm run build` passed (after clearing stale route types for the `/pwa-icon` route, removed in 1.6.0, from `web/.next/dev`).
 - Not tested here: a real phone, and the keyboard opening when a pencil is tapped there (Test Plan K-09).
+- **Confirmed (25 November 2026):** after the deploy, the owner checked on their phone that Settings shows version 1.6.1, that **Sign out** is centred in its row, and that the Edit category and Add category cards show the pencils, with none on the Name of "Other".
 
 ### Clean-up
 - The local database wasn't running, so it was started with `npm run db:local` for the tests. The demo account was removed from the allow-list afterwards, and the test browser was signed out, as it was before. No test data was created.
