@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useSyncExternalStore } from "react";
+import { useEffect, useId, useRef, useState, useSyncExternalStore } from "react";
 import { expensesUrl, fmt, summaryUrl, useCached, type ApiCache } from "@/lib/client";
 import { daysInMonth, localToday, monthKey, monthLabel, shortDay } from "@/lib/dates";
 import { cents, paceRows, type PaceRow } from "@/lib/pace";
@@ -9,6 +9,57 @@ import { BurnUp, PaceNote } from "../pace";
 import SpendPie from "../spend-pie";
 import { NotIncluded, useHomeCurrency, useMoney } from "../currency";
 import { SkeletonBar, SkeletonCategories, SlowNote } from "../loading";
+import { CategorySheet } from "./categories";
+
+// Below a category without a budget, this month (Specification 4.1): the whole line opens a bubble saying where budgets
+// are set, with a link that opens the category's Edit category card over Summary (Architecture decision 44)
+function BudgetNotSet({ category, onSet }: { category: Category; onSet: () => void }) {
+  // Where the bubble's arrow sits (under the "i"), measured when the line is tapped; null while closed
+  const [arrowAt, setArrowAt] = useState<number | null>(null);
+  const open = arrowAt != null;
+  const tipId = useId();
+  const wrap = useRef<HTMLDivElement>(null);
+  const icon = useRef<HTMLSpanElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const close = (ev: PointerEvent) => {
+      if (!wrap.current?.contains(ev.target as Node)) setArrowAt(null);
+    };
+    document.addEventListener("pointerdown", close);
+    return () => document.removeEventListener("pointerdown", close);
+  }, [open]);
+
+  return (
+    <div className="no-budget" ref={wrap}>
+      <button
+        type="button"
+        className={`no-budget-line${open ? " on" : ""}`}
+        aria-expanded={open}
+        aria-controls={tipId}
+        onClick={() => setArrowAt(open ? null : (icon.current?.offsetLeft ?? 0) + 3)}
+      >
+        Budget not set for this category
+        <span className="no-budget-i" ref={icon} aria-hidden="true">i</span>
+      </button>
+      {open && (
+        <div className="ni-tip" id={tipId} role="tooltip" style={{ "--arrow": `${arrowAt}px` } as React.CSSProperties}>
+          The budget for this category can be set in Settings › Categories &amp; budgets.
+          <button
+            type="button"
+            className="no-budget-link"
+            onClick={() => {
+              setArrowAt(null);
+              onSet();
+            }}
+          >
+            Set a budget for {category.name}
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
 
 // The iPhone home-screen app (navigator.standalone) can't return from a download, so there the CSV goes
 // through the share sheet instead (Specification 4.5). Elsewhere the normal download is used.
@@ -29,10 +80,12 @@ const preparedFiles = new Map<string, File>();
 const preparing = new Set<string>();
 const MAX_PREPARED = 6;
 
-export default function SummaryScreen({ cache, categories }: { cache: ApiCache; categories: Category[] }) {
+export default function SummaryScreen({ cache, categories, online, onChanged }: { cache: ApiCache; categories: Category[]; online: boolean; onChanged: () => void }) {
   const money = useMoney();
   const [offset, setOffset] = useState(0);
   const [open, setOpen] = useState<number | null>(null);
+  // The category whose Edit category card is open over Summary
+  const [editing, setEditing] = useState<Category | null>(null);
   const [downloadNote, setDownloadNote] = useState("");
   const shareMode = useSyncExternalStore(noSubscribe, sharesFiles, () => false);
   const month = monthKey(offset);
@@ -52,7 +105,6 @@ export default function SummaryScreen({ cache, categories }: { cache: ApiCache; 
   const spentRows = rows?.filter((r) => r.total > 0);
 
   const total = rows?.reduce((s, r) => s + r.total, 0) ?? 0;
-  const max = Math.max(...(rows ?? []).map((r) => r.total), 0) || 1;
 
   // For the share sheet, the file must be ready the moment CSV is tapped, so it's fetched in advance:
   // once per month shown, and again only after a change made in the app (Specification 4.5)
@@ -152,8 +204,9 @@ export default function SummaryScreen({ cache, categories }: { cache: ApiCache; 
             const budget = isCurrent ? (r.budget ?? null) : null;
             const pace = budget != null && "daily" in r ? r : null;
             const isOpen = pace != null && open === pace.id;
-            // Against the budget where there is one; otherwise relative to the month's largest category
-            const share = Math.min(r.total / (budget ?? max), 1);
+            // This month, a category without a budget points to setting one. A retired category (no longer in the list)
+            // and every category in a past month show their name and amount only (Specification 4.1)
+            const unbudgeted = isCurrent && budget == null && "id" in r ? categories.find((c) => c.id === r.id) : undefined;
             const body = (
               <>
                 <div className="cat-top">
@@ -171,13 +224,16 @@ export default function SummaryScreen({ cache, categories }: { cache: ApiCache; 
                     )}
                   </span>
                 </div>
-                <div className="meter">
-                  <div className="track">
-                    <div className={budget != null && cents(r.total) > cents(budget) ? "fill over" : "fill"} style={{ width: `${share * 100}%` }} />
+                {budget != null && (
+                  <div className="meter">
+                    <div className="track">
+                      <div className={cents(r.total) > cents(budget) ? "fill over" : "fill"} style={{ width: `${Math.min(r.total / budget, 1) * 100}%` }} />
+                    </div>
+                    {pace && <div className="tick" style={{ left: `${Math.min(day / days, 1) * 100}%` }} />}
                   </div>
-                  {pace && <div className="tick" style={{ left: `${Math.min(day / days, 1) * 100}%` }} />}
-                </div>
+                )}
                 {pace && budget != null && <PaceNote total={r.total} budget={budget} day={day} days={days} />}
+                {unbudgeted && <BudgetNotSet category={unbudgeted} onSet={() => setEditing(unbudgeted)} />}
               </>
             );
             return pace && budget != null ? (
@@ -201,6 +257,7 @@ export default function SummaryScreen({ cache, categories }: { cache: ApiCache; 
         )}
       </div>
       {rows?.length === 0 && <p className="sub empty">No expenses this month.</p>}
+      {editing && <CategorySheet category={editing} retired={[]} online={online} onClose={() => setEditing(null)} onChanged={onChanged} />}
       {downloadNote && (
         <div className="undo-bar" role="status">
           <span>{downloadNote}</span>

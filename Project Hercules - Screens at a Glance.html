@@ -66,7 +66,7 @@ footer { margin-top: 56px; padding-top: 18px; border-top: 1px solid var(--rule);
 /* ---------- App mockups: the real app's tokens, inside a phone frame ---------- */
 /* Every phone is the same height, the tallest drawing's, so they look like one device on the page and in the white view;
    the extra space goes to the screen's content, with the tab bar staying at the bottom. Raise it if a drawing grows taller */
-.phone { width: 300px; max-width: 100%; min-height: 603px; border-radius: 26px; border: 1px solid var(--frame); overflow: hidden; display: flex; flex-direction: column;
+.phone { width: 300px; max-width: 100%; min-height: 613px; border-radius: 26px; border: 1px solid var(--frame); overflow: hidden; display: flex; flex-direction: column;
          box-shadow: 0 1px 2px rgba(0,0,0,.05), 0 10px 26px rgba(0,0,0,.07); }
 .m { --m-bg: #fff; --m-text: #18181b; --m-muted: #71717a; --m-line: #e7e7e4; --m-soft: #f4f4f5; --m-edge: #8e8e96; --m-bar: #18181b; --m-bad: #b91c1c; --m-good: #15803d; --m-hl: #fde68a; --m-off: #d4d4d8;
      --m-pie-1: #2a78d6; --m-pie-2: #eb6834; --m-pie-3: #1baf7a; --m-pie-4: #eda100; --m-pie-5: #e87ba4; --m-pie-rest: #a1a1aa; --m-g-border: #747775;
@@ -119,6 +119,8 @@ footer { margin-top: 56px; padding-top: 18px; border-top: 1px solid var(--rule);
 .m .cat.open .tick { box-shadow: 0 0 0 1.5px var(--m-soft); }
 .m .pace { margin-top: 5px; font-size: 10.5px; color: var(--m-muted); }
 .m .pace b { color: var(--m-text); font-weight: 600; }
+.m .nb { display: flex; align-items: center; gap: 4px; }
+.m .nbi { display: grid; place-items: center; width: 11px; height: 11px; border-radius: 50%; border: 1px solid var(--m-muted); font: italic 700 7.5px/1 Georgia, serif; color: var(--m-muted); }
 .m .pace.bad, .m .pace.bad b { color: var(--m-bad); }
 .m .seg { display: flex; background: var(--m-soft); border-radius: 10px; padding: 3px; margin-top: 12px; }
 .m .seg span { flex: 1; text-align: center; padding: 6px 0; border-radius: 8px; font-size: 12px; color: var(--m-muted); }
@@ -679,7 +681,7 @@ html.wv-lock { overflow: hidden; }
         </div>
         <div class="body">
           <div class="cat"><div class="cat-top"><span>Rent<span class="n">1</span></span><span><strong>2,000.00</strong> <span class="of">of 2,000.00</span><svg class="chev"><use href="#i-chev"/></svg></span></div><div class="meter"><div class="track"><div class="fill" style="width:100%"></div></div><div class="tick" style="left:23.3%"></div></div><div class="pace"><b>Budget used</b> · $0.00 left</div></div>
-          <div class="cat"><div class="cat-top"><span>Shopping<span class="n">1</span></span><strong>640.00</strong></div><div class="track"><div class="fill" style="width:32%"></div></div></div>
+          <div class="cat"><div class="cat-top"><span>Shopping<span class="n">1</span></span><strong>640.00</strong></div><div class="pace nb">Budget not set for this category <span class="nbi">i</span></div></div>
           <div class="cat open"><div class="cat-top"><span>Food &amp; Dining<span class="n">7</span></span><span><strong>210.00</strong> <span class="of">of 500.00</span><svg class="chev"><use href="#i-chev-up"/></svg></span></div><div class="meter"><div class="track"><div class="fill" style="width:42%"></div></div><div class="tick" style="left:23.3%"></div></div><div class="pace"><b>$93.33 over pace</b> · $290.00 left, about $12.61/day</div>
             <div class="chart"><svg viewBox="0 0 359 200" role="img" aria-label="Burn-up chart: $210 spent by 7 November against $116.67 expected">
               <line x1="6" x2="353" y1="176" y2="176" stroke="var(--m-muted)" stroke-opacity=".5"/>
@@ -701,7 +703,7 @@ html.wv-lock { overflow: hidden; }
         </div>
         <div class="tabs" data-on="summary"></div>
       </div></div>
-      <figcaption><span class="no">5.1</span><b>Monthly budget overview.</b> Shows remaining balance and daily allowance per category; tap any row to expand its chart. Tap <b>CSV</b> to download a CSV report of your current month's expenses to-date.</figcaption>
+      <figcaption><span class="no">5.1</span><b>Monthly budget overview.</b> Shows remaining balance and daily allowance per category; tap any row to expand its chart. A category without a budget shows <b>Budget not set for this category</b>; tap it to set one. Tap <b>CSV</b> to download a CSV report of your current month's expenses to-date.</figcaption>
     </figure>
     <figure id="s5-2">
       <div class="phone"><div class="m">
@@ -765,13 +767,13 @@ html.wv-lock { overflow: hidden; }
           <div class="mtotal"><div><div style="margin-top:12px" class="sub">Spent in October 2026</div><div class="big">$3,902.15</div></div><span class="mcsv"><svg><use href="#i-down"/></svg>CSV</span></div>
         </div>
         <div class="body">
-          <div class="cat"><div class="cat-top"><span>Rent<span class="n">1</span></span><strong>2,000.00</strong></div><div class="track"><div class="fill" style="width:100%"></div></div></div>
-          <div class="cat"><div class="cat-top"><span>Food &amp; Dining<span class="n">31</span></span><strong>612.40</strong></div><div class="track"><div class="fill" style="width:31%"></div></div></div>
-          <div class="cat"><div class="cat-top"><span>Groceries<span class="n">9</span></span><strong>418.75</strong></div><div class="track"><div class="fill" style="width:21%"></div></div></div>
-          <div class="cat"><div class="cat-top"><span>Shopping<span class="n">4</span></span><strong>356.00</strong></div><div class="track"><div class="fill" style="width:18%"></div></div></div>
-          <div class="cat"><div class="cat-top"><span>Transport<span class="n">22</span></span><strong>214.60</strong></div><div class="track"><div class="fill" style="width:11%"></div></div></div>
-          <div class="cat"><div class="cat-top"><span>Utilities<span class="n">2</span></span><strong>180.40</strong></div><div class="track"><div class="fill" style="width:9%"></div></div></div>
-          <div class="cat"><div class="cat-top"><span>Entertainment<span class="n">3</span></span><strong>120.00</strong></div><div class="track"><div class="fill" style="width:6%"></div></div></div>
+          <div class="cat"><div class="cat-top"><span>Rent<span class="n">1</span></span><strong>2,000.00</strong></div></div>
+          <div class="cat"><div class="cat-top"><span>Food &amp; Dining<span class="n">31</span></span><strong>612.40</strong></div></div>
+          <div class="cat"><div class="cat-top"><span>Groceries<span class="n">9</span></span><strong>418.75</strong></div></div>
+          <div class="cat"><div class="cat-top"><span>Shopping<span class="n">4</span></span><strong>356.00</strong></div></div>
+          <div class="cat"><div class="cat-top"><span>Transport<span class="n">22</span></span><strong>214.60</strong></div></div>
+          <div class="cat"><div class="cat-top"><span>Utilities<span class="n">2</span></span><strong>180.40</strong></div></div>
+          <div class="cat"><div class="cat-top"><span>Entertainment<span class="n">3</span></span><strong>120.00</strong></div></div>
         </div>
         <div class="tabs" data-on="summary"></div>
       </div></div>

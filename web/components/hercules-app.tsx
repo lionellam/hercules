@@ -40,7 +40,7 @@ export default function HerculesApp({ email, defaultCurrency }: { email: string;
       <main className="app">
         {tab === "log" && <LogScreen categories={categories} online={online} cache={cache} onSaved={cache.reloadAll} text={logText} setText={setLogText} />}
         {tab === "history" && <HistoryScreen categories={categories} online={online} cache={cache} onChanged={cache.reloadAll} />}
-        {tab === "summary" && <SummaryScreen cache={cache} categories={categories} />}
+        {tab === "summary" && <SummaryScreen cache={cache} categories={categories} online={online} onChanged={cache.reloadAll} />}
         {tab === "settings" && <SettingsScreen email={email} categories={categories} online={online} cache={cache} onChanged={cache.reloadAll} />}
         <nav className="tabs">
           <TabButton id="log" tab={tab} setTab={setTab} label="Log" path="M12 5v14M5 12h14" />

@@ -204,6 +204,16 @@ textarea::placeholder { color: var(--muted); }
 .ni-tip { position: absolute; left: 0; top: calc(100% + 8px); z-index: 5; max-width: 250px; margin: 0; padding: 9px 12px; border-radius: 10px;
           background: var(--text); color: var(--bg); font-size: 13px; line-height: 1.4; box-shadow: 0 6px 18px rgba(0,0,0,.18); }
 .ni-tip::before { content: ""; position: absolute; top: -5px; left: min(var(--arrow, 20px), calc(100% - 20px)); width: 10px; height: 10px; background: var(--text); transform: rotate(45deg); }
+/* A category without a budget, this month (Architecture decision 44): the line opens a bubble, styled like "Not included" */
+.no-budget { position: relative; margin-top: -5px; }
+.no-budget-line { display: inline-flex; align-items: center; gap: 6px; min-height: 28px; padding: 0; border: none; background: none;
+                  font: inherit; font-size: 12.5px; color: var(--muted); cursor: pointer; text-align: left; }
+.no-budget-i { display: grid; place-items: center; width: 16px; height: 16px; border-radius: 50%; border: 1.3px solid var(--muted); box-sizing: border-box;
+               font: italic 700 10.5px/1 Georgia, "Times New Roman", serif; color: var(--muted); }
+.no-budget-line.on .no-budget-i { background: var(--text); border-color: var(--text); color: var(--bg); }
+.no-budget .ni-tip { top: calc(100% + 4px); max-width: 270px; }
+.no-budget-link { display: block; margin-top: 8px; padding: 0; border: none; background: none; font: inherit; font-weight: 600; color: inherit;
+                  text-decoration: underline; text-underline-offset: 2px; cursor: pointer; text-align: left; }
 .cat.open { background: var(--soft); margin-left: -12px; margin-right: -12px; padding: 12px 12px 10px; border-radius: 14px; }
 .cat.open .track { background: var(--line); }
 .cat-toggle { display: block; width: 100%; padding: 0; border: none; background: none; color: inherit; font: inherit; text-align: left; cursor: pointer; }

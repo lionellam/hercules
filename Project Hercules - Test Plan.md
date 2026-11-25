@@ -1,7 +1,7 @@
 # Project Hercules — Test Plan: Web App v1
 
 ```
-Version 1.42 · Draft
+Version 1.43 · Draft
 Last Reviewed: 25 November 2026
 Produced with AI Assistance (Claude Code)
 ```
@@ -53,6 +53,7 @@ Produced with AI Assistance (Claude Code)
 | 1.40 | 2026-11-24 | Lionel Lam | A-01 and N-01 name the ship picture and icon; new A-12 (sign-in picture in light and dark), M-09 (browser tab icon) and S-13 (the icon on the phone after a release) |
 | 1.41 | 2026-11-25 | Lionel Lam | Q-07 says Sign out is centred; K-08 says Other's Name has no pencil; new K-09 (pencils on the category sheet) |
 | 1.42 | 2026-11-25 | Lionel Lam | K-01 and K-03 name the line under the heading and the "Set amount" placeholder; T-10 updated to match |
+| 1.43 | 2026-11-25 | Lionel Lam | Summary without budgets: H-02 and H-05 updated; new H-11 to H-14 (the bubble, setting a budget from Summary, retired categories, past months) |
 
 ---
 
@@ -224,15 +225,19 @@ Use a month with several expenses, such as one filled with sample data.
 | ID | Test | Steps | Expected result |
 |---|---|---|---|
 | H-01 | This month | Open **Summary** | "Spent so far this month", the total with a **CSV** button beside it, and "Day X of Y" with today's date. There is no comparison with last month |
-| H-02 | Last month | Tap last month's name at the top | "Spent in [month]" and that month's total. No day line, no comparison with the month before and no pace notes |
+| H-02 | Last month | Tap last month's name at the top | "Spent in [month]" and that month's total. No day line, no comparison with the month before, no pace notes and no bars |
 | H-03 | Totals match History | Add up a month's amounts in History (or use a search for each category) | Each category's figure on Summary matches |
 | H-04 | Only categories with spending | Have a category with a budget but no spending this month | It isn't listed on Summary |
-| H-05 | Bars without a budget | Look at a category with no budget | Its bar is relative to the month's largest category |
+| H-05 | No budget, this month | Look at a category with spending this month and no budget | Its name, number of expenses and amount, with no bar and no "of". Below it: "Budget not set for this category" and an "i" in a circle |
 | H-06 | Bars with a budget | Set a budget on a category with spending this month | It reads "x of budget", and the bar fills against the budget |
 | H-07 | Over budget is red | Make a `zz-test-` category with a 10.00 budget and log `[TEST]` expenses totalling 12.00 in it | Its bar is full and red, with "Over budget by $2.00" in red and a warning icon |
 | H-08 | Pie chart | Look below the category list | "Share of spend" with up to six slices and percentages. With more than six categories, the smaller ones are grouped as "Everything else (n)" |
 | H-09 | Future-dated expense | Save a `[TEST]` expense dated later this month | It counts towards this month's total and pace straight away |
 | H-10 | Total stays in place | On a phone held upright (and on a tablet or computer), scroll Summary down to the pie chart, on this month and last month | The heading, month switcher, total, **CSV** button and (this month) day line stay at the top, with a thin line below them; the categories scroll underneath. **CSV** still works while scrolled |
+| H-11 | The "Budget not set" bubble | Tap the words "Budget not set for this category" (not the "i"); tap elsewhere; then tap the "i" | Each tap opens a bubble below the line: "The budget for this category can be set in Settings › Categories & budgets." and the link **Set a budget for [category]**; the "i" is dark while it's open. Tapping elsewhere closes it |
+| H-12 | Setting a budget from Summary | Make a `zz-test-` category with no budget and log a `[TEST]` expense in it; on Summary, open its bubble and tap **Set a budget for zz-test-…**; then **Cancel**; open it again, enter 100 and **Save** | The category's Edit category card slides up over Summary, with no box selected and the keyboard closed. Cancel closes it. After Save, the card closes and the row shows a bar, "of 100.00", a marker and a pace note, without leaving Summary |
+| H-13 | Retired category | Retire the `zz-test-` category from H-12 while it has spending this month | On Summary its row shows its name, number and amount only: no bar and no "Budget not set" line |
+| H-14 | Past months | Switch to last month | Every category shows its name, number and amount only, with no bars and no "Budget not set" lines |
 
 ### I. Spending Pace (This Month)
 

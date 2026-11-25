@@ -6,6 +6,17 @@ Versions follow [semantic versioning](https://semver.org): **major** for a chang
 
 ---
 
+## 1.7.0 — 25 November 2026
+
+**New**
+- On **Summary**, a category without a budget no longer has a bar, since there's nothing to measure it against. Instead it says "Budget not set for this category". Tap that line to see where budgets are set, and tap **Set a budget for…** to open the category's card right there and add one. Once saved, the category gets its bar and spending pace straight away.
+
+**Changed**
+- Past months on Summary show each category's name and amount, without bars, as budgets for past months aren't recorded.
+- A category retired this month shows its name and amount only.
+
+---
+
 ## 1.6.2 — 25 November 2026
 
 **Improved**

@@ -8,7 +8,8 @@ import { useHomeCurrency } from "../currency";
 import { useMoney } from "../currency";
 import { PencilIcon } from "../review-card";
 
-function CategorySheet({ category, retired, online, onClose, onChanged }: { category: Category | null; retired: Category[]; online: boolean; onClose: () => void; onChanged: () => void }) {
+// Also opened from Summary, for a category without a budget (Architecture decision 44)
+export function CategorySheet({ category, retired, online, onClose, onChanged }: { category: Category | null; retired: Category[]; online: boolean; onClose: () => void; onChanged: () => void }) {
   const home = useHomeCurrency();
   const money = useMoney();
   const [name, setName] = useState(category?.name ?? "");

@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Categories Without a Budget</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root { --page: #ececea; --page-text: #18181b; --page-muted: #5f5f66; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--page); color: var(--page-text); font-family: Inter, -apple-system, system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  main { max-width: 1460px; margin: 0 auto; padding: 36px 16px 80px; }
+  h1 { font-size: 28px; letter-spacing: -0.02em; margin: 0 0 8px; }
+  h2 { font-size: 18px; margin: 44px 0 6px; }
+  .lead { color: var(--page-muted); max-width: 880px; line-height: 1.55; margin: 0 0 10px; font-size: 15px; }
+  .lead b { color: var(--page-text); }
+  ol.q { color: var(--page-muted); max-width: 880px; line-height: 1.55; font-size: 15px; margin: 6px 0 10px 22px; }
+  ol.q li { margin-bottom: 8px; }
+  ol.q b { color: var(--page-text); }
+  .frames { display: flex; flex-wrap: wrap; gap: 30px 26px; align-items: flex-start; margin-top: 18px; }
+  figure { margin: 0; max-width: 100%; }
+  figcaption { max-width: 375px; font-size: 13px; color: var(--page-muted); margin-top: 12px; line-height: 1.5; }
+  figcaption b { color: var(--page-text); }
+  .phone { width: 375px; max-width: 100%; height: 700px; border-radius: 30px; overflow: hidden; border: 1px solid rgba(0,0,0,.08);
+           box-shadow: 0 1px 2px rgba(0,0,0,.06), 0 10px 28px rgba(0,0,0,.08); }
+
+  /* App tokens and styles, from web/app/globals.css */
+  .app { --bg: #fff; --text: #18181b; --muted: #71717a; --line: #e7e7e4; --accent: #18181b; --accent-text: #fff; --soft: #f4f4f5; --edge: #8e8e96; --bar: #18181b; --bad: #b91c1c; --good: #15803d;
+         background: var(--bg); color: var(--text); font-size: 15px; position: relative; height: 100%; display: flex; flex-direction: column; overflow: hidden; }
+  .app.dark { --bg: #18181b; --text: #f4f4f5; --muted: #a1a1aa; --line: #27272a; --accent: #f4f4f5; --accent-text: #18181b; --soft: #27272a; --edge: #71717a; --bar: #f4f4f5; --bad: #f87171; --good: #4ade80; }
+  .top { padding: 30px 20px 14px; border-bottom: 1px solid var(--line); }
+  .app h3 { font-size: 28px; font-weight: 700; letter-spacing: -0.02em; }
+  .seg { display: flex; background: var(--soft); border-radius: 12px; padding: 3px; margin-top: 14px; }
+  .seg span { flex: 1; height: 32px; display: grid; place-items: center; border-radius: 10px; font-size: 14px; font-weight: 500; color: var(--muted); }
+  .seg span.on { background: var(--bg); color: var(--text); box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+  .mtotal { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 12px; }
+  .mtotal .s { color: var(--muted); font-size: 14px; }
+  .mtotal .big { font-size: 30px; font-weight: 700; letter-spacing: -0.02em; }
+  .csv { display: inline-flex; align-items: center; height: 34px; padding: 0 12px; border-radius: 10px; box-shadow: inset 0 0 0 1.5px var(--edge); font-size: 14px; font-weight: 600; }
+  .dayline { font-size: 13px; color: var(--muted); margin-top: 6px; }
+  .dayline b { color: var(--text); font-weight: 600; }
+  .body { padding: 0 20px; flex: 1; position: relative; }
+  .cat { margin-top: 18px; position: relative; }
+  .cat-top { display: flex; justify-content: space-between; gap: 12px; font-size: 14px; margin-bottom: 6px; }
+  .cat-top .n { color: var(--muted); font-size: 12px; margin-left: 6px; }
+  .cat-top strong { font-variant-numeric: tabular-nums; }
+  .of { color: var(--muted); font-weight: 400; margin-left: 4px; }
+  .chev { width: 13px; height: 13px; color: var(--muted); margin-left: 4px; vertical-align: -1px; }
+  .meter { position: relative; }
+  .track { height: 6px; background: var(--soft); border-radius: 3px; overflow: hidden; }
+  .fill { height: 100%; background: var(--bar); border-radius: 3px; }
+  .tick { position: absolute; top: -3px; width: 2px; height: 12px; background: var(--text); border-radius: 1px; transform: translateX(-1px); box-shadow: 0 0 0 1.5px var(--bg); }
+  .pace { margin-top: 6px; font-size: 12.5px; color: var(--muted); display: flex; align-items: center; gap: 4px; line-height: 1.35; }
+  .pace b { color: var(--text); font-weight: 600; }
+  /* The proposed "i", drawn like the "?" beside "Not included" */
+  .info { display: grid; place-items: center; width: 16px; height: 16px; border-radius: 50%; border: 1.3px solid var(--muted); color: var(--muted); font: italic 700 10px/1 Georgia, serif; flex-shrink: 0; }
+  .info.on { background: var(--text); border-color: var(--text); color: var(--bg); }
+  .tip { position: absolute; left: 0; top: calc(100% + 8px); z-index: 5; width: 262px; padding: 10px 12px; border-radius: 10px; background: var(--text); color: var(--bg); font-size: 13px; line-height: 1.4; box-shadow: 0 6px 18px rgba(0,0,0,.18); }
+  .tip::before { content: ""; position: absolute; top: -5px; left: 186px; width: 10px; height: 10px; background: var(--text); transform: rotate(45deg); }
+  .tip a { display: inline-block; margin-top: 8px; color: inherit; font-weight: 600; text-decoration: underline; text-underline-offset: 2px; }
+  .tabs { display: flex; justify-content: space-around; border-top: 1px solid var(--line); padding: 10px 0 18px; color: var(--muted); font-size: 11px; background: var(--bg); }
+  .tabs b { color: var(--text); font-weight: 600; }
+  /* Sheets */
+  .scrim { position: absolute; inset: 0; background: rgba(0,0,0,.45); z-index: 6; }
+  .sheet { position: absolute; left: 0; right: 0; bottom: 0; z-index: 7; background: var(--bg); border-radius: 20px 20px 0 0; padding: 14px 20px 24px; }
+  .card-title { font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; margin: 4px 0 6px; }
+  .field { display: flex; justify-content: space-between; align-items: center; padding: 11px 0; border-top: 1px solid var(--line); gap: 12px; }
+  .field label { color: var(--muted); white-space: nowrap; }
+  .field .v { display: inline-flex; align-items: center; gap: 8px; font-weight: 500; white-space: nowrap; }
+  .field .v.ph { color: var(--muted); font-weight: 400; }
+  .caret { display: inline-block; width: 1.5px; height: 18px; background: #2563eb; margin-right: -4px; }
+  .ico { width: 16px; height: 16px; color: var(--muted); flex-shrink: 0; }
+  .btn { height: 44px; padding: 0 18px; border-radius: 12px; border: none; font: inherit; font-size: 15px; font-weight: 600; background: var(--accent); color: var(--accent-text); }
+  .btn.ghost { background: transparent; color: var(--muted); }
+  .btn.red { background: transparent; color: var(--bad); padding-left: 0; }
+  .acts { display: flex; justify-content: space-between; align-items: center; margin-top: 14px; }
+  .acts .r { display: flex; gap: 6px; }
+  .back { color: var(--muted); font-size: 14px; }
+  .sub { color: var(--muted); font-size: 14px; margin-top: 4px; line-height: 1.4; }
+  .addb { align-self: flex-start; margin: 12px 0 4px; }
+  .catrow { display: flex; justify-content: space-between; padding: 13px 0; border-bottom: 1px solid var(--line); }
+  .catrow .c { color: var(--muted); font-size: 14px; }
+  .catrow .a { font-weight: 600; }
+  .new { outline: 2px dashed #1d4ed8; outline-offset: 3px; border-radius: 4px; }
+  .tapped { box-shadow: 0 0 0 3px rgba(37,99,235,.45); border-radius: 50%; }
+  .tapped-l { box-shadow: 0 0 0 3px rgba(37,99,235,.45); border-radius: 3px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Summary: categories without a budget</h1>
+  <p class="lead">Today, a category without a budget still gets a bar on Summary, but it isn't measured against anything: it's drawn relative to the month's biggest category. Shopping at 640.00 shows a third-full bar, which reads as "a third of a budget used". This proposal removes that bar and points people to setting a budget. Dashed blue outlines mark what's new; a blue ring marks what was tapped.</p>
+  <p class="lead"><b>Feasibility:</b> all of it can be built with what the app already has. The "i" and its bubble reuse the "?" beside "Not included" on Summary (same size, same tap area, closes when you tap elsewhere). The Edit category card is the existing one. The only new piece of plumbing is letting Summary open that card for a given category; it is straightforward.</p>
+
+  <h2>1. The rows</h2>
+  <div class="frames" id="rows"></div>
+
+  <h2>2. Tapping the "i", and where the link goes</h2>
+  <p class="lead">The link opens the category's Edit category card over Summary: it slides up from the bottom, as the app's cards do, with nothing selected (Option B, chosen).</p>
+  <div class="frames" id="flow"></div>
+
+  <h2>3. Past months</h2>
+  <div class="frames" id="past"></div>
+
+  <h2>Decisions so far</h2>
+  <ol class="q">
+    <li><b>Where the link goes:</b> Option B. The card slides up over Summary, as the app's cards do, with nothing selected; after Save it closes and the row gets its bar, "of", day tick and pace line.</li>
+    <li><b>Past months:</b> no bars. Every category shows its name and amount only, as past budgets aren't recorded.</li>
+    <li><b>Retired categories:</b> name and amount only, with no bar and no line below.</li>
+    <li><b>The tap target:</b> the whole "Budget not set for this category" line opens the bubble; the "i" turns dark while it's open.</li>
+    <li><b>The link:</b> "Set a budget for" and the category's name.</li>
+  </ol>
+</main>
+
+<script>
+const PENCIL = '<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>';
+const CHEV = '<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>';
+const TICK = 7 / 30 * 100;
+
+// A budgeted row, as today
+const budgeted = (name, n, total, budget, pace) => `<div class="cat"><div class="cat-top"><span>${name}<span class="n">${n}</span></span><span><strong>${total}</strong><span class="of">of ${budget}</span>${CHEV}</span></div>
+  <div class="meter"><div class="track"><div class="fill" style="width:${Math.min(parseFloat(total.replace(/,/g,'')) / parseFloat(budget.replace(/,/g,'')), 1) * 100}%"></div></div><div class="tick" style="left:${TICK}%"></div></div>
+  <p class="pace">${pace}</p></div>`;
+// A row without a budget: today's relative bar, or the proposal
+const unbudgeted = (name, n, total, share, mode, extra = '') => {
+  const top = `<div class="cat-top"><span>${name}<span class="n">${n}</span></span><strong>${total}</strong></div>`;
+  if (mode === 'today') return `<div class="cat">${top}<div class="track"><div class="fill" style="width:${share}%"></div></div></div>`;
+  if (mode === 'plain') return `<div class="cat">${top}</div>`;
+  const open = mode === 'open';
+  return `<div class="cat">${top}<p class="pace new${open ? ' tapped-l' : ''}" style="display:inline-flex">Budget not set for this category <span class="info${open ? ' on' : ''}">i</span></p>
+    ${open ? `<div class="tip">The budget for this category can be set in Settings › Categories &amp; budgets.<br><a>Set a budget for ${name}</a></div>` : ''}${extra}</div>`;
+};
+
+function summary({ mode = 'proposed', dark = false, month = 'current', overlay = '', shoppingBudget = false, retired = false }) {
+  const cur = month === 'current';
+  const rows = cur ? [
+    budgeted('Rent', 1, '2,000.00', '2,000.00', '<b>Budget used</b> · $0.00 left'),
+    shoppingBudget ? `<div class="new" style="outline-offset:6px">${budgeted('Shopping', 3, '640.00', '800.00', '<b>$453.33 over pace</b> · $160.00 left, about $6.96/day')}</div>`
+                   : unbudgeted('Shopping', 3, '640.00', 32, mode === 'open' ? 'open' : mode),
+    budgeted('Food & Dining', 7, '210.00', '500.00', '<b>$93.33 over pace</b> · $290.00 left, about $12.61/day'),
+    unbudgeted('Transport', 9, '124.40', 6, mode === 'open' ? 'proposed' : mode),
+    retired ? unbudgeted('Gifts', 1, '60.00', 3, mode === 'today' ? 'today' : 'plain') : '',
+  ] : [
+    unbudgeted('Rent', 1, '2,000.00', 100, mode), unbudgeted('Shopping', 4, '880.00', 44, mode),
+    unbudgeted('Food & Dining', 21, '512.30', 26, mode), unbudgeted('Transport', 26, '301.10', 15, mode),
+  ];
+  return `<div class="app${dark ? ' dark' : ''}">
+    <div class="top">
+      <h3>Summary</h3>
+      <div class="seg"><span class="${cur ? 'on' : ''}">November</span><span class="${cur ? '' : 'on'}">October</span></div>
+      <div class="mtotal"><div><div class="s">${cur ? 'Spent so far this month' : 'Spent in October'}</div><div class="big">${cur ? '$3,034.40' : '$3,693.40'}</div></div><span class="csv">↓ CSV</span></div>
+      ${cur ? '<div class="dayline"><b>Day 7 of 30</b> · Sat, 7 Nov</div>' : ''}
+    </div>
+    <div class="body">${rows.join('')}</div>
+    <div class="tabs"><span>Log</span><span>History</span><b>Summary</b><span>Settings</span></div>
+    ${overlay}
+  </div>`;
+}
+
+const sheet = `<div class="scrim"></div><div class="sheet">
+  <div class="card-title">Edit category</div>
+  <div class="field"><label>Name</label><span class="v">Shopping${PENCIL}</span></div>
+  <div class="field"><label>Monthly budget (SGD)</label><span class="v ph">Set amount${PENCIL}</span></div>
+  <div class="acts"><div><button class="btn red">Retire</button></div><div class="r"><button class="btn ghost">Cancel</button><button class="btn">Save</button></div></div>
+</div>`;
+
+function settingsPage(dark) {
+  const cats = [['Food & Dining','500.00'],['Transport',null],['Groceries','300.00'],['Rent','2,000.00'],['Shopping',null],['Other',null]];
+  return `<div class="app${dark ? ' dark' : ''}">
+    <div style="padding:26px 20px 0"><div class="back">‹ Settings</div><h3>Categories &amp; budgets</h3>
+    <p class="sub">Manage your expense categories and category budgets.</p><button class="btn addb">Add category</button>
+    ${cats.map(([n, b]) => `<div class="catrow"><span>${n}</span>${b ? `<span class="a">${b}</span>` : '<span class="c">No budget</span>'}</div>`).join('')}</div>
+    <div style="flex:1"></div>
+    <div class="tabs"><span>Log</span><span>History</span><span>Summary</span><b>Settings</b></div>
+    ${sheet}
+  </div>`;
+}
+
+const fig = (html, cap) => `<figure><div class="phone">${html}</div><figcaption>${cap}</figcaption></figure>`;
+document.getElementById('rows').innerHTML = [
+  fig(summary({ mode: 'today' }), '<b>1a. Today.</b> Shopping and Transport have no budget, but still get bars, drawn against Rent, the biggest category.'),
+  fig(summary({}), '<b>1b. Proposed.</b> No bar and no "of" for Shopping and Transport; instead, "Budget not set for this category" with an "i". Their totals are unchanged.'),
+  fig(summary({ dark: true }), '<b>1c. Proposed, dark theme.</b>'),
+  fig(summary({ retired: true }), '<b>1d. A retired category</b> (Gifts, retired this month) shows its name and amount only (chosen).'),
+].join('');
+document.getElementById('flow').innerHTML = [
+  fig(summary({ mode: 'open' }), '<b>2a. Tapping the line or the "i"</b> opens a bubble below it. Tapping anywhere else closes it.'),
+  fig(summary({ mode: 'open', dark: true }), '<b>2a. Dark theme.</b> The bubble is drawn in the opposite colours, like the "Not included" one.'),
+  fig(summary({ mode: 'proposed', overlay: sheet }), '<b>2b. Tapping the link:</b> Shopping\'s card slides up over Summary.'),
+  fig(summary({ shoppingBudget: true }), '<b>2c. After Save</b> (a budget of 800): the card closes and Shopping gets its bar, "of 800.00", the day tick and its pace line.'),
+].join('');
+document.getElementById('past').innerHTML = [
+  fig(summary({ mode: 'today', month: 'past' }), '<b>3a. Today:</b> October with relative bars for every category.'),
+  fig(summary({ mode: 'plain', month: 'past' }), '<b>3b. Chosen:</b> no bars in past months, only names and amounts, since past budgets aren\'t recorded.'),
+].join('');
+</script>
+</body>
+</html>
