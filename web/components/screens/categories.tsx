@@ -75,7 +75,7 @@ function CategorySheet({ category, retired, online, onClose, onChanged }: { cate
           </div>
           <div className="field">
             <label htmlFor="c-budget">Monthly budget ({home})</label>
-            <input id="c-budget" inputMode="decimal" value={budget} onChange={(e) => setBudget(e.target.value)} placeholder="Optional" />
+            <input id="c-budget" inputMode="decimal" value={budget} onChange={(e) => setBudget(e.target.value)} placeholder="Set amount" />
             <label htmlFor="c-budget" className="field-icon"><PencilIcon /></label>
           </div>
           {category?.is_other && <p className="sub">The built-in &quot;Other&quot; category can&apos;t be renamed or retired.</p>}
@@ -132,7 +132,6 @@ function CategorySheet({ category, retired, online, onClose, onChanged }: { cate
 }
 
 export default function CategoriesScreen({ categories, online, cache, onChanged, onBack }: { categories: Category[]; online: boolean; cache: ApiCache; onChanged: () => void; onBack: () => void }) {
-  const home = useHomeCurrency();
   const [editing, setEditing] = useState<Category | "new" | null>(null);
   const retired = useCached<Category[]>(cache, "/api/categories?retired=1") ?? [];
   const [showRetired, setShowRetired] = useState(false);
@@ -153,7 +152,7 @@ export default function CategoriesScreen({ categories, online, cache, onChanged,
       <div className="pinned-top">
         <button className="back-link" onClick={onBack}>‹ Settings</button>
         <h1>Categories &amp; budgets</h1>
-        <p className="sub">Monthly budgets are optional and in {home}.</p>
+        <p className="sub">Manage your expense categories and category budgets.</p>
         <div className="row-start">
           <button className="btn btn-primary" disabled={!online} onClick={() => setEditing("new")}>Add category</button>
         </div>

@@ -2163,3 +2163,30 @@ Last updated: 25 November 2026
 
 ### Clean-up
 - The local database wasn't running, so it was started with `npm run db:local` for the tests. The demo account was removed from the allow-list afterwards, and the test browser was signed out, as it was before. No test data was created.
+
+---
+
+## 25 November 2026 — Version 1.6.2: Nudging People to Set Budgets
+
+### What Was Done
+- At the owner's request, the first step in nudging people to set budgets rather than leave them blank, as budgets are what let Hercules show spending against a plan. More changes to lead people to this page are planned.
+- **Under the Categories & budgets heading:** "Manage your expense categories and category budgets." in place of "Monthly budgets are optional and in SGD." The currency still shows on the budget box ("Monthly budget (SGD)"), so the page no longer needs `useHomeCurrency` (removed from `CategoriesScreen` in `web/components/screens/categories.tsx`).
+- **Empty budget box:** "Set amount" in place of "Optional", on both Edit category and Add category. The Remarks box on the expense cards keeps "Optional".
+- **Application Screens** 7.1 and 7.4 and the user guide's copy of 7.1 show the new line under the heading.
+- Documents: Specification 0.59 (Sections 4.6 and 5.2), Test Plan 1.42 (K-01, K-03 and T-10). No Architecture change, as no design decision changed. Version 1.6.2 (a small tweak), with a CHANGELOG entry.
+
+### Options and the Owner's Choices
+- Mockups in `design/budget-nudge-wording-mockups.html`.
+- The owner first asked for "Set budget amount". Measured at phone widths, it would only just fit on a 375-pixel-wide phone and be cut off ("Set budget amou") on a 360-pixel one, because the "Monthly budget (SGD)" label doesn't shrink. Letting the label wrap, or a shorter placeholder, were offered; the owner chose "Set amount".
+- The user guide's caption under Categories & budgets still says "Budgets are optional." I suggested a change to match the nudge; the owner hasn't decided, so it is unchanged.
+
+### Checks
+- On the demo account (confirmed with `/api/auth/session`), light theme:
+  - At 375 pixels: the line under the heading reads "Manage your expense categories and category budgets." (two lines). Entertainment, which has no budget, shows "Set amount" in full in its budget box; Add category shows the same.
+  - At 360 pixels: "Set amount" (87 pixels) fits its 124-pixel box.
+  - Each sheet was closed with Cancel, so no data was created. Saving a category without a budget (K-03) was not run, to avoid leaving a test category.
+- Application Screens (32 phones) and the user guide (13) previewed locally: the new line shows, and every phone is still 603 tall.
+- `npx tsc --noEmit` passed, `npx eslint .` passed with the one known warning, and `npm run build` passed.
+
+### Clean-up
+- The demo account was removed from the allow-list and the test browser signed out, as it was before. No test data was created.

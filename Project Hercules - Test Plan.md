@@ -1,7 +1,7 @@
 # Project Hercules — Test Plan: Web App v1
 
 ```
-Version 1.41 · Draft
+Version 1.42 · Draft
 Last Reviewed: 25 November 2026
 Produced with AI Assistance (Claude Code)
 ```
@@ -52,6 +52,7 @@ Produced with AI Assistance (Claude Code)
 | 1.39 | 2026-11-23 | Lionel Lam | C-11, Q-04, Q-07 and I-06: expected results describe what the tester sees, without referring to how the app worked before |
 | 1.40 | 2026-11-24 | Lionel Lam | A-01 and N-01 name the ship picture and icon; new A-12 (sign-in picture in light and dark), M-09 (browser tab icon) and S-13 (the icon on the phone after a release) |
 | 1.41 | 2026-11-25 | Lionel Lam | Q-07 says Sign out is centred; K-08 says Other's Name has no pencil; new K-09 (pencils on the category sheet) |
+| 1.42 | 2026-11-25 | Lionel Lam | K-01 and K-03 name the line under the heading and the "Set amount" placeholder; T-10 updated to match |
 
 ---
 
@@ -267,9 +268,9 @@ To set up I-01 to I-05: create a `zz-test-` category with a $300 budget and log 
 
 | ID | Test | Steps | Expected result |
 |---|---|---|---|
-| K-01 | List | Settings → **Categories & budgets** | Your categories, each with its budget or "No budget". **Other** is last |
+| K-01 | List | Settings → **Categories & budgets** | Under the heading: "Manage your expense categories and category budgets." Your categories, each with its budget or "No budget". **Other** is last |
 | K-02 | Add | **Add category** → name `zz-test-pets`, budget 50 → Save | It appears in the list with 50.00, and in the review card's category list |
-| K-03 | Add without a budget | Add `zz-test-gifts` with the budget blank | It shows "No budget" |
+| K-03 | Add without a budget | **Add category**, look at the empty budget box, then add `zz-test-gifts` with the budget blank; open it again | The empty budget box shows "Set amount". The category saves and shows "No budget" in the list; opened again, its budget box shows "Set amount" |
 | K-04 | Duplicate name | Add `ZZ-TEST-PETS` | "That name is already in use, or you've reached the limit of 50 categories." |
 | K-05 | Rename | Rename `zz-test-pets` to `zz-test-animals` | The new name shows in the list, and on every past expense in that category in History and Summary |
 | K-06 | Budget validation | Set a budget of 0, or of "abc" | "Enter a budget above zero, or leave it blank." |
@@ -383,7 +384,7 @@ Use a test account (see A-07) for the tests that change the default (T-03, T-05,
 | T-07 | Named currency kept | Parse `[TEST] dinner 450 baht`, then `[TEST] hotel USD 120`, then `[TEST] taxi 30 pesos MXN` | THB, USD and MXN respectively, whatever the default |
 | T-08 | Picker on the review card | Parse `[TEST] lunch 12`; tap the code beside the amount; choose **JPY**; Save; open the expense from Today | The list shows the 20 currencies; the saved expense is in JPY and is marked "edited". In the Today list it shows "JPY 12.00" |
 | T-09 | Lists follow the default | With an SGD and an MYR `[TEST]` expense today, switch the default between SGD and MYR and look at Today and History | The amount in the default currency shows the number alone; the other shows its code |
-| T-10 | Budget labels | Change the default to MYR; open Categories & budgets and a category | "Monthly budgets are optional and in MYR" and "Monthly budget (MYR)". Budget amounts are unchanged |
+| T-10 | Budget labels | Change the default to MYR; open Categories & budgets and a category | The budget box reads "Monthly budget (MYR)". Budget amounts are unchanged |
 | T-11 | Not in the list | Via the API, try to set the default to `XYZ` (`PATCH /api/settings` with `{"default_currency":"XYZ"}`) | Refused with an error; the default is unchanged |
 | T-12 | Totals count the default only | With the default SGD, save a `[TEST]` SGD 10.00 and a `[TEST]` USD 120.00 expense today. Look at Log, Summary (this month) and a History search for `[TEST]` | Spent today, Today by category, the Summary total, bars and pace, the pie and the search total include the SGD 10.00 only. Under each total: "Not included: USD 120.00". Both expenses are listed in Today and History |
 | T-13 | Switching keeps totals honest | Then switch the default to MYR and look again; then switch back to SGD | With MYR, totals count no SGD or USD ("MYR 0.00" if there's no MYR spending) and the line lists "Not included: SGD … · USD 120.00"; nothing is relabelled. Back on SGD, every figure is exactly as before |

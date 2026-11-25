@@ -1,7 +1,7 @@
 # Project Hercules — Specification Sheet: "Log an Expense" Flow
 
 ```
-Version 0.58 · Draft 
+Version 0.59 · Draft 
 Last Reviewed: 25 November 2026
 Produced with AI Assistance (Claude Code)
 ```
@@ -68,6 +68,7 @@ Produced with AI Assistance (Claude Code)
 | 0.56 | 2026-11-22 | Lionel Lam | Intelligent Merchant Selection uses this month's and last month's merchants, not this month's only (step 3, Sections 4.7, 5.1 and 6) |
 | 0.57 | 2026-11-24 | Lionel Lam | New Section 4.8: the ship picture as the app icon and on the sign-in screen, in place of the "H" square |
 | 0.58 | 2026-11-25 | Lionel Lam | Sign out is centred in its row, within easy reach of either thumb (Section 4.4); a pencil beside the Name and Monthly budget on the Edit category and Add category sheets, except the Name of "Other" (Section 5.2) |
+| 0.59 | 2026-11-25 | Lionel Lam | Categories & budgets encourages setting budgets: the line under its heading reads "Manage your expense categories and category budgets.", and an empty budget box shows "Set amount" (Sections 4.6 and 5.2) |
 
 ---
 
@@ -240,7 +241,7 @@ The language model is asked to report a currency only when the text names one; t
 
 **Changing it on the review card:** the code beside the amount (for example "SGD ▾") opens the list of 20, to change the currency of that expense only. An expense already in a currency outside the list keeps it as an extra option. Changing the currency marks the expense as edited.
 
-**Following the default:** budgets are in the default currency ("Monthly budgets are optional and in SGD", and "Monthly budget (SGD)" on the budget field). In History and the Today list, every expense is listed; amounts in the default currency show the number alone, and others show their code, for example "USD 12.50".
+**Following the default:** budgets are in the default currency ("Monthly budget (SGD)" on the budget field). In History and the Today list, every expense is listed; amounts in the default currency show the number alone, and others show their code, for example "USD 12.50".
 
 **Totals count only the default currency.** Spent today, Today by category, the Summary total, the category bars, pace notes and the burn-up chart, the pie chart and the History search total add up only expenses in the default currency, so every figure is a real sum in one currency. Nothing is converted. Where the period has spending in other currencies, a line under the total lists it, largest first, for example "Not included: USD 120.00 · THB 450.00": under Spent today on Log, under the day line in Summary's fixed section, and under the result count in a History search. A small circled **?** at the end of the line opens a short explanation just below it: "Your default currency is SGD. Expenses in other currencies are not included.", with the person's default currency. Tapping the **?** again, or anywhere else, closes it; it doesn't close on its own. Totals show "$" when the default is a dollar currency (SGD, HKD, TWD, AUD, NZD, USD or CAD), and otherwise its code, for example "MYR 20.00". The CSV file is unchanged and lists every expense with its currency.
 
@@ -309,6 +310,8 @@ Per-user and extensible — this is a **user preference**, not a global constant
 **Preset behavior:** each new user is seeded with their own copy of the starter list — Food & Dining, Transport, Groceries, Entertainment, Utilities, Health & Medical, Household, Shopping, Rent, Clothes, Education, Professional Development, Travel — plus an **"Other"** catch-all. The Categories & budgets page, opened from Settings (Section 4.4), adds and renames categories and sets their monthly budgets; its heading and add button stay fixed at the top while the list scrolls. Names must be unique for the user regardless of capitalisation, with a limit of 50 active categories per user. "Other" cannot be renamed or retired and stays last in the list, because the application falls back to it by name.
 
 **The category sheet:** Edit category and Add category show a pencil beside the Name and the Monthly budget, as on the review and edit expense sheets, so it's clear both can be changed; tapping the pencil puts the cursor in that box. The Name of "Other" has no pencil, as it can't be renamed.
+
+**Encouraging budgets:** budgets are what let Hercules show spending against a plan, so the page nudges people to set them. The line under the Categories & budgets heading reads "Manage your expense categories and category budgets.", and an empty budget box shows "Set amount". A budget can still be left blank.
 
 **Retiring a category:** any category except "Other" can be retired from its edit sheet, after a confirmation. A retired category is never deleted from the database. It is no longer offered for new expenses or to the language model, but past expenses keep it and show its name in History, the Today list and Summary. Its budget is kept but not tracked while it is retired, so any spending in it this month shows as a plain bar without a pace note. An existing expense in a retired category can still be opened and saved; the edit sheet shows the category as "*name* (retired)" and also offers the active categories, but a retired category can't be chosen for any other expense. Retired categories are listed in a collapsed "Retired" group at the bottom of the Categories & budgets page, each with a Restore button that brings it back with its budget. They can't be renamed until restored. Adding a category whose name matches a retired one (regardless of capitalisation) restores that category, with the budget entered, instead of creating a new one. Restoring counts towards the 50-category limit.
 

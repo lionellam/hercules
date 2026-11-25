@@ -6,6 +6,14 @@ Versions follow [semantic versioning](https://semver.org): **major** for a chang
 
 ---
 
+## 1.6.2 — 25 November 2026
+
+**Improved**
+- **Categories & budgets** now says "Manage your expense categories and category budgets." under its heading.
+- A category without a budget shows **Set amount** in its budget box, as a reminder that setting a budget lets Hercules show how your spending compares. You can still leave it blank.
+
+---
+
 ## 1.6.1 — 25 November 2026
 
 **Improved**
