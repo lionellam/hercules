@@ -4,7 +4,7 @@
 Maintained by: Lionel Lam Song Poh, James Wong
 Purpose: Record of work done, decisions made, challenges encountered, and assumptions held —
 to serve as a lessons learned reference for current and future contributors.
-Last updated: 25 November 2026
+Last updated: 26 November 2026
 ```
 
 ---
@@ -2228,3 +2228,32 @@ Last updated: 25 November 2026
 
 ### Clean-up
 - Deleted the `[TEST]` expense and the `zz-test-nobudget` category the tests created, directly in the local database; none remain. No parse entries were created. The demo account was removed from the allow-list and the test browser signed out, as it was before.
+
+---
+
+## 26 November 2026 — Version 1.8.0: A Yellow Budget Nudge, and Clear Buttons on the Cards
+
+### What Was Done
+- At the owner's request, two usability changes.
+- **Yellow "Budget not set" line:** on Summary, the line sits in a soft yellow pill (`.no-budget-line` in `web/app/globals.css`), with new theme colours `--nudge-bg` and `--nudge-text` (pale yellow with dark amber text in light; deep amber with light yellow text in dark). Its bubble is unchanged.
+- **Clear buttons:** while the amount, Merchant or Remarks (review and edit expense cards), or a category's Name or Monthly budget (category card) is being typed in and isn't empty, a round grey × (`.field-clear`, drawn like the Log screen's clear button) shows at its right, replacing the pencil. Tapping it empties the field and keeps the cursor there with the keyboard open: the × prevents the press from taking focus, then focuses the field again. Built as `EditOrClear` and `useFocusedField` in `web/components/review-card.tsx`, used by both cards. Category, Date and the Name of "Other" have no ×.
+- **Application Screens** 5.1 and the user guide's copy show the yellow pill, drawn to fit the 613-pixel phones. The clear button appears only while typing, so no drawing shows it.
+- Documents: Specification 0.61 (step 5, Sections 4.1 and 5.2), Architecture 0.48 (decisions 38 and 44 updated), Test Plan 1.45 (H-05 updated; new C-17, C-18 and K-10). Version 1.8.0 (a new feature), with a CHANGELOG entry.
+
+### Options and the Owner's Choices
+- Mockups in `design/highlight-and-clear-mockups.html`. The mockups didn't show at first, because the side panel opened the file from disk; they were then opened through the local preview server.
+- Yellow: a pill (A), a full-width strip (B) or yellow text only (C). The owner chose A.
+- Other icons: the only other one is the "?" beside "Not included". The owner chose to leave it grey, keeping yellow for things the person can act on.
+- Clear button: only in the field being typed in (A), or on every filled field (B). The owner chose A, which included the amount.
+
+### Checks
+- On the demo account (confirmed with `/api/auth/session`), at 375 pixels wide, with a `zz-test-clear` category (budget 50) and a `[TEST]` expense in it, created through the API. Taps were real clicks, not scripted, so focus behaved as it would for a person:
+  - Edit expense: before tapping, no ×. Tapping Merchant put the cursor there and turned its pencil into a ×; tapping the × emptied it ("—" showing), kept the cursor in it, and brought the pencil back; typing brought the × back. The amount showed a × at its right, and clearing it left "0.00" showing with the cursor in it. Remarks behaved the same ("Optional"). Category and Date never showed a ×. Cancel and **Discard changes** left the saved expense unchanged.
+  - Category card: Name and Monthly budget each cleared the same way (the budget showing "Set amount"), and Save was disabled with the name empty. Discarded; the category kept its name and budget of 50. "Other"'s Name can't be focused and has no icon.
+  - Summary: the "Budget not set" lines (Utilities, Entertainment) showed pale yellow (254, 243, 199) with dark amber text in light, and deep amber (59, 47, 18) with light yellow text in dark; the bubble's arrow sat exactly under the "i".
+- Application Screens (32 phones) and the user guide (13) previewed: every phone is 613 tall (the first pill drawing made 5.1 taller, so its spacing was tightened), and the guide's 5.1 is identical to Application Screens' 5.1.
+- `npx tsc --noEmit` passed, `npx eslint .` passed with the one known warning, and `npm run build` passed.
+- Not tested here: a real phone, where the keyboard staying open after tapping the × matters most (Test Plan C-17).
+
+### Clean-up
+- Deleted the `[TEST]` expense and the `zz-test-clear` category, directly in the local database; none remain. No parse entries were created. The demo account was removed from the allow-list and the test browser signed out, as it was before.

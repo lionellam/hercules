@@ -3,6 +3,7 @@
   --bg: #ffffff; --surface: #ffffff; --text: #18181b; --muted: #71717a;
   --line: #e7e7e4; --accent: #18181b; --accent-text: #ffffff; --soft: #f4f4f5; --edge: #8e8e96; --switch-off: #d4d4d8; --sk: #ececee; --sk-hi: #f7f7f8;
   --bar: #18181b; --good: #15803d; --bad: #b91c1c; --hl: #fde68a;
+  --nudge-bg: #fef3c7; --nudge-text: #854d0e;
   --g-bg: #ffffff; --g-border: #747775; --g-text: #1f1f1f;
   --pie-1: #2a78d6; --pie-2: #eb6834; --pie-3: #1baf7a; --pie-4: #eda100; --pie-5: #e87ba4; --pie-6: #008300; --pie-rest: #a1a1aa;
 }
@@ -11,7 +12,7 @@
     color-scheme: dark;
     --bg: #18181b; --surface: #18181b; --text: #f4f4f5; --muted: #a1a1aa;
     --line: #27272a; --accent: #f4f4f5; --accent-text: #18181b; --soft: #27272a; --edge: #71717a; --switch-off: #3f3f46; --sk: #27272a; --sk-hi: #323236;
-    --bar: #f4f4f5; --good: #4ade80; --bad: #f87171; --hl: #713f12;
+    --bar: #f4f4f5; --good: #4ade80; --bad: #f87171; --hl: #713f12; --nudge-bg: #3b2f12; --nudge-text: #fcd34d;
     --g-bg: #131314; --g-border: #8e918f; --g-text: #e3e3e3;
     --pie-1: #3987e5; --pie-2: #d95926; --pie-3: #199e70; --pie-4: #c98500; --pie-5: #d55181; --pie-6: #008300; --pie-rest: #71717a;
   }
@@ -21,7 +22,7 @@
   color-scheme: dark;
   --bg: #18181b; --surface: #18181b; --text: #f4f4f5; --muted: #a1a1aa;
   --line: #27272a; --accent: #f4f4f5; --accent-text: #18181b; --soft: #27272a; --edge: #71717a; --switch-off: #3f3f46; --sk: #27272a; --sk-hi: #323236;
-  --bar: #f4f4f5; --good: #4ade80; --bad: #f87171; --hl: #713f12;
+  --bar: #f4f4f5; --good: #4ade80; --bad: #f87171; --hl: #713f12; --nudge-bg: #3b2f12; --nudge-text: #fcd34d;
   --g-bg: #131314; --g-border: #8e918f; --g-text: #e3e3e3;
   --pie-1: #3987e5; --pie-2: #d95926; --pie-3: #199e70; --pie-4: #c98500; --pie-5: #d55181; --pie-6: #008300; --pie-rest: #71717a;
 }
@@ -86,6 +87,11 @@ textarea::placeholder { color: var(--muted); }
 .btn-wide { width: 100%; height: 48px; font-size: 16px; }
 .field-icon { display: grid; place-items: center; width: 18px; height: 18px; margin-left: -4px; color: var(--muted); flex-shrink: 0; cursor: pointer; }
 .field-icon svg { width: 16px; height: 16px; }
+/* Clears a typed field while it's being typed in (Architecture decision 38): drawn like the Log screen's clear button, with a finger-sized tap area */
+.field-clear { display: grid; place-items: center; width: 28px; height: 28px; margin: -5px -6px -5px -9px; padding: 0; border: none; background: none; cursor: pointer; flex-shrink: 0; }
+.field-clear span { display: grid; place-items: center; width: 18px; height: 18px; border-radius: 50%; background: var(--muted); color: var(--bg); font-size: 13px; font-weight: 700; line-height: 1; }
+.amount-field .field-clear { align-self: center; margin: 0 -5px 0 0; }
+.amount-field .field-clear span { width: 22px; height: 22px; font-size: 15px; }
 /* Safari on iPhone ignores text-align on date inputs; the browser's own date icon differs by device, so the app draws its own */
 .field input[type="date"] { -webkit-appearance: none; appearance: none; min-height: 1.4em; cursor: pointer; }
 .field input[type="date"]::-webkit-date-and-time-value { text-align: right; margin: 0; }
@@ -205,11 +211,12 @@ textarea::placeholder { color: var(--muted); }
           background: var(--text); color: var(--bg); font-size: 13px; line-height: 1.4; box-shadow: 0 6px 18px rgba(0,0,0,.18); }
 .ni-tip::before { content: ""; position: absolute; top: -5px; left: min(var(--arrow, 20px), calc(100% - 20px)); width: 10px; height: 10px; background: var(--text); transform: rotate(45deg); }
 /* A category without a budget, this month (Architecture decision 44): the line opens a bubble, styled like "Not included" */
-.no-budget { position: relative; margin-top: -5px; }
-.no-budget-line { display: inline-flex; align-items: center; gap: 6px; min-height: 28px; padding: 0; border: none; background: none;
-                  font: inherit; font-size: 12.5px; color: var(--muted); cursor: pointer; text-align: left; }
-.no-budget-i { display: grid; place-items: center; width: 16px; height: 16px; border-radius: 50%; border: 1.3px solid var(--muted); box-sizing: border-box;
-               font: italic 700 10.5px/1 Georgia, "Times New Roman", serif; color: var(--muted); }
+.no-budget { position: relative; margin-top: -3px; }
+/* A soft yellow pill, so the nudge stands out from the grey pace notes (Architecture decision 44) */
+.no-budget-line { display: inline-flex; align-items: center; gap: 6px; min-height: 26px; padding: 3px 7px 3px 10px; border: none; border-radius: 999px;
+                  background: var(--nudge-bg); color: var(--nudge-text); font: inherit; font-size: 12.5px; font-weight: 500; cursor: pointer; text-align: left; }
+.no-budget-i { display: grid; place-items: center; width: 16px; height: 16px; border-radius: 50%; border: 1.3px solid currentColor; box-sizing: border-box;
+               font: italic 700 10.5px/1 Georgia, "Times New Roman", serif; color: inherit; }
 .no-budget-line.on .no-budget-i { background: var(--text); border-color: var(--text); color: var(--bg); }
 .no-budget .ni-tip { top: calc(100% + 4px); max-width: 270px; }
 .no-budget-link { display: block; margin-top: 8px; padding: 0; border: none; background: none; font: inherit; font-weight: 600; color: inherit;

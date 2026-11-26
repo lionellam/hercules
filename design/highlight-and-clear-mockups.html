@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Budget Highlight and Clear Buttons</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root { --page: #ececea; --page-text: #18181b; --page-muted: #5f5f66; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--page); color: var(--page-text); font-family: Inter, -apple-system, system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  main { max-width: 1460px; margin: 0 auto; padding: 36px 16px 80px; }
+  h1 { font-size: 28px; letter-spacing: -0.02em; margin: 0 0 8px; }
+  h2 { font-size: 20px; margin: 48px 0 6px; }
+  h3 { font-size: 16px; margin: 30px 0 4px; }
+  .lead { color: var(--page-muted); max-width: 900px; line-height: 1.55; margin: 0 0 10px; font-size: 15px; }
+  .lead b { color: var(--page-text); }
+  ol.q, ul.q { color: var(--page-muted); max-width: 900px; line-height: 1.55; font-size: 15px; margin: 6px 0 10px 22px; }
+  ol.q li, ul.q li { margin-bottom: 6px; }
+  ol.q b, ul.q b { color: var(--page-text); }
+  .frames { display: flex; flex-wrap: wrap; gap: 30px 26px; align-items: flex-start; margin-top: 16px; }
+  figure { margin: 0; max-width: 100%; }
+  figcaption { max-width: 375px; font-size: 13px; color: var(--page-muted); margin-top: 12px; line-height: 1.5; }
+  figcaption b { color: var(--page-text); }
+  .phone { width: 375px; max-width: 100%; height: 640px; border-radius: 30px; overflow: hidden; border: 1px solid rgba(0,0,0,.08);
+           box-shadow: 0 1px 2px rgba(0,0,0,.06), 0 10px 28px rgba(0,0,0,.08); }
+  .phone.short { height: 400px; }
+
+  /* App tokens and styles, from web/app/globals.css */
+  .app { --bg: #fff; --text: #18181b; --muted: #71717a; --line: #e7e7e4; --accent: #18181b; --accent-text: #fff; --soft: #f4f4f5; --edge: #8e8e96; --bar: #18181b; --bad: #b91c1c;
+         --nudge-bg: #fef3c7; --nudge-text: #854d0e;
+         background: var(--bg); color: var(--text); font-size: 15px; position: relative; height: 100%; display: flex; flex-direction: column; overflow: hidden; }
+  .app.dark { --bg: #18181b; --text: #f4f4f5; --muted: #a1a1aa; --line: #27272a; --accent: #f4f4f5; --accent-text: #18181b; --soft: #27272a; --edge: #71717a; --bar: #f4f4f5; --bad: #f87171;
+              --nudge-bg: #3b2f12; --nudge-text: #fcd34d; }
+  .top { padding: 30px 20px 14px; border-bottom: 1px solid var(--line); }
+  .app h3 { font-size: 28px; font-weight: 700; letter-spacing: -0.02em; margin: 0; }
+  .s { color: var(--muted); font-size: 14px; margin-top: 12px; }
+  .big { font-size: 30px; font-weight: 700; letter-spacing: -0.02em; }
+  .dayline { font-size: 13px; color: var(--muted); margin-top: 6px; }
+  .dayline b { color: var(--text); font-weight: 600; }
+  .body { padding: 0 20px; flex: 1; position: relative; }
+  .cat { margin-top: 18px; position: relative; }
+  .cat-top { display: flex; justify-content: space-between; gap: 12px; font-size: 14px; margin-bottom: 6px; }
+  .cat-top .n { color: var(--muted); font-size: 12px; margin-left: 6px; }
+  .of { color: var(--muted); font-weight: 400; margin-left: 4px; }
+  .meter { position: relative; }
+  .track { height: 6px; background: var(--soft); border-radius: 3px; overflow: hidden; }
+  .fill { height: 100%; background: var(--bar); border-radius: 3px; }
+  .tick { position: absolute; top: -3px; width: 2px; height: 12px; background: var(--text); border-radius: 1px; transform: translateX(-1px); box-shadow: 0 0 0 1.5px var(--bg); }
+  .pace { margin-top: 6px; font-size: 12.5px; color: var(--muted); }
+  .pace b { color: var(--text); font-weight: 600; }
+  .info { display: grid; place-items: center; width: 16px; height: 16px; border-radius: 50%; border: 1.3px solid currentColor; font: italic 700 10.5px/1 Georgia, serif; flex-shrink: 0; }
+  .info.on { background: var(--text); border-color: var(--text); color: var(--bg); }
+  /* Today's line */
+  .nb { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; color: var(--muted); min-height: 24px; }
+  /* Option A: a yellow pill around the line */
+  .nb.pill { background: var(--nudge-bg); color: var(--nudge-text); border-radius: 999px; padding: 3px 7px 3px 10px; margin-top: 1px; font-weight: 500; }
+  /* Option B: a full-width yellow strip */
+  .nb.strip { display: flex; justify-content: space-between; background: var(--nudge-bg); color: var(--nudge-text); border-radius: 8px; padding: 6px 8px 6px 10px; margin-top: 2px; font-weight: 500; }
+  /* Option C: yellow text and icon, no background */
+  .nb.tint { color: var(--nudge-text); font-weight: 500; }
+  .tip { position: absolute; left: 0; top: calc(100% + 6px); z-index: 5; width: 270px; padding: 10px 12px; border-radius: 10px; background: var(--text); color: var(--bg); font-size: 13px; line-height: 1.4; box-shadow: 0 6px 18px rgba(0,0,0,.18); }
+  .tip::before { content: ""; position: absolute; top: -5px; left: 220px; width: 10px; height: 10px; background: var(--text); transform: rotate(45deg); }
+  .tip a { display: block; margin-top: 8px; font-weight: 600; text-decoration: underline; text-underline-offset: 2px; }
+  .ni { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--muted); margin-top: 4px; }
+  .ni .q { display: grid; place-items: center; width: 16px; height: 16px; border-radius: 50%; border: 1.3px solid currentColor; font-size: 10.5px; font-weight: 700; }
+  .ni.pill { background: var(--nudge-bg); color: var(--nudge-text); border-radius: 999px; padding: 3px 7px 3px 10px; display: inline-flex; font-weight: 500; }
+  .tabs { display: flex; justify-content: space-around; border-top: 1px solid var(--line); padding: 10px 0 18px; color: var(--muted); font-size: 11px; background: var(--bg); }
+  .tabs b { color: var(--text); font-weight: 600; }
+
+  /* Cards */
+  .scrim { position: absolute; inset: 0; background: rgba(0,0,0,.45); z-index: 6; }
+  .sheet { position: absolute; left: 0; right: 0; bottom: 0; z-index: 7; background: var(--bg); border-radius: 20px 20px 0 0; padding: 14px 20px 22px; }
+  .sheet.up { bottom: 216px; border-radius: 20px; }
+  .card-title { font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; margin: 4px 0 6px; }
+  .raw { color: var(--muted); font-size: 13px; font-style: italic; margin-bottom: 8px; }
+  .amount { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .cur { background: var(--soft); border-radius: 8px; padding: 5px 9px; font-weight: 600; font-size: 14px; white-space: nowrap; }
+  .amt { flex: 1; font-size: 32px; font-weight: 700; display: flex; align-items: center; }
+  .field { display: flex; justify-content: space-between; align-items: center; padding: 11px 0; border-top: 1px solid var(--line); gap: 12px; min-height: 45px; }
+  .field label { color: var(--muted); white-space: nowrap; }
+  .field .v { display: inline-flex; align-items: center; gap: 8px; font-weight: 500; white-space: nowrap; }
+  .field .v.ph { color: var(--muted); font-weight: 400; }
+  .caret { display: inline-block; width: 1.5px; height: 18px; background: #2563eb; margin: 0 -1px; }
+  .amt .caret { height: 30px; }
+  .ico { width: 16px; height: 16px; color: var(--muted); flex-shrink: 0; }
+  /* The proposed clear button: a filled grey circle with an x, like the Log screen's text box */
+  .clr { display: grid; place-items: center; width: 18px; height: 18px; border-radius: 50%; background: var(--muted); color: var(--bg); font-size: 12px; font-weight: 700; line-height: 1; flex-shrink: 0; }
+  .amt .clr { width: 22px; height: 22px; font-size: 14px; margin-left: auto; }
+  .btn { height: 44px; padding: 0 18px; border-radius: 12px; border: none; font: inherit; font-size: 15px; font-weight: 600; background: var(--accent); color: var(--accent-text); }
+  .btn.ghost { background: transparent; color: var(--muted); }
+  .btn.red { background: transparent; color: var(--bad); padding-left: 0; }
+  .acts { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; }
+  .acts .r { display: flex; gap: 6px; }
+  .kbd { position: absolute; left: 0; right: 0; bottom: 0; height: 216px; background: #d1d3d9; z-index: 8; display: grid; place-items: center; color: #6b7280; font-size: 13px; }
+  .app.dark .kbd { background: #2c2c2e; color: #8e8e93; }
+  .new { outline: 2px dashed #1d4ed8; outline-offset: 3px; border-radius: 6px; }
+  .tapped { box-shadow: 0 0 0 3px rgba(37,99,235,.5); border-radius: 50%; }
+</style>
+</head>
+<body>
+<main>
+  <h1>A yellow "Budget not set" line, and clear buttons on the cards</h1>
+  <p class="lead">Two usability changes. Dashed blue outlines mark what's new.</p>
+
+  <h2>1. Making "Budget not set for this category" stand out</h2>
+  <p class="lead">Three ways to add yellow. All use a soft yellow with dark amber text in the light theme, and a deep amber with light yellow text in the dark theme, so the text stays easy to read in both. The app's red stays for over budget only; yellow reads as "worth a look", not as a warning.</p>
+  <h3>Options, light theme</h3>
+  <div class="frames" id="hl"></div>
+  <h3>Option A, dark theme, and with the bubble open</h3>
+  <div class="frames" id="hl2"></div>
+
+  <h3>Other places with an icon like this</h3>
+  <p class="lead">The only other one is the <b>"?"</b> beside "Not included: USD 12.00", on Log (under today's total), Summary (under the month's total) and History (while searching). It explains that spending in other currencies isn't counted. I suggest leaving it as it is: it's information, with nothing for the person to do, whereas the budget line asks them to act. Keeping yellow for "something you can do" keeps it meaningful. Both are drawn below for comparison.</p>
+  <div class="frames" id="ni"></div>
+
+  <h2>2. A clear button on the cards' text fields</h2>
+  <p class="lead">Today, replacing a merchant, remark, name or budget means deleting it character by character. Proposal: a round grey <b>×</b> (the same look as the clear button in the Log screen's text box) that empties the field in one tap and leaves the cursor in it, with the keyboard still open, ready for new text.</p>
+  <p class="lead"><b>Which fields:</b> Merchant and Remarks (review and edit expense cards), Name and Monthly budget (category card), and the amount. Not Category or Date, which are picked from a list or a calendar, and not the Name of "Other", which can't be changed.</p>
+  <h3>Option A (recommended): the × appears while you're typing in a field</h3>
+  <p class="lead">Fields look as they do today, with their pencils. Tapping a field with something in it puts the cursor there, as today, and its pencil turns into a ×. Tapping the × empties it. This is how clear buttons usually work on phones, and it keeps the cards calm: one icon per line, and only the field you're in shows a ×.</p>
+  <div class="frames" id="clrA"></div>
+  <h3>Option B: a × on every field that has something in it</h3>
+  <p class="lead">One tap clears a field without tapping it first. But each filled field then shows a × instead of its pencil, so a card mixes pencils and ×s, and a × sits one tap away from wiping a value by accident.</p>
+  <div class="frames" id="clrB"></div>
+
+  <h2>Questions for you</h2>
+  <ol class="q">
+    <li><b>The yellow:</b> A, a pill around the line (recommended: it stands out and still reads as part of the row); B, a full-width strip (strongest, but heavier: with several categories without a budget, Summary gets busy); or C, yellow text with no background (lightest).</li>
+    <li><b>"Not included":</b> leave it as it is (recommended), or give it the same yellow?</li>
+    <li><b>The clear button:</b> Option A, only while typing in a field (recommended), or Option B, on every filled field.</li>
+    <li><b>The amount:</b> include it (drawn in A), or leave the amount without a clear button?</li>
+  </ol>
+</main>
+
+<script>
+const PENCIL = '<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>';
+const CAL = '<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="16" rx="2.5"/><path d="M3 9.5h18M8 2.5v4M16 2.5v4"/></svg>';
+const CLR = (cls = '') => `<span class="clr ${cls}">×</span>`;
+const TICK = 25 / 30 * 100;
+
+const budgeted = (name, n, total, budget, pace) => `<div class="cat"><div class="cat-top"><span>${name}<span class="n">${n}</span></span><span><strong>${total}</strong><span class="of">of ${budget}</span></span></div>
+  <div class="meter"><div class="track"><div class="fill" style="width:${Math.min(parseFloat(total.replace(/,/g,'')) / parseFloat(budget.replace(/,/g,'')), 1) * 100}%"></div></div><div class="tick" style="left:${TICK}%"></div></div>
+  <p class="pace">${pace}</p></div>`;
+const unbudgeted = (name, n, total, style, open) => `<div class="cat"><div class="cat-top"><span>${name}<span class="n">${n}</span></span><strong>${total}</strong></div>
+  <div class="nb ${style}${style && style !== 'today' ? ' new' : ''}">Budget not set for this category <span class="info${open ? ' on' : ''}">i</span></div>
+  ${open ? `<div class="tip">The budget for this category can be set in Settings › Categories &amp; budgets.<a>Set a budget for ${name}</a></div>` : ''}</div>`;
+
+function summary(style, { dark = false, open = false } = {}) {
+  return `<div class="app${dark ? ' dark' : ''}">
+    <div class="top"><h3>Summary</h3><div class="s">Spent so far this month</div><div class="big">$2,224.73</div><div class="dayline"><b>Day 25 of 30</b> · Wed, 25 Nov</div></div>
+    <div class="body">
+      ${budgeted('Rent', 1, '1,800.00', '1,800.00', '<b>Budget used</b> · $0.00 left')}
+      ${unbudgeted('Food & Dining', 96, '612.40', style, open)}
+      ${budgeted('Transport', 6, '76.70', '200.00', '<b>$89.97 under pace</b> · $123.30 left, about $24.66/day')}
+      ${unbudgeted('Utilities', 1, '118.35', style)}
+      ${budgeted('Shopping', 1, '64.90', '1,000.00', '<b>$768.43 under pace</b> · $935.10 left, about $187.02/day')}
+    </div>
+    <div class="tabs"><span>Log</span><span>History</span><b>Summary</b><span>Settings</span></div>
+  </div>`;
+}
+
+function notIncluded(yellow, dark) {
+  return `<div class="app${dark ? ' dark' : ''}">
+    <div class="top" style="border:none"><h3>Summary</h3><div class="s">Spent so far this month</div><div class="big">$2,224.73</div>
+    <div class="ni${yellow ? ' pill new' : ''}">Not included: USD 12.00 <span class="q">?</span></div>
+    <div class="dayline"><b>Day 25 of 30</b> · Wed, 25 Nov</div></div>
+  </div>`;
+}
+
+// The edit expense card. focus: which field is being typed in; cleared: that field was just emptied; mode: 'A' | 'B' | 'today'
+function expense({ focus = null, cleared = false, mode = 'A', dark = false } = {}) {
+  const vals = { amount: '35.00', merchant: 'Saizeriya', remarks: 'Dinner with Mum' };
+  const ph = { amount: '0.00', merchant: '—', remarks: 'Optional' };
+  const icon = (f) => {
+    const filled = !(cleared && focus === f) && vals[f];
+    if (mode === 'B' && filled) return `<span class="new" style="display:inline-flex">${CLR()}</span>`;
+    if (mode === 'A' && focus === f && filled) return `<span class="new" style="display:inline-flex">${CLR()}</span>`;
+    return PENCIL;
+  };
+  const value = (f) => {
+    const empty = cleared && focus === f;
+    const caret = focus === f ? '<span class="caret"></span>' : '';
+    return empty ? `${caret}<span style="color:var(--muted);font-weight:400">${ph[f]}</span>` : `${vals[f]}${caret}`;
+  };
+  const amtIcon = mode === 'B' || (mode === 'A' && focus === 'amount' && !cleared) ? CLR('new') : '';
+  const kbd = focus ? '<div class="kbd">Keyboard</div>' : '';
+  return `<div class="app${dark ? ' dark' : ''}">
+    <div class="top" style="opacity:.4"><h3>Log</h3></div>
+    <div class="scrim"></div>
+    <div class="sheet${focus ? ' up' : ''}">
+      <div class="card-title">Edit expense</div>
+      <div class="raw">“saizeriya dinner 35”</div>
+      <div class="amount"><span class="cur">SGD ▾</span><span class="amt">${focus === 'amount' && cleared ? '<span class="caret"></span><span style="color:var(--muted)">0.00</span>' : `35.00${focus === 'amount' ? '<span class="caret"></span>' : ''}`}${amtIcon}</span></div>
+      <div class="field"><label>Category</label><span class="v">Food &amp; Dining${PENCIL}</span></div>
+      <div class="field"><label>Merchant</label><span class="v${cleared && focus === 'merchant' ? '' : ''}">${value('merchant')}${icon('merchant')}</span></div>
+      <div class="field"><label>Date</label><span class="v">06/11/2026${CAL}</span></div>
+      <div class="field"><label>Remarks</label><span class="v">${value('remarks')}${icon('remarks')}</span></div>
+      <div class="acts"><div><button class="btn red">Delete</button></div><div class="r"><button class="btn ghost">Cancel</button><button class="btn">Save</button></div></div>
+    </div>
+    ${kbd}
+  </div>`;
+}
+
+function category({ focus = null, cleared = false, mode = 'A', dark = false } = {}) {
+  const icon = (f, v) => {
+    if (mode === 'B' && v) return `<span class="new" style="display:inline-flex">${CLR()}</span>`;
+    if (mode === 'A' && focus === f && v && !cleared) return `<span class="new" style="display:inline-flex">${CLR()}</span>`;
+    return PENCIL;
+  };
+  return `<div class="app${dark ? ' dark' : ''}">
+    <div class="top" style="opacity:.4"><h3>Categories &amp; budgets</h3></div>
+    <div class="scrim"></div>
+    <div class="sheet${focus ? ' up' : ''}">
+      <div class="card-title">Edit category</div>
+      <div class="field"><label>Name</label><span class="v">Food &amp; Dining${icon('name', true)}</span></div>
+      <div class="field"><label>Monthly budget (SGD)</label><span class="v">${focus === 'budget' && cleared ? '<span class="caret"></span><span style="color:var(--muted);font-weight:400">Set amount</span>' : `500.00${focus === 'budget' ? '<span class="caret"></span>' : ''}`}${icon('budget', true)}</span></div>
+      <div class="acts"><div><button class="btn red">Retire</button></div><div class="r"><button class="btn ghost">Cancel</button><button class="btn">Save</button></div></div>
+    </div>
+    ${focus ? '<div class="kbd">Keyboard</div>' : ''}
+  </div>`;
+}
+
+const fig = (html, cap, short) => `<figure><div class="phone${short ? ' short' : ''}">${html}</div><figcaption>${cap}</figcaption></figure>`;
+document.getElementById('hl').innerHTML = [
+  fig(summary('today'), '<b>Today.</b> The line is grey, like the pace notes, so it blends in.'),
+  fig(summary('pill'), '<b>Option A (recommended): a yellow pill</b> hugging the words and the "i".'),
+  fig(summary('strip'), '<b>Option B: a full-width yellow strip</b>, with the "i" at the right.'),
+  fig(summary('tint'), '<b>Option C: yellow words and "i"</b>, with no background.'),
+].join('');
+document.getElementById('hl2').innerHTML = [
+  fig(summary('pill', { dark: true }), '<b>Option A, dark theme.</b>'),
+  fig(summary('pill', { open: true }), '<b>Option A, bubble open.</b> The "i" turns dark, as today.'),
+].join('');
+document.getElementById('ni').innerHTML = [
+  fig(notIncluded(false), '<b>"Not included" as today (recommended).</b>', true),
+  fig(notIncluded(true), '<b>"Not included" in yellow</b>, for comparison.', true),
+].join('');
+document.getElementById('clrA').innerHTML = [
+  fig(expense({ mode: 'today' }), '<b>1. The card, unchanged:</b> pencils beside Category, Merchant and Remarks, a calendar beside Date.'),
+  fig(expense({ focus: 'merchant' }), '<b>2. Tap Merchant:</b> the cursor goes there and its pencil turns into a ×.'),
+  fig(expense({ focus: 'merchant', cleared: true }), '<b>3. Tap the ×:</b> Merchant is empty, showing its "—" placeholder, with the cursor still in it and the keyboard open. The pencil comes back until something is typed.'),
+  fig(expense({ focus: 'amount' }), '<b>4. Tap the amount:</b> a × appears at its right.'),
+  fig(category({ focus: 'budget' }), '<b>5. Category card, tapping the budget:</b> its pencil turns into a ×.'),
+  fig(category({ focus: 'budget', cleared: true }), '<b>6. After tapping the ×:</b> the budget box is empty, showing "Set amount", ready to type.'),
+  fig(expense({ focus: 'merchant', dark: true }), '<b>Dark theme.</b>'),
+].join('');
+document.getElementById('clrB').innerHTML = [
+  fig(expense({ mode: 'B' }), '<b>Option B:</b> every filled field shows a × instead of its pencil, before anything is tapped.'),
+  fig(category({ mode: 'B' }), '<b>Option B, category card.</b>'),
+].join('');
+</script>
+</body>
+</html>

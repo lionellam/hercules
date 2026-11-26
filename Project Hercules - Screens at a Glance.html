@@ -69,11 +69,11 @@ footer { margin-top: 56px; padding-top: 18px; border-top: 1px solid var(--rule);
 .phone { width: 300px; max-width: 100%; min-height: 613px; border-radius: 26px; border: 1px solid var(--frame); overflow: hidden; display: flex; flex-direction: column;
          box-shadow: 0 1px 2px rgba(0,0,0,.05), 0 10px 26px rgba(0,0,0,.07); }
 .m { --m-bg: #fff; --m-text: #18181b; --m-muted: #71717a; --m-line: #e7e7e4; --m-soft: #f4f4f5; --m-edge: #8e8e96; --m-bar: #18181b; --m-bad: #b91c1c; --m-good: #15803d; --m-hl: #fde68a; --m-off: #d4d4d8;
-     --m-pie-1: #2a78d6; --m-pie-2: #eb6834; --m-pie-3: #1baf7a; --m-pie-4: #eda100; --m-pie-5: #e87ba4; --m-pie-rest: #a1a1aa; --m-g-border: #747775;
+     --m-pie-1: #2a78d6; --m-pie-2: #eb6834; --m-pie-3: #1baf7a; --m-pie-4: #eda100; --m-pie-5: #e87ba4; --m-pie-rest: #a1a1aa; --m-g-border: #747775; --m-nudge-bg: #fef3c7; --m-nudge-text: #854d0e;
      background: var(--m-bg); color: var(--m-text); font-family: Inter, -apple-system, system-ui, sans-serif; font-size: 13px; line-height: 1.35; color-scheme: light;
      position: relative; flex: 1; display: flex; flex-direction: column; min-height: 560px; }
 .m.dark, body.mdark .m { --m-bg: #18181b; --m-text: #f4f4f5; --m-muted: #a1a1aa; --m-line: #27272a; --m-soft: #27272a; --m-edge: #71717a; --m-bar: #f4f4f5; --m-bad: #f87171; --m-good: #4ade80; --m-hl: #713f12; --m-off: #3f3f46;
-     --m-pie-1: #3987e5; --m-pie-2: #d95926; --m-pie-3: #199e70; --m-pie-4: #c98500; --m-pie-5: #d55181; --m-pie-rest: #71717a; --m-g-border: #8e918f; color-scheme: dark; }
+     --m-pie-1: #3987e5; --m-pie-2: #d95926; --m-pie-3: #199e70; --m-pie-4: #c98500; --m-pie-5: #d55181; --m-pie-rest: #71717a; --m-g-border: #8e918f; --m-nudge-bg: #3b2f12; --m-nudge-text: #fcd34d; color-scheme: dark; }
 .m .fade { opacity: .35; }
 .m .top { padding: 20px 16px 12px; border-bottom: 1px solid var(--m-line); }
 .m .top.flat { border-bottom: none; }
@@ -119,8 +119,8 @@ footer { margin-top: 56px; padding-top: 18px; border-top: 1px solid var(--rule);
 .m .cat.open .tick { box-shadow: 0 0 0 1.5px var(--m-soft); }
 .m .pace { margin-top: 5px; font-size: 10.5px; color: var(--m-muted); }
 .m .pace b { color: var(--m-text); font-weight: 600; }
-.m .nb { display: flex; align-items: center; gap: 4px; }
-.m .nbi { display: grid; place-items: center; width: 11px; height: 11px; border-radius: 50%; border: 1px solid var(--m-muted); font: italic 700 7.5px/1 Georgia, serif; color: var(--m-muted); }
+.m .nb { display: flex; width: fit-content; align-items: center; gap: 4px; margin-top: 1px; background: var(--m-nudge-bg); color: var(--m-nudge-text); font-weight: 500; border-radius: 999px; padding: 0 5px 0 7px; }
+.m .nbi { display: grid; place-items: center; width: 11px; height: 11px; border-radius: 50%; border: 1px solid currentColor; font: italic 700 7.5px/1 Georgia, serif; }
 .m .pace.bad, .m .pace.bad b { color: var(--m-bad); }
 .m .seg { display: flex; background: var(--m-soft); border-radius: 10px; padding: 3px; margin-top: 12px; }
 .m .seg span { flex: 1; text-align: center; padding: 6px 0; border-radius: 8px; font-size: 12px; color: var(--m-muted); }

@@ -10,6 +10,40 @@ export const PencilIcon = () => (
     <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z" />
   </svg>
 );
+// While a typed field is focused and not empty, its pencil becomes a round × that empties it (Architecture decision 38).
+// The × keeps the field focused: preventing the press from taking focus, then focusing the field again,
+// so the keyboard stays open on phones.
+export function EditOrClear({ id, value, focused, onClear, pencil = true }: { id: string; value: string; focused: string | null; onClear: () => void; pencil?: boolean }) {
+  if (focused === id && value !== "") {
+    return (
+      <button
+        type="button"
+        className="field-clear"
+        aria-label="Clear"
+        onPointerDown={(e) => e.preventDefault()}
+        onMouseDown={(e) => e.preventDefault()}
+        onClick={() => {
+          onClear();
+          document.getElementById(id)?.focus();
+        }}
+      >
+        <span aria-hidden="true">×</span>
+      </button>
+    );
+  }
+  return pencil ? <label htmlFor={id} className="field-icon"><PencilIcon /></label> : null;
+}
+
+// Tracks which typed field has the cursor, for EditOrClear
+export function useFocusedField() {
+  const [focused, setFocused] = useState<string | null>(null);
+  const track = (id: string) => ({
+    onFocus: () => setFocused(id),
+    onBlur: () => setFocused((f) => (f === id ? null : f)),
+  });
+  return { focused, track };
+}
+
 const CalendarIcon = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
     <rect x="3" y="4.5" width="18" height="16" rx="2.5" />
@@ -44,6 +78,7 @@ type Props = {
 
 export default function ReviewCard({ title, initial, categories, rawInput, onSave, onCancel, cancelLabel, onDelete, disabled, onDirtyChange, afterParse }: Props) {
   const [amount, setAmount] = useState(initial.amount == null ? "" : initial.amount.toFixed(2));
+  const { focused, track } = useFocusedField();
   const [currency, setCurrency] = useState(initial.currency);
   const [categoryId, setCategoryId] = useState(initial.category_id);
   const [merchant, setMerchant] = useState(initial.merchant ?? "");
@@ -110,7 +145,8 @@ export default function ReviewCard({ title, initial, categories, rawInput, onSav
       {rawInput && <p className="raw">“{rawInput}”</p>}
       <div className="amount-field">
         <CurrencySelect value={currency} onChange={setCurrency} />
-        <input inputMode="decimal" value={amount} onChange={(e) => setAmount(e.target.value)} placeholder="0.00" aria-label="Amount" />
+        <input id="f-amount" inputMode="decimal" value={amount} onChange={(e) => setAmount(e.target.value)} placeholder="0.00" aria-label="Amount" {...track("f-amount")} />
+        <EditOrClear id="f-amount" value={amount} focused={focused} onClear={() => setAmount("")} pencil={false} />
       </div>
       <div className="field">
         <label htmlFor="f-cat">Category</label>
@@ -123,8 +159,8 @@ export default function ReviewCard({ title, initial, categories, rawInput, onSav
       </div>
       <div className="field">
         <label htmlFor="f-merchant">Merchant</label>
-        <input id="f-merchant" value={merchant} onChange={(e) => setMerchant(e.target.value)} placeholder="—" maxLength={200} />
-        <label htmlFor="f-merchant" className="field-icon"><PencilIcon /></label>
+        <input id="f-merchant" value={merchant} onChange={(e) => setMerchant(e.target.value)} placeholder="—" maxLength={200} {...track("f-merchant")} />
+        <EditOrClear id="f-merchant" value={merchant} focused={focused} onClear={() => setMerchant("")} />
       </div>
       <div className="field">
         <label htmlFor="f-date">Date</label>
@@ -133,8 +169,8 @@ export default function ReviewCard({ title, initial, categories, rawInput, onSav
       </div>
       <div className="field">
         <label htmlFor="f-remarks">Remarks</label>
-        <input id="f-remarks" value={remarks} onChange={(e) => setRemarks(e.target.value)} placeholder="Optional" maxLength={1000} />
-        <label htmlFor="f-remarks" className="field-icon"><PencilIcon /></label>
+        <input id="f-remarks" value={remarks} onChange={(e) => setRemarks(e.target.value)} placeholder="Optional" maxLength={1000} {...track("f-remarks")} />
+        <EditOrClear id="f-remarks" value={remarks} focused={focused} onClear={() => setRemarks("")} />
       </div>
       {error && <p className="error">{error}</p>}
       {afterParse ? (

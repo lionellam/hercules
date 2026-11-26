@@ -6,6 +6,16 @@ Versions follow [semantic versioning](https://semver.org): **major** for a chang
 
 ---
 
+## 1.8.0 — 26 November 2026
+
+**New**
+- **Clear a field in one tap.** On the review, edit expense and category cards, when you tap into the amount, Merchant, Remarks, a category's name or its budget, a round × appears at its right. Tap it to empty the field and type something new straight away.
+
+**Improved**
+- On **Summary**, "Budget not set for this category" now sits in a soft yellow pill, so it stands out.
+
+---
+
 ## 1.7.0 — 25 November 2026
 
 **New**

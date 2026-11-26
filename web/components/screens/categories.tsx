@@ -6,7 +6,7 @@ import type { Category } from "@/lib/types";
 import { ConfirmSheet, UndoContext, useLeave } from "../confirm";
 import { useHomeCurrency } from "../currency";
 import { useMoney } from "../currency";
-import { PencilIcon } from "../review-card";
+import { EditOrClear, useFocusedField } from "../review-card";
 
 // Also opened from Summary, for a category without a budget (Architecture decision 44)
 export function CategorySheet({ category, retired, online, onClose, onChanged }: { category: Category | null; retired: Category[]; online: boolean; onClose: () => void; onChanged: () => void }) {
@@ -16,6 +16,7 @@ export function CategorySheet({ category, retired, online, onClose, onChanged }:
   const [budget, setBudget] = useState(category?.monthly_budget?.toFixed(2) ?? "");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
+  const { focused, track } = useFocusedField();
   // Adding a retired category's name restores that category
   const match = category ? undefined : retired.find((c) => c.name.toLowerCase() === name.trim().toLowerCase());
   const showUndo = useContext(UndoContext);
@@ -71,13 +72,13 @@ export function CategorySheet({ category, retired, online, onClose, onChanged }:
           <div className="card-title">{category ? "Edit category" : "Add category"}</div>
           <div className="field">
             <label htmlFor="c-name">Name</label>
-            <input id="c-name" value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. Pets" maxLength={50} disabled={category?.is_other} />
-            {!category?.is_other && <label htmlFor="c-name" className="field-icon"><PencilIcon /></label>}
+            <input id="c-name" value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. Pets" maxLength={50} disabled={category?.is_other} {...track("c-name")} />
+            {!category?.is_other && <EditOrClear id="c-name" value={name} focused={focused} onClear={() => setName("")} />}
           </div>
           <div className="field">
             <label htmlFor="c-budget">Monthly budget ({home})</label>
-            <input id="c-budget" inputMode="decimal" value={budget} onChange={(e) => setBudget(e.target.value)} placeholder="Set amount" />
-            <label htmlFor="c-budget" className="field-icon"><PencilIcon /></label>
+            <input id="c-budget" inputMode="decimal" value={budget} onChange={(e) => setBudget(e.target.value)} placeholder="Set amount" {...track("c-budget")} />
+            <EditOrClear id="c-budget" value={budget} focused={focused} onClear={() => setBudget("")} />
           </div>
           {category?.is_other && <p className="sub">The built-in &quot;Other&quot; category can&apos;t be renamed or retired.</p>}
           {match && (

@@ -1,8 +1,8 @@
 # Project Hercules — Test Plan: Web App v1
 
 ```
-Version 1.44 · Draft
-Last Reviewed: 25 November 2026
+Version 1.45 · Draft
+Last Reviewed: 26 November 2026
 Produced with AI Assistance (Claude Code)
 ```
 
@@ -55,6 +55,7 @@ Produced with AI Assistance (Claude Code)
 | 1.42 | 2026-11-25 | Lionel Lam | K-01 and K-03 name the line under the heading and the "Set amount" placeholder; T-10 updated to match |
 | 1.43 | 2026-11-25 | Lionel Lam | Summary without budgets: H-02 and H-05 updated; new H-11 to H-14 (the bubble, setting a budget from Summary, retired categories, past months) |
 | 1.44 | 2026-11-25 | Lionel Lam | H-12 wording shortened |
+| 1.45 | 2026-11-26 | Lionel Lam | H-05 names the yellow pill; new C-17 and C-18 (clearing fields on the expense sheets) and K-10 (on the category sheet) |
 
 ---
 
@@ -167,6 +168,8 @@ After Parse, the review card opens in a sheet over the Log screen. Its save butt
 | C-14 | Confirmation over a sheet | Parse, change the merchant → **Discard**; then **Keep reviewing** | "Discard your edits?" slides up over the review sheet, which stays still; **Keep reviewing** slides only the confirmation away |
 | C-15 | Wider screens | In a window at least 768 pixels wide, parse `[TEST] lunch 5.50`, then **Discard** | The dialog fades in while growing slightly, and fades out while shrinking slightly; it doesn't slide |
 | C-16 | Reduce Motion **[Phone]** | Turn on the phone's Reduce Motion (iPhone: Settings → Accessibility → Motion), then repeat C-13's first step | The sheet fades in and out without sliding |
+| C-17 | Clearing a field | Open a saved `[TEST]` expense with a merchant and remarks; tap **Merchant**; tap the × that appears; type a new merchant; do the same with **Remarks** and the amount | Before tapping, each field shows its pencil and the amount no icon. While Merchant is being typed in, a round grey × replaces its pencil. Tapping it empties Merchant, showing "—", with the cursor still in it and the keyboard open, and the pencil returns. Remarks behaves the same (showing "Optional"); the amount shows a × at its right, and clearing it shows "0.00" |
+| C-18 | No × on Category, Date or an empty field | On the review sheet, tap **Category**, **Date**, and an empty Remarks | Category and Date never show a ×. An empty field shows its pencil, and a × appears once something is typed |
 
 ### D. Fixing, Deleting and Undo
 
@@ -229,7 +232,7 @@ Use a month with several expenses, such as one filled with sample data.
 | H-02 | Last month | Tap last month's name at the top | "Spent in [month]" and that month's total. No day line, no comparison with the month before, no pace notes and no bars |
 | H-03 | Totals match History | Add up a month's amounts in History (or use a search for each category) | Each category's figure on Summary matches |
 | H-04 | Only categories with spending | Have a category with a budget but no spending this month | It isn't listed on Summary |
-| H-05 | No budget, this month | Look at a category with spending this month and no budget | Its name, number of expenses and amount, with no bar and no "of". Below it: "Budget not set for this category" and an "i" in a circle |
+| H-05 | No budget, this month | Look at a category with spending this month and no budget | Its name, number of expenses and amount, with no bar and no "of". Below it: "Budget not set for this category" and an "i" in a circle, in a yellow pill, in both themes |
 | H-06 | Bars with a budget | Set a budget on a category with spending this month | It reads "x of budget", and the bar fills against the budget |
 | H-07 | Over budget is red | Make a `zz-test-` category with a 10.00 budget and log `[TEST]` expenses totalling 12.00 in it | Its bar is full and red, with "Over budget by $2.00" in red and a warning icon |
 | H-08 | Pie chart | Look below the category list | "Share of spend" with up to six slices and percentages. With more than six categories, the smaller ones are grouped as "Everything else (n)" |
@@ -283,6 +286,7 @@ To set up I-01 to I-05: create a `zz-test-` category with a $300 budget and log 
 | K-07 | Remove a budget | Clear a test category's budget → Save | It shows "No budget"; Summary no longer shows "of budget" for it |
 | K-08 | Other can't be renamed or retired | Open **Other** | The name can't be edited and has no pencil; there's no Retire button; the note says it can't be renamed or retired. The budget can still be changed, and has a pencil |
 | K-09 | Pencils on the category sheet | Open a category's edit sheet, tap the pencil beside **Name**, then the pencil beside **Monthly budget**; then do the same on **Add category** | A pencil shows to the right of each value. Tapping a pencil puts the cursor in that box, with the keyboard open on a phone |
+| K-10 | Clearing on the category sheet | Open a `zz-test-` category with a budget; tap **Name**, then its ×; type a name; tap **Monthly budget**, then its × | Each × empties its box (the budget shows "Set amount"), with the cursor still in it. **Other**'s Name shows no × |
 
 ### L. Retiring and Restoring Categories
 
