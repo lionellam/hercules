@@ -2283,3 +2283,22 @@ Last updated: 28 November 2026
 - **The CHANGELOG and worklog** were reviewed too, but the owner chose to leave past entries as they are: they are the paper trail of what changed, and good enough as written.
 - **Retiring a category:** the structured version was chosen over running prose. Splitting the Specification's long steps 5 and 8 into labelled paragraphs was offered and left for later.
 - **Presenting changes:** the owner found the proposals hard to review at first. A commit, a pull request and then a fresh start from the Test Plan followed, and nothing from those reached `main`. Each change was then shown as **Now** and **Proposed**, which worked better.
+
+---
+
+## 28 November 2026 — Document Integrity Check After 1.8.0
+
+### What Was Done
+- At the owner's request, checked the documents after everything since the last check (1.5.5): versions 1.5.6 to 1.8.0 and the document review.
+- **Versions:** each version header matched the last row of its Version History: Specification 0.62, Architecture 0.49, Test Plan 1.46, Charter 0.16 and Project Plan 0.15. The Go-Live Checklist has only a "Last updated" date and is unchanged. `web/package.json` (1.8.0), `CHANGELOG.md` (31 entries) and the Git tags (31, local and on GitHub, with v1.5.6 to v1.8.0 on the same commits in both) agreed.
+- **Old wording:** none left in current documents ("optional and in SGD", "largest category", "plain bar", "603", the "H" square). Summary's bars, pace and "Budget not set" line are described the same way in the Specification, Architecture and Test Plan, and the Charter and Project Plan feature lists are still accurate.
+- **Pages:** all 13 user guide pictures are identical to their Application Screens drawings. The guide, Application Screens and Expense Flow follow the content rules: the owner isn't named, the GitHub username appears only in web addresses, no competitor apps are named, a deleted expense comes back only with Undo, and the only email address is the `you@gmail.com` placeholder. Before the fixes, the live home page, guide, screens and flow pages matched the repository, and the last publish had succeeded. The READMEs link all three pages, and the worklog is dated.
+- **Fixes, approved by the owner:**
+  1. **Expense Flow:** the label and code comment "version 1.5.6" became "version 1.8.0". The flow itself didn't change in 1.5.7 to 1.8.0.
+  2. **Budgets described as optional on the public pages:** the facts were right, but the wording worked against the nudge towards setting budgets. Claude proposed each change, and the owner reviewed them one by one and reworded A and B:
+     - **A. User guide, caption under Categories & budgets:** "Budgets are optional. … Retired categories wait under **Retired** at the bottom." became "Give a category a budget to track your spending more effectively. … Retired categories are moved to the **Retired** section at the bottom of the list of categories."
+     - **B. Application Screens, introduction to section 7:** "Your own list of categories, each with an optional monthly budget." became "Configure your expense categories and monthly category budgets."
+     - **C. Caption 7.1:** "…rename it or assign an optional monthly budget cap." became "…rename it or set its monthly budget."
+     - **D. Caption 7.2:** "Set a name and optional budget." became "Set a name and a monthly budget."
+     - **E.** The guide's "Updated" date became 28 November 2026.
+- The owner reviewed the changes in a local preview before committing. Documents only, so the app version stays at 1.8.0.
