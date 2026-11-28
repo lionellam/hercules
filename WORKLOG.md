@@ -4,7 +4,7 @@
 Maintained by: Lionel Lam Song Poh, James Wong
 Purpose: Record of work done, decisions made, challenges encountered, and assumptions held —
 to serve as a lessons learned reference for current and future contributors.
-Last updated: 26 November 2026
+Last updated: 28 November 2026
 ```
 
 ---
@@ -2257,3 +2257,28 @@ Last updated: 26 November 2026
 
 ### Clean-up
 - Deleted the `[TEST]` expense and the `zz-test-clear` category, directly in the local database; none remain. No parse entries were created. The demo account was removed from the allow-list and the test browser signed out, as it was before.
+
+---
+
+## 28 November 2026 — Document Review: Wording for Each Audience
+
+### What Was Done
+- At the owner's request, a review of the documents changed in 1.6.1 to 1.8.0, so that each reads well for its own audience, keeping the nuance and cutting padding. Each passage was also checked against the app's code, which turned up places where the documents no longer matched the app.
+- **Specification 0.62:**
+  - Retiring a category (Section 5.2) is set out in short labelled parts: what changes, what stays the same, where retired categories are listed, and how to bring one back. Three points that were only implied are now stated: adding a retired name again keeps the original spelling; an empty budget box then leaves it with no budget; and the 50-category limit can stop a restore.
+  - Fixed: retired categories on Summary were described as having a bar, out of date since 1.7.0; past months and retired categories also show the number of expenses.
+  - Plainer wording for categories without a budget (Section 4.1), and Settings (Section 4.4) described as it is now, without references to earlier versions.
+- **Architecture 0.49:** the clear button moved out of decision 38 ("Review after Parse in a sheet"), where it was hard to find, into a new decision 45, with its behaviour in plain words and the technical detail in brackets. Decision 44 includes the number of expenses and explains more plainly why past months have no bars.
+- **Test Plan 1.46:**
+  - L-08 expected a bar for a retired category, out of date since 1.7.0. It was fixed, and H-13, which repeated it, was removed, so the old H-14 is now H-13.
+  - L-10 checks the original spelling and an empty budget.
+  - K-10 opens Other and checks the keyboard.
+  - C-17 also clears a field on the review sheet.
+  - Clearer steps or results in Q-07, H-05, H-11 and H-12.
+- Documents only, so the app version is unchanged.
+
+### Options and the Owner's Choices
+- **Audiences:** the Specification, Architecture and Test Plan are for the project team (technical managers, business analysts, designers and developers) and are the most heavily used, so their wording was reshaped. The user guide and Application Screens are for the public; the owner prefers to change them by hand, or by giving exact instructions, so they were left unchanged.
+- **The CHANGELOG and worklog** were reviewed too, but the owner chose to leave past entries as they are: they are the paper trail of what changed, and good enough as written.
+- **Retiring a category:** the structured version was chosen over running prose. Splitting the Specification's long steps 5 and 8 into labelled paragraphs was offered and left for later.
+- **Presenting changes:** the owner found the proposals hard to review at first. A commit, a pull request and then a fresh start from the Test Plan followed, and nothing from those reached `main`. Each change was then shown as **Now** and **Proposed**, which worked better.

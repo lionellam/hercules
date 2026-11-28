@@ -1,8 +1,8 @@
 # Project Hercules — Test Plan: Web App v1
 
 ```
-Version 1.45 · Draft
-Last Reviewed: 26 November 2026
+Version 1.46 · Draft
+Last Reviewed: 28 November 2026
 Produced with AI Assistance (Claude Code)
 ```
 
@@ -56,6 +56,7 @@ Produced with AI Assistance (Claude Code)
 | 1.43 | 2026-11-25 | Lionel Lam | Summary without budgets: H-02 and H-05 updated; new H-11 to H-14 (the bubble, setting a budget from Summary, retired categories, past months) |
 | 1.44 | 2026-11-25 | Lionel Lam | H-12 wording shortened |
 | 1.45 | 2026-11-26 | Lionel Lam | H-05 names the yellow pill; new C-17 and C-18 (clearing fields on the expense sheets) and K-10 (on the category sheet) |
+| 1.46 | 2026-11-28 | Lionel Lam | Wording review: L-08 expects no bar for a retired category, and H-13 (which repeated it) is removed, so the old H-14 is now H-13; L-10 checks the original spelling and an empty budget; K-10 opens Other and checks the keyboard; C-17 also clears a field on the review sheet; clearer steps or results in Q-07, H-05, H-11 and H-12 |
 
 ---
 
@@ -168,7 +169,7 @@ After Parse, the review card opens in a sheet over the Log screen. Its save butt
 | C-14 | Confirmation over a sheet | Parse, change the merchant → **Discard**; then **Keep reviewing** | "Discard your edits?" slides up over the review sheet, which stays still; **Keep reviewing** slides only the confirmation away |
 | C-15 | Wider screens | In a window at least 768 pixels wide, parse `[TEST] lunch 5.50`, then **Discard** | The dialog fades in while growing slightly, and fades out while shrinking slightly; it doesn't slide |
 | C-16 | Reduce Motion **[Phone]** | Turn on the phone's Reduce Motion (iPhone: Settings → Accessibility → Motion), then repeat C-13's first step | The sheet fades in and out without sliding |
-| C-17 | Clearing a field | Open a saved `[TEST]` expense with a merchant and remarks; tap **Merchant**; tap the × that appears; type a new merchant; do the same with **Remarks** and the amount | Before tapping, each field shows its pencil and the amount no icon. While Merchant is being typed in, a round grey × replaces its pencil. Tapping it empties Merchant, showing "—", with the cursor still in it and the keyboard open, and the pencil returns. Remarks behaves the same (showing "Optional"); the amount shows a × at its right, and clearing it shows "0.00" |
+| C-17 | Clearing a field | Open a saved `[TEST]` expense with a merchant and remarks; tap **Merchant**; tap the × that appears; type a new merchant; do the same with **Remarks** and the amount; **Cancel**. Then Parse a `[TEST]` expense, clear its Merchant on the review sheet, and **Discard** | Before tapping, Merchant and Remarks show their pencils and the amount has no icon. **Merchant:** while it's being typed in, a round grey × replaces its pencil. Tapping the × empties it, showing "—", with the cursor still in it and the keyboard open, and the pencil comes back; typing brings the × back. **Remarks:** the same, showing "Optional" when empty. **Amount:** a × shows at its right; clearing it shows "0.00". **Review sheet:** Merchant clears the same way |
 | C-18 | No × on Category, Date or an empty field | On the review sheet, tap **Category**, **Date**, and an empty Remarks | Category and Date never show a ×. An empty field shows its pencil, and a × appears once something is typed |
 
 ### D. Fixing, Deleting and Undo
@@ -232,16 +233,15 @@ Use a month with several expenses, such as one filled with sample data.
 | H-02 | Last month | Tap last month's name at the top | "Spent in [month]" and that month's total. No day line, no comparison with the month before, no pace notes and no bars |
 | H-03 | Totals match History | Add up a month's amounts in History (or use a search for each category) | Each category's figure on Summary matches |
 | H-04 | Only categories with spending | Have a category with a budget but no spending this month | It isn't listed on Summary |
-| H-05 | No budget, this month | Look at a category with spending this month and no budget | Its name, number of expenses and amount, with no bar and no "of". Below it: "Budget not set for this category" and an "i" in a circle, in a yellow pill, in both themes |
+| H-05 | No budget, this month | Look at a category with spending this month and no budget, in the light theme and then the dark theme | Its name, number of expenses and amount on its own (not "x of budget"), with no bar. Below it: "Budget not set for this category" and an "i" in a circle, in a yellow pill, in both themes |
 | H-06 | Bars with a budget | Set a budget on a category with spending this month | It reads "x of budget", and the bar fills against the budget |
 | H-07 | Over budget is red | Make a `zz-test-` category with a 10.00 budget and log `[TEST]` expenses totalling 12.00 in it | Its bar is full and red, with "Over budget by $2.00" in red and a warning icon |
 | H-08 | Pie chart | Look below the category list | "Share of spend" with up to six slices and percentages. With more than six categories, the smaller ones are grouped as "Everything else (n)" |
 | H-09 | Future-dated expense | Save a `[TEST]` expense dated later this month | It counts towards this month's total and pace straight away |
 | H-10 | Total stays in place | On a phone held upright (and on a tablet or computer), scroll Summary down to the pie chart, on this month and last month | The heading, month switcher, total, **CSV** button and (this month) day line stay at the top, with a thin line below them; the categories scroll underneath. **CSV** still works while scrolled |
-| H-11 | The "Budget not set" bubble | Tap the words "Budget not set for this category" (not the "i"); tap elsewhere; then tap the "i" | Each tap opens a bubble below the line: "The budget for this category can be set in Settings › Categories & budgets." and the link **Set a budget for [category]**; the "i" is dark while it's open. Tapping elsewhere closes it |
-| H-12 | Setting a budget from Summary | Make a `zz-test-` category with no budget and log a `[TEST]` expense in it; on Summary, open its bubble and tap **Set a budget for zz-test-…**; then **Cancel**; open it again, enter 100 and **Save** | The category's Edit category card slides up over Summary. Cancel closes it. After Save, the card closes and the row shows a bar, "of 100.00", a marker and a pace note, without leaving Summary |
-| H-13 | Retired category | Retire the `zz-test-` category from H-12 while it has spending this month | On Summary its row shows its name, number and amount only: no bar and no "Budget not set" line |
-| H-14 | Past months | Switch to last month | Every category shows its name, number and amount only, with no bars and no "Budget not set" lines |
+| H-11 | The "Budget not set" bubble | Tap the words "Budget not set for this category" (not the "i"); tap elsewhere; then tap the "i" | Tapping the words opens a bubble below the line: "The budget for this category can be set in Settings › Categories & budgets." and the link **Set a budget for [category]**. The "i" is dark while it's open. Tapping elsewhere closes it. Tapping the "i" opens the same bubble |
+| H-12 | Setting a budget from Summary | Make a `zz-test-` category with no budget and log a `[TEST]` expense in it; on Summary, open its bubble and tap **Set a budget for zz-test-…**; then **Cancel**; open it again, enter 100 and **Save** | The category's Edit category card slides up over Summary. Cancel closes it. After Save, the card closes and the row shows a bar, "of 100.00", the marker for the amount expected by today, and a pace note, without leaving Summary |
+| H-13 | Past months | Switch to last month | Every category shows its name, number and amount only, with no bars and no "Budget not set" lines |
 
 ### I. Spending Pace (This Month)
 
@@ -286,7 +286,7 @@ To set up I-01 to I-05: create a `zz-test-` category with a $300 budget and log 
 | K-07 | Remove a budget | Clear a test category's budget → Save | It shows "No budget"; Summary no longer shows "of budget" for it |
 | K-08 | Other can't be renamed or retired | Open **Other** | The name can't be edited and has no pencil; there's no Retire button; the note says it can't be renamed or retired. The budget can still be changed, and has a pencil |
 | K-09 | Pencils on the category sheet | Open a category's edit sheet, tap the pencil beside **Name**, then the pencil beside **Monthly budget**; then do the same on **Add category** | A pencil shows to the right of each value. Tapping a pencil puts the cursor in that box, with the keyboard open on a phone |
-| K-10 | Clearing on the category sheet | Open a `zz-test-` category with a budget; tap **Name**, then its ×; type a name; tap **Monthly budget**, then its × | Each × empties its box (the budget shows "Set amount"), with the cursor still in it. **Other**'s Name shows no × |
+| K-10 | Clearing on the category sheet | Open a `zz-test-` category with a budget; tap **Name**, then its ×; type the name back; tap **Monthly budget**, then its ×; **Cancel**. Then open **Other** and tap its Name | Each × empties its box (the budget shows "Set amount"), with the cursor still in it and the keyboard open on a phone. **Other**'s Name can't be typed in and shows no × |
 
 ### L. Retiring and Restoring Categories
 
@@ -299,9 +299,9 @@ To set up I-01 to I-05: create a `zz-test-` category with a $300 budget and log 
 | L-05 | Past expenses keep it | Before retiring, log a `[TEST]` expense in it. After retiring, check History | The expense still shows the category name |
 | L-06 | Editing an old expense | Open that expense, change the amount → Save | The category shows "zz-test-pets (retired)"; the expense saves normally |
 | L-07 | Can't move other expenses into it | Open a different expense and look at its category list | The retired category isn't offered |
-| L-08 | Summary while retired | Look at this month's Summary | The retired category's spending still counts, as a plain bar with no budget or pace note |
+| L-08 | Summary while retired | Look at this month's Summary | The retired category's spending still counts in the total. Its row shows its name, number of expenses and amount only: no bar, no pace note and no "Budget not set" line, even though it still has a budget |
 | L-09 | Restore button | Categories & budgets → Retired → **Restore** | It returns to the main list with its budget; the Retired row disappears when empty |
-| L-10 | Re-adding the name restores it | Retire it, then **Add category** and type `ZZ-TEST-PETS` | A note says it was retired and saving restores it, with or without a budget depending on the budget field. The button reads **Restore**. After saving, it's back with its past expenses |
+| L-10 | Re-adding the name restores it | Retire it, then **Add category**, type `ZZ-TEST-PETS` and leave the budget empty | A note says it was retired and saving restores it, and the button reads **Restore**. After saving, it's back as "zz-test-pets" (its original spelling), with no budget and with its past expenses |
 | L-11 | Retired categories can't be renamed | Via the API, try to rename a retired category | Refused with "That name is already in use, or this category has been retired." |
 
 ### M. Look and Layout
@@ -358,7 +358,7 @@ These need a look at the local database; ask Claude to run them.
 | Q-04 | Opening and going back | Tap **Categories & budgets**, then **‹ Settings** | The Categories & budgets page opens, showing your categories, **Add category** and the Retired group; **‹ Settings** returns to Settings |
 | Q-05 | Returning to Settings | Open Categories & budgets, switch to Log, then tap Settings | The Settings list shows, not Categories & budgets |
 | Q-06 | No theme icon on screens | Look at the top of Log, History and Summary | There's no sun or moon icon |
-| Q-07 | Account | Look at the Account group | Your email address, and **Sign out**, in red and centred in its row (see A-05). Sign out appears only here |
+| Q-07 | Account | Look at the Account group | Your email address, and **Sign out**, in red and centred in its row. Sign out appears only here (signing out is tested in A-05) |
 | Q-08 | Version and last updated | Look at the bottom of Settings; compare with `CHANGELOG.md` and the latest deploy; then try a short window (for example a phone held sideways) | The line sits at the bottom of the screen, just above the tab bar (on a short window, after Sign out once scrolled). The version number matches the newest entry in the changelog (for example 1.0.0), followed by a short code for the exact version and the date and time of the latest deploy |
 | Q-09 | Experimental features, none **[when no feature is listed]** | Settings → look at the Experimental row, then tap **Experimental features**, then **‹ Settings** | The row reads "None right now". The page shows the heading, the note about features being tried out on this device only, and "Nothing to try right now"; "‹ Settings" returns to the list. Switching to another tab and back to Settings shows the list |
 | Q-10 | Experimental switch | Open Experimental features and switch **Intelligent Merchant Selection** on; check it works (B-15); reload the page; then switch it off | The Settings row reads "1 of 1 on" (and "0 of 1 on" when off). The feature works straight away, is still on after the reload, and stops when switched off (merchants come back as typed, B-17). On another device or browser it is off |
