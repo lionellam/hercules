@@ -1,7 +1,7 @@
 # Project Hercules — Test Plan: Web App v1
 
 ```
-Version 1.46 · Draft
+Version 1.47 · Draft
 Last Reviewed: 28 November 2026
 Produced with AI Assistance (Claude Code)
 ```
@@ -57,6 +57,7 @@ Produced with AI Assistance (Claude Code)
 | 1.44 | 2026-11-25 | Lionel Lam | H-12 wording shortened |
 | 1.45 | 2026-11-26 | Lionel Lam | H-05 names the yellow pill; new C-17 and C-18 (clearing fields on the expense sheets) and K-10 (on the category sheet) |
 | 1.46 | 2026-11-28 | Lionel Lam | Wording review: L-08 expects no bar for a retired category, and H-13 (which repeated it) is removed, so the old H-14 is now H-13; L-10 checks the original spelling and an empty budget; K-10 opens Other and checks the keyboard; C-17 also clears a field on the review sheet; clearer steps or results in Q-07, H-05, H-11 and H-12 |
+| 1.47 | 2026-11-28 | Lionel Lam | New B-20 to B-26: the Log screen's Today by category against a daily budget, including over today's budget (amber), over the monthly budget (red), no budget and retired categories |
 
 ---
 
@@ -145,6 +146,13 @@ For each run, note the date, the device and browser, whether it was the local or
 | B-16 | Intelligent Merchant Selection leaves new merchants alone **[Claude]** | With the switch on and "NTUC FairPrice" saved this month, parse `[TEST] sheng siong 18.90` | The merchant is "Sheng Siong" (as written), not "NTUC FairPrice" |
 | B-17 | Intelligent Merchant Selection switched off **[Claude]** | Switch it off, then parse `[TEST] ntuc 45.20` | The merchant comes back as typed ("ntuc" or "NTUC"), not changed to a merchant you've used before. The server log's parse timing line has no `merchants` step or `merchants_sent` count; with the switch on (B-15) it has both, and never the names |
 | B-19 | Intelligent Merchant Selection keeps new merchants when many are known **[Claude]** | Run by Claude against the parser itself, nothing saved: with the switch's merchant list holding 50 known merchants (none of them Sheng Siong, Prime Supermarket or Din Tai Fung), parse each of these 10 times: `Groceries from Sheng Siong at $7`, `Bought vegetables from Prime Supermarket $12`, `dintaifung dinner 48`, `ntuc 45.20`, `Bus fare $2`. Repeat with the switch off | Switch on: Sheng Siong, Prime Supermarket and Din Tai Fung come back in every run (never no merchant); `ntuc` comes back as "NTUC FairPrice"; `Bus fare` has no merchant. Switch off: the prompt has no list of known merchants, and each merchant comes back as typed |
+| B-20 | Today's budget | Run on any day except the 1st. Make `zz-test-daily` with a budget of 300 and save a `[TEST]` expense of 200.00 in it dated the 1st of this month. Then save a `[TEST]` expense of 5.00 in it today | Under **Today by category**, its row reads "5.00 of X", where X = 100 ÷ (days in this month − today's date + 1), to the cent. Its bar is filled to 5 ÷ X of its width, in the usual colour, with no note |
+| B-21 | Today's budget stays the same all day | Save another `[TEST]` expense of 1.00 in `zz-test-daily` today | The row reads "6.00 of X", with the same X as in B-20 |
+| B-22 | Daily budget exceeded | Save `[TEST]` expenses in `zz-test-daily` today until today's total is more than X, with the month's total still under 300. Look in the light theme, then the dark theme | The bar is full and amber, the amount reads "… of X", and "Daily budget exceeded" shows under the bar in amber, in both themes |
+| B-23 | Monthly budget exceeded | Save a `[TEST]` expense in `zz-test-daily` today that takes the month's total over 300. Look in both themes | The bar is full and red, the amount shows on its own with no "of", and "Monthly budget exceeded" shows under the bar in red, in both themes |
+| B-24 | Exactly at today's budget | Make `zz-test-exact` with a budget of 10 × (days in this month − today's date + 1), with nothing spent in it before today. Save a `[TEST]` expense of 10.00 in it today | The row reads "10.00 of 10.00", and the bar is full in the usual colour, with no note |
+| B-25 | No budget | Make `zz-test-nobudget` with no budget and save a `[TEST]` expense in it today. Tap its yellow line, then **Set a budget for zz-test-nobudget**; enter 100 and **Save** | Before: no bar, the amount on its own, and the yellow pill "Budget not set for this category" with an "i". Tapping the line opens the same bubble as on Summary (H-11), and the link slides up the category's Edit category card over the Log screen. After Save, the card closes and the row shows a bar and "… of" today's budget |
+| B-26 | Retired category | Retire `zz-test-nobudget` from B-25 | Its row shows its name, number of expenses and amount only: no bar and no note |
 | B-20 | Intelligent Merchant Selection uses last month's merchants **[Claude]** | With nothing saved this month under the names below, save `[TEST] groceries 20` with the merchant changed to "NTUC FairPrice", dated in last month, and `[TEST] cake 15` with the merchant "Swensens", dated two months ago. Switch **Intelligent Merchant Selection** on, then parse `[TEST] ntuc 45.20` and `[TEST] swensens 9` | The first review sheet shows "NTUC FairPrice" (last month's merchant is on the list). The second shows the merchant as typed or tidied ("Swensens" or "Swensen's"), as with the switch off, never a listed name: two months ago is not on the list. The server log's `merchants_sent` count includes last month's merchant |
 
 ### C. The Review Card

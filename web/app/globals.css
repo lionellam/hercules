@@ -3,7 +3,7 @@
   --bg: #ffffff; --surface: #ffffff; --text: #18181b; --muted: #71717a;
   --line: #e7e7e4; --accent: #18181b; --accent-text: #ffffff; --soft: #f4f4f5; --edge: #8e8e96; --switch-off: #d4d4d8; --sk: #ececee; --sk-hi: #f7f7f8;
   --bar: #18181b; --good: #15803d; --bad: #b91c1c; --hl: #fde68a;
-  --nudge-bg: #fef3c7; --nudge-text: #854d0e;
+  --nudge-bg: #fef3c7; --nudge-text: #854d0e; --warn: #d97706; --warn-text: #b45309;
   --g-bg: #ffffff; --g-border: #747775; --g-text: #1f1f1f;
   --pie-1: #2a78d6; --pie-2: #eb6834; --pie-3: #1baf7a; --pie-4: #eda100; --pie-5: #e87ba4; --pie-6: #008300; --pie-rest: #a1a1aa;
 }
@@ -12,7 +12,7 @@
     color-scheme: dark;
     --bg: #18181b; --surface: #18181b; --text: #f4f4f5; --muted: #a1a1aa;
     --line: #27272a; --accent: #f4f4f5; --accent-text: #18181b; --soft: #27272a; --edge: #71717a; --switch-off: #3f3f46; --sk: #27272a; --sk-hi: #323236;
-    --bar: #f4f4f5; --good: #4ade80; --bad: #f87171; --hl: #713f12; --nudge-bg: #3b2f12; --nudge-text: #fcd34d;
+    --bar: #f4f4f5; --good: #4ade80; --bad: #f87171; --hl: #713f12; --nudge-bg: #3b2f12; --nudge-text: #fcd34d; --warn: #f59e0b; --warn-text: #fbbf24;
     --g-bg: #131314; --g-border: #8e918f; --g-text: #e3e3e3;
     --pie-1: #3987e5; --pie-2: #d95926; --pie-3: #199e70; --pie-4: #c98500; --pie-5: #d55181; --pie-6: #008300; --pie-rest: #71717a;
   }
@@ -22,7 +22,7 @@
   color-scheme: dark;
   --bg: #18181b; --surface: #18181b; --text: #f4f4f5; --muted: #a1a1aa;
   --line: #27272a; --accent: #f4f4f5; --accent-text: #18181b; --soft: #27272a; --edge: #71717a; --switch-off: #3f3f46; --sk: #27272a; --sk-hi: #323236;
-  --bar: #f4f4f5; --good: #4ade80; --bad: #f87171; --hl: #713f12; --nudge-bg: #3b2f12; --nudge-text: #fcd34d;
+  --bar: #f4f4f5; --good: #4ade80; --bad: #f87171; --hl: #713f12; --nudge-bg: #3b2f12; --nudge-text: #fcd34d; --warn: #f59e0b; --warn-text: #fbbf24;
   --g-bg: #131314; --g-border: #8e918f; --g-text: #e3e3e3;
   --pie-1: #3987e5; --pie-2: #d95926; --pie-3: #199e70; --pie-4: #c98500; --pie-5: #d55181; --pie-6: #008300; --pie-rest: #71717a;
 }
@@ -197,6 +197,11 @@ textarea::placeholder { color: var(--muted); }
 .track { height: 6px; background: var(--soft); border-radius: 3px; overflow: hidden; }
 .fill { height: 100%; background: var(--bar); border-radius: 3px; }
 .fill.over { background: var(--bad); }
+.fill.warn { background: var(--warn); }
+/* Log's Today by category notes (Specification 4.9) */
+.day-note { margin-top: 6px; font-size: 12.5px; font-weight: 600; line-height: 1.35; }
+.day-note.warn { color: var(--warn-text); }
+.day-note.over { color: var(--bad); }
 .dayline { font-size: 13px; color: var(--muted); margin-top: 6px; }
 .dayline b { color: var(--text); font-weight: 600; }
 /* Spending in other currencies, left out of the total above it (Specification 4.6) */

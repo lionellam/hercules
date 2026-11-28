@@ -6,6 +6,15 @@ Versions follow [semantic versioning](https://semver.org): **major** for a chang
 
 ---
 
+## 1.9.0 — 28 November 2026
+
+**New**
+- On the **Log** screen, each bar under **Today by category** now shows how much of today's budget for that category you've used, instead of its share of today's spending. Today's budget is what's left of the month's budget, spread evenly over the days left, counting today. It stays the same all day.
+- A bar turns amber with **Daily budget exceeded** when you've spent more than today's budget, and red with **Monthly budget exceeded** once the category is over its budget for the month.
+- A category without a budget shows **Budget not set for this category**, as on Summary. Tap it, then **Set a budget for…**, to add one right there.
+
+---
+
 ## 1.8.0 — 26 November 2026
 
 **New**

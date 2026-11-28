@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useId, useRef, useState, useSyncExternalStore } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import { expensesUrl, fmt, summaryUrl, useCached, type ApiCache } from "@/lib/client";
 import { daysInMonth, localToday, monthKey, monthLabel, shortDay } from "@/lib/dates";
 import { cents, paceRows, type PaceRow } from "@/lib/pace";
@@ -10,56 +10,7 @@ import SpendPie from "../spend-pie";
 import { NotIncluded, useHomeCurrency, useMoney } from "../currency";
 import { SkeletonBar, SkeletonCategories, SlowNote } from "../loading";
 import { CategorySheet } from "./categories";
-
-// Below a category without a budget, this month (Specification 4.1): the whole line opens a bubble saying where budgets
-// are set, with a link that opens the category's Edit category card over Summary (Architecture decision 44)
-function BudgetNotSet({ category, onSet }: { category: Category; onSet: () => void }) {
-  // Where the bubble's arrow sits (under the "i"), measured when the line is tapped; null while closed
-  const [arrowAt, setArrowAt] = useState<number | null>(null);
-  const open = arrowAt != null;
-  const tipId = useId();
-  const wrap = useRef<HTMLDivElement>(null);
-  const icon = useRef<HTMLSpanElement>(null);
-
-  useEffect(() => {
-    if (!open) return;
-    const close = (ev: PointerEvent) => {
-      if (!wrap.current?.contains(ev.target as Node)) setArrowAt(null);
-    };
-    document.addEventListener("pointerdown", close);
-    return () => document.removeEventListener("pointerdown", close);
-  }, [open]);
-
-  return (
-    <div className="no-budget" ref={wrap}>
-      <button
-        type="button"
-        className={`no-budget-line${open ? " on" : ""}`}
-        aria-expanded={open}
-        aria-controls={tipId}
-        onClick={() => setArrowAt(open ? null : (icon.current?.offsetLeft ?? 0) + 3)}
-      >
-        Budget not set for this category
-        <span className="no-budget-i" ref={icon} aria-hidden="true">i</span>
-      </button>
-      {open && (
-        <div className="ni-tip" id={tipId} role="tooltip" style={{ "--arrow": `${arrowAt}px` } as React.CSSProperties}>
-          The budget for this category can be set in Settings › Categories &amp; budgets.
-          <button
-            type="button"
-            className="no-budget-link"
-            onClick={() => {
-              setArrowAt(null);
-              onSet();
-            }}
-          >
-            Set a budget for {category.name}
-          </button>
-        </div>
-      )}
-    </div>
-  );
-}
+import { BudgetNotSet } from "../budget-not-set";
 
 // The iPhone home-screen app (navigator.standalone) can't return from a download, so there the CSV goes
 // through the share sheet instead (Specification 4.5). Elsewhere the normal download is used.

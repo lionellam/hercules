@@ -1,8 +1,8 @@
 # Project Hercules — Project Plan
 
 ```
-Version 0.15 · Draft 
-Last Reviewed: 16 November 2026
+Version 0.16 · Draft 
+Last Reviewed: 28 November 2026
 Produced with AI Assistance (Claude Code)
 ```
 
@@ -25,6 +25,7 @@ Produced with AI Assistance (Claude Code)
 | 0.13 | 2026-11-14 | Lionel Lam | Integrity check: features updated for the default currency (parsing, totals and Settings), delivered in 1.2.0 to 1.2.2 |
 | 0.14 | 2026-11-14 | Lionel Lam | Accuracy review: the CSV download is listed as delivered early under Phase 4 only; Phase 2 notes the review card is a sheet since 1.3.0; Settings lists the System appearance option |
 | 0.15 | 2026-11-16 | Lionel Lam | Settings includes the experimental features page (1.4.0) |
+| 0.16 | 2026-11-28 | Lionel Lam | Budget Tracking includes the Log screen's daily budget bars (1.9.0) |
 
 ---
 
@@ -74,7 +75,7 @@ A high-level look at the functional pieces of the system. These will be broken d
 - **Confirmation Screen** — editable review step before data is committed to the database
 - **Expense Storage** — structured, queryable storage of logged expenses, scoped per user; edits and soft deletes supported, with a confirmation before deleting and Undo afterwards
 - **History & Summary** — month-by-month list of expenses with a search for the month shown, and category totals for the current and previous month, with a pie chart of each category's share. Totals count only the user's default currency; spending in other currencies is shown separately as not included, never converted
-- **Budget Tracking** — category-based budgets and tracking against them; an optional monthly budget per category, shown against the current month's spend in Summary, is in place, along with spending pace (an expected-by-today marker, a pace note and a burn-up chart per budgeted category)
+- **Budget Tracking** — category-based budgets and tracking against them; an optional monthly budget per category, shown against the current month's spend in Summary, is in place, along with spending pace (an expected-by-today marker, a pace note and a burn-up chart per budgeted category); on the Log screen, Today by category measures each budgeted category's spending today against a daily budget
 - **Category Taxonomy** — a per-user, extensible set of expense categories; new users are seeded with a starter list, and can add, rename, retire and restore categories on the Categories & budgets page in Settings
 - **Export / Download** — download a month's expenses as a CSV file from Summary (delivered early, November 2026)
 - **Settings** — Categories & budgets, the default currency (one of 20), appearance (System, Light or Dark), experimental features that can be switched on and off on each device, the signed-in account with sign-out, and the app's version

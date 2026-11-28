@@ -2302,3 +2302,44 @@ Last updated: 28 November 2026
      - **D. Caption 7.2:** "Set a name and optional budget." became "Set a name and a monthly budget."
      - **E.** The guide's "Updated" date became 28 November 2026.
 - The owner reviewed the changes in a local preview before committing. Documents only, so the app version stays at 1.8.0.
+
+---
+
+## 28 November 2026 — Version 1.9.0: Today by Category Against a Daily Budget
+
+### What Was Done
+- At the owner's request: on the Log screen, the bars under **Today by category** showed each category's share of today's spending, measured against the day's largest category. That could mislead, or at best said little. Each budgeted category's bar now shows today's spending against **today's budget** for it.
+- **Today's budget** = (monthly budget − spent in the category this month before today) ÷ days left in the month, counting today. It uses spending before today only, so it stays the same all day (`todayRows` in `web/lib/pace.ts`).
+- **What each row shows:**
+  - Within today's budget: the bar filled to the share used, and "5.00 of 16.67".
+  - Over today's budget, with the month still within budget: a full amber bar and "Daily budget exceeded".
+  - Over the monthly budget, counting today: a full red bar, the amount alone and "Monthly budget exceeded".
+  - No budget: the "Budget not set" pill, bubble and link from Summary. It is now shared in `web/components/budget-not-set.tsx`, and the link opens the Edit category card over the Log screen.
+  - Retired: the amount only.
+- **New colour tokens:** `--warn` and `--warn-text` for each theme in `web/app/globals.css`: amber `#d97706` for the bar and `#b45309` for the note in the light theme; `#f59e0b` and `#fbbf24` in the dark theme. Summary is unchanged.
+- **Application Screens and the user guide:** drawings 2.2, 2.3 and 2.5 show the new rows, with Food & Dining at "30.00 of 16.67" (34.50 in 2.5), amber, with "Daily budget exceeded", and Transport at "2.10 of 5.00". On 7 November, with 24 days left, a $150 Transport budget allows at most $6.25 a day, so the MRT fare in every drawing of that day changed from 9.50 to 2.10: 2.2, 2.3, 2.5, 2.7, 2.8, 3.3, 3.4 and 4.1, and the guide's copies of 2.2, 3.3, 3.4 and 4.1. Spent today in those drawings became $32.10 (was $39.50), and $36.60 in 2.5 (was $44.00). No captions changed.
+- Documents: Specification 0.63 (new Section 4.9; step 8), Architecture 0.50 (new decision 46; decision 44's colour rule), Test Plan 1.47 (new B-20 to B-26), Project Plan 0.16 (Budget Tracking). Version 1.9.0 (a new feature), with a CHANGELOG entry.
+
+### Options and the Owner's Choices
+- The owner made the decisions one at a time, with Claude keeping a list of those still open.
+- **How today's budget is worked out:** counting today and fixed for the day (chosen), or the monthly budget ÷ days in the month (set aside, as it ignores pace). Claude set out how Summary's "about $X/day" differs: it divides what's left after today's spending by the days after today. Making Summary count today, and adding "from tomorrow" to Summary's figure (mockup `design/summary-per-day-wording-mockups.html`), were discussed. The owner chose to leave Summary unchanged for now.
+- **The notes:** plain text, without the suggested "i" and bubble.
+- **Colours:** amber rather than the suggested yellow for "Daily budget exceeded", so yellow keeps one meaning (the "Budget not set" pill), and the same red as Summary.
+- **The drawings:** the old amounts would have shown both categories amber. Of the options offered, the owner chose to lower the MRT fare so one row is amber and one isn't, and to change it in every drawing of that day rather than only the three Log drawings.
+- Mockups: `design/log-daily-budget-mockups.html`.
+
+### Checks
+- The new maths was run separately against the Specification's worked example, with identical results, plus three edge cases: a budget used up before today shows red, a future-dated expense is ignored, and on the last day today's budget is whatever is left.
+- On the demo account (confirmed with `/api/auth/session`), on 28 November (day 28 of 30, so 3 days left), with five `zz-test-` categories and `[TEST]` expenses created through the API:
+  - `zz-test-shop` (budget 300, 200 before today, 45.90 today): "45.90 of 33.33", full amber bar, "Daily budget exceeded".
+  - `zz-test-ent` (budget 100, 90 before, 38 today): "38.00", full red bar, "Monthly budget exceeded".
+  - `zz-test-exact` (budget 30, 10 today): "10.00 of 10.00", full bar in the usual colour.
+  - `zz-test-food` (budget 500, 400 before, 5 today): "5.00 of 33.33", 15% bar. After another 1.00 today, "6.00 of 33.33": today's budget stayed the same.
+  - `zz-test-nobudget`: the pill. Real taps opened the bubble, and the link slid up its Edit category card with no box selected; after a budget of 100 was saved, the row read "12.50 of 33.33" with a bar. Once retired, it showed the amount only.
+  - Checked at phone size in the light and dark themes. Summary was unchanged: for example `zz-test-shop` showed "$34.10 under pace" there, which is expected, since it was under pace for the month but over today's share.
+- Application Screens (32 phones) and the user guide (13) previewed locally. Every phone is still 613 pixels tall: the new note line first made 2.5 5 pixels taller, so the drawn note's spacing was tightened. All 13 guide pictures are identical to their Application Screens drawings.
+- `npx tsc --noEmit` passed, `npx eslint .` passed with the one known warning, and `npm run build` passed.
+- Not tested here: a real phone, and the first day of a month.
+
+### Clean-up
+- Deleted the 9 `[TEST]` expenses and the 5 `zz-test-` categories, directly in the local database; none remain. No parse entries were created. The demo account was removed from the allow-list, and the test browser was signed out, as it was before.

@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Log Daily Budget Bars</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root { --page: #ececea; --page-text: #18181b; --page-muted: #5f5f66; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--page); color: var(--page-text); font-family: Inter, -apple-system, system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  main { max-width: 1460px; margin: 0 auto; padding: 36px 16px 80px; }
+  h1 { font-size: 28px; letter-spacing: -0.02em; margin: 0 0 8px; }
+  h2 { font-size: 18px; margin: 44px 0 6px; }
+  .lead { color: var(--page-muted); max-width: 900px; line-height: 1.55; margin: 0 0 10px; font-size: 15px; }
+  .lead b { color: var(--page-text); }
+  table.ex { border-collapse: collapse; font-size: 13.5px; margin: 10px 0 4px; background: #fff; border-radius: 10px; overflow: hidden; }
+  table.ex th, table.ex td { padding: 7px 12px; text-align: left; border-bottom: 1px solid #e7e7e4; }
+  table.ex th { color: var(--page-muted); font-weight: 600; font-size: 12.5px; }
+  table.ex td.r, table.ex th.r { text-align: right; font-variant-numeric: tabular-nums; }
+  .frames { display: flex; flex-wrap: wrap; gap: 30px 26px; align-items: flex-start; margin-top: 18px; }
+  figure { margin: 0; max-width: 100%; }
+  figcaption { max-width: 375px; font-size: 13px; color: var(--page-muted); margin-top: 12px; line-height: 1.5; }
+  figcaption b { color: var(--page-text); }
+  .phone { width: 375px; max-width: 100%; height: 680px; border-radius: 30px; overflow: hidden; border: 1px solid rgba(0,0,0,.08);
+           box-shadow: 0 1px 2px rgba(0,0,0,.06), 0 10px 28px rgba(0,0,0,.08); }
+  .phone.narrow { width: 360px; }
+
+  /* App tokens and styles, from web/app/globals.css; amber is new */
+  .app { --bg: #fff; --text: #18181b; --muted: #71717a; --line: #e7e7e4; --accent: #18181b; --accent-text: #fff; --soft: #f4f4f5; --bar: #18181b; --bad: #b91c1c;
+         --nudge-bg: #fef3c7; --nudge-text: #854d0e; --warn: #d97706; --warn-text: #b45309;
+         background: var(--bg); color: var(--text); font-size: 15px; position: relative; height: 100%; display: flex; flex-direction: column; overflow: hidden; }
+  .app.dark { --bg: #18181b; --text: #f4f4f5; --muted: #a1a1aa; --line: #27272a; --accent: #f4f4f5; --accent-text: #18181b; --soft: #27272a; --bar: #f4f4f5; --bad: #f87171;
+              --nudge-bg: #3b2f12; --nudge-text: #fcd34d; --warn: #f59e0b; --warn-text: #fbbf24; }
+  .top { padding: 30px 20px 16px; border-bottom: 1px solid var(--line); }
+  .greet { color: var(--muted); font-size: 14px; }
+  .app h3 { font-size: 28px; font-weight: 700; letter-spacing: -0.02em; }
+  .input-wrap { background: var(--soft); border-radius: 16px; padding: 14px; margin-top: 14px; }
+  .txt { font-size: 17px; min-height: 40px; color: var(--muted); }
+  .row { display: flex; justify-content: flex-end; }
+  .btn { height: 38px; padding: 0 18px; border-radius: 12px; border: none; font: inherit; font-size: 15px; font-weight: 600; background: var(--accent); color: var(--accent-text); opacity: .35; }
+  .today-total { display: flex; justify-content: space-between; margin-top: 12px; color: var(--muted); font-size: 14px; }
+  .today-total strong { color: var(--text); font-size: 16px; }
+  .body { padding: 0 20px 20px; flex: 1; position: relative; overflow: hidden; }
+  .body.scrolled { padding-top: 8px; }
+  .label { color: var(--muted); font-size: 13px; font-weight: 600; letter-spacing: .04em; margin-top: 22px; }
+  .item { display: flex; justify-content: space-between; align-items: center; padding: 11px 0; border-bottom: 1px solid var(--line); }
+  .item .m { font-weight: 500; }
+  .item .c { color: var(--muted); font-size: 13px; margin-top: 2px; }
+  .item .a { font-weight: 600; font-variant-numeric: tabular-nums; }
+  .cat { margin-top: 18px; position: relative; }
+  .cat-top { display: flex; justify-content: space-between; gap: 12px; font-size: 14px; margin-bottom: 6px; }
+  .cat-top .n { color: var(--muted); font-size: 12px; margin-left: 6px; }
+  .cat-top strong { font-variant-numeric: tabular-nums; flex-shrink: 0; }
+  .of { color: var(--muted); font-weight: 400; }
+  .track { height: 6px; background: var(--soft); border-radius: 3px; overflow: hidden; }
+  .fill { height: 100%; background: var(--bar); border-radius: 3px; }
+  .fill.warn { background: var(--warn); }
+  .fill.bad { background: var(--bad); }
+  .note { margin-top: 6px; font-size: 12.5px; font-weight: 600; }
+  .note.warn { color: var(--warn-text); }
+  .note.bad { color: var(--bad); }
+  .nb { display: inline-flex; align-items: center; gap: 6px; min-height: 26px; padding: 3px 7px 3px 10px; border-radius: 999px; background: var(--nudge-bg); color: var(--nudge-text); font-size: 12.5px; font-weight: 500; margin-top: -3px; }
+  .nbi { display: grid; place-items: center; width: 16px; height: 16px; border-radius: 50%; border: 1.3px solid currentColor; font: italic 700 10.5px/1 Georgia, serif; }
+  .nbi.on { background: var(--text); border-color: var(--text); color: var(--bg); }
+  .tip { position: absolute; left: 0; top: calc(100% + 4px); z-index: 5; width: 270px; padding: 10px 12px; border-radius: 10px; background: var(--text); color: var(--bg); font-size: 13px; line-height: 1.4; box-shadow: 0 6px 18px rgba(0,0,0,.18); }
+  .tip a { display: block; margin-top: 8px; font-weight: 600; text-decoration: underline; text-underline-offset: 2px; }
+  .tabbar { display: flex; border-top: 1px solid var(--line); padding: 8px 0 18px; background: var(--bg); }
+  .tabbar span { flex: 1; text-align: center; font-size: 11px; color: var(--muted); }
+  .tabbar span.on { color: var(--text); font-weight: 600; }
+  .new { outline: 2px dashed #1d4ed8; outline-offset: 3px; border-radius: 4px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Today by category: spending against today's budget</h1>
+  <p class="lead">On the Log screen, each bar under <b>Today by category</b> shows today's spending against <b>today's budget</b> for that category, instead of its share of today's spending. Dashed blue outlines mark what's new.</p>
+  <p class="lead"><b>Today's budget</b> = (monthly budget − spent this month before today) ÷ days left in the month, counting today. It stays the same all day. Summary doesn't change.</p>
+  <p class="lead"><b>The example:</b> Wednesday 25 November, day 25 of 30, so 6 days are left counting today. One category in each state:</p>
+  <table class="ex">
+    <tr><th>Category</th><th class="r">Budget</th><th class="r">Before today</th><th class="r">Today's budget</th><th class="r">Spent today</th><th>Shows</th></tr>
+    <tr><td>Shopping</td><td class="r">300.00</td><td class="r">200.00</td><td class="r">100.00 ÷ 6 = 16.67</td><td class="r">45.90</td><td>Full amber bar · Daily budget exceeded (month: 245.90 of 300)</td></tr>
+    <tr><td>Entertainment</td><td class="r">100.00</td><td class="r">90.00</td><td class="r">10.00 ÷ 6 = 1.67</td><td class="r">38.00</td><td>Full red bar · Monthly budget exceeded (month: 128.00 of 100)</td></tr>
+    <tr><td>Household</td><td class="r">none</td><td class="r">—</td><td class="r">—</td><td class="r">12.50</td><td>No bar · Budget not set pill</td></tr>
+    <tr><td>Transport</td><td class="r">200.00</td><td class="r">140.00</td><td class="r">60.00 ÷ 6 = 10.00</td><td class="r">10.00</td><td>Full bar, usual colour (exactly at today's budget)</td></tr>
+    <tr><td>Food &amp; Dining</td><td class="r">500.00</td><td class="r">400.00</td><td class="r">100.00 ÷ 6 = 16.67</td><td class="r">5.00</td><td>30% bar</td></tr>
+    <tr><td>Pets (retired)</td><td class="r">—</td><td class="r">—</td><td class="r">—</td><td class="r">8.00</td><td>No bar, no note</td></tr>
+  </table>
+  <p class="lead" style="margin-top:12px"><b>Colours:</b> amber for "Daily budget exceeded" (new, one shade for each theme), the same red as Summary for "Monthly budget exceeded", and the same pale yellow pill as Summary for "Budget not set". The notes are plain text, with no bubble.</p>
+
+  <h2>The Log screen, scrolled down to Today by category</h2>
+  <div class="frames" id="main"></div>
+  <h2>Narrower phone, the "Budget not set" bubble, and the top of the screen</h2>
+  <div class="frames" id="more"></div>
+</main>
+<script>
+const ROWS = [
+  // name, count, spent today, today's budget (null = none, 'retired'), state
+  ['Shopping', 1, 45.90, 16.67, 'warn'],
+  ['Entertainment', 1, 38.00, 1.67, 'bad'],
+  ['Household', 1, 12.50, null, 'none'],
+  ['Transport', 2, 10.00, 10.00, 'ok'],
+  ['Pets', 1, 8.00, 'retired', 'retired'],
+  ['Food & Dining', 1, 5.00, 16.67, 'ok'],
+];
+const f = (n) => n.toFixed(2);
+function cat(r, mark, tipOpen) {
+  const [name, n, spent, budget, state] = r;
+  const nw = (s) => mark ? `<span class="new">${s}</span>` : s;
+  let amt = `<strong>${f(spent)}</strong>`, bar = '', note = '';
+  if (state === 'ok' || state === 'warn') {
+    amt = `<strong>${f(spent)} ${nw(`<span class="of">of ${f(budget)}</span>`)}</strong>`;
+    bar = `<div class="track"><div class="fill ${state === 'warn' ? 'warn' : ''}" style="width:${Math.min(spent / budget, 1) * 100}%"></div></div>`;
+    if (state === 'warn') note = `<p class="note warn">${nw('Daily budget exceeded')}</p>`;
+  } else if (state === 'bad') {
+    bar = `<div class="track"><div class="fill bad" style="width:100%"></div></div>`;
+    note = `<p class="note bad">${nw('Monthly budget exceeded')}</p>`;
+  } else if (state === 'none') {
+    note = `<div style="position:relative">${nw(`<span class="nb">Budget not set for this category <span class="nbi${tipOpen ? ' on' : ''}">i</span></span>`)}
+      ${tipOpen ? `<div class="tip">The budget for this category can be set in Settings › Categories &amp; budgets.<a>Set a budget for ${name}</a></div>` : ''}</div>`;
+  }
+  return `<div class="cat"><div class="cat-top"><span>${name}<span class="n">${n}</span></span>${amt}</div>${bar}${note}</div>`;
+}
+const TABS = '<div class="tabbar"><span class="on">Log</span><span>History</span><span>Summary</span><span>Settings</span></div>';
+const TODAY = [['Uniqlo','Shopping','45.90'],['Golden Village','Entertainment','38.00'],['Daiso','Household','12.50'],['Pet Lovers Centre','Pets','8.00'],['Grab','Transport','6.20'],['Grab','Transport','3.80'],['Ya Kun','Food & Dining','5.00']];
+function screen({ dark = false, mark = true, old = false, tipOpen = false, top = false } = {}) {
+  const cats = old
+    ? ROWS.map(([name, n, spent]) => `<div class="cat"><div class="cat-top"><span>${name}<span class="n">${n}</span></span><strong>${f(spent)}</strong></div><div class="track"><div class="fill" style="width:${spent / 45.9 * 100}%"></div></div></div>`).join('')
+    : ROWS.map((r) => cat(r, mark, tipOpen)).join('');
+  const items = TODAY.map(([m, c, a]) => `<div class="item"><div><div class="m">${m}</div><div class="c">${c}</div></div><div class="a">${a}</div></div>`).join('');
+  const head = `<div class="top"><div class="greet">Wednesday, 25 November</div><h3>Log an expense</h3>
+      <div class="input-wrap"><div class="txt">e.g. Lunch at LJS for $4.50 yesterday</div><div class="row"><button class="btn">Parse</button></div></div>
+      <div class="today-total"><span>Spent today</span><strong>$119.40</strong></div></div>`;
+  const body = top
+    ? `<div class="body"><div class="label">TODAY</div>${items}<div class="label">TODAY BY CATEGORY</div>${cats}</div>`
+    : `<div class="body scrolled"><div class="item" style="opacity:.55"><div><div class="m">Ya Kun</div><div class="c">Food &amp; Dining</div></div><div class="a">5.00</div></div><div class="label">TODAY BY CATEGORY</div>${cats}</div>`;
+  return `<div class="app${dark ? ' dark' : ''}">${top ? head : ''}${body}${TABS}</div>`;
+}
+const fig = (html, cap, cls = '') => `<figure><div class="phone ${cls}">${html}</div><figcaption>${cap}</figcaption></figure>`;
+document.getElementById('main').innerHTML = [
+  fig(screen({ old: true, mark: false }), '<b>Today:</b> each bar is the category\'s share of today\'s spending, measured against the largest (Shopping). It says nothing about budgets.'),
+  fig(screen(), '<b>Proposed, light theme:</b> each bar against today\'s budget. Shopping is over today\'s budget (amber); Entertainment is over the month\'s budget (red); Household has no budget; Transport is exactly at today\'s budget; Food &amp; Dining has used 30%. Pets is retired: amount only.'),
+  fig(screen({ dark: true }), '<b>Proposed, dark theme.</b>'),
+].join('');
+document.getElementById('more').innerHTML = [
+  fig(screen(), '<b>Proposed, 360 pixels wide:</b> "45.90 of 16.67" and the notes still fit on one line.', 'narrow'),
+  fig(screen({ tipOpen: true }), '<b>"Budget not set" tapped:</b> the same bubble as on Summary. <b>Set a budget for Household</b> slides up its Edit category card over the Log screen; after Save, the row gets its bar and "of" figure.'),
+  fig(screen({ top: true }), '<b>The top of the Log screen,</b> before scrolling: Spent today, the Today list, then Today by category.'),
+].join('');
+</script>
+</body>
+</html>

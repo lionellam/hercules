@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Summary Daily Figure Wording</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root { --page: #ececea; --page-text: #18181b; --page-muted: #5f5f66; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--page); color: var(--page-text); font-family: Inter, -apple-system, system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  main { max-width: 1460px; margin: 0 auto; padding: 36px 16px 80px; }
+  h1 { font-size: 28px; letter-spacing: -0.02em; margin: 0 0 8px; }
+  h2 { font-size: 18px; margin: 44px 0 6px; }
+  .lead { color: var(--page-muted); max-width: 880px; line-height: 1.55; margin: 0 0 10px; font-size: 15px; }
+  .lead b { color: var(--page-text); }
+  ol.q { color: var(--page-muted); max-width: 880px; line-height: 1.55; font-size: 15px; margin: 6px 0 10px 22px; }
+  ol.q li { margin-bottom: 8px; }
+  ol.q b { color: var(--page-text); }
+  .frames { display: flex; flex-wrap: wrap; gap: 30px 26px; align-items: flex-start; margin-top: 18px; }
+  figure { margin: 0; max-width: 100%; }
+  figcaption { max-width: 375px; font-size: 13px; color: var(--page-muted); margin-top: 12px; line-height: 1.5; }
+  figcaption b { color: var(--page-text); }
+  .phone { width: 375px; max-width: 100%; height: 640px; border-radius: 30px; overflow: hidden; border: 1px solid rgba(0,0,0,.08);
+           box-shadow: 0 1px 2px rgba(0,0,0,.06), 0 10px 28px rgba(0,0,0,.08); }
+
+  /* App tokens and styles, from web/app/globals.css */
+  .app { --bg: #fff; --text: #18181b; --muted: #71717a; --line: #e7e7e4; --accent: #18181b; --accent-text: #fff; --soft: #f4f4f5; --edge: #8e8e96; --bar: #18181b; --bad: #b91c1c; --good: #15803d;
+         background: var(--bg); color: var(--text); font-size: 15px; position: relative; height: 100%; display: flex; flex-direction: column; overflow: hidden; }
+  .app.dark { --bg: #18181b; --text: #f4f4f5; --muted: #a1a1aa; --line: #27272a; --accent: #f4f4f5; --accent-text: #18181b; --soft: #27272a; --edge: #71717a; --bar: #f4f4f5; --bad: #f87171; --good: #4ade80; }
+  .top { padding: 30px 20px 14px; border-bottom: 1px solid var(--line); }
+  .app h3 { font-size: 28px; font-weight: 700; letter-spacing: -0.02em; }
+  .seg { display: flex; background: var(--soft); border-radius: 12px; padding: 3px; margin-top: 14px; }
+  .seg span { flex: 1; height: 32px; display: grid; place-items: center; border-radius: 10px; font-size: 14px; font-weight: 500; color: var(--muted); }
+  .seg span.on { background: var(--bg); color: var(--text); box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+  .mtotal { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 12px; }
+  .mtotal .s { color: var(--muted); font-size: 14px; }
+  .mtotal .big { font-size: 30px; font-weight: 700; letter-spacing: -0.02em; }
+  .csv { display: inline-flex; align-items: center; height: 34px; padding: 0 12px; border-radius: 10px; box-shadow: inset 0 0 0 1.5px var(--edge); font-size: 14px; font-weight: 600; }
+  .dayline { font-size: 13px; color: var(--muted); margin-top: 6px; }
+  .dayline b { color: var(--text); font-weight: 600; }
+  .body { padding: 0 20px; flex: 1; position: relative; }
+  .cat { margin-top: 18px; position: relative; }
+  .cat-top { display: flex; justify-content: space-between; gap: 12px; font-size: 14px; margin-bottom: 6px; }
+  .cat-top .n { color: var(--muted); font-size: 12px; margin-left: 6px; }
+  .cat-top strong { font-variant-numeric: tabular-nums; }
+  .of { color: var(--muted); font-weight: 400; margin-left: 4px; }
+  .chev { width: 13px; height: 13px; color: var(--muted); margin-left: 4px; vertical-align: -1px; }
+  .meter { position: relative; }
+  .track { height: 6px; background: var(--soft); border-radius: 3px; overflow: hidden; }
+  .fill { height: 100%; background: var(--bar); border-radius: 3px; }
+  .tick { position: absolute; top: -3px; width: 2px; height: 12px; background: var(--text); border-radius: 1px; transform: translateX(-1px); box-shadow: 0 0 0 1.5px var(--bg); }
+  .pace { margin-top: 6px; font-size: 12.5px; color: var(--muted); display: flex; align-items: center; gap: 4px; line-height: 1.35; }
+  .pace b { color: var(--text); font-weight: 600; }
+  /* The proposed "i", drawn like the "?" beside "Not included" */
+  .info { display: grid; place-items: center; width: 16px; height: 16px; border-radius: 50%; border: 1.3px solid var(--muted); color: var(--muted); font: italic 700 10px/1 Georgia, serif; flex-shrink: 0; }
+  .info.on { background: var(--text); border-color: var(--text); color: var(--bg); }
+  .tip { position: absolute; left: 0; top: calc(100% + 8px); z-index: 5; width: 262px; padding: 10px 12px; border-radius: 10px; background: var(--text); color: var(--bg); font-size: 13px; line-height: 1.4; box-shadow: 0 6px 18px rgba(0,0,0,.18); }
+  .tip::before { content: ""; position: absolute; top: -5px; left: 186px; width: 10px; height: 10px; background: var(--text); transform: rotate(45deg); }
+  .tip a { display: inline-block; margin-top: 8px; color: inherit; font-weight: 600; text-decoration: underline; text-underline-offset: 2px; }
+  .tabs { display: flex; justify-content: space-around; border-top: 1px solid var(--line); padding: 10px 0 18px; color: var(--muted); font-size: 11px; background: var(--bg); }
+  .tabs b { color: var(--text); font-weight: 600; }
+  
+  .phone.narrow { width: 360px; }
+  .new { outline: 2px dashed #1d4ed8; outline-offset: 1px; border-radius: 3px; }
+  .bad { color: var(--bad) !important; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Summary's daily figure: "from tomorrow"</h1>
+  <p class="lead">Option B for choice 1. Summary's figures stay the same; only the words "from tomorrow" are added after "/day", so it's clear the figure covers the days <b>after</b> today, unlike the Log screen's budget for today. Dashed blue outlines mark what's new.</p>
+  <p class="lead"><b>The example:</b> day 25 of 30 (Wednesday 25 November), with some spending already logged today. Each category is in a different state, so every kind of note is shown. On the last day of the month, Summary already says "$X left today" instead of a daily figure, so that day doesn't change.</p>
+  <p class="lead"><b>Longer lines:</b> the notes now run to two lines more often. Phones 375 and 360 pixels wide are shown, the common narrow sizes.</p>
+
+  <h2>Today, and Option B, side by side</h2>
+  <div class="frames" id="pair"></div>
+  <h2>Option B on a narrower phone, and in the dark theme</h2>
+  <div class="frames" id="more"></div>
+</main>
+<script>
+const ROWS = [
+  // name, count, total, budget, note kind, extra
+  ['Rent', 1, 2000, 2000, 'used'],
+  ['Food & Dining', 23, 405, 500, 'on', 95, 19],
+  ['Groceries', 6, 250, 400, 'under', 83.33, 150, 30],
+  ['Transport', 18, 190, 200, 'over', 23.33, 10, 2],
+  ['Entertainment', 4, 128, 100, 'bust', 28],
+];
+const m = (n) => '$' + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const f = (n) => n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+function note(r, b) {
+  const tail = b ? ' <span class="new">from tomorrow</span>' : '';
+  switch (r[4]) {
+    case 'used': return '<b>Budget used</b> · ' + m(0) + ' left';
+    case 'on': return '<b>On pace</b> · ' + m(r[5]) + ' left, about ' + m(r[6]) + '/day' + tail;
+    case 'under': return '<b>' + m(r[5]) + ' under pace</b> · ' + m(r[6]) + ' left, about ' + m(r[7]) + '/day' + tail;
+    case 'over': return '<b>' + m(r[5]) + ' over pace</b> · ' + m(r[6]) + ' left, about ' + m(r[7]) + '/day' + tail;
+    case 'bust': return '<b class="bad">Over budget by ' + m(r[5]) + '</b>';
+  }
+}
+function summary(b, dark) {
+  const rows = ROWS.map((r) => {
+    const w = Math.min(r[2] / r[3], 1) * 100, red = r[2] > r[3];
+    return `<div class="cat"><div class="cat-top"><span>${r[0]}<span class="n">${r[1]}</span></span><strong>${f(r[2])}<span class="of">of ${f(r[3])}</span></strong></div>
+      <div class="meter"><div class="track"><div class="fill" style="width:${w}%;${red ? 'background:var(--bad)' : ''}"></div></div><span class="tick" style="left:83.33%"></span></div>
+      <p class="pace"><span>${note(r, b)}</span></p></div>`;
+  }).join('');
+  return `<div class="app${dark ? ' dark' : ''}">
+    <div class="top"><h3>Summary</h3><div class="seg"><span class="on">November</span><span>October</span></div>
+      <div class="mtotal"><div><div class="s">Spent in November</div><div class="big">$2,973.00</div></div><span class="csv">CSV</span></div>
+      <div class="dayline">Day <b>25</b> of 30 · Wed, 25 Nov</div></div>
+    <div class="body">${rows}</div>
+    <div class="tabs"><span>Log</span><span>History</span><b>Summary</b><span>Settings</span></div></div>`;
+}
+const fig = (html, cap, cls = '') => `<figure><div class="phone ${cls}">${html}</div><figcaption>${cap}</figcaption></figure>`;
+document.getElementById('pair').innerHTML = [
+  fig(summary(false), '<b>Today (Option A):</b> "about $19.00/day" with nothing after it.'),
+  fig(summary(true), '<b>Option B:</b> "about $19.00/day from tomorrow". The figures are the same; only the wording changes.'),
+].join('');
+document.getElementById('more').innerHTML = [
+  fig(summary(true), '<b>Option B, 360 pixels wide.</b>', 'narrow'),
+  fig(summary(true, true), '<b>Option B, dark theme.</b>'),
+].join('');
+</script>
+</body>
+</html>
