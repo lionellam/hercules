@@ -24,10 +24,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={inter.variable} suppressHydrationWarning>
       <head>
-        {/* Applies a saved theme before the first paint, so dark mode doesn't flash white */}
+        {/* Before the first paint: applies a saved theme, so dark mode doesn't flash white, and, with the experimental
+            Loading Screen switched on, shows the loading screen (components/loading-screen.tsx, Architecture decision 47) */}
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}})()`,
+            __html: `(function(){var d=document.documentElement;try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")d.dataset.theme=t}catch(e){}try{var x=JSON.parse(localStorage.getItem("hercules-experiments")||"{}");if(x&&x["loading-screen"]===true)d.dataset.splash="on"}catch(e){}})()`,
           }}
         />
       </head>

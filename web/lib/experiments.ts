@@ -18,4 +18,11 @@ export const EXPERIMENTS: Experiment[] = [
     name: "Intelligent Merchant Selection",
     description: "Infer merchant names from this month's and last month's expenses.",
   },
+  // Architecture decision 47: the ship picture while the app starts. Read before the first paint by the script in
+  // app/layout.tsx, which uses this id too, so it takes effect the next time the app is opened
+  {
+    id: "loading-screen",
+    name: "Loading Screen",
+    description: "Show the app loading screen while the app starts.",
+  },
 ];

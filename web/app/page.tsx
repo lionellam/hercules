@@ -2,12 +2,17 @@ import { Suspense } from "react";
 import { redirect } from "next/navigation";
 import { currentUser } from "@/lib/session";
 import HerculesApp from "@/components/hercules-app";
+import { LoadingScreen } from "@/components/loading-screen";
 
 export default function Page() {
   return (
-    <Suspense fallback={<div className="loading">Loading…</div>}>
-      <SignedInApp />
-    </Suspense>
+    <>
+      {/* Hidden unless the experimental Loading Screen is switched on on this device (Specification 4.10) */}
+      <LoadingScreen />
+      <Suspense fallback={<div className="loading">Loading…</div>}>
+        <SignedInApp />
+      </Suspense>
+    </>
   );
 }
 

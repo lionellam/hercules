@@ -2344,3 +2344,52 @@ Last updated: 28 November 2026
 
 ### Clean-up
 - Deleted the 9 `[TEST]` expenses and the 5 `zz-test-` categories, directly in the local database; none remain. No parse entries were created. The demo account was removed from the allow-list, and the test browser was signed out, as it was before.
+
+---
+
+## 28 November 2026 — Version 1.10.0: Loading Screen (Experimental)
+
+### What Was Done
+- At the owner's request: a loading screen showing the ship picture and "Hercules" on white while the app starts, until the Log screen's figures have arrived. It is an experimental feature, **Loading Screen** ("Show the app loading screen while the app starts."), off until switched on, on each device.
+- **How it works:**
+  - The screen is part of the home page's first HTML (`LoadingScreen` in the new `web/components/loading-screen.tsx`, placed in `web/app/page.tsx` outside the part that waits for the sign-in check), and is hidden by CSS unless `data-splash` is set on the page's root element.
+  - The script in the page head (`web/app/layout.tsx`), which already applied the Appearance choice before drawing, now also reads the switch from `hercules-experiments` in local storage and sets that flag. So the switch is known before anything is drawn, and with it on "Loading…" never shows first.
+  - The app reports when this month's expenses and the categories have first arrived (or failed, which leaves an empty list); the screen then fades out over 0.3 seconds, after at least half a second on screen. Going offline makes it give way at once.
+  - "Still loading..." at 3 seconds and giving way at 10 seconds are CSS animations, so they work even before the app's script has started. With Reduce Motion, the fade is skipped.
+  - The picture is a CSS background from a new 320-pixel copy, `web/public/hercules-ship-320.jpg` (33 KB, the sign-in picture on white). The first build used an image element, and testing showed the browser downloaded it even with the switch off and the screen hidden, so it was changed to a background, which is fetched only when shown.
+  - The switch is listed in `web/lib/experiments.ts` (id `loading-screen`).
+- Documents: Specification 0.64 (new Section 4.10; Section 4.7 and step 8), Architecture 0.51 (new decision 47, updated after testing to describe the background picture; decision 39), Test Plan 1.48 (new M-10 to M-18; M-07 and Q-10 updated). Version 1.10.0 (a new feature), with a CHANGELOG entry.
+- **The Experimental features page's note** now reads, in the owner's words: "These features are experimental, and may be turned on to improve your experience with the app. Changes are applied only to this device." The old note said switching takes effect straight away, which isn't so for Loading Screen (it shows from the next opening). Changed in `web/components/experiments.tsx`, Specification Section 4.7, Test Plan Q-09 and Application Screens 9.1.
+- **Public pages**, each change proposed separately and approved by the owner:
+  - Application Screens 9.1: a second row, **Loading Screen** with its description, switched on (chosen over a mock with it off).
+  - Application Screens, new drawing 9.3: the white loading screen with the picture and "Hercules", with the caption "**Experimental Feature - Loading Screen.** Shows the app logo while the app starts, then fades to the **Log** screen once your expenses have loaded." (the owner changed "Hercules ship" to "app logo", and chose this plain version over one showing "Still loading..."). It stays white in the page's dark App theme, as the app does.
+  - The Settings drawing 6.1 and its copy in the user guide: "1 of 1 on" became "2 of 2 on".
+  - The user guide's Experimental features line, in the owner's words: "allows you to experiment with features that are still being tested. These features offer a way to improve your experience with the app, while these features are still being worked on." Claude had suggested leaving it unchanged.
+
+### Options and the Owner's Choices
+- Discussed first, then mocked up in `design/loading-screen-mockups.html`.
+- **Dark mode:** always white (Option A, the owner's choice) rather than a dark screen with the picture on a white card (Option B, recommended by Claude).
+- **Timing:** at least half a second on screen; after 3 seconds, "Still loading..." (the owner's wording, in place of the Log screen's longer slow-start note); giving way after 10 seconds, or when loading fails or the device goes offline.
+- **Experimental:** the owner chose to make it an experimental feature, and wrote the switch's description. The grey placeholders stay, behind the loading screen and everywhere else.
+- **Left out:** Apple's launch pictures for the home-screen app's blank moment before the page arrives.
+- The owner asked where the switch is kept: in the browser's local storage on that device, not the cache. On iPhone, the home-screen app and Safari keep separate storage.
+
+### Checks
+- On the demo account (confirmed with `/api/auth/session`), with one `[TEST]` expense of 12.40 today:
+  - **Switch off:** after a reload, the loading screen was hidden (`display: none`), the ship picture wasn't downloaded, and the Log screen loaded with its figures. Settings read "0 of 2 on". The "Loading…" line itself was too quick to see locally.
+  - **Switch on** (tapped on the Experimental features page): Settings read "1 of 2 on". A quick reload showed the screen, which faded and was removed, leaving the Log screen with $12.40 and Today by category filled in.
+  - **Slow load** (the expenses route slowed by 5 seconds, temporarily): the ship and "Hercules" on white; "Still loading..." at 3 seconds; then a filled-in Log screen. The browser pane was in dark mode: the loading screen stayed white, and the Log screen after it was dark.
+  - **Very slow** (15 seconds): the screen was still showing at 9.2 seconds and gone by 11.2, leaving the grey placeholders and "Taking a little longer than usual…"; the figures arrived at about 16 seconds.
+  - **Failure** (the route returning an error, temporarily): it gave way within 1.7 seconds of the reload, and the Log screen showed what it shows with the switch off.
+  - **Offline** (an `offline` event during a slow load): it gave way at once.
+  - **Tabs:** switching to History, Summary, Settings and back to Log didn't show it.
+  - **Sizes:** at 1,280 × 800 it filled the window, with the picture and name centred at phone size; at phone size it matched the mockup.
+  - **Sign-in:** after signing out, the sign-in screen showed without it; after signing in, the loading screen showed, then the Log screen.
+- **Not tested:** Reduce Motion (the browser pane can't switch it on; the rule was checked as loaded), and a real phone, including the home-screen app.
+- **The switch-off path** (CLAUDE.md, Experimental features): two parts run with the switch off, the head script and the hidden screen in the page. The script only adds a check of the saved switches, each in its own `try`, and the screen is `display: none`, with no picture downloaded. With the switch off, the Log screen and placeholders loaded as before.
+- The temporary changes to the expenses route were removed, and checked: the route has no changes.
+- `npx tsc --noEmit` passed, `npx eslint .` passed with the one known warning, and `npm run build` passed (the note's rewording was checked with `npx tsc --noEmit` again).
+- Application Screens and the user guide previewed locally: all 33 phones are 613 pixels tall, and all 13 guide pictures are identical to their Application Screens drawings.
+
+### Clean-up
+- Deleted the `[TEST]` expense directly in the local database; none remain. No categories or parse entries were created. The test browser's switch was reset (no switches saved, as before), the demo account was signed out and removed from the allow-list, and the test browser was left signed out, as it was before.

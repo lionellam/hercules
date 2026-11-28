@@ -314,6 +314,24 @@ textarea::placeholder { color: var(--muted); }
 .offline { background: var(--soft); color: var(--muted); font-size: 13px; text-align: center; padding: 8px; border-radius: 10px; margin-bottom: 16px; }
 .loading { color: var(--muted); font-size: 14px; padding: 40px 20px; text-align: center; }
 
+/* Experimental loading screen (Specification 4.10): white in both themes, shown only when the head script sets
+   data-splash. "Still loading..." fades in at 3 seconds, and it gives way by itself at 10 */
+.splash { display: none; }
+:root[data-splash] .splash { position: fixed; inset: 0; z-index: 50; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 0 32px 60px; text-align: center; background: #ffffff; color: #18181b; animation: splash-out .3s ease 10s forwards; }
+:root[data-splash] .splash.leaving { animation: splash-out-now .3s ease forwards; }
+/* A 320-pixel copy of the sign-in picture on white, sharp at twice the size shown */
+.splash-art { width: 160px; height: 160px; border-radius: 28px; background: #ffffff url("/hercules-ship-320.jpg") center / cover no-repeat; }
+.splash-name { margin-top: 18px; font-size: 28px; font-weight: 700; letter-spacing: -0.02em; }
+.splash-still { margin-top: 14px; font-size: 13px; color: #71717a; opacity: 0; animation: splash-in .3s ease 3s forwards; }
+@keyframes splash-out { to { opacity: 0; visibility: hidden; } }
+@keyframes splash-out-now { to { opacity: 0; visibility: hidden; } }
+@keyframes splash-in { to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) {
+  :root[data-splash] .splash { animation-duration: .01s; }
+  :root[data-splash] .splash.leaving { animation-duration: .01s; }
+}
+
 /* Tablets and computers */
 /* Phones: Safari on iPhone zooms in when a field with text under 16px is tapped, and stays zoomed (Architecture decision 24) */
 @media (max-width: 767px) {

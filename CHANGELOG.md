@@ -6,6 +6,16 @@ Versions follow [semantic versioning](https://semver.org): **major** for a chang
 
 ---
 
+## 1.10.0 — 28 November 2026
+
+**New (experimental)**
+- **Loading Screen**, in Settings → Experimental features. When it's on, opening Hercules shows a white screen with the ship picture and "Hercules" while the app starts, then fades to the Log screen with your figures already in place. If it takes more than 3 seconds, "Still loading..." appears under the name, and after 10 seconds the Log screen shows anyway. It's off until you switch it on, on each device, and takes effect the next time you open the app.
+
+**Improved**
+- The note at the top of **Experimental features** now reads "These features are experimental, and may be turned on to improve your experience with the app. Changes are applied only to this device."
+
+---
+
 ## 1.9.0 — 28 November 2026
 
 **New**

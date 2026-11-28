@@ -71,7 +71,7 @@ export function ExperimentsPage({ onBack }: { onBack: () => void }) {
       <div className="pinned-top">
         <button className="back-link" onClick={onBack}>‹ Settings</button>
         <h1>Experimental features</h1>
-        <p className="sub">Features still being tried out. They may change or be removed. Switching one on or off takes effect straight away, on this device only.</p>
+        <p className="sub">These features are experimental, and may be turned on to improve your experience with the app. Changes are applied only to this device.</p>
       </div>
       {EXPERIMENTS.length ? (
         <ul className="experiment-list">

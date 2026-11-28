@@ -1,7 +1,7 @@
 # Project Hercules — Test Plan: Web App v1
 
 ```
-Version 1.47 · Draft
+Version 1.48 · Draft
 Last Reviewed: 28 November 2026
 Produced with AI Assistance (Claude Code)
 ```
@@ -58,6 +58,7 @@ Produced with AI Assistance (Claude Code)
 | 1.45 | 2026-11-26 | Lionel Lam | H-05 names the yellow pill; new C-17 and C-18 (clearing fields on the expense sheets) and K-10 (on the category sheet) |
 | 1.46 | 2026-11-28 | Lionel Lam | Wording review: L-08 expects no bar for a retired category, and H-13 (which repeated it) is removed, so the old H-14 is now H-13; L-10 checks the original spelling and an empty budget; K-10 opens Other and checks the keyboard; C-17 also clears a field on the review sheet; clearer steps or results in Q-07, H-05, H-11 and H-12 |
 | 1.47 | 2026-11-28 | Lionel Lam | New B-20 to B-26: the Log screen's Today by category against a daily budget, including over today's budget (amber), over the monthly budget (red), no budget and retired categories |
+| 1.48 | 2026-11-28 | Lionel Lam | New M-10 to M-18: the experimental loading screen; M-07 runs with it off; Q-10 counts two experimental features; Q-09 matches the reworded note |
 
 ---
 
@@ -322,9 +323,18 @@ To set up I-01 to I-05: create a `zz-test-` category with a $300 budget and log 
 | M-04 | Phone layout | Use a phone, or a browser window narrower than 768 pixels | One column; the review and edit sheets, and confirmations, slide up from the bottom of the screen |
 | M-05 | Tablet and computer | Use windows 768, 1,024 and 1,280 pixels wide or more | The app widens to about 820, 920 and 1,000 pixels; Log and Summary show two columns; the review and edit sheets, and confirmations, open as centred dialogs |
 | M-06 | No sideways scrolling | Check each screen at phone width | Nothing makes the page scroll sideways |
-| M-07 | Loading placeholders | Open the app after it has been closed for a while (or, locally, slow the expenses route down); on Log, then Summary, then History moved to an earlier month | While loading: grey placeholder rows (Log, History) or bars (Summary) with a soft shimmer, and a short grey bar instead of "Spent today" or the month's total. No "Nothing logged yet today.", "No expenses this month." or $0.00 until the data arrives; then the real content replaces the placeholders. The text box, Parse, month buttons and search still work |
+| M-07 | Loading placeholders | With **Loading Screen** off (Settings → Experimental features), open the app after it has been closed for a while (or, locally, slow the expenses route down); on Log, then Summary, then History moved to an earlier month | While loading: grey placeholder rows (Log, History) or bars (Summary) with a soft shimmer, and a short grey bar instead of "Spent today" or the month's total. No "Nothing logged yet today.", "No expenses this month." or $0.00 until the data arrives; then the real content replaces the placeholders. The text box, Parse, month buttons and search still work |
 | M-08 | Slow-start note | As M-07, with loading taking more than 3 seconds | "Taking a little longer than usual. Hercules is starting up after a quiet spell." appears under the placeholders and goes when the data arrives. With Reduce Motion on, the placeholders don't shimmer |
 | M-09 | Browser tab icon | Open the app in a browser on a computer | The tab shows a small ship on white, with rounded corners |
+| M-10 | Loading screen | Switch **Loading Screen** on (Settings → Experimental features), then reload the app | A white screen with the ship picture and "Hercules" below it shows, with no "Loading…" line before it. It fades out to the Log screen with Today, **Spent today** and **Today by category** already filled in, without grey placeholders. The Settings row reads "1 of 2 on" |
+| M-11 | Not on tabs or months | With it on, switch between all four tabs, and change month on Summary and History | The loading screen doesn't show. A month not yet loaded shows the grey placeholders (M-07) |
+| M-12 | Quick load | With it on, reload the local app a few times | The loading screen shows for at least half a second each time, then fades; it never just flickers |
+| M-13 | Slow load | With it on, locally slow the expenses route by about 5 seconds, then reload | After 3 seconds, "Still loading..." appears under "Hercules". When the data arrives, the screen fades to a filled-in Log screen |
+| M-14 | Loading takes too long | As M-13, with a delay of about 15 seconds | At 10 seconds the loading screen gives way to the Log screen, which shows its grey placeholders and "Taking a little longer than usual. Hercules is starting up after a quiet spell." The figures replace them when they arrive |
+| M-15 | Loading fails | With it on, locally make the expenses route return an error, then reload | The loading screen gives way straight away, and the Log screen shows what it shows with the switch off. The app isn't stuck on the loading screen |
+| M-16 | Themes and Reduce Motion | With it on: set Appearance to **Dark** and reload; then turn on the device's Reduce Motion setting and reload | In Dark, the loading screen is white, and the Log screen after it is dark. With Reduce Motion on, it disappears without fading |
+| M-17 | Sizes and sign-in | With it on: reload in a computer browser window, wide and narrow; sign out, then sign in again | The white screen fills the window, with the picture and name in the middle at the same size as on a phone. The sign-in screen shows without it; after signing in, the loading screen shows, then the Log screen |
+| M-18 | Switched off | Switch **Loading Screen** off and reload | "Loading…" shows, then the Log screen with its placeholders until the data arrives (M-07). No loading screen. On another device or browser where it was never switched on, it is off |
 
 ### N. Phones
 
@@ -368,8 +378,8 @@ These need a look at the local database; ask Claude to run them.
 | Q-06 | No theme icon on screens | Look at the top of Log, History and Summary | There's no sun or moon icon |
 | Q-07 | Account | Look at the Account group | Your email address, and **Sign out**, in red and centred in its row. Sign out appears only here (signing out is tested in A-05) |
 | Q-08 | Version and last updated | Look at the bottom of Settings; compare with `CHANGELOG.md` and the latest deploy; then try a short window (for example a phone held sideways) | The line sits at the bottom of the screen, just above the tab bar (on a short window, after Sign out once scrolled). The version number matches the newest entry in the changelog (for example 1.0.0), followed by a short code for the exact version and the date and time of the latest deploy |
-| Q-09 | Experimental features, none **[when no feature is listed]** | Settings → look at the Experimental row, then tap **Experimental features**, then **‹ Settings** | The row reads "None right now". The page shows the heading, the note about features being tried out on this device only, and "Nothing to try right now"; "‹ Settings" returns to the list. Switching to another tab and back to Settings shows the list |
-| Q-10 | Experimental switch | Open Experimental features and switch **Intelligent Merchant Selection** on; check it works (B-15); reload the page; then switch it off | The Settings row reads "1 of 1 on" (and "0 of 1 on" when off). The feature works straight away, is still on after the reload, and stops when switched off (merchants come back as typed, B-17). On another device or browser it is off |
+| Q-09 | Experimental features, none **[when no feature is listed]** | Settings → look at the Experimental row, then tap **Experimental features**, then **‹ Settings** | The row reads "None right now". The page shows the heading, the note that the features are experimental and changes apply only to this device, and "Nothing to try right now"; "‹ Settings" returns to the list. Switching to another tab and back to Settings shows the list |
+| Q-10 | Experimental switch | Open Experimental features and switch **Intelligent Merchant Selection** on; check it works (B-15); reload the page; then switch it off | The Settings row reads "1 of 2 on" (and "0 of 2 on" when off), with **Loading Screen** off. The feature works straight away, is still on after the reload, and stops when switched off (merchants come back as typed, B-17). On another device or browser it is off |
 
 ### R. Downloading Expenses (CSV)
 

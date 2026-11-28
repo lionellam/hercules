@@ -12,6 +12,7 @@ import LogScreen from "./screens/log";
 import SettingsScreen from "./screens/settings";
 import SummaryScreen from "./screens/summary";
 import { ThemeColorSync } from "./theme";
+import { markLogReady } from "./loading-screen";
 
 type Tab = "log" | "history" | "summary" | "settings";
 
@@ -20,7 +21,8 @@ export default function HerculesApp({ email, defaultCurrency }: { email: string;
   // The Log screen's typed text, held here so it survives switching tabs (memory only; Architecture decision 23)
   const [logText, setLogText] = useState("");
   const cache = useApiCache();
-  const categories = useCached<Category[]>(cache, "/api/categories") ?? [];
+  const loadedCategories = useCached<Category[]>(cache, "/api/categories");
+  const categories = loadedCategories ?? [];
   // Known from the page at sign-in, then kept up to date from the server after a change in Settings
   const homeCurrency = useCached<Settings>(cache, SETTINGS_URL)?.default_currency ?? defaultCurrency;
   const { load } = cache;
@@ -33,6 +35,13 @@ export default function HerculesApp({ email, defaultCurrency }: { email: string;
     load(expensesUrl(monthKey(0)));
     load(summaryUrl(monthKey(-1)));
   }, [load]);
+
+  // The Log screen's first data has arrived (or failed, which leaves an empty list), so the loading screen can go
+  const monthExpenses = useCached<unknown[]>(cache, expensesUrl(monthKey(0)));
+  const logReady = loadedCategories !== undefined && monthExpenses !== undefined;
+  useEffect(() => {
+    if (logReady) markLogReady();
+  }, [logReady]);
 
   return (
     <HomeCurrency.Provider value={homeCurrency}>
