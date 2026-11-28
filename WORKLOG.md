@@ -2413,6 +2413,30 @@ Last updated: 28 November 2026
 - Application Screens and the user guide previewed locally: all 33 phones are 613 pixels tall, and all 13 guide pictures are identical to their Application Screens drawings.
 - `npx tsc --noEmit` passed, `npx eslint .` passed with the one known warning, and `npm run build` passed.
 - Not tested here: a real phone.
+- **Confirmed (28 November 2026):** after the deploy, the owner checked on their phone that Settings shows version 1.10.1, and that the budget-exceeded notes under **Today by category** on the Log screen start with the filled "!".
 
 ### Clean-up
 - Deleted the 4 `[TEST]` expenses and the 2 `zz-test-` categories directly in the local database; none remain. No parse entries were created. The demo account was signed out and removed from the allow-list, and the test browser was left signed out, as it was before. The preview copies of the public pages were deleted.
+
+---
+
+## 28 November 2026 — Version 1.10.2: What's Left of Today's Budget
+
+### What Was Done
+- At the owner's request: on the Log screen, under **Today by category**, a category within today's budget now shows what's left of it under its bar, worded as on Summary: "**Daily budget** · $28.43 left", with the label in the usual text colour and the rest in grey. At exactly today's budget it reads "**Daily budget used** · $0.00 left". The amount follows the default currency, as on Summary. The owner's reason: it tells the user what the bar is about (today's budget for that category). The exceeded notes are unchanged.
+- Code: `TodayByCategory` in `web/components/screens/log.tsx`, reusing Summary's `.pace` style.
+- Documents: Specification 0.66 (Section 4.9 and its worked example), Architecture 0.53 (decision 46), Test Plan 1.50. Version 1.10.2 (a small tweak), with a CHANGELOG entry.
+- **Public pages**, proposed and approved by the owner: Application Screens drawings 2.2, 2.3 and 2.5, and the user guide's copy of 2.2, show "**Daily budget** · $2.90 left" under Transport (2.10 of 5.00). In 2.5 the new line made the phone 627 pixels tall; the space at the bottom of its content, above the tab bar, was trimmed from 16 to 2 pixels for that drawing only, so it is 613 again. No captions changed.
+- **Test Plan numbering slip, fixed:** the Today by category tests added in 1.9.0 (Test Plan 1.47) were numbered B-20 to B-26, but B-20 was already Intelligent Merchant Selection's last-month test (Test Plan 1.34). They are now B-21 to B-27, after that test, with their cross-references updated. Earlier Version History rows and worklog entries keep the old numbers, as written at the time. Lesson: check the last ID in a section before numbering new tests.
+
+### Options and the Owner's Choices
+- Mocked up in `design/log-daily-budget-left-mockups.html`. For spending exactly today's budget: "Daily budget used · $0.00 left" (A, recommended, matching Summary's "Budget used") or "Daily budget · $0.00 left" (B). The owner chose A.
+
+### Checks
+- On the demo account (confirmed with `/api/auth/session`), on 28 November (3 days left), with four `zz-test-` categories: `zz-test-ok` (budget 300, 200 before today, 8 today) read "8.00 of 33.33" and "Daily budget · $25.33 left"; after another 1.00, "9.00 of 33.33" and "$24.33 left". `zz-test-exact` (budget 30, 10 today) read "10.00 of 10.00" and "Daily budget used · $0.00 left". `zz-test-daily` and `zz-test-over` showed the exceeded notes as before. Checked in the dark and light themes; the label is in the text colour (#18181b in light) and the rest grey (#71717a).
+- Application Screens and the user guide previewed locally: all 33 phones are 613 pixels tall with nothing cut off, and all 13 guide pictures are identical to their Application Screens drawings.
+- `npx tsc --noEmit` passed, `npx eslint .` passed with the one known warning, and `npm run build` passed.
+- Not tested here: a real phone, and a default currency other than SGD.
+
+### Clean-up
+- Deleted the 8 `[TEST]` expenses and the 4 `zz-test-` categories directly in the local database; none remain. No parse entries were created. The demo account was signed out and removed from the allow-list, and the test browser was left signed out, as it was before. The preview copies of the public pages were deleted.

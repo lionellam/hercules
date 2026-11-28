@@ -3,7 +3,7 @@
 import { useRef, useState } from "react";
 import { api, expensesUrl, fmt, useCached, type ApiCache } from "@/lib/client";
 import { daysInMonth, localToday } from "@/lib/dates";
-import { todayRows } from "@/lib/pace";
+import { cents, todayRows } from "@/lib/pace";
 import type { Category, Expense } from "@/lib/types";
 import { ConfirmSheet, useLeave } from "../confirm";
 import { NotIncluded, useHomeCurrency, useMoney } from "../currency";
@@ -17,6 +17,7 @@ import { CategorySheet } from "./categories";
 // Today's spending by category, each budgeted category against today's budget (Specification 4.9, Architecture decision 46).
 // Default currency only, as in Summary; `expenses` is this month's, so spending before today sets today's budget.
 function TodayByCategory({ expenses, categories, today, onSet }: { expenses: Expense[]; categories: Category[]; today: string; onSet: (c: Category) => void }) {
+  const money = useMoney();
   const rows = todayRows(expenses, categories, today, daysInMonth(today.slice(0, 7)));
 
   return (
@@ -45,6 +46,16 @@ function TodayByCategory({ expenses, categories, today, onSet }: { expenses: Exp
                   style={{ width: `${r.state === "ok" && r.allowance ? Math.min(r.total / r.allowance, 1) * 100 : 100}%` }}
                 />
               </div>
+            )}
+            {/* Within today's budget: what's left of it, worded as on Summary (Specification 4.9) */}
+            {r.state === "ok" && r.allowance != null && (
+              <p className="pace">
+                {cents(r.total) === cents(r.allowance) ? (
+                  <span><b>Daily budget used</b> · {money(0)} left</span>
+                ) : (
+                  <span><b>Daily budget</b> · {money(r.allowance - r.total)} left</span>
+                )}
+              </p>
             )}
             {r.state === "warn" && <p className="day-note warn"><WarnMark />Daily budget exceeded</p>}
             {r.state === "over" && <p className="day-note over"><WarnMark />Monthly budget exceeded</p>}

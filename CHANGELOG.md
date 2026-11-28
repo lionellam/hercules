@@ -6,6 +6,13 @@ Versions follow [semantic versioning](https://semver.org): **major** for a chang
 
 ---
 
+## 1.10.2 — 28 November 2026
+
+**Improved**
+- On the **Log** screen, a category within today's budget under **Today by category** now says how much is left under its bar, for example "**Daily budget** · $28.43 left", worded as on Summary. At exactly today's budget it says "**Daily budget used** · $0.00 left". It makes clear that the bar shows today's budget for that category.
+
+---
+
 ## 1.10.1 — 28 November 2026
 
 **Improved**

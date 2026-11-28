@@ -189,6 +189,8 @@ footer { margin-top: 72px; padding-top: 18px; border-top: 1px solid var(--rule);
 .m .cat.open .tick { box-shadow: 0 0 0 1.5px var(--m-soft); }
 .m .pace { margin-top: 5px; font-size: 10.5px; color: var(--m-muted); }
 .m .pace b { color: var(--m-text); font-weight: 600; }
+/* Log's "Daily budget · $X left" under a Today by category bar: as tight as the exceeded notes (.dn) */
+.m .pace.dl { margin-top: 2px; line-height: 1.15; }
 .m .nb { display: flex; width: fit-content; align-items: center; gap: 4px; margin-top: 1px; background: var(--m-nudge-bg); color: var(--m-nudge-text); font-weight: 500; border-radius: 999px; padding: 0 5px 0 7px; }
 .m .nbi { display: grid; place-items: center; width: 11px; height: 11px; border-radius: 50%; border: 1px solid currentColor; font: italic 700 7.5px/1 Georgia, serif; }
 .m .pace.bad, .m .pace.bad b { color: var(--m-bad); }
@@ -433,7 +435,7 @@ html { scroll-behavior: smooth; }
           <div class="item"><div><div class="nm">MRT</div><div class="c">Transport</div></div><div class="a">2.10</div></div>
           <div class="h">TODAY BY CATEGORY</div>
           <div class="cat"><div class="cat-top"><span>Food &amp; Dining<span class="n">1</span></span><span><strong>30.00</strong> <span class="of">of 16.67</span></span></div><div class="track"><div class="fill warn" style="width:100%"></div></div><div class="dn warn"><span class="wm"><span>!</span></span>Daily budget exceeded</div></div>
-          <div class="cat"><div class="cat-top"><span>Transport<span class="n">1</span></span><span><strong>2.10</strong> <span class="of">of 5.00</span></span></div><div class="track"><div class="fill" style="width:42%"></div></div></div>
+          <div class="cat"><div class="cat-top"><span>Transport<span class="n">1</span></span><span><strong>2.10</strong> <span class="of">of 5.00</span></span></div><div class="track"><div class="fill" style="width:42%"></div></div><div class="pace dl"><b>Daily budget</b> · $2.90 left</div></div>
         </div>
         <div class="tabs" data-on="log"></div>
       </div></div>
