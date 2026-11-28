@@ -2340,6 +2340,7 @@ Last updated: 28 November 2026
 - Application Screens (32 phones) and the user guide (13) previewed locally. Every phone is still 613 pixels tall: the new note line first made 2.5 5 pixels taller, so the drawn note's spacing was tightened. All 13 guide pictures are identical to their Application Screens drawings.
 - `npx tsc --noEmit` passed, `npx eslint .` passed with the one known warning, and `npm run build` passed.
 - Not tested here: a real phone, and the first day of a month.
+- **Confirmed (28 November 2026):** after the deploy, the owner checked on their phone that Settings shows version 1.9.0, and that the bars under **Today by category** on the Log screen show today's spending against today's budget.
 
 ### Clean-up
 - Deleted the 9 `[TEST]` expenses and the 5 `zz-test-` categories, directly in the local database; none remain. No parse entries were created. The demo account was removed from the allow-list, and the test browser was signed out, as it was before.
