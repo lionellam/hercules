@@ -2390,6 +2390,29 @@ Last updated: 28 November 2026
 - The temporary changes to the expenses route were removed, and checked: the route has no changes.
 - `npx tsc --noEmit` passed, `npx eslint .` passed with the one known warning, and `npm run build` passed (the note's rewording was checked with `npx tsc --noEmit` again).
 - Application Screens and the user guide previewed locally: all 33 phones are 613 pixels tall, and all 13 guide pictures are identical to their Application Screens drawings.
+- **Confirmed (28 November 2026):** after the deploy, the owner checked on their phone that Settings shows version 1.10.0, and that with **Loading Screen** switched on, opening the app shows the white screen with the app logo before the Log screen.
 
 ### Clean-up
 - Deleted the `[TEST]` expense directly in the local database; none remain. No categories or parse entries were created. The test browser's switch was reset (no switches saved, as before), the demo account was signed out and removed from the allow-list, and the test browser was left signed out, as it was before.
+
+---
+
+## 28 November 2026 — Version 1.10.1: A "!" Before Budget-Exceeded Notes
+
+### What Was Done
+- At the owner's request: on the Log screen, under **Today by category**, **Daily budget exceeded** (amber) and **Monthly budget exceeded** (red) now start with a "!" in a small filled circle of the note's own colour, with the "!" in the screen's background colour. Screen readers skip it, since the note says the same thing (`WarnMark` in `web/components/screens/log.tsx`, `.warn-mark` in `web/app/globals.css`).
+- Documents: Specification 0.65 (Section 4.9), Architecture 0.52 (decision 46), Test Plan 1.49 (B-22 and B-23). Version 1.10.1 (a small tweak), with a CHANGELOG entry.
+- **Public pages**, proposed and approved by the owner: Application Screens drawings 2.2, 2.3 and 2.5, and the user guide's copy of 2.2, show the same "!" before "Daily budget exceeded", drawn to scale. These are the only drawings with an exceeded note. No captions changed.
+
+### Options and the Owner's Choices
+- Mocked up in `design/budget-exceeded-mark-mockups.html`, in the dark and light themes: A, a bold "!"; B, "!" in an outlined circle like the "i" on "Budget not set"; C, "!" in a filled circle (recommended). The owner chose C, which reads as a warning and can't be mistaken for the tappable "i".
+- Summary's "Over budget by $X" is unchanged; the request covered the Log screen only.
+
+### Checks
+- On the demo account (confirmed with `/api/auth/session`), on 28 November (3 days left), with `zz-test-daily` (budget 300, 200 before today, 45 today) and `zz-test-over` (budget 100, 90 before, 38 today): "45.00 of 33.33" with an amber bar and "! Daily budget exceeded"; "38.00" with a red bar and "! Monthly budget exceeded". In the dark theme the circles were amber (#fbbf24) and red (#f87171) with a dark "!"; in the light theme amber (#b45309) and red (#b91c1c) with a white "!". Both marks are hidden from screen readers.
+- Application Screens and the user guide previewed locally: all 33 phones are 613 pixels tall, and all 13 guide pictures are identical to their Application Screens drawings.
+- `npx tsc --noEmit` passed, `npx eslint .` passed with the one known warning, and `npm run build` passed.
+- Not tested here: a real phone.
+
+### Clean-up
+- Deleted the 4 `[TEST]` expenses and the 2 `zz-test-` categories directly in the local database; none remain. No parse entries were created. The demo account was signed out and removed from the allow-list, and the test browser was left signed out, as it was before. The preview copies of the public pages were deleted.

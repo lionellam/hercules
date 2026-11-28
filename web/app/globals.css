@@ -199,7 +199,10 @@ textarea::placeholder { color: var(--muted); }
 .fill.over { background: var(--bad); }
 .fill.warn { background: var(--warn); }
 /* Log's Today by category notes (Specification 4.9) */
-.day-note { margin-top: 6px; font-size: 12.5px; font-weight: 600; line-height: 1.35; }
+.day-note { margin-top: 6px; font-size: 12.5px; font-weight: 600; line-height: 1.35; display: flex; align-items: center; gap: 6px; }
+/* The "!" before the note (1.10.1): a filled circle in the note's colour, with the "!" in the screen's background colour */
+.warn-mark { display: grid; place-items: center; width: 15px; height: 15px; border-radius: 50%; background: currentColor; flex-shrink: 0; }
+.warn-mark span { color: var(--bg); font-size: 10px; font-weight: 800; line-height: 1; }
 .day-note.warn { color: var(--warn-text); }
 .day-note.over { color: var(--bad); }
 .dayline { font-size: 13px; color: var(--muted); margin-top: 6px; }

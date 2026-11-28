@@ -46,13 +46,22 @@ function TodayByCategory({ expenses, categories, today, onSet }: { expenses: Exp
                 />
               </div>
             )}
-            {r.state === "warn" && <p className="day-note warn">Daily budget exceeded</p>}
-            {r.state === "over" && <p className="day-note over">Monthly budget exceeded</p>}
+            {r.state === "warn" && <p className="day-note warn"><WarnMark />Daily budget exceeded</p>}
+            {r.state === "over" && <p className="day-note over"><WarnMark />Monthly budget exceeded</p>}
             {unbudgeted && <BudgetNotSet category={unbudgeted} onSet={() => onSet(unbudgeted)} />}
           </div>
         );
       })}
     </>
+  );
+}
+
+// The "!" before an exceeded note: a filled circle in the note's colour. Screen readers skip it; the note says the same
+function WarnMark() {
+  return (
+    <span className="warn-mark" aria-hidden="true">
+      <span>!</span>
+    </span>
   );
 }
 

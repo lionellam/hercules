@@ -1,7 +1,7 @@
 # Project Hercules — Specification Sheet: "Log an Expense" Flow
 
 ```
-Version 0.64 · Draft 
+Version 0.65 · Draft 
 Last Reviewed: 28 November 2026
 Produced with AI Assistance (Claude Code)
 ```
@@ -74,6 +74,7 @@ Produced with AI Assistance (Claude Code)
 | 0.62 | 2026-11-28 | Lionel Lam | Wording review: retiring a category set out in short labelled parts, including what happens to the spelling and budget when a retired name is added again (Section 5.2); past months and retired categories show the number of expenses too (step 8, Sections 4.1 and 5.2); plainer wording for categories without a budget (Section 4.1); Settings described as it is now, without references to earlier versions (Section 4.4) |
 | 0.63 | 2026-11-28 | Lionel Lam | New Section 4.9: the Log screen's Today by category bars show today's spending against a daily budget, worked out at the start of the day, with amber for over today's budget, red for over the monthly budget, and the "Budget not set" pill for categories without one; step 8 points to it |
 | 0.64 | 2026-11-28 | Lionel Lam | New Section 4.10: an experimental loading screen with the ship picture, shown while the app starts until the Log screen's figures have arrived; listed in Section 4.7, and step 8 points to it; the Experimental features page's note reworded (Section 4.7) |
+| 0.65 | 2026-11-28 | Lionel Lam | The Log screen's "Daily budget exceeded" and "Monthly budget exceeded" notes start with a "!" in a filled circle of the note's colour (Section 4.9) |
 
 ---
 
@@ -303,13 +304,13 @@ Below the Today list, **Today by category** lists each category with spending to
 |---|---|---|---|
 | Within today's budget | Filled to the share of today's budget used, in the usual colour | Today's spending "of" today's budget, for example "5.00 of 16.67" | None |
 | Exactly at today's budget | Full, in the usual colour | For example "16.67 of 16.67" | None |
-| Over today's budget, while the month's spending, counting today, is still within the monthly budget | Full, in amber | For example "45.90 of 16.67" | "Daily budget exceeded", in amber |
-| The month's spending, counting today, is over the monthly budget | Full, in red | The amount alone, for example "38.00" | "Monthly budget exceeded", in red |
+| Over today's budget, while the month's spending, counting today, is still within the monthly budget | Full, in amber | For example "45.90 of 16.67" | "! Daily budget exceeded", in amber |
+| The month's spending, counting today, is over the monthly budget | Full, in red | The amount alone, for example "38.00" | "! Monthly budget exceeded", in red |
 | No budget | No bar | The amount alone | "Budget not set for this category" in the yellow pill, with the same bubble and link as on Summary (Section 4.1). The link slides up the category's Edit category card over the Log screen; after Save, the row shows its bar and "of" figure |
 | Retired category | No bar | The amount alone | None |
 
 - **Red takes priority:** a category over its monthly budget shows red even if it is also over today's budget. Spending exactly the monthly budget isn't over it, as with Summary's "Budget used".
-- **The notes are plain text,** with no "i" or bubble.
+- **The notes start with a "!"**: a small filled circle in the note's colour, with the "!" cut out in the screen's background colour. It marks the note as a warning. It does nothing when tapped, and has no bubble, unlike the "i" on "Budget not set". Screen readers skip it, since the note says the same thing.
 - **Colours:** amber is new, with its own shade for each theme; in the light theme the note text is a darker amber than the bar, so it reads well on white. Red is the same as Summary's over budget, and the yellow pill is the same as Summary's "Budget not set".
 
 **Worked example** — 25 November, day 25 of 30, so 6 days are left, counting today:

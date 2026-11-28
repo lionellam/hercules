@@ -6,6 +6,13 @@ Versions follow [semantic versioning](https://semver.org): **major** for a chang
 
 ---
 
+## 1.10.1 — 28 November 2026
+
+**Improved**
+- On the **Log** screen, **Daily budget exceeded** and **Monthly budget exceeded** under **Today by category** now start with a "!" in a small filled circle of the same colour, so they stand out as warnings.
+
+---
+
 ## 1.10.0 — 28 November 2026
 
 **New (experimental)**

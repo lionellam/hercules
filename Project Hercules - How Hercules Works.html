@@ -179,7 +179,10 @@ footer { margin-top: 72px; padding-top: 18px; border-top: 1px solid var(--rule);
 .m .fill { height: 100%; background: var(--m-bar); border-radius: 3px; }
 .m .fill.over { background: var(--m-bad); }
 .m .fill.warn { background: var(--m-warn); }
-.m .dn { margin-top: 2px; font-size: 10.5px; font-weight: 600; line-height: 1.15; }
+.m .dn { margin-top: 2px; font-size: 10.5px; font-weight: 600; line-height: 1.15; display: flex; align-items: center; gap: 5px; }
+/* The "!" before the note, as in the app: a filled circle in the note's colour */
+.m .dn .wm { display: grid; place-items: center; width: 12px; height: 12px; border-radius: 50%; background: currentColor; flex-shrink: 0; }
+.m .dn .wm span { color: var(--m-bg); font-size: 8px; font-weight: 800; line-height: 1; }
 .m .dn.warn { color: var(--m-warn-text); }
 .m .dn.over { color: var(--m-bad); }
 .m .tick { position: absolute; top: -3px; width: 2px; height: 11px; background: var(--m-text); transform: translateX(-1px); border-radius: 1px; box-shadow: 0 0 0 1.5px var(--m-bg); }
@@ -429,7 +432,7 @@ html { scroll-behavior: smooth; }
           <div class="item"><div><div class="nm">Toast Box</div><div class="c">Food &amp; Dining</div></div><div class="a">30.00</div></div>
           <div class="item"><div><div class="nm">MRT</div><div class="c">Transport</div></div><div class="a">2.10</div></div>
           <div class="h">TODAY BY CATEGORY</div>
-          <div class="cat"><div class="cat-top"><span>Food &amp; Dining<span class="n">1</span></span><span><strong>30.00</strong> <span class="of">of 16.67</span></span></div><div class="track"><div class="fill warn" style="width:100%"></div></div><div class="dn warn">Daily budget exceeded</div></div>
+          <div class="cat"><div class="cat-top"><span>Food &amp; Dining<span class="n">1</span></span><span><strong>30.00</strong> <span class="of">of 16.67</span></span></div><div class="track"><div class="fill warn" style="width:100%"></div></div><div class="dn warn"><span class="wm"><span>!</span></span>Daily budget exceeded</div></div>
           <div class="cat"><div class="cat-top"><span>Transport<span class="n">1</span></span><span><strong>2.10</strong> <span class="of">of 5.00</span></span></div><div class="track"><div class="fill" style="width:42%"></div></div></div>
         </div>
         <div class="tabs" data-on="log"></div>
