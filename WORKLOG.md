@@ -2254,6 +2254,7 @@ Last updated: 28 November 2026
 - Application Screens (32 phones) and the user guide (13) previewed: every phone is 613 tall (the first pill drawing made 5.1 taller, so its spacing was tightened), and the guide's 5.1 is identical to Application Screens' 5.1.
 - `npx tsc --noEmit` passed, `npx eslint .` passed with the one known warning, and `npm run build` passed.
 - Not tested here: a real phone, where the keyboard staying open after tapping the × matters most (Test Plan C-17).
+- **Confirmed (28 November 2026):** after the deploy, the owner checked on their phone that Settings shows version 1.8.0, that the "Budget not set for this category" line on Summary sits in a yellow pill, and that tapping a field's × empties it with the keyboard staying open.
 
 ### Clean-up
 - Deleted the `[TEST]` expense and the `zz-test-clear` category, directly in the local database; none remain. No parse entries were created. The demo account was removed from the allow-list and the test browser signed out, as it was before.
