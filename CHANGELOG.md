@@ -9,7 +9,7 @@ Versions follow [semantic versioning](https://semver.org): **major** for a chang
 ## 1.8.0 — 26 November 2026
 
 **New**
-- **Clear a field in one tap.** On the review, edit expense and category cards, when you tap into the amount, Merchant, Remarks, a category's name or its budget, a round × appears at its right. Tap it to empty the field and type something new straight away.
+- **Clear a field in one tap.** On the review, edit expense and category cards, when you're typing in the amount, Merchant, Remarks, a category's name or its budget, a round × appears at its right. Tap it to empty the field and type something new straight away, without the keyboard closing.
 
 **Improved**
 - On **Summary**, "Budget not set for this category" now sits in a soft yellow pill, so it stands out.
@@ -22,8 +22,8 @@ Versions follow [semantic versioning](https://semver.org): **major** for a chang
 - On **Summary**, a category without a budget no longer has a bar, since there's nothing to measure it against. Instead it says "Budget not set for this category". Tap that line to see where budgets are set, and tap **Set a budget for…** to open the category's card right there and add one. Once saved, the category gets its bar and spending pace straight away.
 
 **Changed**
-- Past months on Summary show each category's name and amount, without bars, as budgets for past months aren't recorded.
-- A category retired this month shows its name and amount only.
+- Past months on Summary show each category's name, number of expenses and amount, without bars. Hercules keeps only each category's current budget, so it can't show how a past month compared.
+- A retired category with spending this month shows its name, number of expenses and amount, without a bar.
 
 ---
 

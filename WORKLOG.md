@@ -4,7 +4,7 @@
 Maintained by: Lionel Lam Song Poh, James Wong
 Purpose: Record of work done, decisions made, challenges encountered, and assumptions held —
 to serve as a lessons learned reference for current and future contributors.
-Last updated: 26 November 2026
+Last updated: 28 November 2026
 ```
 
 ---
@@ -2178,7 +2178,7 @@ Last updated: 26 November 2026
 ### Options and the Owner's Choices
 - Mockups in `design/budget-nudge-wording-mockups.html`.
 - The owner first asked for "Set budget amount". Measured at phone widths, it would only just fit on a 375-pixel-wide phone and be cut off ("Set budget amou") on a 360-pixel one, because the "Monthly budget (SGD)" label doesn't shrink. Letting the label wrap, or a shorter placeholder, were offered; the owner chose "Set amount".
-- The user guide's caption under Categories & budgets still says "Budgets are optional." I suggested a change to match the nudge; the owner hasn't decided, so it is unchanged.
+- The user guide's caption under Categories & budgets still says "Budgets are optional." Claude suggested a change to match the nudge; the owner hasn't decided, so it is unchanged.
 
 ### Checks
 - On the demo account (confirmed with `/api/auth/session`), light theme:
@@ -2198,9 +2198,9 @@ Last updated: 26 November 2026
 
 ### What Was Done
 - At the owner's request: on Summary, a category without a budget had a bar drawn relative to the month's largest category, which looked like a share of a budget used and could mislead. Bars are now drawn only where there is a budget to measure against, and categories without one point people to setting a budget, part of the wider nudge towards budgets.
-- **This month, no budget:** the row shows the category's name, number of expenses and amount, with no bar and no "of", and below it "Budget not set for this category" with an "i" in a circle. The whole line is a button (`BudgetNotSet` in `web/components/screens/summary.tsx`) that opens a bubble styled like the "Not included" one: "The budget for this category can be set in Settings › Categories & budgets." and a **Set a budget for [category]** link. Tapping elsewhere closes it.
-- **The link** opens the existing Edit category card over Summary (`CategorySheet`, now exported from `web/components/screens/categories.tsx`; Summary now receives `online` and `onChanged` from `web/components/hercules-app.tsx`). It slides up as the app's cards do, with nothing selected. After Save, the row gets its bar, "of", marker and pace note.
-- **Retired this month, and past months:** name, number and amount only. Past months have no bars because past budgets aren't recorded.
+- **This month, no budget:** the row shows the category's name, number of expenses and amount, with no bar and the amount on its own (not "x of budget"), and below it "Budget not set for this category" with an "i" in a circle. The whole line is a button (`BudgetNotSet` in `web/components/screens/summary.tsx`) that opens a bubble styled like the "Not included" one: "The budget for this category can be set in Settings › Categories & budgets." and a **Set a budget for [category]** link. Tapping elsewhere closes it.
+- **The link** opens the existing Edit category card over Summary (`CategorySheet`, now exported from `web/components/screens/categories.tsx`; Summary now receives `online` and `onChanged` from `web/components/hercules-app.tsx`). It slides up as the app's cards do, with no box selected. After Save, the row gets its bar, "of", marker and pace note.
+- **Retired, with spending this month, and past months:** name, number and amount only. Past months have no bars because past budgets aren't recorded.
 - **Application Screens:** 5.1 shows Shopping with "Budget not set for this category" in place of its relative bar, with a sentence in its caption; 5.4 (October) has no bars. The user guide's copy of 5.1 matches, and its Summary list has a new "No budget yet?" item. The new line made 5.1 10 pixels taller, so, following the rule in `CLAUDE.md`, every phone on both pages is now 613 pixels tall (was 603), and `CLAUDE.md` says so.
 - Documents: Specification 0.60 (step 8 and Section 4.1), Architecture 0.47 (new decision 44), Test Plan 1.43 (H-02 and H-05 updated; new H-11 to H-14). Version 1.7.0 (a new feature), with a CHANGELOG entry.
 
@@ -2213,9 +2213,9 @@ Last updated: 26 November 2026
 
 ### Checks
 - On the demo account (confirmed with `/api/auth/session`), at 375 pixels wide, with a `zz-test-nobudget` category (no budget) and one `[TEST]` expense of 42.00 in it, created through the API:
-  - This month: the three categories without a budget (Utilities, Entertainment and the test category) show no bar, no "of" and the "Budget not set" line; the five with budgets are unchanged.
+  - This month: the three categories without a budget (Utilities, Entertainment and the test category) show no bar, the amount on its own (not "x of budget") and the "Budget not set" line; the five with budgets are unchanged.
   - Tapping the words (not the "i") opened the bubble, with its arrow under the "i" and the "i" dark; tapping elsewhere closed it; tapping the "i" opened it again.
-  - **Set a budget for zz-test-nobudget** slid up its Edit category card with nothing focused (the page body had focus). Cancel closed it. Opened again, a budget of 100 saved: the card closed and the row showed a bar, "of 100.00", the marker and "$41.33 under pace · $58.00 left, about $11.60/day", correct for day 25 of 30.
+  - **Set a budget for zz-test-nobudget** slid up its Edit category card with no box selected, so the keyboard stayed closed. Cancel closed it. Opened again, a budget of 100 saved: the card closed and the row showed a bar, "of 100.00", the marker and "$41.33 under pace · $58.00 left, about $11.60/day", correct for day 25 of 30.
   - After the test category was retired, its row showed only "zz-test-nobudget 1 42.00".
   - October: all 9 categories showed name, number and amount only, with no bars, lines or pace notes.
   - The bubble checked in light and dark.
@@ -2241,10 +2241,10 @@ Last updated: 26 November 2026
 - Documents: Specification 0.61 (step 5, Sections 4.1 and 5.2), Architecture 0.48 (decisions 38 and 44 updated), Test Plan 1.45 (H-05 updated; new C-17, C-18 and K-10). Version 1.8.0 (a new feature), with a CHANGELOG entry.
 
 ### Options and the Owner's Choices
-- Mockups in `design/highlight-and-clear-mockups.html`. The mockups didn't show at first, because the side panel opened the file from disk; they were then opened through the local preview server.
+- Mockups in `design/highlight-and-clear-mockups.html`.
 - Yellow: a pill (A), a full-width strip (B) or yellow text only (C). The owner chose A.
 - Other icons: the only other one is the "?" beside "Not included". The owner chose to leave it grey, keeping yellow for things the person can act on.
-- Clear button: only in the field being typed in (A), or on every filled field (B). The owner chose A, which included the amount.
+- Clear button: only in the field being typed in (A), or on every filled field (B). The owner chose A, with the amount getting a × too, though it has no pencil.
 
 ### Checks
 - On the demo account (confirmed with `/api/auth/session`), at 375 pixels wide, with a `zz-test-clear` category (budget 50) and a `[TEST]` expense in it, created through the API. Taps were real clicks, not scripted, so focus behaved as it would for a person:
@@ -2253,7 +2253,35 @@ Last updated: 26 November 2026
   - Summary: the "Budget not set" lines (Utilities, Entertainment) showed pale yellow (254, 243, 199) with dark amber text in light, and deep amber (59, 47, 18) with light yellow text in dark; the bubble's arrow sat exactly under the "i".
 - Application Screens (32 phones) and the user guide (13) previewed: every phone is 613 tall (the first pill drawing made 5.1 taller, so its spacing was tightened), and the guide's 5.1 is identical to Application Screens' 5.1.
 - `npx tsc --noEmit` passed, `npx eslint .` passed with the one known warning, and `npm run build` passed.
+- **Slip:** the mockups didn't show at first, because the side panel opened the file from disk. Lesson: open mockups through the local preview server, not from disk, so they show in the side panel.
 - Not tested here: a real phone, where the keyboard staying open after tapping the × matters most (Test Plan C-17).
 
 ### Clean-up
 - Deleted the `[TEST]` expense and the `zz-test-clear` category, directly in the local database; none remain. No parse entries were created. The demo account was removed from the allow-list and the test browser signed out, as it was before.
+
+---
+
+## 28 November 2026 — Document Review: Wording for Each Audience (Part 1)
+
+### What Was Done
+- At the owner's request, a review of the documents changed in 1.6.1 to 1.8.0. The aim is that each document reads well for its own audience, keeping the nuance and cutting padding. The Specification, Architecture, Test Plan, CHANGELOG and worklog are for the project team (technical managers, business analysts, designers and developers). The user guide and Application Screens are for members of the public and will be reviewed next.
+- Each passage was checked against the app's code as well as for wording, which turned up a few places where the documents no longer matched the app.
+- **Specification 0.62:**
+  - Retiring a category is set out in short labelled parts: what changes, what stays the same, where retired categories are listed, and how to bring one back. Three points that were only implied are now stated: adding a retired name again keeps the original spelling; an empty budget box then leaves it with no budget; and the 50-category limit can stop a restore.
+  - Fixed: retired categories on Summary are described as having no bar, which was out of date since 1.7.0; past months and retired categories also show the number of expenses.
+  - Plainer wording for categories without a budget, and Settings described as it is now, without references to earlier versions.
+- **Architecture 0.49:** the clear button moved out of decision 38 ("Review after Parse in a sheet"), where it was hard to find, into a new decision 45, with its behaviour in plain words and the technical detail in brackets. Decision 44 includes the number of expenses and explains more plainly why past months have no bars.
+- **Test Plan 1.46:**
+  - L-08 expected a bar for a retired category, which was out of date since 1.7.0. It was fixed, and H-13, which repeated it, was removed, so the old H-14 is now H-13.
+  - L-10 now checks the spelling and the empty budget.
+  - K-10 now opens Other and checks the keyboard.
+  - C-17 now also clears a field on the review sheet.
+  - Clearer steps or results in Q-07, H-05, H-11 and H-12.
+- **CHANGELOG:** the 1.8.0 and 1.7.0 entries corrected: the × shows while typing, and past months and retired categories show the number of expenses.
+- **Worklog:** the 1.6.2, 1.7.0 and 1.8.0 entries reworded where they used insider shorthand. An "I" was replaced with "Claude". The 1.8.0 mockup problem moved from the owner's choices to a slip, with its lesson.
+- Documents only, so the app version is unchanged.
+
+### Options and the Owner's Choices
+- The owner chose the structured version of the retiring text over running prose.
+- Splitting the Specification's long steps 5 and 8 into labelled paragraphs was offered; the owner chose to leave them for now.
+- Relabelling the worklog's varying section headings (for example "Decisions Made", "Options Considered", "Slips and Lessons") to one fixed set was offered and left out of this round.
