@@ -2437,6 +2437,7 @@ Last updated: 28 November 2026
 - Application Screens and the user guide previewed locally: all 33 phones are 613 pixels tall with nothing cut off, and all 13 guide pictures are identical to their Application Screens drawings.
 - `npx tsc --noEmit` passed, `npx eslint .` passed with the one known warning, and `npm run build` passed.
 - Not tested here: a real phone, and a default currency other than SGD.
+- **Confirmed (28 November 2026):** after the deploy, the owner checked on their phone that Settings shows version 1.10.2, and that a category within today's budget under **Today by category** on the Log screen shows "Daily budget · $X left" under its bar.
 
 ### Clean-up
 - Deleted the 8 `[TEST]` expenses and the 4 `zz-test-` categories directly in the local database; none remain. No parse entries were created. The demo account was signed out and removed from the allow-list, and the test browser was left signed out, as it was before. The preview copies of the public pages were deleted.
